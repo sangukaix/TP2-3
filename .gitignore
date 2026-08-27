@@ -1,0 +1,14 @@
+.env
+.env.*
+!.env.example
+data/raw/*
+!data/raw/SOURCE_REGISTRY.csv
+!data/raw/README.md
+data/interim/*
+data/processed/*
+data/chroma/*
+.venv/
+__pycache__/
+node_modules/
+dist/
+backend/.cache/
