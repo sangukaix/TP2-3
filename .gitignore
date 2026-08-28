@@ -1,4 +1,5 @@
 .env
+storage/strategy_documents/
 .env.*
 !.env.example
 data/raw/*

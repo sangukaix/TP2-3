@@ -8,12 +8,15 @@ from ..openai_responses import create_structured_response
 from .prompts import PLANNER_INSTRUCTIONS
 
 class PlannerAgent:
+    """조사·사례 적합성 결과를 사람이 읽는 하나의 실행 기획안 JSON으로 정리하는 Agent입니다."""
     def __init__(self, *, api_key: str, model: str, report_schema: dict[str, Any]) -> None:
         self.api_key = api_key
         self.model = model
         self.report_schema = report_schema
 
     async def write(self, evidence_pack: dict[str, Any], revision_feedback: dict[str, Any] | None = None) -> dict[str, Any]:
+        # 최초 작성에는 검증된 evidence_pack만 넣습니다.
+        # 사용자 입력 planning_brief는 evidence_pack 안에서 공식 관측값과 분리된 상태로 포함됩니다.
         payload: dict[str, Any] = {'evidence_pack': evidence_pack}
         instructions = PLANNER_INSTRUCTIONS
         if revision_feedback:
@@ -34,6 +37,7 @@ class PlannerAgent:
                 '\n이전 기획안의 품질 검토 결과가 함께 제공된다. 근거 패키지 밖의 사실을 추가하지 말고, '
                 '검토에서 지적한 항목만 정확히 고쳐 전체 기획안을 다시 작성한다.'
             )
+        # report_schema를 Responses API의 JSON schema로 넘겨 화면·Word·PPT가 같은 필드를 사용할 수 있게 합니다.
         return await create_structured_response(
             api_key=self.api_key,
             model=self.model,

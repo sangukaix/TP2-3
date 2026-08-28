@@ -1,8 +1,8 @@
 import { ChevronLeft, ChevronRight, Download, FileText, Presentation, RotateCcw, Search, X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import WorkspaceShell from '../components/WorkspaceShell'
-import { downloadAiStrategyPresentation, downloadAiStrategyProposal } from '../api/dashboardApi'
-import { downloadBlob, listSavedReports, readSavedReport } from './tourismWorkspace'
+import { downloadStoredStrategyDocument, getStoredStrategyReport, getStoredStrategyReports } from '../api/dashboardApi'
+import { downloadBlob } from './tourismWorkspace'
 import '../App.css'
 
 const ROWS_PER_PAGE = 10
@@ -14,16 +14,21 @@ function formatSavedDate(value) {
 
 /** 참고 이미지처럼 단순한 표 중심으로 만든 저장 기획서 업무 게시판입니다. */
 export default function SavedStrategyPlansBoardPage() {
-  const [plans] = useState(listSavedReports)
+  const [plans, setPlans] = useState([])
   const [query, setQuery] = useState('')
   const [searchInput, setSearchInput] = useState('')
   const [selectedYear, setSelectedYear] = useState('')
   const [page, setPage] = useState(1)
   const [selectedPlan, setSelectedPlan] = useState(null)
+  const [selectedReport, setSelectedReport] = useState(null)
   const [downloading, setDownloading] = useState('')
   const [error, setError] = useState('')
-  const selectedReport = selectedPlan ? readSavedReport(selectedPlan) : null
   const strategy = selectedReport?.strategies?.[0]
+
+  // 저장 목록은 브라우저별 임시 저장소가 아닌 팀 공용 MySQL에서 불러옵니다.
+  useEffect(() => {
+    getStoredStrategyReports().then(setPlans).catch((requestError) => setError(requestError.message))
+  }, [])
 
   const availableYears = useMemo(() => [...new Set(plans.map((plan) => new Date(plan.savedAt).getFullYear()).filter(Number.isFinite))].sort((a, b) => b - a), [plans])
 
@@ -54,26 +59,32 @@ export default function SavedStrategyPlansBoardPage() {
   }
 
   const download = async (plan, format) => {
-    const report = readSavedReport(plan)
-    if (!report) { setError('저장된 기획안 본문을 찾지 못했습니다.'); return }
     setDownloading(`${plan.entryId || plan.regionCode}-${format}`)
     setError('')
     try {
-      const blob = format === 'docx'
-        ? await downloadAiStrategyProposal(plan.regionCode, report)
-        : await downloadAiStrategyPresentation(plan.regionCode, report)
+      const blob = await downloadStoredStrategyDocument(plan.entryId, format)
       downloadBlob(blob, `${plan.regionName.replaceAll(' ', '-')}-관광-전략기획안.${format}`)
     } catch (requestError) {
       setError(requestError.message)
     } finally { setDownloading('') }
   }
 
+  // 제목을 누르면 MySQL의 원문을 불러와 팝업으로 다시 볼 수 있습니다.
+  const openPlan = async (plan) => {
+    setError('')
+    try {
+      const report = await getStoredStrategyReport(plan.entryId)
+      setSelectedPlan(plan)
+      setSelectedReport(report)
+    } catch (requestError) { setError(requestError.message) }
+  }
+
   return (
     <WorkspaceShell>
       <main className="tourism-work-page saved-board-page">
         {error && <p className="work-error">{error}</p>}
-        <section className="strategy-board-table" aria-label="저장된 관광 전략기획서 목록">
-          <header className="strategy-board-title"><h1>저장된 관광 전략기획서</h1></header>
+        <section className="strategy-board-table" aria-label="기획안 저장기록 목록">
+          <header className="strategy-board-title"><h1>기획안 저장기록</h1></header>
           <form className="strategy-board-search-form" onSubmit={submitSearch}>
             <b><i />검색조건</b>
             <select value={selectedYear} onChange={(event) => { setSelectedYear(event.target.value); setPage(1) }} aria-label="작성연도 선택"><option value="">작성연도</option>{availableYears.map((year) => <option key={year} value={year}>{year}</option>)}</select>
@@ -83,11 +94,10 @@ export default function SavedStrategyPlansBoardPage() {
           </form>
           <p className="strategy-board-total"><i />총 <b>{filteredPlans.length}</b>건</p>
           <div className="strategy-board-grid strategy-board-head"><span>번호</span><span>작성연도</span><span>지역</span><span>제목</span><span>첨부파일</span><span>등록일</span></div>
-          {visiblePlans.map((plan, index) => <div className="strategy-board-grid strategy-board-row" key={plan.entryId || `${plan.regionCode}-${plan.savedAt}`}><span>{filteredPlans.length - ((currentPage - 1) * ROWS_PER_PAGE + index)}</span><span>{new Date(plan.savedAt).getFullYear() || '-'}</span><span>{plan.regionName}</span><button type="button" onClick={() => setSelectedPlan(plan)}>{plan.title}</button><span className="strategy-board-files"><button type="button" onClick={() => download(plan, 'docx')} disabled={Boolean(downloading)} title="Word 다운로드"><FileText size={17} /></button><button type="button" onClick={() => download(plan, 'pptx')} disabled={Boolean(downloading)} title="PowerPoint 다운로드"><Presentation size={17} /></button></span><time>{formatSavedDate(plan.savedAt)}</time></div>)}
+          {visiblePlans.map((plan, index) => <div className="strategy-board-grid strategy-board-row" key={plan.entryId || `${plan.regionCode}-${plan.savedAt}`}><span>{filteredPlans.length - ((currentPage - 1) * ROWS_PER_PAGE + index)}</span><span>{new Date(plan.savedAt).getFullYear() || '-'}</span><span>{plan.regionName}</span><button type="button" onClick={() => openPlan(plan)}>{plan.title}</button><span className="strategy-board-files"><button type="button" onClick={() => download(plan, 'docx')} disabled={Boolean(downloading)} title="Word 다운로드"><FileText size={17} /></button><button type="button" onClick={() => download(plan, 'pptx')} disabled={Boolean(downloading)} title="PowerPoint 다운로드"><Presentation size={17} /></button></span><time>{formatSavedDate(plan.savedAt)}</time></div>)}
           {Array.from({ length: blankRows }, (_, index) => <div className="strategy-board-grid strategy-board-row is-blank" key={`blank-${index}`} aria-hidden="true"><span /><span /><span /><span /><span /><span /></div>)}
           {(query || selectedYear) && visiblePlans.length === 0 && <p className="strategy-board-no-result">검색 결과가 없습니다.</p>}
           <div className="strategy-board-bottom">
-            <a href="/strategy"><FileText size={14} />기획안 만들기</a>
             <nav aria-label="페이지 이동"><button type="button" disabled={currentPage === 1} onClick={() => setPage(1)} aria-label="첫 페이지"><ChevronLeft size={14} /><ChevronLeft size={14} /></button><button type="button" disabled={currentPage === 1} onClick={() => setPage((value) => Math.max(1, value - 1))} aria-label="이전 페이지"><ChevronLeft size={15} /></button><b>{currentPage}</b>{currentPage < pageCount && <button type="button" onClick={() => setPage(currentPage + 1)}>{currentPage + 1}</button>}<button type="button" disabled={currentPage === pageCount} onClick={() => setPage((value) => Math.min(pageCount, value + 1))} aria-label="다음 페이지"><ChevronRight size={15} /></button><button type="button" disabled={currentPage === pageCount} onClick={() => setPage(pageCount)} aria-label="마지막 페이지"><ChevronRight size={14} /><ChevronRight size={14} /></button></nav>
           </div>
         </section>

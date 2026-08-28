@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import asyncio
+from datetime import date
+from io import BytesIO
 import json
 import logging
 import os
@@ -13,7 +15,7 @@ from typing import Any, Literal
 
 import httpx
 from dotenv import dotenv_values, load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import StreamingResponse
@@ -27,6 +29,10 @@ from .raw_data_repository import read_region_tables
 from .agents.report_orchestrator import orchestrate_strategy_report
 from .agents.chat_assistant_agent import TourismChatAssistantAgent
 from .tourism_open_api import TourismOpenApiClient
+from .planning_brief import PlanningBrief, brief_fingerprint, extract_brief_reference, without_reference_text
+from .strategy_store import initialize_strategy_store, list_strategy_reports, read_document, read_strategy_report, save_strategy_report, write_document
+from ..ml.gangnam_data import load_gangnam_monthly_demand, load_latest_consumption_shares, load_latest_lodging_metrics
+from ..ml.region_service import predict_region_demand
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 load_dotenv(PROJECT_ROOT / '.env', override=False)
@@ -37,13 +43,27 @@ LOGGER = logging.getLogger(__name__)
 
 app = FastAPI(title='STAY-UP AI Server', version='0.1.0')
 app.add_middleware(GZipMiddleware, minimum_size=1024)
-app.add_middleware(CORSMiddleware, allow_origins=['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:5175', 'http://127.0.0.1:5175'], allow_methods=['POST', 'GET'], allow_headers=['*'])
+app.add_middleware(CORSMiddleware, allow_origins=['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:5175', 'http://127.0.0.1:5175', 'http://localhost:5176', 'http://127.0.0.1:5176'], allow_methods=['POST', 'GET', 'PUT'], allow_headers=['*'])
+
+
+@app.on_event('startup')
+async def initialize_mysql_strategy_store() -> None:
+    """MySQL이 준비된 경우에만 기획안 저장 테이블을 생성합니다.
+
+    DB 설정이 빠져도 지도·대시보드처럼 저장과 무관한 화면은 계속 사용할 수 있도록
+    서버 시작 자체는 막지 않고, 저장 기능에서 명확한 오류를 안내합니다.
+    """
+    try:
+        initialize_strategy_store()
+    except Exception as exc:
+        LOGGER.warning('MySQL strategy store is unavailable: %s', type(exc).__name__)
 
 
 class ReportRequest(BaseModel):
     """선택 지역의 검증된 원자료로 종합 보고서를 생성합니다."""
 
     region_name: str
+    planning_brief: PlanningBrief | None = None
 
 
 class RegionOpenApiResource(BaseModel):
@@ -108,10 +128,14 @@ class MonthlyTrend(BaseModel):
     """보고서의 그래프는 LLM이 만든 값이 아니라 원본 ZIP에서 재계산한 값만 사용합니다."""
 
     month: str
-    visitor_index: float
-    spending_index: float
-    visitors: int
-    spending_krw: int
+    visitor_index: float | None
+    spending_index: float | None
+    visitors: int | None
+    spending_krw: int | None
+    # 원자료와 ML 예측 막대를 화면에서 확실히 구분하기 위한 표시용 값입니다.
+    is_forecast: bool = False
+    # 실제 데이터나 예측값이 아닌 오늘 위치 표시용 빈 월입니다.
+    is_current_month: bool = False
 
 
 class ExecutionScenario(BaseModel):
@@ -143,6 +167,9 @@ class ReportResponse(BaseModel):
     agent_trace: list[dict[str, Any]] = Field(default_factory=list)
     execution_scenario: ExecutionScenario | None = None
     generation_mode: Literal['openai', 'offline_sample'] = 'openai'
+    # 생성 당시 조건을 고정 보관해 이후 초안 수정이 과거 보고서를 바꾸지 않게 합니다.
+    planning_brief: PlanningBrief | None = None
+    planning_brief_fingerprint: str = ''
 
 
 class StrategyReportJobResponse(BaseModel):
@@ -177,6 +204,7 @@ class AssistantChatRequest(BaseModel):
     history: list[AssistantChatMessage] = Field(default_factory=list, max_length=8)
     current_report: dict[str, Any] | None = None
     enable_web_search: bool = True
+    planning_brief: PlanningBrief | None = None
 
 
 class AssistantSource(BaseModel):
@@ -221,6 +249,22 @@ class TourismDiagnostic(BaseModel):
     lodging_rate: float
     average_lodging_nights: float
     lodging_nights_change: float
+    # 업종별 값은 별도 업종 모델이 아니라 최신 관측 비중을 적용한 예상 분포일 수 있습니다.
+    forecast_month: str = ''
+    is_forecast: bool = False
+    # 3개월 ML 예측 소비액의 평균. 업종별 분포 금액을 계산할 때 사용하는 기준값입니다.
+    forecast_average_spending_krw: int | None = None
+    assumption: str = ''
+
+
+class ForecastInformation(BaseModel):
+    """대시보드가 모델 예측임을 숨기지 않고 표시하기 위한 최소 메타데이터입니다."""
+
+    model_version: str
+    test_period: str
+    visitor_mae: float
+    spending_mae_krw: float
+    limitation: str
 
 
 class DashboardResponse(BaseModel):
@@ -232,6 +276,7 @@ class DashboardResponse(BaseModel):
     metrics: list[DashboardMetric]
     monthly_trend: list[MonthlyTrend]
     diagnostic: TourismDiagnostic
+    forecast: ForecastInformation | None = None
 
 
 class SidoComparisonItem(BaseModel):
@@ -374,6 +419,144 @@ def _change_direction(value: float) -> Literal['up', 'down', 'same']:
     if value < -0.05:
         return 'down'
     return 'same'
+
+
+def _next_calendar_month() -> str:
+    """화면의 대표 예측월을 현재 달의 다음 달로 정합니다."""
+    current = date.today()
+    year, month = current.year, current.month + 1
+    if month == 13:
+        year, month = year + 1, 1
+    return f'{year}{month:02d}'
+
+
+def _months_between(start_month: str, end_month: str) -> int:
+    """YYYYMM 두 월 사이 간격을 구해 필요한 재귀 예측 길이를 계산합니다."""
+    return (int(end_month[:4]) - int(start_month[:4])) * 12 + int(end_month[4:]) - int(start_month[4:])
+
+
+def _select_display_forecasts(forecasts: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict[str, Any] | None]:
+    """차트의 전체 예측 중 현재 시점의 다음 달을 카드 대표값으로 고릅니다."""
+    target_month = _next_calendar_month()
+    for index, forecast in enumerate(forecasts):
+        if forecast['month'] == target_month:
+            return forecasts[index:index + 3], forecasts[index - 1] if index else None
+    # 원자료 갱신이 늦어 현재 달보다 예측 범위가 과거일 때는, 가장 가까운 첫 예측을 보여 줍니다.
+    return forecasts[:3], None
+
+
+def _build_gangnam_ml_dashboard() -> DashboardResponse:
+    """강남구의 최근 3개월 관측값과 다음 3개월 저장 모델 예측을 대시보드 형태로 만듭니다.
+
+    기존 일반 지역 대시보드는 원본을 바로 읽는 구조를 유지합니다. 강남구만 새 중첩
+    ZIP 원본을 학습 파이프라인으로 정규화했으므로, 이 함수가 저장 모델의 결과를
+    기존 화면 응답 형식으로 바꿔 전달합니다. 지도·경계 코드는 전혀 건드리지 않습니다.
+    """
+    target_month = _next_calendar_month()
+    latest_observed_month = str(load_gangnam_monthly_demand()['year_month'].iloc[-1])
+    # 최신 원자료가 늦게 공개돼도, 다음 달부터 3개월을 끊김 없이 보여 줄 만큼만 재귀 예측합니다.
+    required_horizon = max(4, _months_between(latest_observed_month, target_month) + 2)
+    forecast_result = predict_region_demand('11680', required_horizon)
+    visible_forecasts, previous_forecast = _select_display_forecasts(forecast_result['forecasts'])
+    if not visible_forecasts:
+        raise ValueError('현재 달 다음의 예측값을 만들지 못했습니다.')
+    next_forecast = visible_forecasts[0]
+    latest_visitors = forecast_result['latest_observed_visitors']
+    latest_spending = forecast_result['latest_observed_spending_krw']
+    comparison_visitors = previous_forecast['visitors'] if previous_forecast else latest_visitors
+    comparison_spending = previous_forecast['spending_krw'] if previous_forecast else latest_spending
+    comparison_lodging = previous_forecast['lodging_nights'] if previous_forecast else forecast_result['latest_observed_lodging_nights']
+    visitor_change = _percent_change(next_forecast['visitors'], comparison_visitors)
+    spending_change = _percent_change(next_forecast['spending_krw'], comparison_spending)
+    next_month_label = f"{int(next_forecast['month'][4:])}월"
+    latest_lodging_rate, _, _ = load_latest_lodging_metrics()
+    lodging_nights_change = next_forecast['lodging_nights'] - comparison_lodging
+    comparison_label = f"{int(previous_forecast['month'][4:])}월 예상 대비" if previous_forecast else '7월 대비'
+
+    # 공식 원자료의 마지막 확정월은 7월이므로 8월은 모델이 계산한 현재월 추정값입니다.
+    # 화면은 6·7월 실제값과 8·9·10월 예측값을 보여 주어 오늘 날짜(8월)가 축 안에 들어오게 합니다.
+    forecast_rows = ([previous_forecast] if previous_forecast else []) + visible_forecasts[:2]
+    trend_rows = [*forecast_result['recent_actuals'][-3:], *forecast_rows]
+    first_visitor = trend_rows[0]['visitors']
+    first_spending = trend_rows[0]['spending_krw']
+    trend = [
+        MonthlyTrend(
+            month=f"{row['month'][:4]}.{row['month'][4:]}",
+            visitor_index=round(row['visitors'] / first_visitor * 100, 1) if row['visitors'] is not None else None,
+            spending_index=round(row['spending_krw'] / first_spending * 100, 1) if row['spending_krw'] is not None else None,
+            visitors=row['visitors'],
+            spending_krw=row['spending_krw'],
+            is_forecast=bool(row['is_forecast']),
+            is_current_month=bool(row.get('is_current_month')),
+        )
+        for row in trend_rows
+    ]
+
+    # 업종별 데이터는 현재 월별 장기 시계열이 충분하지 않아 업종마다 별도 ML로 예측하지 않습니다.
+    # 대신 저장된 전체 소비액 ML 모델의 향후 3개월 예측 평균에 최신 관측 비중을 적용합니다.
+    # 즉, 총 소비액 평균은 ML 결과이고 업종별 배분은 공식 원자료의 최신 비중이라는 역할 분리입니다.
+    forecast_average_spending_krw = round(sum(row['spending_krw'] for row in visible_forecasts) / len(visible_forecasts))
+    consumption_categories = [
+        ConsumptionCategory(
+            name=str(category['name']),
+            share=float(category['share']),
+            amount_krw=round(forecast_average_spending_krw * float(category['share']) / 100),
+        )
+        for category in load_latest_consumption_shares()[:4]
+    ]
+    metadata = forecast_result['model']
+    return DashboardResponse(
+        region_name='서울특별시 강남구',
+        latest_month=f"{next_forecast['month'][:4]}-{next_forecast['month'][4:]}",
+        source='한국관광 데이터랩 강남구 공식 다운로드 원본 + 저장된 ML 예측 모델',
+        metrics=[
+            DashboardMetric(
+                label=f'{next_month_label} 예상 방문자 수',
+                value=f"{next_forecast['visitors']:,.0f}명",
+                detail='',
+                change_label=comparison_label,
+                change_value=f'{visitor_change:+.1f}%',
+                change_direction=_change_direction(visitor_change),
+                accent='aqua',
+            ),
+            DashboardMetric(
+                label=f'{next_month_label} 예상 관광소비액',
+                value=f"₩{next_forecast['spending_krw'] / 100_000_000:,.0f}억",
+                detail='',
+                change_label=comparison_label,
+                change_value=f'{spending_change:+.1f}%',
+                change_direction=_change_direction(spending_change),
+                accent='blue',
+            ),
+            DashboardMetric(
+                label=f'{next_month_label} 예상 평균 숙박일수',
+                value=f"{next_forecast['lodging_nights']:.2f}일",
+                detail='',
+                change_label=comparison_label,
+                change_value=f'{lodging_nights_change:+.2f}일',
+                change_direction='up' if lodging_nights_change > 0 else 'down' if lodging_nights_change < 0 else 'same',
+                accent='purple',
+            ),
+        ],
+        monthly_trend=trend,
+        diagnostic=TourismDiagnostic(
+            consumption_categories=consumption_categories,
+            lodging_rate=latest_lodging_rate,
+            average_lodging_nights=next_forecast['lodging_nights'],
+            lodging_nights_change=lodging_nights_change,
+            forecast_month=next_forecast['month'],
+            is_forecast=True,
+            forecast_average_spending_krw=forecast_average_spending_krw,
+            assumption='향후 3개월 전체 관광소비액 ML 예측 평균값에 최신 업종 비중을 적용한 예상 분포',
+        ),
+        forecast=ForecastInformation(
+            model_version=metadata['version'],
+            test_period=metadata['test_period'],
+            visitor_mae=float(metadata['evaluation']['visitors']['selected_model_metrics']['mae']),
+            spending_mae_krw=float(metadata['evaluation']['spending_krw']['selected_model_metrics']['mae']),
+            limitation=metadata['limitations'][0],
+        ),
+    )
 
 
 def build_sido_comparison(sido_name: str) -> SidoComparisonResponse:
@@ -707,6 +890,9 @@ async def generate_report(request: ReportRequest) -> ReportResponse:
 
 async def generate_orchestrated_report(region_code: str, request: ReportRequest) -> ReportResponse:
     """지역 근거→공식 사례→적합성→기획→품질 검토 Agent를 고정 순서로 실행합니다."""
+    if request.planning_brief and request.planning_brief.region_code != region_code:
+        raise HTTPException(status_code=422, detail={'code': 'BRIEF_REGION_MISMATCH', 'message': '기획 조건의 지역과 선택 지역이 다릅니다.'})
+    brief = request.planning_brief.model_dump(mode='json') if request.planning_brief else None
     api_key = (ENV_VALUES.get('OPENAI_API_KEY') or '').strip()
     if not api_key:
         raise HTTPException(status_code=503, detail={'code': 'OPENAI_KEY_MISSING', 'message': 'AI 서버의 OpenAI 키가 설정되지 않았습니다.'})
@@ -718,6 +904,7 @@ async def generate_orchestrated_report(region_code: str, request: ReportRequest)
             region_code=region_code,
             snapshot=snapshot,
             report_schema=REPORT_SCHEMA,
+            planning_brief=brief,
         )
         return ReportResponse(
             region_name=snapshot['region_name'],
@@ -728,6 +915,8 @@ async def generate_orchestrated_report(region_code: str, request: ReportRequest)
             evidence_sources=result['evidence_sources'],
             research_gaps=result['research_gaps'],
             agent_trace=result['agent_trace'],
+            planning_brief=without_reference_text(request.planning_brief),
+            planning_brief_fingerprint=brief_fingerprint(brief),
             **result['report'],
         )
     except OpenAIResponseError as exc:
@@ -744,6 +933,18 @@ def _job_error_message(exc: HTTPException) -> str:
     if isinstance(detail, dict):
         return str(detail.get('message') or 'AI 전략기획서를 생성하지 못했습니다.')
     return str(detail or 'AI 전략기획서를 생성하지 못했습니다.')
+
+
+def _persist_completed_strategy_report(job_id: str, region_code: str, report: ReportResponse) -> None:
+    """완료된 기획안을 MySQL과 로컬 서버 문서 폴더에 한 번만 영구 저장합니다."""
+    payload = report.model_dump(mode='json')
+    save_strategy_report(job_id, region_code, payload)
+    # 문서 생성 실패가 AI 기획안 본문 저장을 되돌리지는 않도록 파일 출력은 별도로 보호합니다.
+    try:
+        write_document(job_id, 'docx', create_strategy_proposal_document(payload).getvalue())
+        write_document(job_id, 'pptx', create_strategy_proposal_presentation(payload).getvalue())
+    except (KeyError, TypeError, ValueError, OSError) as exc:
+        LOGGER.warning('Strategy document save failed: job_id=%s error=%s', job_id, type(exc).__name__)
 
 
 def _strategy_job_response(job_id: str) -> StrategyReportJobResponse:
@@ -772,7 +973,7 @@ async def _run_strategy_report_job(job_id: str, region_code: str, request: Repor
         if re.search(r'credit|quota|billing|크레딧|잔액', message, flags=re.IGNORECASE):
             try:
                 snapshot = build_region_snapshot(request.region_name)
-                report = ReportResponse(**build_offline_sample_report(region_code, snapshot))
+                report = ReportResponse(**build_offline_sample_report(region_code, snapshot), planning_brief=without_reference_text(request.planning_brief))
             except (FileNotFoundError, KeyError, ValueError) as sample_exc:
                 job.update(status='failed', message='기획서 생성을 완료하지 못했습니다.', error=str(sample_exc))
             else:
@@ -784,11 +985,79 @@ async def _run_strategy_report_job(job_id: str, region_code: str, request: Repor
         job.update(status='failed', message='기획서 생성을 완료하지 못했습니다.', error=f'{type(exc).__name__}: {exc}')
     else:
         job.update(status='completed', message='AI 전략기획서 생성이 완료되었습니다.', report=report)
+    if job.get('status') == 'completed' and job.get('report'):
+        try:
+            _persist_completed_strategy_report(job_id, region_code, job['report'])
+        except Exception as exc:
+            # 저장 실패는 생성 결과를 없애지 않고, 서버 로그에서 DB 연결을 점검할 수 있게 남깁니다.
+            LOGGER.exception('Strategy report persistence failed: job_id=%s error=%s', job_id, type(exc).__name__)
+            job.update(message='기획안은 생성됐지만 MySQL 저장에 실패했습니다. 서버 DB 설정을 확인해 주세요.')
 
 
 @app.get('/ai/health')
 async def health_check() -> dict[str, str]:
     return {'status': 'ok'}
+
+
+@app.get('/ai/v1/strategy-reports')
+async def read_saved_strategy_reports() -> list[dict[str, Any]]:
+    """모든 팀원이 같은 MySQL 기록에서 저장된 기획서 목록을 확인합니다."""
+    try:
+        return list_strategy_reports()
+    except Exception as exc:
+        LOGGER.exception('Strategy report list failed: %s', type(exc).__name__)
+        raise HTTPException(status_code=503, detail={'code': 'STRATEGY_STORE_UNAVAILABLE', 'message': '저장 기획서 DB에 연결하지 못했습니다. MySQL 설정을 확인해 주세요.'}) from exc
+
+
+@app.get('/ai/v1/strategy-reports/{report_id}')
+async def read_saved_strategy_report(report_id: str) -> dict[str, Any]:
+    """게시판의 제목 클릭 시 MySQL에 저장된 원본 기획안을 반환합니다."""
+    try:
+        report = read_strategy_report(report_id)
+    except Exception as exc:
+        raise HTTPException(status_code=503, detail={'code': 'STRATEGY_STORE_UNAVAILABLE', 'message': '저장 기획서 DB에 연결하지 못했습니다.'}) from exc
+    if not report:
+        raise HTTPException(status_code=404, detail={'code': 'SAVED_STRATEGY_NOT_FOUND', 'message': '저장된 기획안을 찾지 못했습니다.'})
+    return report
+
+
+@app.put('/ai/v1/strategy-reports/{report_id}')
+async def update_saved_strategy_report(report_id: str, region_code: str, report: ReportResponse) -> dict[str, str]:
+    """챗봇 수정 후 사용자가 저장한 기획안을 같은 MySQL 기록에 반영합니다."""
+    try:
+        save_strategy_report(report_id, region_code, report.model_dump(mode='json'))
+    except Exception as exc:
+        LOGGER.exception('Strategy report update failed: %s', type(exc).__name__)
+        raise HTTPException(status_code=503, detail={'code': 'STRATEGY_STORE_UNAVAILABLE', 'message': '기획안을 MySQL에 저장하지 못했습니다.'}) from exc
+    return {'status': 'saved'}
+
+
+@app.get('/ai/v1/strategy-reports/{report_id}/documents/{file_format}')
+async def download_saved_strategy_document(report_id: str, file_format: Literal['docx', 'pptx']) -> StreamingResponse:
+    """이미 저장한 Word/PPT 파일을 재생성하지 않고 서버 파일 저장소에서 내려보냅니다."""
+    try:
+        content = read_document(report_id, file_format)
+        if content is None:
+            report = read_strategy_report(report_id)
+            if not report:
+                raise HTTPException(status_code=404, detail={'code': 'SAVED_STRATEGY_NOT_FOUND', 'message': '저장된 기획안을 찾지 못했습니다.'})
+            content = (
+                create_strategy_proposal_document(report).getvalue()
+                if file_format == 'docx'
+                else create_strategy_proposal_presentation(report).getvalue()
+            )
+            write_document(report_id, file_format, content)
+    except HTTPException:
+        raise
+    except Exception as exc:
+        LOGGER.exception('Stored document download failed: %s', type(exc).__name__)
+        raise HTTPException(status_code=503, detail={'code': 'SAVED_DOCUMENT_UNAVAILABLE', 'message': '저장된 문서를 준비하지 못했습니다.'}) from exc
+    media_type = (
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        if file_format == 'docx'
+        else 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+    )
+    return StreamingResponse(BytesIO(content), media_type=media_type, headers={'Content-Disposition': f'attachment; filename="tourism-strategy-proposal.{file_format}"'})
 
 
 @app.get('/ai/v1/demo/sido-comparison', response_model=SidoComparisonResponse)
@@ -805,8 +1074,12 @@ async def read_sido_comparison(sido_name: str) -> SidoComparisonResponse:
 
 @app.get('/ai/v1/demo/{region_code}/dashboard', response_model=DashboardResponse)
 async def read_region_dashboard(region_code: str, region_name: str) -> DashboardResponse:
-    """선택 지역의 원본 기반 최신월·전월 대비 요약 카드를 반환합니다."""
+    """선택 지역의 관측 대시보드 또는 강남구 저장 모델 예측 대시보드를 반환합니다."""
     try:
+        # 강남구는 2024~2026 원본을 대상으로 검증·저장한 3개월 ML 예측을 사용합니다.
+        # 다른 지역은 학습 모델이 없으므로 기존의 관측 원자료 표시를 그대로 유지합니다.
+        if _normalize_region_name(region_name) == _normalize_region_name('서울특별시 강남구'):
+            return _build_gangnam_ml_dashboard()
         return build_region_dashboard(region_name)
     except (FileNotFoundError, KeyError, ValueError) as exc:
         raise HTTPException(
@@ -892,9 +1165,28 @@ async def read_region_open_api_info(region_code: str, region_name: str) -> Regio
     )
 
 
+@app.post('/ai/v1/planning/reference')
+async def read_planning_reference(request: Request, filename: str) -> dict:
+    """유료 호출 없이 문서의 텍스트만 추출합니다. 본문 스트림도 크기를 제한합니다."""
+    content = bytearray()
+    async for chunk in request.stream():
+        content.extend(chunk)
+        if len(content) > 2_000_000:
+            raise HTTPException(status_code=413, detail={'code': 'REFERENCE_TOO_LARGE', 'message': '2MB 이하 파일만 첨부할 수 있습니다.'})
+    try:
+        return extract_brief_reference(filename, bytes(content))
+    except Exception as exc:
+        message = str(exc) if isinstance(exc, ValueError) else '문서 텍스트를 읽지 못했습니다. TXT 또는 정상 DOCX를 사용해 주세요.'
+        raise HTTPException(status_code=422, detail={'code': 'REFERENCE_INVALID', 'message': message}) from exc
+
+
 @app.post('/ai/v1/demo/{region_code}/strategy-report/jobs', response_model=StrategyReportJobResponse, status_code=202)
 async def start_region_strategy_report_job(region_code: str, request: ReportRequest) -> StrategyReportJobResponse:
     """AI 전략기획 생성을 백그라운드에 등록하고 즉시 작업 ID를 반환합니다."""
+    if request.planning_brief and request.planning_brief.region_code != region_code:
+        raise HTTPException(status_code=422, detail={'code': 'BRIEF_REGION_MISMATCH', 'message': '기획 조건의 지역과 선택 지역이 다릅니다.'})
+    # 실행 조건은 작업마다 복사합니다. 다른 사용자의 같은 지역 작업을 차단하지 않습니다.
+    request = request.model_copy(deep=True)
     job_id = uuid4().hex
     STRATEGY_REPORT_JOBS[job_id] = {
         'region_code': region_code,
@@ -935,7 +1227,7 @@ async def create_offline_sample_strategy_report(region_code: str, request: Repor
         raise HTTPException(status_code=404, detail={'code': 'OFFLINE_SAMPLE_DISABLED', 'message': '운영 환경에서는 오프라인 샘플을 제공하지 않습니다.'})
     try:
         snapshot = build_region_snapshot(request.region_name)
-        return ReportResponse(**build_offline_sample_report(region_code, snapshot))
+        return ReportResponse(**build_offline_sample_report(region_code, snapshot), planning_brief=without_reference_text(request.planning_brief))
     except (FileNotFoundError, KeyError, ValueError) as exc:
         raise HTTPException(
             status_code=404,
@@ -986,6 +1278,9 @@ async def chat_with_tourism_assistant(region_code: str, request: AssistantChatRe
             history=[message.model_dump() for message in request.history],
             current_report=request.current_report,
             enable_web_search=request.enable_web_search,
+            planning_brief=(request.current_report or {}).get('planning_brief') if request.current_report else (
+                request.planning_brief.model_dump(mode='json') if request.planning_brief else None
+            ),
         )
         return AssistantChatResponse(**result, generation_mode='openai')
     except OpenAIResponseError as exc:

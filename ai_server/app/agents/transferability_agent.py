@@ -8,6 +8,7 @@ from ..openai_responses import create_structured_response
 from .prompts import TRANSFERABILITY_INSTRUCTIONS
 
 
+# 타 지역 성공사례를 그대로 복사하지 않도록, ‘우리 지역에 적용 가능한 이유·위험·검증 방식’을 따로 받는 JSON 계약입니다.
 TRANSFERABILITY_SCHEMA = {
     'type': 'object',
     'additionalProperties': False,
@@ -60,11 +61,13 @@ TRANSFERABILITY_SCHEMA = {
 
 
 class TransferabilityAgent:
+    """사례의 효과를 보장하지 않고, 선택 지역에서 시험할 수 있는 조건부 시범사업으로 바꾸는 Agent입니다."""
     def __init__(self, *, api_key: str, model: str) -> None:
         self.api_key = api_key
         self.model = model
 
     async def assess(self, *, evidence_pack: dict[str, Any]) -> dict[str, Any]:
+        # 공식 사례가 하나도 없으면 모델에게 내용을 지어내게 하지 않고, 안전한 ‘추가 조사 필요’ 결과를 즉시 반환합니다.
         cases = evidence_pack.get('benchmark_cases') or []
         if not cases:
             return {
@@ -83,6 +86,8 @@ class TransferabilityAgent:
                     'supporting_case_ids': [],
                 },
             }
+        # 선택 지역 snapshot, 사용자 여건, 사례 카드만 전달합니다.
+        # 실제 수치 계산은 ML·원자료 계층이 담당하고 이 Agent는 적용 판단만 담당합니다.
         return await create_structured_response(
             api_key=self.api_key,
             model=self.model,
@@ -92,6 +97,7 @@ class TransferabilityAgent:
                 'region_name': evidence_pack.get('region_name'),
                 'period': evidence_pack.get('period'),
                 'snapshot': evidence_pack.get('snapshot'),
+                'planning_brief': evidence_pack.get('planning_brief'),
                 'benchmark_cases': cases,
             },
             schema_name='tourism_case_transferability',

@@ -4,8 +4,48 @@
 
 ## 기본 원칙
 
+### 사업 여건 계약 (2026-08-28 구현)
+
+`POST /ai/v1/demo/{region_code}/strategy-report/jobs`의 기존 요청에 선택 필드 `planning_brief`를 추가한다. 생략하면 기존 호출과 호환된다.
+
+```json
+{
+  "region_name": "서울특별시 강남구",
+  "planning_brief": {
+    "version": 1,
+    "region_code": "11680",
+    "budget_status": "confirmed",
+    "budget_min_krw": null,
+    "budget_max_krw": 30000000,
+    "budget_hard_limit": true,
+    "schedule_status": "fixed",
+    "start_date": "2026-10-01",
+    "end_date": "2026-12-31",
+    "resources_confirmed": "",
+    "resources_possible": "",
+    "hard_constraints": "신규 시설 설치 제외",
+    "preferences": "",
+    "field_context": "",
+    "references": []
+  }
+}
+```
+
+- 예산 상태: `unknown | indicative | confirmed`. 미정 금액은 null. 지정 금액은 1원~1조 원 정수이며 최소≤최대.
+- 일정 상태: `unknown | flexible | fixed`. 지정 시 시작일·종료일 모두 필요, 시작≤종료.
+- 자원은 확정/협의 중을 구분한다. 제약과 선호도 별도 필드다.
+- 문서 `references`: `{name, text}` 최대 3개, 텍스트 각 6,000자 이하. 지시문이 아닌 사용자 제공 데이터로만 사용한다.
+- 지역 불일치·조건 오류: HTTP 422. 작업 등록: HTTP 202 + 기존 job_id. 생성 결과에 `planning_brief`와 SHA256 `planning_brief_fingerprint`를 보존한다.
+- 기존 채팅 요청도 `planning_brief`를 받는다. 현재 기획안이 있으면 그 기획안의 생성 당시 조건을 우선한다.
+
+`POST /ai/v1/planning/reference?filename=자료.docx`
+
+- body: 파일 바이트, Content-Type: application/octet-stream. TXT/MD/DOCX만 지원한다.
+- 성공: `{name, text}`. 파일은 2MB 이하, DOCX 압축 해제 합계 12MB 이하. 초과 413, 잘못된 파일/텍스트 초과 422 + `detail: {code, message}`.
+- 유료 AI·웹 호출 없이 메모리에서 읽는다. 원본 디스크 저장·공용 RAG 등록 없음.
+
 - React는 `/api`와 `/ai` 경로만 호출한다.
-- 로컬 개발에서는 일반 데이터 Backend FastAPI(`8100`), 원자료·근거 기반 전략 AI FastAPI(`8101`)가 담당한다. 배포 포트는 Nginx 뒤에서 별도로 설정한다.
+- 로컬 개발에서는 일반 데이터 Backend FastAPI(`8100`), 원자료·근거 기반 전략 AI FastAPI(`8111`)가 담당한다. 배포 포트는 Nginx 뒤에서 별도로 설정한다.
 - OpenAI API 키는 어떤 응답이나 React 코드에도 포함하지 않고 AI 서버의 `.env`에서만 읽는다.
 - 모든 실제 수치에는 `region_code`, `year_month`, `source_name`, `source_url`을 함께 보존한다.
 
@@ -22,6 +62,8 @@
 ### `GET /ai/v1/demo/{region_code}/dashboard?region_name={region_name}`
 
 선택 지역 공식 원본을 읽기 전용으로 계산해 상단 카드용 최신 기준월, 외지인 방문자 수, 외지인 관광소비액, 평균 숙박일수와 각각의 전월 대비를 반환한다. 이 경로는 OpenAI를 호출하지 않는다.
+
+강남구(`11680`)는 예외적으로 저장된 ML artifact를 읽어 최근 3개월 관측값과 향후 3개월 예측값을 반환한다. 학습은 이 HTTP 요청에서 실행하지 않는다. `monthly_trend[].is_forecast`로 관측·예측을 구분하며, `forecast`에는 모델 버전·시간순 테스트 기간·MAE·한계를 담는다. `diagnostic.is_forecast=true`인 업종별 소비 금액은 전체 소비액 예측에 최신 관측 업종 비중을 적용한 가정이다.
 
 ### `GET /ai/v1/demo/sido-comparison?sido_name={sido_name}`
 
@@ -123,5 +165,5 @@ VWorld WFS의 전국 시군구 경계를 Backend에서 불러와, 키가 없는 
 
 - `frontend/src/api/dashboardApi.js`: 위 두 엔드포인트 호출 자리
 - `frontend/src/pages/TourismDashboardPage.jsx`: 실제 응답을 카드·차트·진단에 표시하며 미지원 지역은 빈 상태로 처리
-- `frontend/vite.config.js`: 개발 중 `/api → 8100`, `/ai → 8101` 프록시 설정
+- `frontend/vite.config.js`: 개발 중 `/api → 8100`, `/ai → 8111` 프록시 설정
 - `backend/app/services/vworld.py`: VWorld 키를 서버에서만 사용하고 시군구 GeoJSON을 캐시·중계

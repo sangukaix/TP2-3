@@ -2,6 +2,26 @@
 
 ## 1. 설계 원칙
 
+### 현재 구현: 사업 여건 입력과 Agent 연결
+
+```text
+/dashboard 지역선택 (기존 지도 유지)
+  └─ /planning 사업 여건
+       ├─ 예산 / 일정 / 자원 / 필수 제약 (+ 선택 현장정보·선호·문서)
+       ├─ 지역별 초안: 브라우저 localStorage
+       └─ POST strategy-report/jobs + planning_brief
+            ├─ Pydantic 검증 → 작업마다 조건 복사
+            ├─ Evidence + Case Scout 병렬 조사 (조건을 캐시 키에 포함)
+            ├─ Transferability: 지역 여건에서 가능한 대안 검토
+            ├─ Planner: 문제·기회·목표·방법·실행 단계 제안
+            └─ Reviewer: 근거·실행 가능성·조건 준수 검수 / 기존 재작성
+                 └─ /strategy 상태 조회 → 결과 + 생성 당시 조건 저장
+                      ├─ AI 챗봇: 해당 결과의 조건으로 설명·수정안
+                      └─ Word/PPT: 예산·일정 요약 포함
+```
+
+`snapshot`은 공식 관측값, `planning_brief`는 사용자 제공 여건으로 분리한다. 사용자 문서 안의 명령은 시스템 지시로 실행하지 않는다. 이 입력 기능은 새 ML 모델이나 공용 RAG 구축을 의미하지 않는다. 모델·토큰 설정과 기존 품질 검수 절차는 유지한다.
+
 1. 오프라인 학습과 온라인 예측을 분리한다.
 2. 일반 업무 API와 AI 로직을 분리한다.
 3. 정확한 정형 수치는 MySQL, 문서 의미 검색은 ChromaDB에 둔다.
@@ -31,7 +51,7 @@ OpenAI 모델명은 코드에 고정하지 말고 `.env`의 `OPENAI_MODEL`로 �
 ```text
 [Browser]
     |
-    +-- localhost:5175 ---------> [React / Vite]
+    +-- localhost:5176 ---------> [React / Vite]
     |                                  |
     |                                  +-- /api/*
     |                                  +-- /ai/*
@@ -40,7 +60,7 @@ OpenAI 모델명은 코드에 고정하지 말고 `.env`의 `OPENAI_MODEL`로 �
     |                                  |
     |                                  └--> [MySQL :3306]
     |
-    └-- 127.0.0.1:8101/ai/* ---> [AI FastAPI]
+    └-- 127.0.0.1:8111/ai/* ---> [AI FastAPI]
                                        ├--> [model.joblib]
                                        ├--> [ChromaDB]
                                        └--> [OpenAI API]
@@ -100,6 +120,22 @@ AI Server가 Backend의 내부 Feature Snapshot API를 호출할지, Backend가 
 ```
 
 학습은 일반 웹 요청에서 실행하지 않는다. 서비스에서는 저장된 모델을 불러와 예측만 한다.
+
+### 강남구 1차 구현
+
+```text
+data/raw/서울특별시/서울특별시_강남구-*.zip (2024~2026, 읽기 전용)
+  + test-gangnam-dashboard/download/강남구_* (최신 2026-07 공식 다운로드)
+→ ai_server/ml/gangnam_data.py
+→ data/processed/gangnam_monthly_demand.csv
+→ ai_server/ml/train_gangnam.py (수동 재학습 CLI)
+→ 시간순 마지막 4개월 테스트 + seasonal-naive 기준선 비교
+→ artifacts/ml/gangnam_demand_model.joblib / metadata.json
+→ GET /ai/v1/demo/11680/dashboard
+→ 최근 3개월 관측 + 향후 3개월 예측 차트
+```
+
+방문자와 소비액은 별도 모델이다. 방문자 수는 `RandomForestRegressor`, 소비액은 `LinearRegression`을 사용한다. 업종별 소비 패턴은 아직 별도 모델이 아니며 최신 관측 비중을 적용한 표시용 가정이다.
 
 초기 Feature 후보: 전월 방문객, 최근 3개월 평균, 전년 동월 방문객, 전월 관광지출액, 1인당 소비액, 내비게이션 검색량·증가율, 연령대 비율, 월·계절, 공휴일 수, 축제 여부. 실제 데이터로 사용 가능성과 예측 시점 누수를 먼저 확인한다.
 

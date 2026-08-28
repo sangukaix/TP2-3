@@ -3,8 +3,8 @@ $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $pythonPath = Join-Path $projectRoot 'backend\.venv\Scripts\python.exe'
 $backendPort = 8100
-$aiPort = 8101
-$frontendPort = 5175
+$aiPort = 8111
+$frontendPort = 5176
 
 if (-not (Test-Path -LiteralPath $pythonPath)) {
   throw "Python virtual environment was not found: $pythonPath"

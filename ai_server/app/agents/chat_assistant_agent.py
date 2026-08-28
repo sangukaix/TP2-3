@@ -6,6 +6,7 @@ from typing import Any
 
 from ..openai_responses import create_structured_response
 from .evidence_agent import _url_is_allowed, allowed_domains
+from .prompts import PLANNING_CONTEXT_RULES
 
 
 ASSISTANT_CHAT_SCHEMA: dict[str, Any] = {
@@ -109,6 +110,7 @@ class TourismChatAssistantAgent:
         history: list[dict[str, str]],
         current_report: dict[str, Any] | None,
         enable_web_search: bool,
+        planning_brief: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         tools = None
         include = None
@@ -123,11 +125,12 @@ class TourismChatAssistantAgent:
         result = await create_structured_response(
             api_key=self.api_key,
             model=self.model,
-            instructions=ASSISTANT_INSTRUCTIONS,
+            instructions=ASSISTANT_INSTRUCTIONS + PLANNING_CONTEXT_RULES,
             input_payload={
                 'selected_region': snapshot['region_name'],
                 'analysis_period': snapshot['period'],
                 'snapshot': snapshot,
+                'planning_brief': planning_brief,
                 'current_report': current_report,
                 'recent_conversation': history[-8:],
                 'user_request': question,
@@ -146,4 +149,3 @@ class TourismChatAssistantAgent:
             if _url_is_allowed(str(source.get('url') or ''), self.domains)
         ]
         return result
-

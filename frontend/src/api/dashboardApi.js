@@ -75,7 +75,8 @@ export async function startAiStrategyReportJob(regionCode, options) {
   })
   if (!response.ok) {
     const error = await response.json().catch(() => null)
-    throw new Error(error?.detail?.message || 'AI 전략기획 작업을 시작하지 못했습니다.')
+    const message = Array.isArray(error?.detail) ? error.detail.map((item) => item.msg?.replace('Value error, ', '')).join(' / ') : error?.detail?.message
+    throw new Error(message || 'AI 전략기획 작업을 시작하지 못했습니다.')
   }
   return response.json()
 }
@@ -117,6 +118,42 @@ export async function downloadAiStrategyPresentation(regionCode, report) {
   return response.blob()
 }
 
+/** 팀 공용 MySQL에 저장된 기획서 목록입니다. 브라우저별 localStorage를 사용하지 않습니다. */
+export async function getStoredStrategyReports() {
+  const response = await fetch('/ai/v1/strategy-reports')
+  if (!response.ok) {
+    const error = await response.json().catch(() => null)
+    throw new Error(error?.detail?.message || '저장된 기획서 목록을 불러오지 못했습니다.')
+  }
+  return response.json()
+}
+
+/** 제목을 눌렀을 때 MySQL에 보관된 기획안 원문을 읽습니다. */
+export async function getStoredStrategyReport(reportId) {
+  const response = await fetch(`/ai/v1/strategy-reports/${encodeURIComponent(reportId)}`)
+  if (!response.ok) throw new Error('저장된 기획안을 불러오지 못했습니다.')
+  return response.json()
+}
+
+/** 생성 시 저장된 Word/PPT를 내려받습니다. 파일이 없을 때만 서버가 한 번 생성합니다. */
+export async function downloadStoredStrategyDocument(reportId, fileFormat) {
+  const response = await fetch(`/ai/v1/strategy-reports/${encodeURIComponent(reportId)}/documents/${fileFormat}`)
+  if (!response.ok) throw new Error('저장된 문서를 내려받지 못했습니다.')
+  return response.blob()
+}
+
+/** 챗봇으로 수정한 기획안을 사용자가 저장 버튼을 눌렀을 때 MySQL 원문에 반영합니다. */
+export async function saveStoredStrategyReport(reportId, regionCode, report) {
+  const response = await fetch(`/ai/v1/strategy-reports/${encodeURIComponent(reportId)}?region_code=${encodeURIComponent(regionCode)}`, {
+    method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(report),
+  })
+  if (!response.ok) {
+    const error = await response.json().catch(() => null)
+    throw new Error(error?.detail?.message || '기획안을 저장하지 못했습니다.')
+  }
+  return response.json()
+}
+
 /** 선택 지역 원본에서 계산한 최신 월·전월 대비 상단 카드 데이터입니다. OpenAI 호출은 하지 않습니다. */
 export async function getAiRegionDashboard(regionCode, regionName) {
   const params = new URLSearchParams({ region_name: regionName })
@@ -154,4 +191,15 @@ export async function chatWithTourismAssistant(regionCode, options) {
     throw new Error(error?.detail?.message || 'AI 챗봇이 답변하지 못했습니다.')
   }
   return response.json()
+}
+
+/** 참고자료의 텍스트만 추출합니다. 이 단계에서는 OpenAI를 호출하지 않습니다. */
+export async function uploadPlanningReference(file) {
+  if (file.size > 2_000_000) throw new Error('2MB 이하 파일만 첨부할 수 있습니다.')
+  const response = await fetch(`/ai/v1/planning/reference?filename=${encodeURIComponent(file.name)}`, {
+    method: 'POST', headers: { 'Content-Type': 'application/octet-stream' }, body: file,
+  })
+  const result = await response.json()
+  if (!response.ok) throw new Error(result?.detail?.message || '참고자료를 읽지 못했습니다.')
+  return result
 }

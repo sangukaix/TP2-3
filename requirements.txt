@@ -8,8 +8,18 @@ httpx>=0.27,<1.0
 python-dotenv>=1.0,<2.0
 # AI 전략기획서 Word(.docx)와 원자료 추세 그래프 생성에 사용합니다.
 python-docx>=1.2,<2.0
+# 사용자 참고문서의 텍스트만 메모리에서 추출합니다(PDF·Excel). 원본 파일은 서버에 저장하지 않습니다.
+pypdf>=6.0,<7.0
+openpyxl>=3.1,<4.0
 # bid3의 제안서 제작 장점을 관광 기획안에 적용하는 PowerPoint(.pptx) 출력입니다.
 python-pptx>=1.0,<2.0
 matplotlib>=3.10,<4.0
+# 강남구 월별 방문자·외지인 관광소비 예측의 전처리, 시간순 검증, 저장 모델에 사용합니다.
+pandas>=2.2,<4.0
+numpy>=1.26,<3.0
+scikit-learn>=1.5,<2.0
+joblib>=1.4,<2.0
 # 공식 정책·관광 문서를 지역 필터로 검색하는 영속형 RAG 저장소입니다.
 chromadb>=1.0,<2.0
+# 생성 기획안 기록과 Word/PPT 파일 경로를 MySQL에 저장합니다.
+PyMySQL>=1.1,<2.0

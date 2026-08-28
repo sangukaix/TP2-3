@@ -77,7 +77,7 @@ class EvidenceAgent:
             or 'gpt-5.6'
         ).strip()
 
-    async def collect(self, *, region_code: str, snapshot: dict[str, Any]) -> dict[str, Any]:
+    async def collect(self, *, region_code: str, snapshot: dict[str, Any], planning_brief: dict[str, Any] | None = None) -> dict[str, Any]:
         sources: list[dict[str, Any]] = []
         gaps: list[str] = []
         trace: list[dict[str, Any]] = []
@@ -164,6 +164,7 @@ class EvidenceAgent:
                     instructions=EVIDENCE_RESEARCH_INSTRUCTIONS,
                     input_payload={
                         'region_name': snapshot['region_name'],
+                        'planning_brief': planning_brief,
                         'period': snapshot['period'],
                         'observations': snapshot.get('observations') or [],
                         'research_questions': [

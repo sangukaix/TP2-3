@@ -30,10 +30,12 @@ def _evidence_cache_key(
     env_values: dict[str, Any],
     region_code: str,
     snapshot: dict[str, Any],
+    planning_brief: dict[str, Any] | None = None,
 ) -> str:
     relevant_settings = {
         'region_code': region_code,
         'snapshot': snapshot,
+        'planning_brief': planning_brief,
         'research_model': env_values.get('OPENAI_RESEARCH_MODEL'),
         'web_enabled': env_values.get('ENABLE_OFFICIAL_WEB_RESEARCH'),
         'allowed_domains': env_values.get('TOURISM_ALLOWED_RESEARCH_DOMAINS'),
@@ -53,6 +55,7 @@ async def _collect_evidence(
     env_values: dict[str, Any],
     region_code: str,
     snapshot: dict[str, Any],
+    planning_brief: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any], bool]:
     ttl_seconds = max(0, int(float(env_values.get('EVIDENCE_CACHE_TTL_SECONDS') or 3600)))
     cache_key = _evidence_cache_key(
@@ -60,13 +63,14 @@ async def _collect_evidence(
         env_values=env_values,
         region_code=region_code,
         snapshot=snapshot,
+        planning_brief=planning_brief,
     )
     now = monotonic()
     cached = _EVIDENCE_CACHE.get(cache_key)
     if ttl_seconds and cached and now - cached[0] < ttl_seconds:
         return deepcopy(cached[1]), True
 
-    evidence_pack = await agent.collect(region_code=region_code, snapshot=snapshot)
+    evidence_pack = await agent.collect(region_code=region_code, snapshot=snapshot, planning_brief=planning_brief)
     if ttl_seconds:
         # 오래된 항목을 함께 정리해 개발 서버에서 캐시가 계속 커지지 않게 합니다.
         expired_keys = [key for key, (created_at, _) in _EVIDENCE_CACHE.items() if now - created_at >= ttl_seconds]
@@ -82,10 +86,12 @@ def _case_study_cache_key(
     env_values: dict[str, Any],
     region_code: str,
     snapshot: dict[str, Any],
+    planning_brief: dict[str, Any] | None = None,
 ) -> str:
     relevant_settings = {
         'region_code': region_code,
         'snapshot': snapshot,
+        'planning_brief': planning_brief,
         'case_research_model': env_values.get('OPENAI_CASE_RESEARCH_MODEL'),
         'research_model': env_values.get('OPENAI_RESEARCH_MODEL'),
         'web_enabled': env_values.get('ENABLE_CASE_STUDY_WEB_RESEARCH'),
@@ -104,6 +110,7 @@ async def _collect_case_studies(
     env_values: dict[str, Any],
     region_code: str,
     snapshot: dict[str, Any],
+    planning_brief: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any], bool]:
     ttl_seconds = max(0, int(float(env_values.get('CASE_STUDY_CACHE_TTL_SECONDS') or 21600)))
     cache_key = _case_study_cache_key(
@@ -111,13 +118,14 @@ async def _collect_case_studies(
         env_values=env_values,
         region_code=region_code,
         snapshot=snapshot,
+        planning_brief=planning_brief,
     )
     now = monotonic()
     cached = _CASE_STUDY_CACHE.get(cache_key)
     if ttl_seconds and cached and now - cached[0] < ttl_seconds:
         return deepcopy(cached[1]), True
 
-    case_pack = await agent.collect(region_code=region_code, snapshot=snapshot)
+    case_pack = await agent.collect(region_code=region_code, snapshot=snapshot, planning_brief=planning_brief)
     if ttl_seconds:
         expired_keys = [key for key, (created_at, _) in _CASE_STUDY_CACHE.items() if now - created_at >= ttl_seconds]
         for key in expired_keys:
@@ -133,6 +141,7 @@ async def orchestrate_strategy_report(
     region_code: str,
     snapshot: dict[str, Any],
     report_schema: dict[str, Any],
+    planning_brief: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     api_key = str(env_values.get('OPENAI_API_KEY') or '').strip()
     report_model = str(
@@ -152,15 +161,19 @@ async def orchestrate_strategy_report(
             env_values=env_values,
             region_code=region_code,
             snapshot=snapshot,
+            planning_brief=planning_brief,
         ),
         _collect_case_studies(
             agent=case_study_agent,
             env_values=env_values,
             region_code=region_code,
             snapshot=snapshot,
+            planning_brief=planning_brief,
         ),
     )
     evidence_pack, evidence_cache_hit = evidence_result
+    # 사용자가 입력한 여건을 snapshot(공식 관측값)에 섞지 않습니다.
+    evidence_pack['planning_brief'] = deepcopy(planning_brief)
     case_pack, case_cache_hit = case_result
     trace.extend(evidence_pack.pop('trace', []))
     trace.extend(case_pack.pop('trace', []))

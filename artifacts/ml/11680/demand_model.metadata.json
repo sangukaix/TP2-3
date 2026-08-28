@@ -1,0 +1,69 @@
+{
+  "version": "gangnam-demand-v1.1",
+  "region_code": "11680",
+  "region_name": "서울특별시 강남구",
+  "target": {
+    "visitors": "월간 외지인 순 방문자 수",
+    "spending_krw": "월간 외지인 관광소비액(원)",
+    "lodging_nights": "월간 평균 숙박일수(일)"
+  },
+  "source_period": "202401~202607",
+  "feature_names": [
+    "visitors_lag_1",
+    "visitors_lag_3",
+    "visitors_lag_12",
+    "spending_lag_1",
+    "spending_lag_3",
+    "spending_lag_12",
+    "month_sin",
+    "month_cos"
+  ],
+  "test_period": "202604~202607",
+  "baseline": "seasonal_naive_previous_year_same_month",
+  "evaluation": {
+    "visitors": {
+      "selected_model": "RandomForestRegressor",
+      "selected_model_metrics": {
+        "mae": 537513.5,
+        "rmse": 609494.04,
+        "mape_percent": 3.05
+      },
+      "baseline_metrics": {
+        "mae": 673789.0,
+        "rmse": 908024.63,
+        "mape_percent": 3.78
+      }
+    },
+    "spending_krw": {
+      "selected_model": "LinearRegression",
+      "selected_model_metrics": {
+        "mae": 13228314300.7,
+        "rmse": 15578163724.23,
+        "mape_percent": 2.72
+      },
+      "baseline_metrics": {
+        "mae": 24906220750.0,
+        "rmse": 28465897436.44,
+        "mape_percent": 5.21
+      }
+    },
+    "lodging_nights": {
+      "selected_model": "seasonal_naive_previous_year_same_month",
+      "selected_model_metrics": {
+        "mae": 0.05,
+        "rmse": 0.07,
+        "mape_percent": 1.75
+      },
+      "baseline_metrics": {
+        "mae": 0.05,
+        "rmse": 0.07,
+        "mape_percent": 1.75
+      }
+    }
+  },
+  "limitations": [
+    "강남구 한 지역의 31개월 관측값으로 학습한 초기 모델입니다.",
+    "예측은 자연 추세 추정이며, 정책 실행 효과나 매출 증가의 인과관계를 뜻하지 않습니다.",
+    "업종별 예상 소비 패턴은 최신 관측월 업종 비중을 유지한다는 별도 가정으로 계산합니다."
+  ]
+}

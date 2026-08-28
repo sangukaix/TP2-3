@@ -13,6 +13,7 @@ from .evidence_agent import _url_is_allowed, allowed_domains
 from .prompts import CASE_STUDY_RESEARCH_INSTRUCTIONS
 
 
+# 공식 사례마다 운영 방식·예산·결과·제약 조건을 같은 필드로 보관하기 위한 구조화 응답 계약입니다.
 CASE_STUDY_SCHEMA = {
     'type': 'object',
     'additionalProperties': False,
@@ -55,6 +56,7 @@ CASE_STUDY_SCHEMA = {
 
 
 def _case_source_id(url: str) -> str:
+    # URL의 해시 앞부분을 안정적인 내부 ID로 써, 같은 공식 페이지가 여러 번 검색돼도 하나로 합칠 수 있게 합니다.
     return f"case:{sha256(url.encode('utf-8')).hexdigest()[:14]}"
 
 
@@ -96,6 +98,7 @@ class CaseStudyAgent:
     """일반 아이디어가 아니라 공식 자료에서 확인된 사업 사례만 반환합니다."""
 
     def __init__(self, *, project_root: Path, env_values: dict[str, Any]) -> None:
+        # 환경변수에서만 API 키·모델·허용 도메인을 읽어, 프런트엔드나 코드에 비밀값을 남기지 않습니다.
         self.project_root = project_root
         self.env_values = env_values
         self.api_key = str(env_values.get('OPENAI_API_KEY') or '').strip()
@@ -108,13 +111,17 @@ class CaseStudyAgent:
             or 'gpt-5.6'
         ).strip()
 
-    async def collect(self, *, region_code: str, snapshot: dict[str, Any]) -> dict[str, Any]:
+    async def collect(self, *, region_code: str, snapshot: dict[str, Any], planning_brief: dict[str, Any] | None = None) -> dict[str, Any]:
+        # 1) 팀이 먼저 검수한 JSONL 사례, 2) 영속 RAG, 3) 허용 도메인 웹 검색 순서로 근거를 모읍니다.
+        # 어느 단계가 실패했는지는 trace·research_gaps에 남겨 Planner와 Reviewer가 알 수 있게 합니다.
         curated_cards = _load_curated_case_cards(self.project_root, self.domains)
         gaps: list[str] = []
         trace: list[dict[str, Any]] = [{
             'agent': 'case_scout', 'stage': 'curated_registry', 'status': 'completed', 'items': len(curated_cards),
         }]
 
+        # 영속 ChromaDB에는 이미 검수한 문서의 의미 검색 결과가 들어 있습니다.
+        # 월별 숫자 표는 RAG에 넣지 않고 snapshot의 원자료 수치로만 다룹니다.
         rag_candidates: list[dict[str, Any]] = []
         rag_path = Path(str(self.env_values.get('CHROMA_PERSIST_DIRECTORY') or 'data/chroma'))
         if not rag_path.is_absolute():
@@ -141,6 +148,7 @@ class CaseStudyAgent:
             gaps.append(f'공식 사례 RAG 검색 불가: {type(exc).__name__}')
             trace.append({'agent': 'case_scout', 'stage': 'case_rag', 'status': 'failed', 'items': 0})
 
+        # 라이브 웹 검색은 선택 기능입니다. 꺼져 있거나 API 키가 없으면 검수된 카드만 사용합니다.
         web_enabled = str(self.env_values.get('ENABLE_CASE_STUDY_WEB_RESEARCH') or 'true').lower() == 'true'
         if not self.api_key or not web_enabled:
             gaps.append('공식 성공사례 웹 조사가 비활성화되었거나 OpenAI 키가 없음')
@@ -154,6 +162,7 @@ class CaseStudyAgent:
                     instructions=CASE_STUDY_RESEARCH_INSTRUCTIONS,
                     input_payload={
                         'selected_region': snapshot['region_name'],
+                        'planning_brief': planning_brief,
                         'analysis_period': snapshot['period'],
                         'observations': snapshot.get('observations') or [],
                         'consumption_by_category': snapshot.get('consumption_by_category') or [],

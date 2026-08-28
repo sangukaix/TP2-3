@@ -120,6 +120,9 @@ def create_strategy_proposal_presentation(report: dict[str, Any]) -> BytesIO:
     _text(cover, f'{region}\n관광 전략 기획안', 1.05, 1.75, 8.6, 1.5, size=31, color=WHITE, bold=True)
     _text(cover, str(report.get('summary') or ''), 1.05, 3.48, 8.4, 1.1, size=15, color=RGBColor(203, 213, 225))
     _text(cover, f'분석 기준  {period}', 1.05, 5.62, 4.4, .35, size=10, color=MUTED)
+    if report.get('planning_brief'):
+        from .planning_brief import brief_summary
+        _text(cover, brief_summary(report['planning_brief']), 1.05, 5.03, 10.9, .4, size=11, color=RGBColor(203, 213, 225))
     _text(cover, 'TOUR INSIGHT', 10.15, 6.3, 2.1, .35, size=11, color=WHITE, bold=True, align=PP_ALIGN.RIGHT)
 
     # 2. 실제 관측값과 추세

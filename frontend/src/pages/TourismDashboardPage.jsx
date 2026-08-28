@@ -3,7 +3,6 @@ import {
   ChevronDown,
   ChevronUp,
   Download,
-  ExternalLink,
   FileText,
   Info,
   LoaderCircle,
@@ -263,14 +262,20 @@ function TourismConsumptionStayDiagnostic({ diagnostic, latestMonth }) {
     )
   }
 
+  // 업종별 장기 데이터가 더 쌓이기 전까지는 전체 소비액만 ML로 예측하고,
+  // 업종별 금액은 향후 3개월 전체 소비액 예측 평균에 최신 관측 비중을 적용합니다.
+  const isForecast = diagnostic.is_forecast
   return (
     <article className="tourism-diagnosis" id="consumption-diagnosis" aria-labelledby="tourism-diagnosis-title">
       <div className="tourism-diagnosis-heading">
-        <h3 id="tourism-diagnosis-title">관광소비</h3>
+        <h3 id="tourism-diagnosis-title">{isForecast ? '소비패턴 예측' : '관광소비'}</h3>
       </div>
       <div className="tourism-diagnosis-body">
         <section className="consumption-breakdown" aria-label="관광소비 업종 비중">
-          <div className="diagnostic-subheading"><span>관광소비 업종 비중</span><small>기준: {monthLabel}</small></div>
+          <div className="diagnostic-subheading">
+            <span>{isForecast ? '업종' : '관광소비 업종 비중'}</span>
+            <small>{isForecast ? `향후 3개월 소비패턴 예측 평균값 · ${formatAmount(diagnostic.forecast_average_spending_krw)}` : `기준: ${monthLabel}`}</small>
+          </div>
           <div className="consumption-category-list">
             {diagnostic.consumption_categories.map((category, index) => (
               <div className="consumption-category" key={category.name}>
@@ -491,11 +496,14 @@ const TOURISM_CHART_CONFIG = {
 /** Recharts 기본 툴팁 대신 담당자가 단위와 기준월을 바로 읽는 카드형 툴팁입니다. */
 function TourismChartTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null
+  const displayLabel = typeof label === 'number'
+    ? new Date(label).toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' })
+    : label
 
   return (
     <div className="tourism-chart-tooltip">
-      <p>{label} 기준</p>
-      {payload.map((entry) => {
+      <p>{displayLabel} {payload[0]?.payload?.is_forecast ? '예상' : '관측'}값</p>
+      {payload.filter((entry) => !String(entry.dataKey).includes('_forecast')).map((entry) => {
         const series = TOURISM_CHART_CONFIG[entry.dataKey]
         const isVisitor = entry.dataKey === 'visitors'
         const value = Number(entry.value)
@@ -556,10 +564,18 @@ function MonthlyActualTrendChart({ trend, height = 278, emptyMessage = '월간 �
   }
 
   if (!trend?.length) return <div className="trend-empty-state">{emptyMessage}</div>
-
+  // 관측선은 실제 마지막 월에서 끝내고, 예측선은 그 지점에서 이어서 다른 색으로 표시합니다.
+  const firstForecastIndex = trend.findIndex((point) => point.is_forecast)
+  const chartData = trend.map((point, index) => ({
+    ...point,
+    spending_actual_krw: point.is_forecast ? null : point.spending_krw,
+    // 예측선은 첫 예측월(8월)부터만 그려 실제선(7월까지)과 색이 섞이지 않게 합니다.
+    spending_forecast_krw: point.is_forecast ? point.spending_krw : null,
+  }))
   return (
-    <ResponsiveContainer width="100%" height={height}>
-      <ComposedChart data={trend} margin={{ top: 28, right: 20, left: 14, bottom: 10 }}>
+    <div className="monthly-trend-chart">
+      <ResponsiveContainer width="100%" height={height}>
+      <ComposedChart data={chartData} margin={{ top: 28, right: 20, left: 14, bottom: 10 }}>
         <CartesianGrid stroke="#dfe5ea" strokeDasharray="0" vertical={false} />
         <XAxis dataKey="month" axisLine={{ stroke: '#2f3640' }} tickLine={{ stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: 11 }} />
         <YAxis yAxisId="visitors" axisLine={{ stroke: '#2f3640' }} tickLine={{ stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: 10 }} width={54} tickFormatter={formatVisitorTick} domain={[0, paddedAxisMax]} />
@@ -567,17 +583,25 @@ function MonthlyActualTrendChart({ trend, height = 278, emptyMessage = '월간 �
         <ChartTooltip cursor={{ fill: '#1fbac80d' }} content={<TourismChartTooltip />} />
         <Legend verticalAlign="bottom" content={<TourismChartLegend />} />
         <Bar yAxisId="visitors" dataKey="visitors" name={TOURISM_CHART_CONFIG.visitors.label} fill={TOURISM_CHART_CONFIG.visitors.color} barSize={25} radius={[4, 4, 0, 0]}>
+          {/* 8월부터는 저장 모델의 예측값이므로 실제값과 부드러운 보라색으로 구분합니다. */}
+          {chartData.map((point) => <Cell key={`visitor-${point.month}`} fill={point.is_forecast ? '#7a87d8' : TOURISM_CHART_CONFIG.visitors.color} />)}
           {/* 막대 내부 중앙에 두 줄로 표시해 어떤 화면 크기에서도 라벨이 막대 밖으로 튀지 않게 합니다. */}
           <LabelList content={renderVisitorBarLabel} />
         </Bar>
-        <Line yAxisId="spending" type="monotone" dataKey="spending_krw" name={TOURISM_CHART_CONFIG.spending_krw.label} stroke={TOURISM_CHART_CONFIG.spending_krw.color} strokeWidth={3.5} dot={{ r: 4, fill: '#fff', stroke: TOURISM_CHART_CONFIG.spending_krw.color, strokeWidth: 2 }} activeDot={{ r: 6 }} />
+        <Line yAxisId="spending" type="monotone" dataKey="spending_actual_krw" name={TOURISM_CHART_CONFIG.spending_krw.label} stroke={TOURISM_CHART_CONFIG.spending_krw.color} strokeWidth={3.5} dot={{ r: 4, fill: '#fff', stroke: TOURISM_CHART_CONFIG.spending_krw.color, strokeWidth: 2 }} activeDot={{ r: 6 }} />
+        <Line yAxisId="spending" type="monotone" dataKey="spending_forecast_krw" name="관광소비액 예상" stroke="#ee7180" strokeWidth={3.5} dot={{ r: 4, fill: '#fff', stroke: '#ee7180', strokeWidth: 2 }} activeDot={{ r: 6 }} legendType="none" />
       </ComposedChart>
-    </ResponsiveContainer>
+      </ResponsiveContainer>
+    </div>
   )
 }
 
 function TourismTrendChart({ trend, emptyMessage }) {
-  return <div className="trend-chart-wrap"><MonthlyActualTrendChart trend={trend} emptyMessage={emptyMessage} /></div>
+  return (
+    <div className="trend-chart-wrap">
+      <MonthlyActualTrendChart trend={trend} emptyMessage={emptyMessage} />
+    </div>
+  )
 }
 
 /** 실제 관광 원자료가 아직 없는 시군구를 선택했을 때, 다른 지역의 시연값을 잘못 보여주지 않기 위한 빈 대시보드입니다. */
@@ -606,51 +630,36 @@ function createPendingRegion(regionCode, regionName) {
   }
 }
 
-/**
- * 지역 대시보드의 수치와 관광 Open API 자원을 한 팝업에서 분리해 보여줍니다.
- * 방문·소비 수치는 원자료 요약이고, 아래 관광자원 목록은 Open API 응답입니다.
- */
-function RegionInfoModal({ visible, onClose, region, dashboard, info, state, error }) {
+/** 관광 Open API의 업종별 관광자원을 사진 목록으로 탐색하는 지역별 핫플레이스 창입니다. */
+function RegionInfoModal({ visible, onClose, region, info, state, error }) {
+  // 선택한 업종만 같은 Open API 응답 안에서 즉시 필터링합니다. 새 API 호출은 필요 없습니다.
+  const [activeCategory, setActiveCategory] = useState('')
   if (!visible) return null
 
-  const metrics = dashboard?.metrics ?? []
   const resources = info?.resources ?? []
   const categories = info?.category_summary ?? []
   const isLoading = state === 'loading'
+  const filteredResources = activeCategory ? resources.filter((resource) => resource.content_type === activeCategory) : resources
 
   return (
     <div className="region-info-modal-backdrop" role="presentation" onMouseDown={onClose}>
       <section className="region-info-modal" role="dialog" aria-modal="true" aria-labelledby="region-info-modal-title" onMouseDown={(event) => event.stopPropagation()}>
-        <button type="button" className="region-info-modal-close" onClick={onClose} aria-label="지역 정보 상세보기 닫기"><X size={18} /></button>
+        <button type="button" className="region-info-modal-close" onClick={onClose} aria-label="지역별 핫플레이스 닫기"><X size={18} /></button>
         <header className="region-info-modal-heading">
-          <span><Info size={15} /> 지역 정보 상세보기</span>
-          <h2 id="region-info-modal-title">{region.name} 관광 현황</h2>
-          <p>월간 수치는 관광데이터랩 원자료, 관광자원은 한국관광공사 Open API에서 각각 확인합니다.</p>
+          <span><Info size={15} /> {region.name}</span>
+          <h2 id="region-info-modal-title">이 지역 핫플레이스</h2>
+          <p>선택 지역에서 확인된 관광자원을 업종별로 살펴보세요.</p>
         </header>
 
-        <section className="region-info-data-summary" aria-label="관광데이터랩 원자료 요약">
-          <div className="region-info-section-title"><span>관광데이터랩 원자료</span><small>{dashboard?.latest_month ? `${dashboard.latest_month.replace('-', '.')} 기준` : '자료 연결 상태'}</small></div>
-          {metrics.length > 0 ? (
-            <div className="region-info-metric-grid">
-              {metrics.slice(0, 3).map((metric) => <div key={metric.label}><span>{metric.label}</span><b>{metric.value}</b></div>)}
-            </div>
-          ) : <p className="region-info-empty">이 지역의 월간 원자료가 아직 연결되지 않았습니다.</p>}
-        </section>
-
-        <section className="region-info-open-api" aria-label="관광 Open API 관광자원">
-          <div className="region-info-section-title">
-            <span>관광자원 · 연계 정보</span>
-            {info?.source_url && <a href={info.source_url} target="_blank" rel="noreferrer">공식 API 보기 <ExternalLink size={12} /></a>}
-          </div>
+        <section className="region-info-open-api" aria-label="지역별 핫플레이스 목록">
           {isLoading && <div className="region-info-loading"><LoaderCircle size={20} />관광 Open API 정보를 불러오는 중입니다.</div>}
           {!isLoading && error && <p className="region-info-error">{error}</p>}
           {!isLoading && !error && info && (
             <>
-              <p className={`region-info-api-message region-info-api-message--${info.status}`}>{info.message}</p>
-              {categories.length > 0 && <div className="region-info-category-chips">{categories.map((category) => <span key={category.name}>{category.name}<b>{category.count}</b></span>)}</div>}
-              {resources.length > 0 && (
+              {categories.length > 0 && <div className="region-info-category-chips"><button type="button" className={!activeCategory ? 'is-active' : ''} onClick={() => setActiveCategory('')}>전체</button>{categories.map((category) => <button type="button" className={activeCategory === category.name ? 'is-active' : ''} key={category.name} onClick={() => setActiveCategory(category.name)}>{category.name}<b>{category.count}</b></button>)}</div>}
+              {filteredResources.length > 0 && (
                 <div className="region-info-resource-grid">
-                  {resources.slice(0, 8).map((resource) => (
+                  {filteredResources.map((resource) => (
                     <article key={`${resource.title}-${resource.address}`} className="region-info-resource-card">
                       {resource.image_url ? <img src={resource.image_url} alt="" loading="lazy" /> : <div className="region-info-resource-image"><span>{resource.content_type}</span></div>}
                       <div><span>{resource.content_type}</span><h3>{resource.title}</h3><p>{resource.address || '주소 정보 없음'}</p></div>
@@ -658,11 +667,11 @@ function RegionInfoModal({ visible, onClose, region, dashboard, info, state, err
                   ))}
                 </div>
               )}
+              {activeCategory && filteredResources.length === 0 && <p className="region-info-empty">선택한 업종의 관광자원이 없습니다.</p>}
             </>
           )}
         </section>
 
-        <footer className="region-info-modal-note">관광자원 정보는 Open API의 반환 결과이며, 월간 방문자·관광소비 수치와는 집계 기준이 다를 수 있습니다.</footer>
       </section>
     </div>
   )
@@ -691,6 +700,9 @@ function DashboardApp() {
   const [boundaryError, setBoundaryError] = useState(false)
   const [regionDashboard, setRegionDashboard] = useState(null)
   const [regionDashboardState, setRegionDashboardState] = useState('idle')
+  // 한 달이 바뀌어도 열린 화면이 이전 예측월에 머물지 않도록, 한 시간마다 최신 대시보드 데이터를 다시 요청합니다.
+  // 이 값은 화면에 표시하지 않고 API 요청 효과를 다시 실행하는 용도로만 사용합니다.
+  const [dashboardRefreshTick, setDashboardRefreshTick] = useState(0)
   const [regionSearch, setRegionSearch] = useState('')
   const [regionSearchMessage, setRegionSearchMessage] = useState('')
   const [isRegionInfoVisible, setIsRegionInfoVisible] = useState(false)
@@ -705,6 +717,16 @@ function DashboardApp() {
     updateScrollTopVisibility()
     window.addEventListener('scroll', updateScrollTopVisibility, { passive: true })
     return () => window.removeEventListener('scroll', updateScrollTopVisibility)
+  }, [])
+
+  // 서버가 "다음 달"을 날짜 기준으로 계산하므로, 브라우저를 새로고침하지 않아도 자정·월 변경 후 최신 기준을 받습니다.
+  // 시간 단위 재검증은 OpenAI 호출이 아닌 공식 지표/저장 모델 조회라 비용을 발생시키지 않습니다.
+  useEffect(() => {
+    const refreshTimer = window.setInterval(() => {
+      setDashboardRefreshTick((previousTick) => previousTick + 1)
+    }, 60 * 60 * 1000)
+
+    return () => window.clearInterval(refreshTimer)
   }, [])
 
   const selectedBoundary = useMemo(
@@ -735,7 +757,7 @@ function DashboardApp() {
     if (selectedCode && selectedRegion.name) {
       window.localStorage.setItem('tour-insight-selected-region', JSON.stringify({ code: selectedCode, name: selectedRegion.name }))
     }
-  }, [selectedCode, selectedRegion.name])
+  }, [selectedCode, selectedRegion.name, dashboardRefreshTick])
 
   // 원본이 검증된 지원 지역만 FastAPI 응답으로 최신월·전월 대비 값을 표시합니다.
   const dashboardMetrics = useMemo(() => {
@@ -994,7 +1016,7 @@ function DashboardApp() {
             </div>
             <button type="button" className="selected-region-detail-button" onClick={openRegionInfo}>
               <Info size={16} />
-              지역 정보 상세보기
+              이 지역 핫플레이스
             </button>
           </div>
 
@@ -1006,7 +1028,7 @@ function DashboardApp() {
 
               <article className="panel trend-panel">
                 <div className="trend-panel-heading">
-                  <h3 className="chart-title">방문자수 | 소비액</h3>
+                  <h3 className="chart-title">{regionDashboard?.forecast ? '방문자수 | 소비액 예측' : '방문자수 | 소비액'}</h3>
                 </div>
                 {/* 지역마다 원본 보유 기간이 달라도 Backend가 최신 12개월만 반환해 같은 차트 틀을 유지합니다. */}
                 <TourismTrendChart

@@ -315,6 +315,11 @@ def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
     subtitle.paragraph_format.space_after = Pt(12)
     _set_run_font(subtitle.add_run(f"분석 기간 {report['period']} | 관광데이터랩 원자료와 공식 관광자료 기반"), size=9.5, color=MUTED)
     _add_heading(document, '1. 핵심 제안')
+    if report.get('planning_brief'):
+        from .planning_brief import brief_summary
+        conditions = document.add_paragraph(brief_summary(report['planning_brief']))
+        for item in conditions.runs:
+            _set_run_font(item, size=9, color=MUTED)
     callout = document.add_table(rows=1, cols=1)
     _set_table_geometry(callout, [9360])
     _shade(callout.cell(0, 0), PALE_AQUA)

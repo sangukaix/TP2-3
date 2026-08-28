@@ -4,6 +4,7 @@ import { lazy, Suspense } from 'react'
 const TourismHomePage = lazy(() => import('./pages/TourismHomePage'))
 const TourismDashboardPage = lazy(() => import('./pages/TourismDashboardPage'))
 const TourismStrategyPage = lazy(() => import('./pages/TourismStrategyPage'))
+const TourismPlanningPage = lazy(() => import('./pages/TourismPlanningPage'))
 const SavedStrategyPlansPage = lazy(() => import('./pages/SavedStrategyPlansBoardPage'))
 
 function PageLoading() {
@@ -22,6 +23,7 @@ export default function App() {
   // 진단 지표는 지역선택 화면 안에 통합했습니다. 예전 주소도 대시보드를 표시해 링크가 끊기지 않게 합니다.
   if (path === '/diagnosis') Page = TourismDashboardPage
   if (path === '/strategy') Page = TourismStrategyPage
+  if (path === '/planning') Page = TourismPlanningPage
   // 기획서 제작은 AI 전략기획 화면에 통합했습니다. 예전 주소는 같은 화면으로 연결합니다.
   if (path === '/proposal') Page = TourismStrategyPage
   if (path === '/saved-plans') Page = SavedStrategyPlansPage
