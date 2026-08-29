@@ -57,7 +57,10 @@ export default function TourismHomePage() {
     <main className="tourism-home">
       <header className="home-header">
         <div>
-          <a className="home-brand" href="/"><span><MapPinned size={17} /></span><b>TOUR INSIGHT</b></a>
+          <div className="home-brand-wrap">
+            <a className="home-brand" href="/"><span><MapPinned size={17} /></span><b>TOUR INSIGHT</b></a>
+            <a className="ml-learning-dot" href="/ml-test" aria-label="머신러닝 학습 결과 보기" title="머신러닝 학습 결과" />
+          </div>
         </div>
       </header>
 

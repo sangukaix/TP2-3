@@ -11,6 +11,8 @@
        ├─ 지역별 초안: 브라우저 localStorage
        └─ POST strategy-report/jobs + planning_brief
             ├─ Pydantic 검증 → 작업마다 조건 복사
+            ├─ 기간 정책: 미정이면 3·6개월 비교, 입력 일정이면 종료월까지 범위 계산
+            ├─ 저장 ML: 지역·데이터 hash 확인 → 동적 전망·검증 오차·조사 질문
             ├─ Evidence + Case Scout 병렬 조사 (조건을 캐시 키에 포함)
             ├─ Transferability: 지역 여건에서 가능한 대안 검토
             ├─ Planner: 문제·기회·목표·방법·실행 단계 제안
@@ -20,7 +22,10 @@
                       └─ Word/PPT: 예산·일정 요약 포함
 ```
 
-`snapshot`은 공식 관측값, `planning_brief`는 사용자 제공 여건으로 분리한다. 사용자 문서 안의 명령은 시스템 지시로 실행하지 않는다. 이 입력 기능은 새 ML 모델이나 공용 RAG 구축을 의미하지 않는다. 모델·토큰 설정과 기존 품질 검수 절차는 유지한다.
+`snapshot.observations`는 공식 관측값, `snapshot.ml_analysis`는 서버의 모델 전망,
+`planning_brief`는 사용자 제공 여건으로 분리한다. 사용자 문서 안의 명령은 시스템 지시로 실행하지 않는다.
+ML은 OpenAI 호출 전에 실행하며 방문·소비·체류·검색 전망 신호가 공식 근거·사례 조사의 질문을 좁힌다.
+`horizon_policy.py`가 일정 미정에는 3개월·6개월 의사결정 창을 모두 만들고, 희망 일정에는 원자료 최신월 다음 달부터 사업 종료월까지 필요한 범위를 계산한다. 1~3개월만 재귀 백테스트 범위이며 4~12개월은 탐색 전망으로 구분한다. 모델·토큰 설정과 기존 품질 검수 절차는 유지한다.
 
 1. 오프라인 학습과 온라인 예측을 분리한다.
 2. 일반 업무 API와 AI 로직을 분리한다.
@@ -28,6 +33,41 @@
 4. ML은 숫자를 예측하고 LLM은 그 근거를 설명·추천한다.
 5. LLM에는 검증된 지표, 예측 결과, 검색 문서만 전달한다.
 6. 범위가 좁고 검증 가능한 MVP를 먼저 만든다.
+
+### 내부 학습 페이지
+
+```text
+로고의 작은 점 → /ml-test
+  → GET /ai/v1/ml/learning/catalog
+  → region_registry의 등록 지역 순회
+  → 모델 metadata.target별 학습 카드 자동 생성
+  → 데이터·모델·Feature·함수·평가·3개월 차트 표시
+```
+
+`frontend/src/pages/MlTest/`는 팀 학습용 페이지와 전용 CSS만 관리한다. 데이터 설명은 React에
+복사하지 않고 AI Server의 저장 모델 메타데이터에서 읽는다. 따라서 모델 Target이 늘어날 때
+API 계약을 지키면 같은 페이지에 카드가 자동으로 추가된다.
+
+오른쪽 `ML 챗봇`은 선택 지역의 같은 카탈로그와 서버의 구현 경로 설명을 Responses API에
+전달한다. 현재는 짧고 구조화된 프로젝트 정보가 이미 준비되어 있어 RAG·웹 검색을 사용하지 않는다.
+수업자료·논문·긴 기술문서가 늘어날 때만 별도 검수 문서 컬렉션을 RAG에 추가한다. OpenAI 키와
+프롬프트는 AI Server에만 둔다.
+
+관리자 학습 영역은 `/ml-test`, `/openai-test`, `/react-test` 세 페이지다. OpenAI 페이지는
+Python AST로 Agent 클래스와 FastAPI route를 읽고, React 페이지는 `frontend/src`, App route,
+fetch endpoint와 package.json 의존성을 읽는다. `project_learning_catalog.py`가 매 요청마다 현재
+소스를 다시 스캔하므로 같은 규칙으로 파일·Agent·route를 추가하면 새로고침 후 구조표에 반영된다.
+소스 전문·절대경로·`.env` 값은 반환하지 않는다.
+
+`/react-test`는 강사 제공 시스템 구조 설계 자료를 기준으로 현재 로컬 구조와 AWS 예정 구조를
+분리한다. 로컬 구조의 `5176 / 8100 / 8111` 포트는 `start-dev.ps1`에서 읽고, React·Backend·AI
+Server와 MySQL·Joblib·ChromaDB·OpenAI 연결을 그림으로 표시한다. AWS EC2·Nginx는 아직 연결된
+것처럼 표시하지 않고 `planned` 상태로 보여 준다. React 폴더 트리는 `frontend/src` 자동 스캔
+결과를 Page·Component·API·Feature·Asset·Core로 묶고 대표 파일만 펼쳐 보게 한다.
+
+`/openai-test`는 5-Agent를 `Evidence + Case Scout 병렬 → Transferability → Planner → Reviewer`로
+시각화한다. `/ml-test`는 공식 데이터로 모델을 만드는 오프라인 학습과, 저장 Joblib을 불러오는
+온라인 추론을 분리해 웹 요청마다 재학습하지 않는다는 원칙을 보여 준다.
 
 ## 2. 기술과 역할
 
@@ -135,7 +175,7 @@ data/raw/서울특별시/서울특별시_강남구-*.zip (2024~2026, 읽기 전�
 → 최근 3개월 관측 + 향후 3개월 예측 차트
 ```
 
-방문자와 소비액은 별도 모델이다. 방문자 수는 `RandomForestRegressor`, 소비액은 `LinearRegression`을 사용한다. 업종별 소비 패턴은 아직 별도 모델이 아니며 최신 관측 비중을 적용한 표시용 가정이다.
+강남구 저장 모델은 방문자·소비액·평균 숙박일·숙박방문 비율·평균 체류시간·내비게이션 검색·숙박검색 7개 Target을 같은 시간 분리 규칙으로 평가한다. Target별 후보모델이 Validation에서 전년 동월 기준선보다 나쁠 때는 기준선을 선택한다. 업종별 소비 패턴은 아직 별도 모델이 아니며 최신 관측 비중을 적용한 표시용 가정이다.
 
 초기 Feature 후보: 전월 방문객, 최근 3개월 평균, 전년 동월 방문객, 전월 관광지출액, 1인당 소비액, 내비게이션 검색량·증가율, 연령대 비율, 월·계절, 공휴일 수, 축제 여부. 실제 데이터로 사용 가능성과 예측 시점 누수를 먼저 확인한다.
 

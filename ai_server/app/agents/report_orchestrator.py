@@ -16,6 +16,7 @@ from ..openai_responses import OpenAIResponseError
 from .planner_agent import PlannerAgent
 from .reviewer_agent import ReviewerAgent
 from .transferability_agent import TransferabilityAgent
+from ...ml.planning_evidence import build_planning_ml_evidence
 
 
 # 같은 원자료·같은 조사 설정으로 다시 생성할 때 외부 자료조사를 반복하지 않습니다.
@@ -152,6 +153,17 @@ async def orchestrate_strategy_report(
     review_model = str(env_values.get('OPENAI_REVIEW_MODEL') or report_model).strip()
     trace: list[dict[str, Any]] = []
 
+    # OpenAI가 개입하기 전에 저장 모델로 숫자를 계산합니다. 원본 snapshot·사용자 조건은 변경하지 않습니다.
+    snapshot = deepcopy(snapshot)
+    ml_evidence = await asyncio.to_thread(
+        build_planning_ml_evidence, region_code, snapshot['region_name'], planning_brief,
+    )
+    snapshot['ml_analysis'] = ml_evidence.model_dump(mode='json')
+    trace.append({'agent': 'ml', 'stage': 'forecast_evidence', 'status': ml_evidence.status,
+                  'reason_code': ml_evidence.reason_code,
+                  'forecast_horizon_months': ml_evidence.horizon_policy.get('forecast_horizon_months'),
+                  'selection_basis': ml_evidence.horizon_policy.get('selection_basis')})
+
     evidence_agent = EvidenceAgent(project_root=project_root, env_values=env_values)
     case_study_agent = CaseStudyAgent(project_root=project_root, env_values=env_values)
     started = perf_counter()
@@ -174,6 +186,8 @@ async def orchestrate_strategy_report(
     evidence_pack, evidence_cache_hit = evidence_result
     # 사용자가 입력한 여건을 snapshot(공식 관측값)에 섞지 않습니다.
     evidence_pack['planning_brief'] = deepcopy(planning_brief)
+    # 테스트 대역·다른 근거 수집기에서도 동일한 검증 snapshot이 후속 3개 Agent에 전달됩니다.
+    evidence_pack['snapshot'] = snapshot
     case_pack, case_cache_hit = case_result
     trace.extend(evidence_pack.pop('trace', []))
     trace.extend(case_pack.pop('trace', []))
@@ -271,6 +285,7 @@ async def orchestrate_strategy_report(
 
     review['revised_once'] = revised
     return {
+        'ml_analysis': snapshot['ml_analysis'],
         'report': draft,
         'quality_review': review,
         'evidence_sources': evidence_pack['sources'],

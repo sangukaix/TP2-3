@@ -26,15 +26,24 @@ export default function WorkspaceShell({ children }) {
         ? '3. 기획안 수정 및 출력'
         : currentPath === '/saved-plans'
           ? '저장공간'
+          : currentPath === '/ml-test'
+            ? '머신러닝 결과'
+            : currentPath === '/openai-test'
+              ? 'OpenAI · Agent AI 구조'
+              : currentPath === '/react-test'
+                ? 'React · Vite 구조'
           : '지역관광 전략 업무공간'
 
   return (
     <div className="workspace-shell">
       <aside className="workspace-sidebar">
-        <a className="workspace-brand" href="/" aria-label="TOUR Insight 홈">
-          <span><MapPinned size={18} /></span>
-          <div><b>TOUR INSIGHT</b></div>
-        </a>
+        <div className="workspace-brand-wrap">
+          <a className="workspace-brand" href="/" aria-label="TOUR Insight 홈">
+            <span><MapPinned size={18} /></span>
+            <div><b>TOUR INSIGHT</b></div>
+          </a>
+          <a className="ml-learning-dot" href="/ml-test" aria-label="머신러닝 학습 결과 보기" title="머신러닝 학습 결과" />
+        </div>
 
         <nav className="workspace-nav" aria-label="관광 분석 메뉴">
           <p>분석 업무</p>

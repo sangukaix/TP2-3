@@ -14,6 +14,8 @@ import zipfile
 
 import pandas as pd
 
+from .validation import validate_monthly_data
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 # 지역코드와 원본 경로를 상수로 두면, 실행 위치가 달라도 같은 데이터 파일을 찾을 수 있습니다.
@@ -23,6 +25,7 @@ RAW_BUNDLE = PROJECT_ROOT / 'data' / 'raw' / '서울특별시' / '서울특별�
 # 대시보드와 같은 정의를 쓰기 위해 연인원이 아니라 체류자료의 월간 순 방문자 수를 사용합니다.
 LATEST_STAY_ZIP = PROJECT_ROOT / 'test-gangnam-dashboard' / 'download' / '강남구_숙박체류시간.zip'
 LATEST_SPENDING_ZIP = PROJECT_ROOT / 'test-gangnam-dashboard' / 'download' / '강남구_관광소비.zip'
+LATEST_VISITOR_ZIP = PROJECT_ROOT / 'test-gangnam-dashboard' / 'download' / '강남구_방문자.zip'
 # 지역 코드별로 분리해 50개 이상 시군구의 전처리 표가 서로 덮어쓰지 않게 합니다.
 PROCESSED_PATH = PROJECT_ROOT / 'data' / 'processed' / 'ml' / REGION_CODE / 'monthly_demand.csv'
 
@@ -42,13 +45,19 @@ def _number(value: str) -> float:
     return float(str(value).replace(',', '').strip())
 
 
+ML_TABLE_NAMES = (
+    '순 방문자 수 및 숙박 비율', '관광소비 추이_외지인', '평균 숙박일',
+    '숙박방문자 비율 추이', '평균 체류시간 추이', '숙박 목적지 검색건수',
+    '내비게이션 목적지 유형별 검색량',
+)
+
+
 def _read_interesting_rows(archive: zipfile.ZipFile) -> Iterable[tuple[str, list[dict[str, str]]]]:
-    """방문자·소비·평균 숙박일 표만 선택해 불필요한 표의 혼입을 막습니다."""
+    """검증한 7개 월별 Target 표만 선택해 다른 정의의 표가 섞이지 않게 합니다."""
     for entry in archive.infolist():
         if not entry.filename.lower().endswith('.csv'):
             continue
-        if ('순 방문자 수 및 숙박 비율' not in entry.filename and '관광소비 추이_외지인' not in entry.filename
-                and '평균 숙박일' not in entry.filename):
+        if not any(name in entry.filename for name in ML_TABLE_NAMES):
             continue
         rows = list(csv.DictReader(io.StringIO(_decode_csv(archive.read(entry)))))
         yield entry.filename, rows
@@ -59,8 +68,12 @@ def _append_metrics(
     visitors: dict[str, float],
     spending_krw: dict[str, float],
     lodging_nights: dict[str, float],
+    lodging_rate_pct: dict[str, float],
+    stay_minutes: dict[str, float],
+    navigation_searches: dict[str, float],
+    lodging_searches: dict[str, float],
 ) -> None:
-    """한 ZIP에서 월별 외지인 순 방문자·소비·평균 숙박일을 수집합니다."""
+    """한 ZIP에서 학습 가능한 7개 월별 수치를 같은 YYYYMM 키로 수집합니다."""
     for file_name, rows in _read_interesting_rows(archive):
         is_visitor = '순 방문자 수 및 숙박 비율' in file_name
         for row in rows:
@@ -69,14 +82,23 @@ def _append_metrics(
                 continue
             if is_visitor:
                 visitors[month] = _number(row['순 방문자수'])
-            elif row.get('업종대분류명') == '전체':
+            elif '관광소비 추이_외지인' in file_name and row.get('업종대분류명') == '전체':
                 # 원본 단위가 천원이므로, 서비스와 문서에는 원 단위로 통일해 전달합니다.
                 spending_krw[month] = _number(row['소비액(천원)']) * 1000
             elif '평균 숙박일' in file_name:
                 lodging_nights[month] = _number(row['평균 숙박일수'])
+            elif '숙박방문자 비율 추이' in file_name and str(row.get('지역명') or '').strip() == '강남구':
+                lodging_rate_pct[month] = _number(row['숙박방문자 비율'])
+            elif '평균 체류시간 추이' in file_name and str(row.get('지역명') or '').strip() == '강남구':
+                stay_minutes[month] = _number(row['체류시간(분)'])
+            elif '숙박 목적지 검색건수' in file_name:
+                lodging_searches[month] = _number(row['검색건수'])
+            elif ('내비게이션 목적지 유형별 검색량' in file_name
+                  and str(row.get('목적지 유형') or '').strip() == '전체'):
+                navigation_searches[month] = _number(row['목적지 검색량'])
 
 
-def _read_nested_bundle(visitors: dict[str, float], spending_krw: dict[str, float], lodging_nights: dict[str, float]) -> None:
+def _read_nested_bundle(series: dict[str, dict[str, float]]) -> None:
     """새로 받은 바깥 ZIP 안의 연도별 ZIP을 메모리에서 열어 2024~2026 자료를 읽습니다."""
     if not RAW_BUNDLE.exists():
         raise FileNotFoundError(f'강남구 원본 묶음을 찾지 못했습니다: {RAW_BUNDLE}')
@@ -84,47 +106,56 @@ def _read_nested_bundle(visitors: dict[str, float], spending_krw: dict[str, floa
     # 읽은 바이트는 메모리 버퍼로만 전달해 data/raw 원본을 수정하지 않습니다.
     with zipfile.ZipFile(RAW_BUNDLE) as root_archive:
         for entry in root_archive.infolist():
-            if not entry.filename.endswith('.zip') or ('/숙박_체류시간/' not in entry.filename and '/관광소비/' not in entry.filename):
+            if not entry.filename.endswith('.zip') or not any(
+                section in entry.filename for section in ('/숙박_체류시간/', '/관광소비/', '/방문자/')
+            ):
                 continue
             with zipfile.ZipFile(io.BytesIO(root_archive.read(entry))) as inner_archive:
-                _append_metrics(inner_archive, visitors, spending_krw, lodging_nights)
+                _append_metrics(inner_archive, **series)
 
 
-def _read_latest_july(visitors: dict[str, float], spending_krw: dict[str, float], lodging_nights: dict[str, float]) -> None:
+def _read_latest_july(series: dict[str, dict[str, float]]) -> None:
     """7월 최신 관측값은 별도의 공식 다운로드 ZIP으로 보완합니다.
 
     같은 월이 중복될 경우 최신 다운로드가 기존 값보다 우선합니다. 이 처리 덕분에
     갱신된 월 값이 모델 학습·대시보드 기준값으로 함께 사용됩니다.
     """
-    for path in (LATEST_STAY_ZIP, LATEST_SPENDING_ZIP):
+    for path in (LATEST_STAY_ZIP, LATEST_SPENDING_ZIP, LATEST_VISITOR_ZIP):
         if not path.exists():
             raise FileNotFoundError(f'강남구 최신 월 원본을 찾지 못했습니다: {path}')
         with zipfile.ZipFile(path) as archive:
-            _append_metrics(archive, visitors, spending_krw, lodging_nights)
+            _append_metrics(archive, **series)
 
 
 def load_gangnam_monthly_demand() -> pd.DataFrame:
     """2024-01부터 최신 관측월까지의 공통 월별 방문자·소비·숙박일 시계열을 반환합니다."""
-    visitors: dict[str, float] = {}
-    spending_krw: dict[str, float] = {}
-    lodging_nights: dict[str, float] = {}
-    _read_nested_bundle(visitors, spending_krw, lodging_nights)
-    _read_latest_july(visitors, spending_krw, lodging_nights)
+    series: dict[str, dict[str, float]] = {
+        'visitors': {}, 'spending_krw': {}, 'lodging_nights': {},
+        'lodging_rate_pct': {}, 'stay_minutes': {},
+        'navigation_searches': {}, 'lodging_searches': {},
+    }
+    _read_nested_bundle(series)
+    _read_latest_july(series)
 
     # 세 지표가 모두 존재하는 월만 공통 키로 사용합니다. 부분 월을 억지로 0으로 채우지 않습니다.
-    common_months = sorted(set(visitors) & set(spending_krw) & set(lodging_nights))
+    common_months = sorted(set.intersection(*(set(values) for values in series.values())))
     if len(common_months) < 24:
         raise ValueError(f'강남구 학습에는 최소 24개 공통 월이 필요합니다. 현재 {len(common_months)}개입니다.')
     frame = pd.DataFrame({
         'region_code': REGION_CODE,
         'region_name': '서울특별시 강남구',
         'year_month': common_months,
-        'visitors': [round(visitors[month]) for month in common_months],
-        'spending_krw': [round(spending_krw[month]) for month in common_months],
-        'lodging_nights': [lodging_nights[month] for month in common_months],
+        'visitors': [round(series['visitors'][month]) for month in common_months],
+        'spending_krw': [round(series['spending_krw'][month]) for month in common_months],
+        'lodging_nights': [series['lodging_nights'][month] for month in common_months],
+        'lodging_rate_pct': [series['lodging_rate_pct'][month] for month in common_months],
+        'stay_minutes': [series['stay_minutes'][month] for month in common_months],
+        'navigation_searches': [round(series['navigation_searches'][month]) for month in common_months],
+        'lodging_searches': [round(series['lodging_searches'][month]) for month in common_months],
     })
     # 날짜 열은 학습 피처의 월/계절을 계산할 때만 사용하고, CSV에는 안정적인 YYYYMM 키를 보관합니다.
     frame['year_month'] = frame['year_month'].astype(str)
+    validate_monthly_data(frame, REGION_CODE)
     return frame
 
 

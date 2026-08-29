@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from typing import Callable, Any
 
 from .gangnam_forecast import predict_future_months, train_gangnam_models
+from .gangnam_data import load_gangnam_monthly_demand
 
 
 @dataclass(frozen=True)
@@ -20,13 +21,15 @@ class RegionMlPipeline:
     region_name: str
     train: Callable[[], dict[str, Any]]
     predict: Callable[[int], dict[str, Any]]
+    # 기획안의 전년 동월 비교에도 동일한 원자료를 쓰기 위한 읽기 전용 함수입니다.
+    load_history: Callable[[], Any] | None = None
 
 
 # 등록표는 ‘지역 코드 → 전용 데이터 어댑터’의 연결표입니다.
 # 새 시군구는 이 파일에 한 줄 추가하고, 해당 지역만 읽는 train/predict 함수를 만들면 됩니다.
 _PIPELINES = {
     # 첫 등록 지역입니다. 이후에는 각 지역 어댑터를 같은 형식으로 한 줄 추가합니다.
-    '11680': RegionMlPipeline('11680', '서울특별시 강남구', train_gangnam_models, predict_future_months),
+    '11680': RegionMlPipeline('11680', '서울특별시 강남구', train_gangnam_models, predict_future_months, load_gangnam_monthly_demand),
 }
 
 

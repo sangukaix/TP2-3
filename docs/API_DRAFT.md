@@ -167,3 +167,40 @@ VWorld WFS의 전국 시군구 경계를 Backend에서 불러와, 키가 없는 
 - `frontend/src/pages/TourismDashboardPage.jsx`: 실제 응답을 카드·차트·진단에 표시하며 미지원 지역은 빈 상태로 처리
 - `frontend/vite.config.js`: 개발 중 `/api → 8100`, `/ai → 8111` 프록시 설정
 - `backend/app/services/vworld.py`: VWorld 키를 서버에서만 사용하고 시군구 GeoJSON을 캐시·중계
+# ML 기획 근거 확인
+
+`GET /ai/v1/ml/{region_code}/planning-evidence?region_name={region_name}`
+
+- 저장 모델만 읽으며 OpenAI 호출이나 온라인 재학습을 하지 않는다.
+- `status=available`일 때 방문·소비·체류·검색 7개 지표의 전망, 전년 동월 비교 신호, Validation/Test 오차와 의사결정 단위로 묶은 조사 질문을 반환한다.
+- 기획안 내부 호출은 `planning_brief`를 함께 전달한다. 일정 미정이면 3·6개월 후보를 모두 만들고, 희망 일정이면 종료월까지 필요한 전망을 최대 12개월 범위에서 계산한다.
+- `horizon_policy`에는 선택 근거, 전망 시작·종료월, 기획 비교 구간, 전체 일정 포함 여부와 신뢰도 구분이 들어간다. 1~3개월은 재귀 백테스트, 이후 월은 탐색 전망이다.
+- 미지원 지역은 `unsupported`, 모델 재학습 필요·원자료 불일치는 `unavailable`로 반환하며 다른 지역 모델을 대신 쓰지 않는다.
+
+## ML 학습 페이지 카탈로그
+
+`GET /ai/v1/ml/learning/catalog`
+
+- `region_registry.py`에 등록된 모델만 지역 선택 목록에 반환한다.
+- 모델 메타데이터의 `target`을 순회해 데이터셋, 모델, Feature, 함수, 기법, Test 오차와 3개월 결과를 카드 단위로 반환한다.
+- 새 지역이나 새 Target이 동일 계약으로 등록되면 React의 `MlTest` 페이지는 별도 카드 코드를 추가하지 않고 자동으로 목록을 늘린다.
+- 학습용 읽기 전용 API이며 OpenAI, Open API, 모델 재학습을 실행하지 않는다.
+
+### `POST /ai/v1/ml/learning/{region_code}/assistant`
+
+- 요청: `question`, 최근 대화 `history` 최대 6개.
+- AI Server가 선택 지역의 등록 모델 카탈로그, 코드 역할표, 기획안 전망기간 규칙을 OpenAI Responses API에 전달한다.
+- 답변: `answer`, `key_points`, `related_modules`, `caution`의 구조화 JSON이다.
+- 현재 ML 챗봇은 RAG·웹 검색을 사용하지 않는다. OpenAI 키가 없으면 `503 OPENAI_KEY_MISSING`, 미지원 지역은 `404 ML_LEARNING_REGION_UNAVAILABLE`을 반환한다.
+
+### `GET /ai/v1/learning/{topic}`
+
+- `topic`은 `openai` 또는 `react`다.
+- OpenAI는 Agent 클래스·오케스트레이터·FastAPI route·환경변수 이름을, React는 src 파일·App route·fetch endpoint·package.json을 현재 소스에서 다시 읽는다.
+- 파이프라인, 파일 역할, route, 의존성, 설계 원칙과 챗봇 흐름을 반환한다. 절대경로·소스 전문·환경변수 값은 반환하지 않는다.
+
+### `POST /ai/v1/learning/{topic}/assistant`
+
+- 자동 생성한 해당 주제 카탈로그와 최근 대화 최대 6개를 OpenAI에 전달한다.
+- 답변은 `answer`, `key_points`, `related_files`, `caution` 구조다.
+- RAG·웹 검색을 사용하지 않으며, 현재 프로젝트에 없는 기능을 사용 중이라고 설명하지 않도록 제한한다.

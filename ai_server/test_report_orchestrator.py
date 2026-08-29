@@ -164,6 +164,12 @@ class ReportOrchestratorTest(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(any(item['agent'] == 'case_scout' and item['stage'] == 'cache' for item in second['agent_trace']))
         self.assertEqual(FakeTransferabilityAgent.calls, 2)
         self.assertEqual(FakePlannerAgent.last_evidence_pack['transfer_assessment']['recommended_case_ids'], ['case:1'])
+        self.assertEqual(first['ml_analysis']['status'], 'available')
+        self.assertEqual(len(FakePlannerAgent.last_evidence_pack['snapshot']['ml_analysis']['forecasts']), 6)
+        self.assertEqual(
+            FakePlannerAgent.last_evidence_pack['snapshot']['ml_analysis']['horizon_policy']['selection_basis'],
+            'unknown_compare_3_and_6_months',
+        )
 
     async def test_failed_review_triggers_one_revision_and_final_review(self) -> None:
         FakePlannerAgent.calls = 0

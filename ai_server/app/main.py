@@ -28,11 +28,16 @@ from .proposal_presentation import create_strategy_proposal_presentation
 from .raw_data_repository import read_region_tables
 from .agents.report_orchestrator import orchestrate_strategy_report
 from .agents.chat_assistant_agent import TourismChatAssistantAgent
+from .agents.ml_learning_assistant_agent import MlLearningAssistantAgent
+from .agents.project_learning_assistant_agent import ProjectLearningAssistantAgent
 from .tourism_open_api import TourismOpenApiClient
 from .planning_brief import PlanningBrief, brief_fingerprint, extract_brief_reference, without_reference_text
+from .project_learning_catalog import ProjectLearningCatalog, build_project_learning_catalog
 from .strategy_store import initialize_strategy_store, list_strategy_reports, read_document, read_strategy_report, save_strategy_report, write_document
 from ..ml.gangnam_data import load_gangnam_monthly_demand, load_latest_consumption_shares, load_latest_lodging_metrics
 from ..ml.region_service import predict_region_demand
+from ..ml.planning_evidence import PlanningMlEvidence, build_planning_ml_evidence
+from ..ml.learning_catalog import MlLearningCatalog, build_ml_learning_catalog
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 load_dotenv(PROJECT_ROOT / '.env', override=False)
@@ -170,6 +175,8 @@ class ReportResponse(BaseModel):
     # 생성 당시 조건을 고정 보관해 이후 초안 수정이 과거 보고서를 바꾸지 않게 합니다.
     planning_brief: PlanningBrief | None = None
     planning_brief_fingerprint: str = ''
+    # AI가 새로 계산하지 않은, 생성 당시 모델 예측·검증 결과를 저장 보고서에도 보존합니다.
+    ml_analysis: PlanningMlEvidence | None = None
 
 
 class StrategyReportJobResponse(BaseModel):
@@ -220,6 +227,38 @@ class AssistantChatResponse(BaseModel):
     sources: list[AssistantSource] = Field(default_factory=list)
     report_patch: dict[str, Any] | None = None
     generation_mode: Literal['openai', 'offline_sample'] = 'openai'
+
+
+class MlLearningChatRequest(BaseModel):
+    """학습 페이지에서 선택 지역의 ML 구현에 관해 묻는 요청입니다."""
+
+    question: str = Field(min_length=1, max_length=2000)
+    history: list[AssistantChatMessage] = Field(default_factory=list, max_length=6)
+
+
+class MlLearningChatResponse(BaseModel):
+    """ML 튜터 답변은 화면에서 항목별로 읽기 쉬운 고정 구조를 사용합니다."""
+
+    answer: str
+    key_points: list[str] = Field(default_factory=list, max_length=5)
+    related_modules: list[str] = Field(default_factory=list, max_length=7)
+    caution: str = ''
+    generation_mode: Literal['openai'] = 'openai'
+
+
+class ProjectLearningChatRequest(BaseModel):
+    """OpenAI·React 구조 학습 페이지의 질문입니다."""
+    question: str = Field(min_length=1, max_length=2000)
+    history: list[AssistantChatMessage] = Field(default_factory=list, max_length=6)
+
+
+class ProjectLearningChatResponse(BaseModel):
+    """구현 설명과 관련 파일을 분리한 학습 답변입니다."""
+    answer: str
+    key_points: list[str] = Field(default_factory=list, max_length=5)
+    related_files: list[str] = Field(default_factory=list, max_length=8)
+    caution: str = ''
+    generation_mode: Literal['openai'] = 'openai'
 
 
 class DashboardMetric(BaseModel):
@@ -912,6 +951,7 @@ async def generate_orchestrated_report(region_code: str, request: ReportRequest)
             metrics_count=len(snapshot['observations']),
             monthly_trend=snapshot['monthly_trend'],
             quality_review=result['quality_review'],
+            ml_analysis=result.get('ml_analysis'),
             evidence_sources=result['evidence_sources'],
             research_gaps=result['research_gaps'],
             agent_trace=result['agent_trace'],
@@ -1058,6 +1098,83 @@ async def download_saved_strategy_document(report_id: str, file_format: Literal[
         else 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
     )
     return StreamingResponse(BytesIO(content), media_type=media_type, headers={'Content-Disposition': f'attachment; filename="tourism-strategy-proposal.{file_format}"'})
+
+
+@app.get('/ai/v1/ml/{region_code}/planning-evidence', response_model=PlanningMlEvidence)
+async def read_planning_ml_evidence(region_code: str, region_name: str) -> PlanningMlEvidence:
+    """유료 API 없이 기획 Agent에 전달될 ML 전망·오차·조사 질문을 확인합니다."""
+    return await asyncio.to_thread(build_planning_ml_evidence, region_code, region_name)
+
+
+@app.get('/ai/v1/ml/learning/catalog', response_model=MlLearningCatalog)
+async def read_ml_learning_catalog() -> MlLearningCatalog:
+    """학습용 화면에서 등록된 지역별 모델·함수·예측·평가를 한 번에 확인합니다."""
+    return await asyncio.to_thread(build_ml_learning_catalog)
+
+
+@app.post('/ai/v1/ml/learning/{region_code}/assistant', response_model=MlLearningChatResponse)
+async def chat_with_ml_learning_assistant(
+    region_code: str,
+    request: MlLearningChatRequest,
+) -> MlLearningChatResponse:
+    """등록 모델·평가·함수 정보만 근거로 ML 학습 질문에 답합니다."""
+    catalog = await asyncio.to_thread(build_ml_learning_catalog)
+    region = next((item for item in catalog.regions if item.region_code == region_code), None)
+    if region is None or region.status != 'available':
+        raise HTTPException(
+            status_code=404,
+            detail={'code': 'ML_LEARNING_REGION_UNAVAILABLE', 'message': '선택 지역의 머신러닝 학습 정보를 찾지 못했습니다.'},
+        )
+    if not (ENV_VALUES.get('OPENAI_API_KEY') or '').strip():
+        raise HTTPException(
+            status_code=503,
+            detail={'code': 'OPENAI_KEY_MISSING', 'message': 'ML 챗봇을 사용하려면 AI 서버의 OpenAI API 키가 필요합니다.'},
+        )
+    try:
+        result = await MlLearningAssistantAgent(env_values=ENV_VALUES).answer(
+            learning_region=region.model_dump(mode='json'),
+            question=request.question,
+            history=[message.model_dump() for message in request.history],
+        )
+        return MlLearningChatResponse(**result)
+    except OpenAIResponseError as exc:
+        raise HTTPException(
+            status_code=exc.status_code,
+            detail={'code': exc.code, 'message': exc.message},
+        ) from exc
+
+
+@app.get('/ai/v1/learning/{topic}', response_model=ProjectLearningCatalog)
+async def read_project_learning_catalog(topic: Literal['openai', 'react']) -> ProjectLearningCatalog:
+    """현재 프로젝트 파일을 다시 읽어 OpenAI 또는 React 학습 구조를 반환합니다."""
+    try:
+        return await asyncio.to_thread(build_project_learning_catalog, topic)
+    except (OSError, ValueError, SyntaxError, json.JSONDecodeError) as exc:
+        raise HTTPException(
+            status_code=500,
+            detail={'code': 'PROJECT_LEARNING_SCAN_FAILED', 'message': '프로젝트 학습 구조를 읽지 못했습니다.'},
+        ) from exc
+
+
+@app.post('/ai/v1/learning/{topic}/assistant', response_model=ProjectLearningChatResponse)
+async def chat_with_project_learning_assistant(
+    topic: Literal['openai', 'react'], request: ProjectLearningChatRequest,
+) -> ProjectLearningChatResponse:
+    """자동 탐색한 현재 구조를 근거로 OpenAI·React 학습 질문에 답합니다."""
+    catalog = await asyncio.to_thread(build_project_learning_catalog, topic)
+    if not (ENV_VALUES.get('OPENAI_API_KEY') or '').strip():
+        raise HTTPException(
+            status_code=503,
+            detail={'code': 'OPENAI_KEY_MISSING', 'message': '학습 챗봇을 사용하려면 AI 서버의 OpenAI API 키가 필요합니다.'},
+        )
+    try:
+        result = await ProjectLearningAssistantAgent(env_values=ENV_VALUES).answer(
+            topic=topic, project_catalog=catalog.model_dump(mode='json'),
+            question=request.question, history=[message.model_dump() for message in request.history],
+        )
+        return ProjectLearningChatResponse(**result)
+    except OpenAIResponseError as exc:
+        raise HTTPException(status_code=exc.status_code, detail={'code': exc.code, 'message': exc.message}) from exc
 
 
 @app.get('/ai/v1/demo/sido-comparison', response_model=SidoComparisonResponse)

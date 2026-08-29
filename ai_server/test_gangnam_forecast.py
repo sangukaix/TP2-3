@@ -10,7 +10,7 @@ class GangnamForecastTest(unittest.TestCase):
     """공식 원본을 읽는 전처리와 지도학습 행 생성만 빠르게 점검합니다."""
 
     def test_monthly_source_has_continuous_common_months(self) -> None:
-        """방문자·소비·숙박일이 모두 있는 2024~2026 공통 월만 학습표에 남는지 확인합니다."""
+        """7개 Target이 모두 있는 2024~2026 공통 월만 학습표에 남는지 확인합니다."""
         frame = load_gangnam_monthly_demand()
         self.assertEqual(frame['year_month'].iloc[0], '202401')
         self.assertEqual(frame['year_month'].iloc[-1], '202607')
@@ -18,6 +18,8 @@ class GangnamForecastTest(unittest.TestCase):
         self.assertTrue(frame['visitors'].gt(0).all())
         self.assertTrue(frame['spending_krw'].gt(0).all())
         self.assertTrue(frame['lodging_nights'].gt(0).all())
+        for target in ('lodging_rate_pct', 'stay_minutes', 'navigation_searches', 'lodging_searches'):
+            self.assertTrue(frame[target].gt(0).all(), target)
 
     def test_supervised_features_only_start_after_twelve_past_months(self) -> None:
         """12개월 전 계절 피처를 쓰므로 첫 12개월은 학습 목표로 사용하지 않습니다."""

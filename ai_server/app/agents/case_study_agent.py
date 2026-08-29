@@ -135,7 +135,8 @@ class CaseStudyAgent:
             ).search(
                 query=(
                     f"{snapshot['region_name']} 방문 소비 체류 개선 할인 환급 쿠폰 숙박 야간관광 "
-                    '지역상권 결제 성과평가 예산 집행 사례'
+                    '지역상권 결제 성과평가 예산 집행 사례 '
+                    + ' '.join((snapshot.get('ml_analysis') or {}).get('research_questions') or [])
                 ),
                 region_code=region_code,
                 region_name=snapshot['region_name'],
@@ -165,6 +166,9 @@ class CaseStudyAgent:
                         'planning_brief': planning_brief,
                         'analysis_period': snapshot['period'],
                         'observations': snapshot.get('observations') or [],
+                        # 예측된 문제·기회에 맞는 사례를 찾되, 예측 자체를 사업 성과로 사용하지 않습니다.
+                        'ml_analysis': snapshot.get('ml_analysis') or {},
+                        'forecast_research_questions': (snapshot.get('ml_analysis') or {}).get('research_questions') or [],
                         'consumption_by_category': snapshot.get('consumption_by_category') or [],
                         'regional_comparison': snapshot.get('regional_comparison') or {},
                         'curated_case_cards': curated_cards,

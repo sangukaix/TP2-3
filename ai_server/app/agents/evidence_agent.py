@@ -97,6 +97,18 @@ class EvidenceAgent:
                 'published_or_updated_at': observation.get('period') or snapshot.get('latest_month', ''),
             })
         trace.append({'agent': 'evidence', 'stage': 'dataset', 'status': 'completed', 'items': len(sources)})
+        # ML은 공식 관측값과 구분된 내부 계산 근거입니다. 수치표를 RAG에 저장하지 않습니다.
+        ml = snapshot.get('ml_analysis') or {}
+        if ml.get('status') == 'available':
+            sources.append({
+                'source_id': ml['source_id'], 'source_type': 'model_forecast',
+                'title': '지역 관광수요 ML 전망 · 공식 관측값 아님',
+                'source_url': '',
+                'summary': f"학습 {ml['source_period']} · 모델 {ml['model_version']} · 자연 추세 예측",
+                'model_version': ml['model_version'], 'data_fingerprint': ml['data_fingerprint'],
+            })
+        elif ml:
+            gaps.append(f"ML 근거 미제공: {ml.get('reason_code') or ml.get('status')}")
 
         # 아래 세 작업은 서로의 결과를 입력으로 쓰지 않습니다. 동시에 실행하면 근거의 범위와
         # 모델 품질은 그대로 유지하면서 첫 보고서의 자료 조사 대기시간을 줄일 수 있습니다.
@@ -136,7 +148,7 @@ class EvidenceAgent:
             )
             try:
                 items = await rag_store.search(
-                    query=f"{snapshot['region_name']} 관광 체류 소비 정책 교통 행사 인프라 활성화",
+                    query=f"{snapshot['region_name']} 관광 체류 소비 정책 " + ' '.join(ml.get('research_questions') or []),
                     region_code=region_code,
                     region_name=snapshot['region_name'],
                     top_k=5,
@@ -167,7 +179,9 @@ class EvidenceAgent:
                         'planning_brief': planning_brief,
                         'period': snapshot['period'],
                         'observations': snapshot.get('observations') or [],
+                        'ml_analysis': ml,
                         'research_questions': [
+                            *(ml.get('research_questions') or []),
                             '선택 지역의 공식 관광정책·사업·관광 인프라 현황',
                             '분석 기간과 날짜가 겹치는 공식 축제·행사·계절 관광사업과 시행 시점',
                             '현재 지역에서 바로 활용할 수 있는 제도·교통·숙박·상권 운영 조건',
