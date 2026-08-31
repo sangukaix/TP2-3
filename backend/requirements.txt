@@ -1,0 +1,6 @@
+# 지도 경계 API를 위한 최소 서버 의존성입니다.
+# AI/ML·MySQL 의존성은 실제 데이터 검증 후 별도 단계에서 추가합니다.
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.30,<1.0
+httpx>=0.27,<1.0
+python-dotenv>=1.0,<2.0

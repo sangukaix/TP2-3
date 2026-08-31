@@ -1,0 +1,94 @@
+/* bid3 기반 업무화면의 간격·톤을 사용합니다. 지도/기존 차트 선택자는 수정하지 않습니다. */
+.planning-page{padding-top:28px}
+.planning-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:22px;align-items:start;margin-top:20px}
+.planning-fields,.planning-fieldset{min-width:0}
+.planning-fieldset{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0;padding:0;border:0}
+.planning-intro{display:flex;align-items:center;gap:13px;padding:18px 20px;margin-bottom:18px;border:1px solid #dce6ed;border-radius:10px;background:linear-gradient(110deg,#f5fbfd,#f7f8fd)}
+.planning-intro>span:first-child{display:grid;flex:0 0 38px;height:38px;place-items:center;border-radius:10px;color:#4475ae;background:#e7f1fa}
+.planning-intro h2{margin:0;color:#223d57;font-size:16px;font-weight:650;letter-spacing:-.4px}
+.planning-intro p{margin:5px 0 0;color:#6c8095;font-size:12px;line-height:1.6}
+.planning-optional{margin-left:auto;color:#8092a5;font-size:10px;white-space:nowrap}
+.planning-section{display:flex;min-width:0;box-sizing:border-box;flex-direction:column;padding:21px;border:1px solid #dce5ed;border-radius:10px;background:#fff;box-shadow:0 2px 5px #25456504}
+.planning-section>header{display:flex;align-items:center;gap:10px;margin-bottom:19px}
+.planning-section-icon{display:grid;flex:0 0 34px;height:34px;place-items:center;border:1px solid #e5edf5;border-radius:9px;color:#537a9d;background:#f6f9fc}
+.planning-section-number{display:block;margin-bottom:2px;color:#96a5b5;font-size:10px}
+.planning-section h2{margin:0;color:#2a435c;font-size:14px;font-weight:650;letter-spacing:-.3px}
+.planning-help{position:relative;margin-left:auto;color:#a0afbd;cursor:help;outline-offset:4px}
+.planning-help>span{display:none;position:absolute;z-index:20;top:23px;right:0;box-sizing:border-box;width:230px;padding:12px;border:1px solid #dce7ef;border-radius:8px;background:#fff;color:#506b82;box-shadow:0 8px 25px #2545651c;font-size:12px;line-height:1.6}
+.planning-help:hover>span,.planning-help:focus>span{display:block}
+.planning-section label{display:block;color:#52697e;font-size:12px;line-height:1.5}
+.planning-detail-field{margin-top:18px}
+.planning-section label>small{margin-left:5px;color:#97a5b3;font-size:10px;font-weight:400}
+.planning-choice{display:flex;gap:5px;padding:4px;border:1px solid #e7edf2;border-radius:8px;background:#f4f7fa}
+.planning-choice button{display:flex;min-width:0;flex:1;align-items:center;justify-content:center;gap:5px;padding:8px 5px;border:1px solid transparent;border-radius:5px;background:transparent;color:#76889a;font:inherit;font-size:12px;cursor:pointer}
+.planning-choice button.is-selected{border-color:#c7ddf4;color:#346eb6;background:#eaf4ff;box-shadow:0 2px 4px #244e7510}
+.planning-section input:not([type=checkbox]):not([type=file]),.planning-section textarea{box-sizing:border-box;width:100%;min-width:0;margin-top:7px;padding:11px 12px;border:1px solid #dbe3eb;border-radius:7px;outline:none;color:#2e485e;background:#fcfdfe;font:inherit;font-size:12px;line-height:1.6}
+.planning-section textarea{resize:vertical;min-height:72px}
+.planning-section input::placeholder,.planning-section textarea::placeholder{color:#a1adba}
+.planning-section input:focus,.planning-section textarea:focus{border-color:#78a3d4;box-shadow:0 0 0 3px #dceafa77}
+.planning-input-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.planning-money{position:relative}
+.planning-money input{padding-right:30px!important}
+.planning-money>span{position:absolute;right:12px;top:19px;color:#8396a7;font-size:12px}
+.planning-section .planning-check{display:flex;align-items:center;gap:6px;margin-top:12px;font-size:11px}
+.planning-check input{accent-color:#467fbf}
+.planning-hint{margin:15px 0 0;color:#8293a4;font-size:11px;line-height:1.7}
+.planning-inner-details{margin-top:12px;color:#6b8298;font-size:11px}
+.planning-inner-details summary,.planning-extra>summary{cursor:pointer;outline-offset:4px}
+.planning-constraint-examples{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:10px}.planning-constraint-examples>span{margin-right:2px;color:#93a3b2;font-size:10px}.planning-constraint-examples>i{padding:6px 8px;border:1px solid #e0e7ee;border-radius:5px;color:#7a8da0;background:#fafcfd;font-size:10px;font-style:normal}
+.planning-extra{grid-column:1 / -1}
+.planning-extra>summary{color:#405c76;font-size:13px;font-weight:600}
+.planning-extra>summary>span{float:right;color:#99a7b5;font-size:10px;font-weight:400}
+.planning-extra[open]>summary{padding-bottom:19px;border-bottom:1px solid #edf1f5;margin-bottom:17px}
+.planning-extra>label+label{margin-top:15px}
+.planning-upload{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:18px}
+.planning-reference-heading{margin-top:18px;padding-top:18px;border-top:1px solid #edf1f5}.planning-reference-heading span{color:#405c76;font-size:13px;font-weight:650}.planning-reference-heading p{margin:5px 0 0;color:#8496a7;font-size:11px;line-height:1.6}
+.planning-upload>label{display:flex;align-items:center;gap:7px;padding:9px 12px;border:1px solid #dce5ed;border-radius:6px;color:#526f89;font-size:11px;cursor:pointer}
+.planning-upload input{max-width:170px;font-size:10px}
+.planning-upload>small{color:#97a5b4;font-size:10px}
+.planning-reference{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-top:9px;padding:11px;border:1px solid #e7edf3;border-radius:6px;color:#576e83;font-size:11px}
+.planning-reference details{min-width:0;flex:1}.planning-reference summary{overflow-wrap:anywhere;cursor:pointer}.planning-reference small{color:#93a3b2}
+.planning-reference pre{max-height:170px;overflow:auto;white-space:pre-wrap;word-break:break-word;line-height:1.6;font:inherit}
+.planning-reference button{display:grid;place-items:center;border:0;background:transparent;color:#91a1b0;cursor:pointer}
+.planning-summary-column{position:sticky;top:85px;min-width:0;padding:8px;border:1px solid #dbe7f2;border-radius:15px;background:linear-gradient(155deg,#f5faff,#fbfcff 58%,#f4f7ff);box-shadow:0 15px 34px #315c8510}
+.planning-summary-generate{position:relative;width:calc(100% - 20px);min-height:48px;margin:12px 10px 10px;padding:13px 14px;border:0!important;border-radius:10px!important;background:linear-gradient(110deg,#397dca,#4d67c7 54%,#775bd0)!important;box-shadow:0 10px 20px #3a68bd2b;font-size:13px!important;font-weight:700;letter-spacing:-.1px}
+.planning-summary-generate:hover:not(:disabled){transform:translateY(-1px);background:linear-gradient(110deg,#3475bf,#465fba 54%,#6d53c6)!important;box-shadow:0 13px 24px #3a68bd38!important}
+.planning-summary{overflow:hidden;border:1px solid #dbe7f2;border-radius:10px;background:#fff;box-shadow:0 2px 7px #315c8508}
+.planning-summary>header{position:relative;padding:21px 19px 18px;border-bottom:1px solid #e6eef5;background:linear-gradient(135deg,#f9fcff,#f2f7fe)}
+.planning-summary>header:after{position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,#4caed9,#5578d2,#8a64db);content:""}
+.planning-summary>header>span{display:flex;align-items:center;gap:6px;color:#66809c;font-size:11px;font-weight:600}
+.planning-summary h2{margin:10px 0 0;color:#28445f;font-size:15px;font-weight:700;letter-spacing:-.35px}
+.planning-summary dl{margin:0;padding:3px 19px}
+.planning-summary dl>div{padding:13px 0;border-bottom:1px solid #eef2f6}.planning-summary dl>div:last-child{border-bottom:0}
+.planning-summary dt{margin-bottom:6px;color:#7890a8;font-size:10px;font-weight:700;letter-spacing:.02em}.planning-summary dd{margin:0;color:#3d5d79;font-size:12px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}.planning-summary dd small{display:block;margin-top:4px;color:#91a2b3;font-size:10px}
+.planning-ai-role{display:flex;align-items:flex-start;gap:8px;margin:10px 15px 17px;padding:12px;border-radius:7px;color:#448996;background:#f1f9fa}
+.planning-ai-role svg{flex:0 0 auto;margin-top:2px}.planning-ai-role p{margin:0;font-size:11px;line-height:1.7}
+.planning-next{padding:18px 8px;color:#8295a7;font-size:11px}.planning-next>span{font-size:10px}.planning-next p{line-height:1.8}.planning-next a{display:flex;align-items:center;gap:7px;color:#5b7b9e;text-decoration:none}
+.planning-actions{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:18px;padding:15px 17px;border:1px solid #dce5ed;border-radius:9px;background:#fff}
+.planning-actions>div:first-child{flex:1;min-width:0}.planning-actions p{margin:0;color:#8798a9;font-size:11px;line-height:1.6}
+.planning-actions>div:last-child{display:flex;gap:8px;flex-wrap:wrap}
+.planning-primary,.planning-secondary{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 14px;border:1px solid #dce4ed;border-radius:6px;background:#fff;color:#57718b;font-size:12px;text-decoration:none;cursor:pointer;transition:background .15s,box-shadow .15s}
+.planning-primary{border-color:#3a78bd;background:#3a78bd;color:#fff}
+.planning-primary:hover:not(:disabled){background:#306bae;box-shadow:0 4px 12px #346ea02b}
+.planning-secondary:hover:not(:disabled){background:#f5f8fc}
+.planning-page button:disabled{cursor:not-allowed;opacity:.55}
+.planning-actions .planning-error{color:#b45959}
+.planning-storage-note{margin:12px 2px;color:#95a4b2;font-size:10px;line-height:1.6}
+.planning-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.planning-spinner{animation:planning-spin 1s linear infinite}
+.strategy-planning-link{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:0 0 16px;padding:14px 17px;border:1px solid #dce5ed;border-radius:8px;color:#687f94;background:#f8fbfd;font-size:12px}
+.strategy-planning-link a{color:#3c79b8;text-decoration:none;white-space:nowrap}
+.strategy-condition-details{margin:16px 0;color:#70869a;font-size:12px}.strategy-condition-details>summary{cursor:pointer}.strategy-condition-details .planning-summary{margin-top:12px}
+.planning-summary.is-compact dl{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+@keyframes planning-spin{to{transform:rotate(360deg)}}
+@media(min-width:1600px){.planning-layout{grid-template-columns:minmax(0,1fr) 320px}}
+@media(max-width:1250px){.planning-fieldset{grid-template-columns:1fr}.planning-layout{grid-template-columns:minmax(0,1fr) 275px}.planning-optional{display:none}.planning-actions{align-items:stretch;flex-direction:column}.planning-actions>div:last-child{justify-content:flex-end}}
+@media(max-width:960px){.planning-layout{grid-template-columns:1fr}.planning-summary-column{position:static}.planning-summary-column .planning-summary dl{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}.planning-fieldset{grid-template-columns:1fr 1fr}.planning-next{display:none}}
+@media(max-width:760px){.planning-page{padding-top:18px}.planning-fieldset{grid-template-columns:1fr}.planning-section{padding:18px}.planning-intro{padding:15px}.planning-intro h2{font-size:15px}.planning-intro p{font-size:11px}.planning-input-row{gap:8px}.planning-actions>div:last-child{display:grid;grid-template-columns:1fr}.planning-actions button{width:100%}.planning-summary.is-compact dl,.planning-summary-column .planning-summary dl{grid-template-columns:1fr}.strategy-planning-link{align-items:flex-start;flex-direction:column}}
+@media(prefers-reduced-motion:reduce){.planning-spinner{animation:none}}
+/* 기획안 생성 화면은 다른 업무 화면의 청록·파랑 계열을 유지하되, 카드 경계와 입력 상태를 더 또렷하게 합니다. */
+.planning-page .work-page-header{justify-content:flex-start;gap:22px;padding:6px 0 19px}.planning-page .work-page-header h1{font-size:23px;color:#163b61}.planning-page .work-region-picker{flex:0 0 auto;padding-left:20px;border-left:1px solid #d8e3ec}.planning-page .work-region-picker span{color:#56748c;font-size:11px;font-weight:700}.planning-page .work-region-picker select{height:38px;border-color:#bfcfdd;border-radius:8px;color:#294862;background:#fbfdff;box-shadow:0 2px 5px rgb(22 60 97 / 5%)}.planning-layout{gap:24px;margin-top:24px}.planning-fieldset{gap:18px}.planning-section{position:relative;overflow:hidden;padding:22px;border-color:#c9d9e6;border-radius:12px;box-shadow:0 8px 20px rgb(29 69 108 / 7%)}.planning-section::before{position:absolute;top:0;right:0;left:0;height:3px;background:linear-gradient(90deg,#2bb7c7,#4a88d6,#796ed2);content:''}.planning-section>header{margin-bottom:18px}.planning-section-icon{border-color:#cce1ed;color:#237d9d;background:#edfafd}.planning-section-number{color:#477eaa;font-weight:700;letter-spacing:.04em}.planning-section h2{color:#1f405c;font-size:15px;font-weight:700}.planning-help{color:#6690ae}.planning-choice{padding:5px;border-color:#d4e0ea;background:#f4f8fb}.planning-choice button{padding:9px 6px;color:#60798e;font-size:12px}.planning-choice button.is-selected{border-color:transparent;color:#167294;background:linear-gradient(135deg,#dff7fa,#e5edff);box-shadow:none}.planning-section input:not([type=checkbox]):not([type=file]),.planning-section textarea{border-color:#cbd9e4;background:#fff;color:#29465d;box-shadow:inset 0 1px 2px rgb(28 58 84 / 3%)}.planning-section input:focus,.planning-section textarea:focus{border-color:#45a7c8;box-shadow:0 0 0 3px rgb(69 167 200 / 15%)}.planning-hint{color:#6c8496}.planning-summary-column{padding:9px;border-color:#bfd9e8;border-radius:16px;background:linear-gradient(155deg,#eff9fc,#f7f9ff 58%,#edf3ff);box-shadow:0 16px 34px rgb(29 89 132 / 12%)}.planning-summary{border-color:#cbdfea;box-shadow:0 5px 13px rgb(29 79 119 / 8%)}.planning-summary>header{background:linear-gradient(135deg,#f7fdff,#edf4ff)}.planning-summary h2{color:#173c60}.planning-summary-generate{min-height:52px;margin-top:14px;background:linear-gradient(110deg,#1889ad,#397bcb 52%,#765bd0)!important}.planning-actions{border-color:#cbdce8;border-radius:10px;box-shadow:0 5px 14px rgb(30 66 99 / 5%)}
+
+/* 임시저장은 조건 입력 카드와 분리해, 지역명 헤더의 오른쪽 끝에서 언제든 저장할 수 있게 합니다. */
+.planning-header-save{display:inline-flex;align-items:center;gap:7px;margin-left:auto;padding:10px 13px;border:1px solid #a9c8d9;border-radius:8px;color:#1d6986;background:#f7fcfe;box-shadow:0 3px 9px rgb(34 108 145 / 8%);font-size:11px;font-weight:700;cursor:pointer}.planning-header-save:hover:not(:disabled){border-color:#6daec9;background:#edf9fc}.planning-header-save:disabled{cursor:default;opacity:.55}
+.planning-inline-status{margin-top:14px;padding:0 4px;color:#71889a;font-size:11px}.planning-inline-status p{margin:0;line-height:1.6}.planning-inline-status .planning-error{color:#b45959}

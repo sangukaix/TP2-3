@@ -1,0 +1,46 @@
+"""여러 시군구 ML 파이프라인의 등록 정보와 공통 진입점을 관리합니다.
+
+새 지역을 추가할 때 화면 코드를 복사하지 않습니다. 이 파일에 지역 코드와
+전용 데이터 어댑터를 등록한 뒤, 같은 train/predict 인터페이스를 사용합니다.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Callable, Any
+
+from .gangnam_forecast import predict_future_months, train_gangnam_models
+from .gangnam_data import load_gangnam_monthly_demand
+
+
+@dataclass(frozen=True)
+class RegionMlPipeline:
+    """한 시군구의 학습·예측 함수를 묶는 최소 계약입니다."""
+
+    region_code: str
+    region_name: str
+    train: Callable[[], dict[str, Any]]
+    predict: Callable[[int], dict[str, Any]]
+    # 기획안의 전년 동월 비교에도 동일한 원자료를 쓰기 위한 읽기 전용 함수입니다.
+    load_history: Callable[[], Any] | None = None
+
+
+# 등록표는 ‘지역 코드 → 전용 데이터 어댑터’의 연결표입니다.
+# 새 시군구는 이 파일에 한 줄 추가하고, 해당 지역만 읽는 train/predict 함수를 만들면 됩니다.
+_PIPELINES = {
+    # 첫 등록 지역입니다. 이후에는 각 지역 어댑터를 같은 형식으로 한 줄 추가합니다.
+    '11680': RegionMlPipeline('11680', '서울특별시 강남구', train_gangnam_models, predict_future_months, load_gangnam_monthly_demand),
+}
+
+
+def get_region_pipeline(region_code: str) -> RegionMlPipeline:
+    """등록되지 않은 지역에 강남 모델을 잘못 적용하지 않도록 명시적으로 거절합니다."""
+    try:
+        return _PIPELINES[str(region_code)]
+    except KeyError as exc:
+        raise ValueError(f'{region_code} 지역의 ML 파이프라인이 아직 등록되지 않았습니다.') from exc
+
+
+def list_region_pipelines() -> tuple[RegionMlPipeline, ...]:
+    """관리 화면·일괄 학습 CLI가 지원 지역 목록을 재사용할 수 있게 합니다."""
+    return tuple(_PIPELINES.values())
