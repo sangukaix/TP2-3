@@ -254,6 +254,7 @@ def _recursive_test(monthly: pd.DataFrame, evaluation: dict[str, Any]) -> dict[s
 
 
 def train_gangnam_models() -> dict[str, Any]:
+    
     """7개 Target을 시간순 검증하고 저장하는 오프라인 재학습 함수입니다."""
     monthly = write_processed_dataset()
     evaluation, models, target_months = {}, {}, None
