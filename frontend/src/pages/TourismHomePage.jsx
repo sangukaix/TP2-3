@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ArrowRight, BarChart3, Bot, FileText, MapPinned } from 'lucide-react'
 import '../App.css'
+import logo from '../assets/logo.png'
 
 const STEPS = [
   {
@@ -58,7 +59,7 @@ export default function TourismHomePage() {
       <header className="home-header">
         <div>
           <div className="home-brand-wrap">
-            <a className="home-brand" href="/"><span><MapPinned size={17} /></span><b>TOUR INSIGHT</b></a>
+            <a className="home-brand" href="/" aria-label="OLIGO 홈"><img className="home-brand-logo" src={logo} alt="OLIGO (가제)" /></a>
             <a className="ml-learning-dot" href="/ml-test" aria-label="머신러닝 학습 결과 보기" title="머신러닝 학습 결과" />
           </div>
         </div>
