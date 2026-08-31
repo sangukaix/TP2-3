@@ -1,16 +1,17 @@
 import {
   FileBarChart,
   LayoutDashboard,
-  MapPinned,
   Sparkles,
   ClipboardList,
 } from 'lucide-react'
+import logo from '../assets/logo.png'
 
 const menuItems = [
   { href: '/dashboard', label: '지역선택', icon: LayoutDashboard },
   { href: '/planning', label: '기획안 생성', icon: ClipboardList },
   { href: '/strategy', label: '기획안 수정 · 출력', icon: Sparkles },
 ]
+const savedPlansMenuItem = { href: '/saved-plans', label: '저장된 기획서', icon: FileBarChart }
 
 /**
  * bid3의 224px 사이드바·64px 상단바 비율을 React + Vite에 맞춰 옮긴 공통 화면 틀입니다.
@@ -36,15 +37,16 @@ export default function WorkspaceShell({ children }) {
 
   return (
     <div className="workspace-shell">
-      <aside className="workspace-sidebar">
-        <div className="workspace-brand-wrap">
-          <a className="workspace-brand" href="/" aria-label="TOUR Insight 홈">
-            <span><MapPinned size={18} /></span>
-            <div><b>TOUR INSIGHT</b></div>
-          </a>
-          <a className="ml-learning-dot" href="/ml-test" aria-label="머신러닝 학습 결과 보기" title="머신러닝 학습 결과" />
+      <header className="home-header workspace-global-header">
+        <div>
+          <div className="home-brand-wrap">
+            <a className="home-brand" href="/" aria-label="OLIGO 홈"><img className="home-brand-logo" src={logo} alt="OLIGO (가제)" /></a>
+            <a className="ml-learning-dot" href="/ml-test" aria-label="머신러닝 학습 결과 보기" title="머신러닝 학습 결과" />
+          </div>
         </div>
+      </header>
 
+      <aside className="workspace-sidebar">
         <nav className="workspace-nav" aria-label="관광 분석 메뉴">
           <p>분석 업무</p>
           {menuItems.map(({ href, label, icon: Icon }) => (
@@ -66,7 +68,7 @@ export default function WorkspaceShell({ children }) {
       </section>
 
       <nav className="workspace-mobile-nav" aria-label="모바일 관광 분석 메뉴">
-        {menuItems.slice(0, 3).map(({ href, label, icon: Icon }) => (
+        {[...menuItems, savedPlansMenuItem].map(({ href, label, icon: Icon }) => (
           <a className={currentPath === href ? 'is-active' : ''} href={href} key={href}><Icon size={17} /><span>{label}</span></a>
         ))}
       </nav>
