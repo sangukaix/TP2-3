@@ -30,6 +30,9 @@ class MlLearningAssistantTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(payload['learning_region']['region_code'], '11680')
         self.assertIn('사용하지 않음', payload['implementation_map']['runtime']['rag_role'])
         self.assertEqual(request.call_args.kwargs['model'], 'test-model')
+        self.assertEqual(request.call_args.kwargs['reasoning_effort'], 'low')
+        self.assertEqual(request.call_args.kwargs['max_output_tokens'], 800)
+        self.assertEqual(request.call_args.kwargs['verbosity'], 'low')
 
 
 class MlLearningAssistantApiTest(unittest.TestCase):
@@ -53,6 +56,13 @@ class MlLearningAssistantApiTest(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['generation_mode'], 'openai')
         self.assertEqual(response.json()['related_modules'], ['evaluation.py'])
+
+    def test_status_endpoint_marks_missing_key_inactive_without_openai_call(self) -> None:
+        """키가 없으면 외부 호출 없이 즉시 빨간 Inactive 상태를 돌려줍니다."""
+        with patch.dict(main.ENV_VALUES, {'OPENAI_API_KEY': ''}, clear=False), TestClient(main.app) as client:
+            response = client.get('/ai/v1/learning/assistant-status')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['status'], 'inactive')
 
 
 if __name__ == '__main__':

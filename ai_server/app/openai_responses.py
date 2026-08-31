@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 import os
 from typing import Any
+from urllib.parse import quote
 
 import httpx
 
@@ -17,6 +19,45 @@ class OpenAIResponseError(RuntimeError):
         self.code = code
         self.message = message
         self.status_code = status_code
+
+
+# 학습 페이지 3곳이 동시에 열려도 같은 상태 점검을 반복 호출하지 않도록 짧게 캐시합니다.
+_READINESS_CACHE: dict[str, Any] = {'checked_at': 0.0, 'model': '', 'result': None}
+
+
+async def check_openai_readiness(*, api_key: str, model: str) -> dict[str, str]:
+    """키·선택 모델·네트워크 연결을 비용 없이 확인해 상태 배지에 사용합니다.
+
+    실제 답변을 생성하지 않고 Models API만 조회하므로 토큰을 사용하지 않습니다.
+    이후 실제 채팅 요청이 실패하면 프런트엔드가 즉시 Inactive로 전환합니다.
+    """
+    safe_key = str(api_key or '').strip()
+    safe_model = str(model or '').strip()
+    if not safe_key:
+        return {'status': 'inactive', 'message': 'OpenAI API 키가 설정되지 않았습니다.'}
+    now = asyncio.get_running_loop().time()
+    cached = _READINESS_CACHE.get('result')
+    if cached and _READINESS_CACHE.get('model') == safe_model and now - float(_READINESS_CACHE.get('checked_at', 0)) < 45:
+        return cached
+    try:
+        async with httpx.AsyncClient(timeout=6.0) as client:
+            response = await client.get(
+                f'https://api.openai.com/v1/models/{quote(safe_model, safe="")}',
+                headers={'Authorization': f'Bearer {safe_key}'},
+            )
+    except httpx.HTTPError:
+        result = {'status': 'inactive', 'message': 'OpenAI API 서버에 연결하지 못했습니다.'}
+    else:
+        if 200 <= response.status_code < 300:
+            result = {'status': 'active', 'message': 'AI Server와 OpenAI 모델 연결을 확인했습니다.'}
+        elif response.status_code == 401:
+            result = {'status': 'inactive', 'message': 'OpenAI API 키 인증에 실패했습니다.'}
+        elif response.status_code == 429:
+            result = {'status': 'inactive', 'message': 'OpenAI 요청 한도 또는 결제 상태를 확인해 주세요.'}
+        else:
+            result = {'status': 'inactive', 'message': '선택한 OpenAI 모델을 사용할 수 없습니다.'}
+    _READINESS_CACHE.update({'checked_at': now, 'model': safe_model, 'result': result})
+    return result
 
 
 def output_text(payload: dict[str, Any]) -> str:
@@ -38,6 +79,7 @@ async def create_structured_response(
     schema: dict[str, Any],
     reasoning_effort: str = 'medium',
     max_output_tokens: int = 8000,
+    verbosity: str = 'medium',
     tools: list[dict[str, Any]] | None = None,
     include: list[str] | None = None,
 ) -> dict[str, Any]:
@@ -50,7 +92,8 @@ async def create_structured_response(
         'instructions': instructions,
         'input': json.dumps(input_payload, ensure_ascii=False),
         'text': {
-            'verbosity': 'medium',
+            # 보고서와 학습 챗봇은 필요한 설명 길이가 다르므로 호출자가 조절합니다.
+            'verbosity': verbosity,
             'format': {
                 'type': 'json_schema',
                 'name': schema_name,

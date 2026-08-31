@@ -53,6 +53,11 @@ API 계약을 지키면 같은 페이지에 카드가 자동으로 추가된다.
 수업자료·논문·긴 기술문서가 늘어날 때만 별도 검수 문서 컬렉션을 RAG에 추가한다. OpenAI 키와
 프롬프트는 AI Server에만 둔다.
 
+학습 챗봇의 답변은 보고서 생성과 분리해 `reasoning=low`, `text.verbosity=low`,
+`max_output_tokens=800`으로 호출한다. 답변은 4문장·핵심 포인트 3개·관련 파일 3개 이내다.
+`GET /ai/v1/learning/assistant-status`는 AI Server와 OpenAI 모델 연결을 Models API로 확인하며,
+토큰을 생성하지 않는다. 프런트엔드는 30초마다 상태를 갱신하고, 실제 답변 실패도 즉시 `Inactive`로 표시한다.
+
 관리자 학습 영역은 `/ml-test`, `/openai-test`, `/react-test` 세 페이지다. OpenAI 페이지는
 Python AST로 Agent 클래스와 FastAPI route를 읽고, React 페이지는 `frontend/src`, App route,
 fetch endpoint와 package.json 의존성을 읽는다. `project_learning_catalog.py`가 매 요청마다 현재

@@ -14,6 +14,7 @@ import '../../App.css'
 import { chatWithMlLearningAssistant, getMlLearningCatalog } from '../../api/mlLearningApi'
 import WorkspaceShell from '../../components/WorkspaceShell'
 import LearningSectionNav from './LearningSectionNav'
+import useLearningAssistantStatus from './useLearningAssistantStatus'
 import './mlTest.css'
 
 const FUNCTION_DESCRIPTIONS = {
@@ -203,6 +204,8 @@ function MlChatPanel({ region }) {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const messageEndRef = useRef(null)
+  const { assistantStatus, markActive, markInactive } = useLearningAssistantStatus()
+  const statusLabel = assistantStatus.status === 'active' ? 'Active' : assistantStatus.status === 'inactive' ? 'Inactive' : 'Checking'
 
   useEffect(() => { messageEndRef.current?.scrollIntoView({ block: 'nearest' }) }, [messages, busy])
 
@@ -218,12 +221,13 @@ function MlChatPanel({ region }) {
         role: 'assistant', content: answer.answer, keyPoints: answer.key_points,
         modules: answer.related_modules, caution: answer.caution,
       }])
-    } catch (requestError) { setError(requestError.message) }
+      markActive()
+    } catch (requestError) { setError(requestError.message); markInactive(requestError) }
     finally { setBusy(false) }
   }
 
   return <aside className="ml-chat" aria-label="ML 챗봇">
-    <header><span><Bot size={18} /></span><div><h2>ML 챗봇</h2><p>{region?.region_name || '선택 지역'} 모델 학습 도우미</p></div><i><b />Active</i></header>
+    <header><span><Bot size={18} /></span><div><h2>ML 챗봇</h2><p>{region?.region_name || '선택 지역'} 모델 학습 도우미</p></div><i className={`assistant-status is-${assistantStatus.status}`} title={assistantStatus.message}><b />{statusLabel}</i></header>
     <div className="ml-chat-context"><Sparkles size={14} /><span>현재 페이지의 데이터·모델·함수·평가 결과를 근거로 답합니다.</span></div>
     <div className="ml-chat-messages" aria-live="polite">
       {messages.length === 0 && <div className="ml-chat-empty"><b>무엇이든 물어보세요</b><p>모델을 선택한 이유, Feature, MAE, 재귀 예측, 기획안 연결 방식까지 설명할 수 있습니다.</p><div>{ML_CHAT_EXAMPLES.map((example) => <button type="button" key={example} onClick={() => sendQuestion(example)}>{example}</button>)}</div></div>}

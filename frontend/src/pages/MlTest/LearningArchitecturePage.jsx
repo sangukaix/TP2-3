@@ -9,6 +9,7 @@ import '../../App.css'
 import WorkspaceShell from '../../components/WorkspaceShell'
 import { chatWithProjectLearningAssistant, getProjectLearningCatalog } from '../../api/projectLearningApi'
 import LearningSectionNav from './LearningSectionNav'
+import useLearningAssistantStatus from './useLearningAssistantStatus'
 import './mlTest.css'
 
 const EXAMPLES = {
@@ -110,6 +111,8 @@ function ProjectTutor({ topic }) {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const endRef = useRef(null)
+  const { assistantStatus, markActive, markInactive } = useLearningAssistantStatus()
+  const statusLabel = assistantStatus.status === 'active' ? 'Active' : assistantStatus.status === 'inactive' ? 'Inactive' : 'Checking'
   useEffect(() => { endRef.current?.scrollIntoView({ block: 'nearest' }) }, [messages, busy])
   const send = async (text) => {
     const value = String(text || '').trim()
@@ -119,10 +122,11 @@ function ProjectTutor({ topic }) {
     try {
       const response = await chatWithProjectLearningAssistant(topic, { question: value, history })
       setMessages((current) => [...current, { role: 'assistant', content: response.answer, points: response.key_points, files: response.related_files, caution: response.caution }])
-    } catch (reason) { setError(reason.message) }
+      markActive()
+    } catch (reason) { setError(reason.message); markInactive(reason) }
     finally { setBusy(false) }
   }
-  return <aside className="learning-tutor"><header><span><Bot size={18} /></span><div><h2>{topic === 'openai' ? 'OpenAI 챗봇' : 'React 챗봇'}</h2><p>현재 프로젝트 구조 학습 도우미</p></div><i><b />Active</i></header>
+  return <aside className="learning-tutor"><header><span><Bot size={18} /></span><div><h2>{topic === 'openai' ? 'OpenAI 챗봇' : 'React 챗봇'}</h2><p>현재 프로젝트 구조 학습 도우미</p></div><i className={`assistant-status is-${assistantStatus.status}`} title={assistantStatus.message}><b />{statusLabel}</i></header>
     <div className="learning-tutor-scope"><Sparkles size={13} />이 페이지를 만들 때 스캔한 실제 구조만 근거로 답합니다.</div>
     <div className="learning-tutor-messages" aria-live="polite">{messages.length === 0 && <section className="learning-tutor-empty"><b>구조가 궁금한 부분을 물어보세요</b><p>파일 위치, 실행 순서, 사용하는 기술과 이유를 쉬운 말로 설명합니다.</p>{EXAMPLES[topic].map((text) => <button type="button" onClick={() => send(text)} key={text}>{text}</button>)}</section>}
       {messages.map((message, index) => <article className={`learning-tutor-message is-${message.role}`} key={`${message.role}-${index}`}><small>{message.role === 'user' ? '나' : '학습 챗봇'}</small><p>{message.content}</p>{message.points?.length > 0 && <ul>{message.points.map((point) => <li key={point}>{point}</li>)}</ul>}{message.files?.length > 0 && <div>{message.files.map((file) => <code key={file}>{file}</code>)}</div>}{message.caution && <em>{message.caution}</em>}</article>)}

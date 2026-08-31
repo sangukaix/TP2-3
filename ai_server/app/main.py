@@ -21,7 +21,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
-from .openai_responses import OpenAIResponseError
+from .openai_responses import OpenAIResponseError, check_openai_readiness
 from .offline_sample_report import build_offline_sample_report
 from .proposal_document import create_strategy_proposal_document
 from .proposal_presentation import create_strategy_proposal_presentation
@@ -240,8 +240,8 @@ class MlLearningChatResponse(BaseModel):
     """ML 튜터 답변은 화면에서 항목별로 읽기 쉬운 고정 구조를 사용합니다."""
 
     answer: str
-    key_points: list[str] = Field(default_factory=list, max_length=5)
-    related_modules: list[str] = Field(default_factory=list, max_length=7)
+    key_points: list[str] = Field(default_factory=list, max_length=3)
+    related_modules: list[str] = Field(default_factory=list, max_length=3)
     caution: str = ''
     generation_mode: Literal['openai'] = 'openai'
 
@@ -255,10 +255,17 @@ class ProjectLearningChatRequest(BaseModel):
 class ProjectLearningChatResponse(BaseModel):
     """구현 설명과 관련 파일을 분리한 학습 답변입니다."""
     answer: str
-    key_points: list[str] = Field(default_factory=list, max_length=5)
-    related_files: list[str] = Field(default_factory=list, max_length=8)
+    key_points: list[str] = Field(default_factory=list, max_length=3)
+    related_files: list[str] = Field(default_factory=list, max_length=3)
     caution: str = ''
     generation_mode: Literal['openai'] = 'openai'
+
+
+class LearningAssistantStatusResponse(BaseModel):
+    """학습 챗봇 배지에 필요한 최소 연결 상태만 브라우저에 전달합니다."""
+
+    status: Literal['active', 'inactive']
+    message: str
 
 
 class DashboardMetric(BaseModel):
@@ -1142,6 +1149,22 @@ async def chat_with_ml_learning_assistant(
             status_code=exc.status_code,
             detail={'code': exc.code, 'message': exc.message},
         ) from exc
+
+
+@app.get('/ai/v1/learning/assistant-status', response_model=LearningAssistantStatusResponse)
+async def read_learning_assistant_status() -> LearningAssistantStatusResponse:
+    """AI Server·OpenAI 키·선택 모델 연결을 확인해 학습 챗봇 배지에 제공합니다."""
+    model = str(
+        ENV_VALUES.get('OPENAI_LEARNING_CHAT_MODEL')
+        or ENV_VALUES.get('OPENAI_ML_CHAT_MODEL')
+        or ENV_VALUES.get('OPENAI_CHAT_MODEL')
+        or ENV_VALUES.get('OPENAI_MODEL')
+        or 'gpt-5.5'
+    ).strip()
+    status = await check_openai_readiness(
+        api_key=str(ENV_VALUES.get('OPENAI_API_KEY') or ''), model=model,
+    )
+    return LearningAssistantStatusResponse(**status)
 
 
 @app.get('/ai/v1/learning/{topic}', response_model=ProjectLearningCatalog)
