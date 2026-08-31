@@ -587,3 +587,16 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 24px
 /* 모든 페이지의 상단 고정 영역: 로고 바 → 업무 안내 바 순서로 항상 화면 위에 유지합니다. */
 .home-header,.workspace-global-header{position:sticky!important;top:0!important;z-index:2000!important}
 .workspace-shell .workspace-topbar{position:sticky!important;top:64px!important;z-index:1900!important}
+
+/* 메인 페이지는 상위 영역의 overflow 설정과 무관하게 브라우저 화면에 직접 고정합니다. */
+.tourism-home{padding-top:64px}
+.tourism-home>.home-header{position:fixed!important;top:0!important;right:0;left:0;width:100%;z-index:2000!important}
+
+/* 업무 페이지도 같은 공통 로고 바를 브라우저 화면에 직접 고정합니다. */
+.workspace-shell{padding-top:64px}
+.workspace-shell>.workspace-global-header{position:fixed!important;top:0!important;right:0;left:0;width:100%;z-index:2000!important}
+@media(max-width:760px){
+  .tourism-home,.workspace-shell{padding-top:58px}
+  .workspace-shell .workspace-topbar{top:58px!important}
+}
+@media(min-width:601px) and (max-width:760px){.workspace-shell .workspace-sidebar{top:58px;height:calc(100vh - 58px)}}
