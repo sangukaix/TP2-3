@@ -6,7 +6,6 @@ OpenAI 전략 보고서와 원자료 추세만 받아 문서 레이아웃으로 
 
 from __future__ import annotations
 
-from datetime import datetime
 from io import BytesIO
 from pathlib import Path
 import textwrap
@@ -157,45 +156,65 @@ def _compact_text(value: Any, limit: int) -> str:
     return f'{shortened}…'
 
 
-def _execution_target(report: dict[str, Any]) -> tuple[float, float]:
-    """화면에서 선택한 목표율만 안전한 범위에서 읽습니다. 이는 예측값이 아닙니다."""
+def _execution_target(report: dict[str, Any]) -> tuple[float, float] | None:
+    """사용자가 직접 입력한 목표율만 읽습니다. 입력이 없으면 임의 기본값을 만들지 않습니다."""
     scenario = report.get('execution_scenario') or {}
-    visitor_pct = float(scenario.get('visitor_target_pct', 5))
-    spending_pct = float(scenario.get('spending_target_pct', 8))
+    if 'visitor_target_pct' not in scenario or 'spending_target_pct' not in scenario:
+        return None
+    visitor_pct = float(scenario['visitor_target_pct'])
+    spending_pct = float(scenario['spending_target_pct'])
     return max(0, min(visitor_pct, 20)), max(0, min(spending_pct, 30))
 
 
+def _ml_forecast_rows(report: dict[str, Any]) -> list[dict[str, Any]]:
+    """저장 모델이 만든 자연추세 전망만 문서용 월별 행으로 정리합니다."""
+    analysis = report.get('ml_analysis') or {}
+    if analysis.get('status') != 'available':
+        return []
+    rows: list[dict[str, Any]] = []
+    for forecast in (analysis.get('forecasts') or [])[:6]:
+        month = str(forecast.get('month') or '')
+        if len(month) == 6 and month.isdigit():
+            month = f'{month[:4]}.{month[4:]}'
+        visitors = forecast.get('visitors')
+        spending = forecast.get('spending_krw')
+        if visitors is None or spending is None:
+            continue
+        rows.append({'month': month, 'visitors': float(visitors), 'spending_krw': float(spending)})
+    return rows
+
+
 def _create_execution_comparison_chart(report: dict[str, Any]) -> BytesIO:
-    """최근 월부터 6개월 동안의 미실행 유지선과 실행 목표선을 실제 단위로 표시합니다."""
-    visitor_pct, spending_pct = _execution_target(report)
-    latest = (report.get('monthly_trend') or [{}])[-1]
-    baseline_visitors = float(latest.get('visitors') or 0)
-    baseline_spending = float(latest.get('spending_krw') or 0)
-    try:
-        start = datetime.strptime(str(latest.get('month') or ''), '%Y.%m')
-    except ValueError:
-        start = datetime(2026, 7, 1)
-    labels = []
-    for offset in range(7):
-        month_index = start.month - 1 + offset
-        labels.append(f'{start.year + month_index // 12}.{month_index % 12 + 1:02d}')
-    progress = [offset / 6 for offset in range(7)]
-    baseline_visitor_line = [baseline_visitors / 10_000] * 7
-    target_visitor_line = [baseline_visitors * (1 + visitor_pct / 100 * ratio) / 10_000 for ratio in progress]
-    baseline_spending_line = [baseline_spending / 100_000_000] * 7
-    target_spending_line = [baseline_spending * (1 + spending_pct / 100 * ratio) / 100_000_000 for ratio in progress]
+    """ML 자연추세와 사용자가 입력한 목표를 분리해 실제 단위로 표시합니다."""
+    rows = _ml_forecast_rows(report)
+    is_ml_forecast = bool(rows)
+    if not rows:
+        rows = [
+            row for row in (report.get('monthly_trend') or [])[-6:]
+            if row.get('visitors') is not None and row.get('spending_krw') is not None
+        ]
+    labels = [str(row.get('month') or '').replace('-', '.') for row in rows]
+    natural_visitor_line = [float(row['visitors']) / 10_000 for row in rows]
+    natural_spending_line = [float(row['spending_krw']) / 100_000_000 for row in rows]
+    target = _execution_target(report)
     figure, axes = plt.subplots(2, 1, figsize=(7.05, 3.4), dpi=170, sharex=True)
     chart_specs = [
-        (axes[0], baseline_visitor_line, target_visitor_line, '방문자 수(만 명)', '#24AFC0'),
-        (axes[1], baseline_spending_line, target_spending_line, '관광소비액(억 원)', '#8060C6'),
+        (axes[0], natural_visitor_line, target[0] if target else None, '방문자 수(만 명)', '#24AFC0'),
+        (axes[1], natural_spending_line, target[1] if target else None, '관광소비액(억 원)', '#8060C6'),
     ]
-    for axis, baseline, target, ylabel, color in chart_specs:
-        values = baseline + target
+    for axis, natural, target_pct, ylabel, color in chart_specs:
+        target_line = []
+        if target_pct is not None and natural:
+            last_index = max(1, len(natural) - 1)
+            target_line = [value * (1 + target_pct / 100 * index / last_index) for index, value in enumerate(natural)]
+        values = natural + target_line
         spread = max(values) - min(values)
         padding = max(spread * 0.3, max(values) * 0.006, 1)
         axis.set_ylim(max(0, min(values) - padding), max(values) + padding)
-        axis.plot(labels, baseline, color='#8FA1B4', linewidth=1.7, linestyle='--', label='미실행')
-        axis.plot(labels, target, color=color, linewidth=2.4, marker='o', markersize=3, label='실행 목표')
+        natural_label = 'ML 자연추세' if is_ml_forecast else '최근 관측값'
+        axis.plot(labels, natural, color=color, linewidth=2.4, marker='o', markersize=3, label=natural_label)
+        if target_line:
+            axis.plot(labels, target_line, color='#E86973', linewidth=1.8, linestyle='--', label='사용자 설정 목표')
         axis.set_ylabel(ylabel, color='#536B88', fontsize=7.5)
         axis.grid(axis='y', color='#DCE5EB', linewidth=0.6)
         axis.tick_params(axis='both', labelsize=6.8, colors='#536B88')
@@ -282,6 +301,36 @@ def _add_footer(document: Document) -> None:
     paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     run = paragraph.add_run('TOUR INSIGHT | 원자료 기반 AI 전략기획서')
     _set_run_font(run, size=8, color=MUTED)
+
+
+def _validate_document_structure(content: bytes) -> None:
+    """서버에서 렌더러 없이도 잡을 수 있는 Word 구조 오류를 저장 전에 차단합니다.
+
+    페이지 수·겹침은 별도 Word/LibreOffice 렌더 QA가 필요하지만, 필수 섹션 누락,
+    과도한 본문, 5단계 표 손상, 예전의 미실행 정책효과 문구는 여기서 확정적으로 검사합니다.
+    """
+    checked = Document(BytesIO(content))
+    paragraphs = [paragraph.text.strip() for paragraph in checked.paragraphs if paragraph.text.strip()]
+    body_text = '\n'.join(paragraphs)
+    table_text = '\n'.join(cell.text for table in checked.tables for row in table.rows for cell in row.cells)
+    required_headings = [
+        '1. 핵심 제안', '2. 최신 현황과 월간 변화', '3. 문제 / 제안과 판단 근거',
+        '4. 해결 방법', '5. 집행 방법', '6. ML 자연추세와 사업 목표',
+        '7. 참고한 공식 사례·데이터',
+    ]
+    missing = [heading for heading in required_headings if heading not in paragraphs]
+    if missing:
+        raise ValueError(f"Word 필수 섹션이 누락되었습니다: {', '.join(missing)}")
+    if len(body_text) + len(table_text) > 14_000:
+        raise ValueError('Word 본문이 문서 검토 상한을 넘었습니다. 긴 문장을 더 요약해 주세요.')
+    if '미실행 (최근 월)' in table_text or '추가 관광소비' in table_text:
+        raise ValueError('정책 인과효과로 오해할 수 있는 이전 비교 표기가 남아 있습니다.')
+    execution_tables = [
+        table for table in checked.tables
+        if table.rows and [cell.text.strip() for cell in table.rows[0].cells] == ['순서', '기간', '실행 작업', '완료 산출물']
+    ]
+    if len(execution_tables) != 1 or len(execution_tables[0].rows) != 6:
+        raise ValueError('집행 방법은 머리글과 정확히 5개 실행 단계로 구성해야 합니다.')
 
 
 def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
@@ -385,26 +434,51 @@ def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
     timeline_caption.alignment = WD_ALIGN_PARAGRAPH.CENTER
     _set_run_font(timeline_caption.add_run('그림 2. 5단계 실행 일정과 단계별 결과물'), size=8.3, color=MUTED)
 
-    _add_heading(document, '6. 실행 목표 비교')
-    visitor_pct, spending_pct = _execution_target(report)
-    latest = (report.get('monthly_trend') or [{}])[-1]
-    baseline_visitors = int(latest.get('visitors') or 0)
-    baseline_spending = int(latest.get('spending_krw') or 0)
-    target_visitors = round(baseline_visitors * (1 + visitor_pct / 100))
-    target_spending = round(baseline_spending * (1 + spending_pct / 100))
-    comparison_table = document.add_table(rows=2, cols=3)
-    _set_table_geometry(comparison_table, [3120, 3120, 3120])
-    for cell, header in zip(comparison_table.rows[0].cells, ['미실행 (최근 월)', '실행 목표', '추가 관광소비']):
-        _shade(cell, PALE_AQUA)
-        _add_text(cell, header, bold=True, size=8.5)
-    _add_text(comparison_table.cell(1, 0), f"방문 {baseline_visitors:,}명\n소비 {_format_amount(baseline_spending)}", size=8.8)
-    _add_text(comparison_table.cell(1, 1), f"방문 {target_visitors:,}명 (+{visitor_pct:g}%)\n소비 {_format_amount(target_spending)} (+{spending_pct:g}%)", size=8.8)
-    _add_text(comparison_table.cell(1, 2), _format_amount(target_spending - baseline_spending), bold=True, color=BLUE, size=10)
-    document.add_paragraph().paragraph_format.space_after = Pt(1)
-    document.add_picture(_create_execution_comparison_chart(report), width=Inches(6.45))
-    comparison_note = document.add_paragraph()
-    comparison_note.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    _set_run_font(comparison_note.add_run('그림 3. 최근 월부터 6개월간 미실행 유지선과 실행 목표선'), size=8.3, color=MUTED)
+    _add_heading(document, '6. ML 자연추세와 사업 목표')
+    forecasts = _ml_forecast_rows(report)
+    target = _execution_target(report)
+    if forecasts:
+        last_forecast = forecasts[-1]
+        if target:
+            visitor_pct, spending_pct = target
+            target_visitors = round(last_forecast['visitors'] * (1 + visitor_pct / 100))
+            target_spending = round(last_forecast['spending_krw'] * (1 + spending_pct / 100))
+            comparison_table = document.add_table(rows=2, cols=3)
+            _set_table_geometry(comparison_table, [3120, 3120, 3120])
+            headers = ['ML 자연추세', '사용자 설정 목표', '추가로 필요한 수준']
+            for cell, header in zip(comparison_table.rows[0].cells, headers):
+                _shade(cell, PALE_AQUA)
+                _add_text(cell, header, bold=True, size=8.5)
+            _add_text(comparison_table.cell(1, 0), f"{last_forecast['month']}\n방문 {last_forecast['visitors']:,.0f}명\n소비 {_format_amount(last_forecast['spending_krw'])}", size=8.8)
+            _add_text(comparison_table.cell(1, 1), f"방문 {target_visitors:,}명 (+{visitor_pct:g}%)\n소비 {_format_amount(target_spending)} (+{spending_pct:g}%)", size=8.8)
+            _add_text(comparison_table.cell(1, 2), f"방문 {target_visitors - round(last_forecast['visitors']):,}명\n소비 {_format_amount(target_spending - last_forecast['spending_krw'])}", bold=True, color=BLUE, size=8.8)
+        else:
+            comparison_table = document.add_table(rows=2, cols=2)
+            _set_table_geometry(comparison_table, [3300, 6060])
+            for cell, header in zip(comparison_table.rows[0].cells, ['전망 마지막 달', '저장 모델의 자연추세 전망']):
+                _shade(cell, PALE_AQUA)
+                _add_text(cell, header, bold=True, size=8.5)
+            _add_text(comparison_table.cell(1, 0), last_forecast['month'], bold=True, size=9)
+            _add_text(comparison_table.cell(1, 1), f"방문 {last_forecast['visitors']:,.0f}명 · 관광소비 {_format_amount(last_forecast['spending_krw'])}", size=9)
+        document.add_paragraph().paragraph_format.space_after = Pt(1)
+        document.add_picture(_create_execution_comparison_chart(report), width=Inches(6.45))
+        comparison_note = document.add_paragraph()
+        comparison_note.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        note = '그림 3. 저장 ML 모델의 월별 자연추세'
+        if target:
+            note += '와 사용자 설정 목표'
+        _set_run_font(comparison_note.add_run(note), size=8.3, color=MUTED)
+        forecast_caution = document.add_paragraph()
+        forecast_caution.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        _set_run_font(
+            forecast_caution.add_run('자연추세는 과거 이력 기반 전망이며, 사업의 인과효과나 추가 매출 예측이 아닙니다.'),
+            size=8.2,
+            color=MUTED,
+        )
+    else:
+        no_forecast = document.add_paragraph('검증된 저장 모델 전망이 없어 임의의 미실행·실행 수치를 만들지 않았습니다.')
+        for run in no_forecast.runs:
+            _set_run_font(run, size=9, color=MUTED)
     effect_callout = document.add_table(rows=1, cols=1)
     _set_table_geometry(effect_callout, [9360])
     _shade(effect_callout.cell(0, 0), PALE_AQUA)
@@ -433,16 +507,17 @@ def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
     }
     supporting_sources = [source for source in all_sources if source.get('source_type') != 'benchmark_case'][:5]
     for source in supporting_sources:
-        source_line = document.add_paragraph(style=None)
+        source_line = document.add_paragraph(style='List Bullet')
         source_line.paragraph_format.left_indent = Inches(0.15)
         source_line.paragraph_format.space_after = Pt(1)
         _set_run_font(
-            source_line.add_run(f"• {source_type_names.get(source.get('source_type'), '공식 자료')} · {_compact_text(source.get('title', ''), 95)}"),
+            source_line.add_run(f"{source_type_names.get(source.get('source_type'), '공식 자료')} · {_compact_text(source.get('title', ''), 95)}"),
             size=8.2,
             color=MUTED,
         )
 
     output = BytesIO()
     document.save(output)
-    output.seek(0)
-    return output
+    content = output.getvalue()
+    _validate_document_structure(content)
+    return BytesIO(content)

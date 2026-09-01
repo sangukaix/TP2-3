@@ -33,6 +33,18 @@ class BriefContractTest(unittest.TestCase):
         self.assertIsNone(value['start_date'])
         self.assertEqual(value['resources_confirmed'], '')
 
+    def test_restart_payload_never_stores_attachment_text(self):
+        """작업 복구용 MySQL JSON에는 참고문서 이름과 본문을 남기지 않습니다."""
+        request = main.ReportRequest(
+            region_name='서울특별시 강남구',
+            planning_brief=brief(references=[{'name': 'memo.txt', 'text': '저장하면 안 되는 첨부 본문'}]),
+        )
+        payload, had_references = main._job_persistence_payload(request)
+
+        self.assertTrue(had_references)
+        self.assertEqual(payload['planning_brief']['references'], [])
+        self.assertNotIn('저장하면 안 되는 첨부 본문', str(payload))
+
     def test_invalid_conditions_rejected(self):
         for changes in [
             {'budget_status': 'confirmed'},

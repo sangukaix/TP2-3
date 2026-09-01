@@ -63,14 +63,25 @@ class ReviewerAgent:
         self.api_key = api_key
         self.model = model
 
-    async def review(self, *, evidence_pack: dict[str, Any], draft_report: dict[str, Any]) -> dict[str, Any]:
+    async def review(
+        self,
+        *,
+        evidence_pack: dict[str, Any],
+        draft_report: dict[str, Any],
+        deterministic_precheck: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         # evidence_pack 원본과 Planner 초안을 함께 보내야 ‘그럴듯하지만 근거 없는 문장’을 비교해 걸러낼 수 있습니다.
         # 점수가 낮으면 오케스트레이터가 이 응답의 issue만 Planner에게 전달해 한 번 재작성합니다.
         return await create_structured_response(
             api_key=self.api_key,
             model=self.model,
             instructions=REVIEW_INSTRUCTIONS,
-            input_payload={'evidence_pack': evidence_pack, 'draft_report': draft_report},
+            # 코드가 확인한 기계적 오류도 함께 주어, Reviewer가 사실성·문장 품질 검토에 집중하게 합니다.
+            input_payload={
+                'evidence_pack': evidence_pack,
+                'draft_report': draft_report,
+                'deterministic_precheck': deterministic_precheck or {'checked': False, 'issues': []},
+            },
             schema_name='tourism_plan_quality_review',
             schema=REVIEW_SCHEMA,
             reasoning_effort='high',

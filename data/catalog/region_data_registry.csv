@@ -1,0 +1,3 @@
+region_code,region_name,short_name,raw_relative_path,adapter_type,source_name,source_url,downloaded_at,provenance_status,enabled
+11680,서울특별시 강남구,강남구,data/raw/서울특별시/서울특별시_강남구-20260828T031131Z-1-001.zip,legacy_gangnam_zip,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-28,needs_exact_download_url,true
+28245,인천광역시 계양구,계양구,data/raw/인천광역시/계양구,standard_datalab_csv,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-24,needs_exact_download_url,true

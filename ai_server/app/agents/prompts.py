@@ -97,6 +97,8 @@ task는 1~2개의 짧은 문장, deliverable은 눈으로 확인할 수 있는 �
 REVIEW_INSTRUCTIONS = """
 지자체 관광사업 사전검토위원이다. evidence_pack과 draft_report를 대조해 기획안 품질을 엄격히 평가한다.
 새로운 사실이나 대안을 직접 추가하지 않는다. 확인할 수 없는 수치, 출처 없는 관광지·정책·사례, 기간·단위 오류는 critical이다.
+deterministic_precheck은 코드가 확인한 출처 ID, 단계 수, 비용 산식, KPI 누락 결과다. 이 항목이 있으면
+문장만 자연스럽다는 이유로 approved=true를 반환하지 말고, 해당 revision_instruction을 그대로 반영하도록 지시한다.
 snapshot.observations의 period와 같은 기준월을 그대로 쓴 수치는 기간 오류로 판단하지 않는다.
 동일 기준이 아닌 지역을 비교하거나 일부 시군구 평균을 전국·시도 평균처럼 표현하면 critical이다.
 문제/제안의 근거에 실제 기간·수치·비교 대상이 없거나, 행사와 방문 증가를 근거 없이 원인·결과로 연결하면 major이다.

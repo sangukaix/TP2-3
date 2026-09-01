@@ -42,7 +42,7 @@ def _connect():
 def initialize_strategy_store() -> None:
     """서버 시작 시 필요한 테이블과 로컬 문서 폴더를 한 번 준비합니다."""
     DOCUMENT_DIRECTORY.mkdir(parents=True, exist_ok=True)
-    sql = '''
+    report_sql = '''
         CREATE TABLE IF NOT EXISTS strategy_reports (
             report_id VARCHAR(64) PRIMARY KEY,
             region_code VARCHAR(20) NOT NULL,
@@ -58,9 +58,124 @@ def initialize_strategy_store() -> None:
             INDEX idx_strategy_reports_region_code (region_code)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     '''
+    job_sql = '''
+        CREATE TABLE IF NOT EXISTS strategy_report_jobs (
+            job_id VARCHAR(64) PRIMARY KEY,
+            region_code VARCHAR(20) NOT NULL,
+            region_name VARCHAR(120) NOT NULL,
+            status VARCHAR(20) NOT NULL,
+            message VARCHAR(500) NOT NULL,
+            error TEXT NOT NULL,
+            request_json JSON NULL,
+            had_transient_references BOOLEAN NOT NULL DEFAULT FALSE,
+            created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            INDEX idx_strategy_jobs_status (status),
+            INDEX idx_strategy_jobs_updated_at (updated_at)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+    '''
     with _connect() as connection:
         with connection.cursor() as cursor:
-            cursor.execute(sql)
+            cursor.execute(report_sql)
+            cursor.execute(job_sql)
+
+
+def save_strategy_job(
+    job_id: str,
+    region_code: str,
+    region_name: str,
+    status: str,
+    message: str,
+    *,
+    error: str = '',
+    request_payload: dict[str, Any] | None = None,
+    had_transient_references: bool = False,
+) -> None:
+    """작업 상태를 MySQL에 저장해 브라우저 이동과 AI 서버 재시작 뒤에도 조회하게 합니다.
+
+    첨부 본문은 저장 금지 원칙을 지키기 위해 request_payload에 포함하지 않습니다.
+    """
+    values = {
+        'job_id': job_id,
+        'region_code': region_code,
+        'region_name': region_name,
+        'status': status,
+        'message': message,
+        'error': error,
+        'request_json': json.dumps(request_payload, ensure_ascii=False, default=str) if request_payload is not None else None,
+        'had_transient_references': had_transient_references,
+    }
+    sql = '''
+        INSERT INTO strategy_report_jobs (
+            job_id, region_code, region_name, status, message, error,
+            request_json, had_transient_references
+        ) VALUES (
+            %(job_id)s, %(region_code)s, %(region_name)s, %(status)s, %(message)s, %(error)s,
+            %(request_json)s, %(had_transient_references)s
+        )
+        ON DUPLICATE KEY UPDATE
+            status=VALUES(status), message=VALUES(message), error=VALUES(error),
+            request_json=COALESCE(VALUES(request_json), request_json),
+            had_transient_references=VALUES(had_transient_references),
+            updated_at=CURRENT_TIMESTAMP
+    '''
+    with _connect() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(sql, values)
+
+
+def update_strategy_job_state(job_id: str, status: str, message: str, error: str = '') -> None:
+    """진행 단계만 갱신합니다. 최초 요청 조건은 그대로 유지합니다."""
+    with _connect() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                'UPDATE strategy_report_jobs SET status=%s, message=%s, error=%s WHERE job_id=%s',
+                (status, message, error, job_id),
+            )
+
+
+def read_strategy_job(job_id: str) -> dict[str, Any] | None:
+    """메모리에 없는 작업을 MySQL에서 복구해 상태 조회에 사용합니다."""
+    with _connect() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute('SELECT * FROM strategy_report_jobs WHERE job_id=%s', (job_id,))
+            row = cursor.fetchone()
+    if not row:
+        return None
+    request_value = row.get('request_json')
+    if isinstance(request_value, str):
+        request_value = json.loads(request_value)
+    return {
+        'job_id': row['job_id'],
+        'region_code': row['region_code'],
+        'region_name': row['region_name'],
+        'status': row['status'],
+        'message': row['message'],
+        'error': row['error'] or '',
+        'request': request_value,
+        'had_transient_references': bool(row['had_transient_references']),
+    }
+
+
+def list_interrupted_strategy_jobs() -> list[dict[str, Any]]:
+    """서버 종료 당시 queued/running이던 작업만 오래된 순서로 반환합니다."""
+    with _connect() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT * FROM strategy_report_jobs WHERE status IN ('queued', 'running') ORDER BY created_at ASC"
+            )
+            rows = cursor.fetchall()
+    jobs: list[dict[str, Any]] = []
+    for row in rows:
+        request_value = row.get('request_json')
+        if isinstance(request_value, str):
+            request_value = json.loads(request_value)
+        jobs.append({
+            'job_id': row['job_id'], 'region_code': row['region_code'], 'region_name': row['region_name'],
+            'status': row['status'], 'message': row['message'], 'error': row['error'] or '',
+            'request': request_value, 'had_transient_references': bool(row['had_transient_references']),
+        })
+    return jobs
 
 
 def save_strategy_report(report_id: str, region_code: str, report: dict[str, Any]) -> None:
