@@ -271,17 +271,10 @@ def _recursive_test(monthly: pd.DataFrame, evaluation: dict[str, Any]) -> dict[s
     }
 
 
-<<<<<<< HEAD
 def train_region_models(settings: RegionForecastSettings) -> dict[str, Any]:
     """설정된 한 지역의 7개 Target을 시간순 검증하고 Joblib으로 저장합니다."""
     # 웹 요청에서는 실행하지 않습니다. 지역별 원본 검증이 끝난 관리용 CLI에서만 호출합니다.
     monthly = settings.write_processed()
-=======
-def train_gangnam_models() -> dict[str, Any]:
-    
-    """7개 Target을 시간순 검증하고 저장하는 오프라인 재학습 함수입니다."""
-    monthly = write_processed_dataset()
->>>>>>> a0a2a7ba83442b279e00e211b321f0385c9dd97a
     evaluation, models, target_months = {}, {}, None
     for key in TARGETS:
         features, targets, baseline, months = _training_frame(monthly, key)

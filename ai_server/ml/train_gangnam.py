@@ -2,19 +2,10 @@
 
 실행: python -m ai_server.ml.train_gangnam
 """
-# Choi_20260831_Version_0002
-
 
 from __future__ import annotations
-# 20260831_Choi_Version_0002 
-#    Python에게 함수의 타입 힌트(type hint)를 나중에 해석하도록 하는 기능
-#   "함수의 타입 힌트를 지금 당장 해석하지 말고, 나중에 해석해 주세요."
-
 
 import json
-
-# Python에서 JSON 데이터를 처리하기 위한 표준 라이브러리를 가져오는 것
-# Python의 dictionary를 JSON 문자열로 바꾸려면:
 
 from .gangnam_forecast import train_gangnam_models
 
