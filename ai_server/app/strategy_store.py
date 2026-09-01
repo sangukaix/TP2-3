@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -74,10 +75,41 @@ def initialize_strategy_store() -> None:
             INDEX idx_strategy_jobs_updated_at (updated_at)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     '''
+    # 기획안의 목표와 실제 관측값을 섞지 않기 위한 최소 측정 저장소입니다.
+    # 전국 데이터 schema를 아직 적용하지 않은 개발 DB에서도 기획안 저장과 함께 동작합니다.
+    measurement_baseline_sql = '''
+        CREATE TABLE IF NOT EXISTS strategy_measurement_baseline (
+            report_id VARCHAR(64) NOT NULL,
+            region_code VARCHAR(10) NOT NULL,
+            metric_name VARCHAR(100) NOT NULL,
+            baseline_month CHAR(7) NOT NULL,
+            observed_value DECIMAL(24,4) NOT NULL,
+            unit VARCHAR(40) NOT NULL,
+            source_references_json JSON NOT NULL,
+            created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (report_id, metric_name),
+            KEY ix_measurement_baseline_region (region_code, baseline_month)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+    '''
+    measurement_followup_sql = '''
+        CREATE TABLE IF NOT EXISTS strategy_measurement_followup (
+            followup_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            report_id VARCHAR(64) NOT NULL,
+            metric_name VARCHAR(100) NOT NULL,
+            observed_month CHAR(7) NOT NULL,
+            observed_value DECIMAL(24,4) NOT NULL,
+            unit VARCHAR(40) NOT NULL,
+            source_references_json JSON NOT NULL,
+            recorded_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE KEY uq_measurement_followup (report_id, metric_name, observed_month)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+    '''
     with _connect() as connection:
         with connection.cursor() as cursor:
             cursor.execute(report_sql)
             cursor.execute(job_sql)
+            cursor.execute(measurement_baseline_sql)
+            cursor.execute(measurement_followup_sql)
 
 
 def save_strategy_job(
@@ -199,6 +231,131 @@ def save_strategy_report(report_id: str, region_code: str, report: dict[str, Any
     with _connect() as connection:
         with connection.cursor() as cursor:
             cursor.execute(sql, values)
+
+
+def _number_from_display(value: Any) -> float | None:
+    """대시보드 표시용 '1,234명'을 저장 가능한 숫자로 바꿉니다.
+
+    이 함수는 화면 문구를 다시 계산하지 않습니다. 생성에 사용한 snapshot의 관측값을
+    그대로 baseline으로 보관하기 위한 변환만 담당합니다.
+    """
+    match = re.search(r'-?[\d,]+(?:\.\d+)?', str(value or ''))
+    return float(match.group(0).replace(',', '')) if match else None
+
+
+def _measurement_source_references(snapshot: dict[str, Any], source_label: str) -> list[dict[str, str]]:
+    """기준값의 원자료 문구와, 있을 때만 전국 비교의 공식 출처 URL을 함께 보존합니다."""
+    references: list[dict[str, str]] = [{'kind': 'regional_raw_snapshot', 'reference': source_label}]
+    nationwide = snapshot.get('nationwide_comparison') or {}
+    if nationwide.get('available'):
+        for source in nationwide.get('source_records') or []:
+            references.append({
+                'kind': 'nationwide_official_dataset',
+                'reference': str(source.get('source_id') or ''),
+                'url': str(source.get('source_url') or ''),
+            })
+    return references
+
+
+def save_strategy_measurement_baseline(report_id: str, region_code: str, snapshot: dict[str, Any]) -> int:
+    """생성 시점의 실제 관측값을 기획안별 baseline으로 저장합니다.
+
+    예측치·사용자 목표·LLM의 기대효과 문장은 넣지 않습니다. 이후 follow-up과 비교할
+    수 있는 원자료 관측값만 저장해 정책 성과를 과장하지 않도록 합니다.
+    """
+    latest_month = str(snapshot.get('latest_month') or '')
+    if not re.fullmatch(r'20\d{2}-(0[1-9]|1[0-2])', latest_month):
+        return 0
+    metric_specs = {
+        '월간 순 방문자 수': ('monthly_unique_visitors', '명'),
+        '월간 외지인 관광소비 총액': ('monthly_tourism_spend', '원'),
+        '외지인 숙박 방문 비율': ('overnight_ratio', '%'),
+        '외지인 평균 숙박일수': ('average_stay_days', '일'),
+    }
+    rows: list[dict[str, Any]] = []
+    for observation in snapshot.get('observations') or []:
+        spec = metric_specs.get(str(observation.get('metric') or ''))
+        value = _number_from_display(observation.get('value'))
+        if not spec or value is None:
+            continue
+        rows.append({
+            'report_id': report_id,
+            'region_code': region_code,
+            'metric_name': spec[0],
+            'baseline_month': latest_month,
+            'observed_value': value,
+            'unit': spec[1],
+            'source_references_json': json.dumps(
+                _measurement_source_references(snapshot, str(observation.get('source') or '')),
+                ensure_ascii=False,
+            ),
+        })
+    if not rows:
+        return 0
+    sql = '''
+        INSERT INTO strategy_measurement_baseline (
+            report_id, region_code, metric_name, baseline_month, observed_value, unit, source_references_json
+        ) VALUES (
+            %(report_id)s, %(region_code)s, %(metric_name)s, %(baseline_month)s,
+            %(observed_value)s, %(unit)s, %(source_references_json)s
+        ) ON DUPLICATE KEY UPDATE
+            baseline_month=VALUES(baseline_month), observed_value=VALUES(observed_value), unit=VALUES(unit),
+            source_references_json=VALUES(source_references_json)
+    '''
+    with _connect() as connection:
+        with connection.cursor() as cursor:
+            cursor.executemany(sql, rows)
+    return len(rows)
+
+
+def save_strategy_measurement_followup(
+    report_id: str,
+    metric_name: str,
+    observed_month: str,
+    observed_value: float,
+    unit: str,
+    source_references: list[dict[str, str]],
+) -> None:
+    """후속 실제 관측값을 기록합니다. 사용자 목표나 예상값은 이 함수로 저장하지 않습니다."""
+    sql = '''
+        INSERT INTO strategy_measurement_followup (
+            report_id, metric_name, observed_month, observed_value, unit, source_references_json
+        ) VALUES (%s, %s, %s, %s, %s, %s)
+        ON DUPLICATE KEY UPDATE
+            observed_value=VALUES(observed_value), unit=VALUES(unit),
+            source_references_json=VALUES(source_references_json), recorded_at=CURRENT_TIMESTAMP
+    '''
+    with _connect() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(sql, (
+                report_id, metric_name, observed_month, observed_value, unit,
+                json.dumps(source_references, ensure_ascii=False),
+            ))
+
+
+def list_strategy_measurements(report_id: str) -> dict[str, list[dict[str, Any]]]:
+    """기획안별 baseline과 실제 follow-up을 분리해 반환합니다."""
+    with _connect() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                '''SELECT metric_name, baseline_month, observed_value, unit, source_references_json
+                   FROM strategy_measurement_baseline WHERE report_id=%s ORDER BY metric_name''',
+                (report_id,),
+            )
+            baselines = cursor.fetchall()
+            cursor.execute(
+                '''SELECT metric_name, observed_month, observed_value, unit, source_references_json, recorded_at
+                   FROM strategy_measurement_followup WHERE report_id=%s ORDER BY observed_month, metric_name''',
+                (report_id,),
+            )
+            followups = cursor.fetchall()
+    for row in [*baselines, *followups]:
+        value = row.get('source_references_json')
+        row['source_references'] = json.loads(value) if isinstance(value, str) else (value or [])
+        row.pop('source_references_json', None)
+        if row.get('recorded_at'):
+            row['recorded_at'] = row['recorded_at'].isoformat()
+    return {'baselines': baselines, 'followups': followups}
 
 
 def list_strategy_reports() -> list[dict[str, Any]]:

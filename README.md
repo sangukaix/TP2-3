@@ -18,6 +18,12 @@ Codex 또는 팀원은 먼저 루트의 `AGENTS.md`와 아래 문서를 순서�
 
 ## 현재 상태
 
+### 전국 데이터 확장 파이프라인 (2026-09-01)
+
+- 전국 공식 관광 원본을 서비스 코드와 분리해 검증·정규화하는 자산은 `data_pipeline/`에 둡니다. 결과는 `data/processed/nationwide/`, 모델 산출물은 `artifacts/nationwide/`, MySQL 적재 스키마는 `database/mysql/`에 있습니다.
+- 원본 ZIP/CSV는 팀 공유폴더의 읽기 전용 보관소를 유지하며 Git에 복사하지 않습니다. 현재 강남·계양 지역 화면은 기존 검증 경로를 계속 사용합니다.
+- 전국 수치를 화면과 기획서 근거로 사용하기 전에는 MySQL 적재, 지역별 시간순 ML 평가, AI Server 입력 연결을 별도로 검증해야 합니다. 자세한 내용은 `data_pipeline/README.md`와 `docs/nationwide/`를 확인합니다.
+
 ### 전략기획 입력 페이지 (2026-08-28)
 
 - 메뉴: 지역선택 → **전략기획** (`/planning`) → AI 전략기획 (`/strategy`) → 저장된 기획서.
@@ -149,7 +155,7 @@ cd C:\Users\Admin\mbca\TP2-3
 - 화면의 `AI 전략기획서 생성`은 Evidence Agent가 선택 지역 근거를 모으고, Case Scout가 전국 공식 성공사례의 실행 방식·예산·성과를 조사합니다. Transferability Agent가 지역 적합성을 평가한 뒤 Planner가 3~6개월 기획안을 작성하고 Reviewer가 사례 오용과 실행 가능성을 검토합니다. 기준 미달 시 한 번 수정합니다.
 - Agent별 코드와 프롬프트·페르소나의 조정 위치는 `ai_server/app/agents/README.md`와 `ai_server/app/agents/prompts.py`에서 확인합니다.
 - 우측 `AI 분석 도우미`는 선택 지역 snapshot과 현재 기획안을 함께 읽고 지표 설명, 공식 웹 사례 조사, 기획안 수정안을 제공합니다. 수정안은 사용자가 `기획안 수정안 적용`을 눌러야 화면 보고서에 반영됩니다.
-- 같은 구조화 보고서로 `Word 다운로드`와 `PowerPoint 다운로드`를 선택할 수 있습니다. Word는 최대 5쪽의 검토 문서, PowerPoint는 현황 그래프·문제·솔루션·5단계 로드맵·공식 출처를 담은 최대 5장의 발표 자료입니다.
+- 같은 구조화 보고서로 `Word 다운로드`와 `PowerPoint 다운로드`를 선택할 수 있습니다. Word는 최대 5쪽의 검토 문서입니다. PowerPoint는 `표지 → 핵심 판단 → 데이터 진단 → 추천 전략 → ML 자연추세/실행 목표 → 예산/KPI → 5단계 로드맵 → 공식 출처·ML 방법`의 8장 발표 자료입니다. 공식 관광 Open API 사진이 있으면 표지·전략 장에 사용하고, 없으면 같은 레이아웃의 추상 배경을 표시합니다.
 - 보고서 모델은 루트 `.env`의 `OPENAI_REPORT_MODEL`을 우선 사용하고, 비어 있으면 `OPENAI_MODEL`, 둘 다 비어 있으면 `gpt-5.6`을 사용합니다. 키와 모델 설정은 React에 넣지 않습니다.
 
 ## 핵심 기술 흐름

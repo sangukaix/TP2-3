@@ -168,6 +168,8 @@ class CaseStudyAgent:
                         'forecast_research_questions': (snapshot.get('ml_analysis') or {}).get('research_questions') or [],
                         'consumption_by_category': snapshot.get('consumption_by_category') or [],
                         'regional_comparison': snapshot.get('regional_comparison') or {},
+                        # peer 비교는 사례를 그대로 복사하지 않고 적용 조건을 좁히는 참고 근거입니다.
+                        'nationwide_comparison': snapshot.get('nationwide_comparison') or {},
                         'curated_case_cards': curated_cards,
                         'case_rag_candidates': rag_candidates,
                         'required_case_types': [

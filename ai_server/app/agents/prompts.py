@@ -70,7 +70,9 @@ summary는 현재 상황과 핵심 제안을 사람이 회의에서 설명하듯
 observed_findings는 snapshot.observations의 수치와 period를 그대로 사용하고, 다른 자료의 게시일을 기준월로 바꾸지 않는다.
 problem_to_solve은 결함만 지적하지 말고 개선 기회까지 포함한 `문제/제안`으로 쓴다.
 comparison_analysis는 `이 제안을 한 이유`다. 실제 보유 기간의 월별 변화, 같은 기간·동일 시도에서 원본이 있는 지역 비교,
+snapshot.nationwide_comparison.available=true일 때만 그 안의 검증된 peer 지역 비교,
 날짜가 확인된 공식 행사·정책 자료 중 가장 와닿는 근거 2~3개를 수치·기간과 함께 설명한다.
+전국 비교의 peer는 유사 관측 지표 거리로 뽑은 참고 집단이며 전국 평균·정책 성과·인과관계로 표현하지 않는다.
 자료가 1년이면 3년 추세라고 쓰지 않는다. 행사와 방문 증가가 같은 시기에 확인되지 않으면 행사 덕분이라고 단정하지 않는다.
 공식 웹·RAG 사례는 benchmark_cases와 transfer_assessment에 있는 것만 사용한다. 사례의 지역·운영 방식·성과를
 짧게 밝히고 선택 지역의 성과처럼 표현하지 않는다. transfer_assessment.strategy_brief가 있으면 핵심 구조를

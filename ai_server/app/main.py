@@ -26,6 +26,7 @@ from .offline_sample_report import build_offline_sample_report
 from .proposal_document import create_strategy_proposal_document
 from .proposal_presentation import create_strategy_proposal_presentation
 from .raw_data_repository import read_region_tables
+from .nationwide_context_store import NationwideContextUnavailable, load_nationwide_comparison
 from .agents.report_orchestrator import orchestrate_strategy_report
 from .agents.chat_assistant_agent import TourismChatAssistantAgent
 from .agents.ml_learning_assistant_agent import MlLearningAssistantAgent
@@ -40,6 +41,9 @@ from .strategy_store import (
     read_document,
     read_strategy_job,
     read_strategy_report,
+    list_strategy_measurements,
+    save_strategy_measurement_baseline,
+    save_strategy_measurement_followup,
     save_strategy_job,
     save_strategy_report,
     update_strategy_job_state,
@@ -105,6 +109,16 @@ class ReportRequest(BaseModel):
 
     region_name: str
     planning_brief: PlanningBrief | None = None
+
+
+class StrategyMeasurementFollowupRequest(BaseModel):
+    """기획안 이후의 실제 관측값을 저장하는 API 입력 형식입니다."""
+
+    metric_name: Literal['monthly_unique_visitors', 'monthly_tourism_spend', 'overnight_ratio', 'average_stay_days']
+    observed_month: str = Field(pattern=r'^20\d{2}-(0[1-9]|1[0-2])$')
+    observed_value: float
+    unit: Literal['명', '원', '%', '일']
+    source_references: list[dict[str, str]] = Field(min_length=1, max_length=20)
 
 
 class RegionOpenApiResource(BaseModel):
@@ -990,10 +1004,24 @@ def build_region_snapshot(region_name: str) -> dict[str, Any]:
             'available': False,
             'reason': '같은 기간 원본을 갖춘 동일 시도 시군구가 2곳 미만이어서 비교하지 않음',
         }
+    # 전국 비교는 MySQL에 검증된 12개월 요약이 있을 때만 추가합니다.
+    # DB가 아직 준비되지 않아도 기존 지역 원본·ML 흐름을 멈추지 않습니다.
+    nationwide_comparison: dict[str, Any] = {
+        'available': False,
+        'reason': '전국 비교 MySQL 적재 데이터 또는 지역별 등록 정보가 아직 준비되지 않음',
+    }
+    if registered_region_code:
+        try:
+            loaded_comparison = load_nationwide_comparison(registered_region_code, ENV_VALUES)
+            if loaded_comparison:
+                nationwide_comparison = loaded_comparison
+        except NationwideContextUnavailable as exc:
+            LOGGER.info('Nationwide comparison unavailable for %s: %s', registered_region_code, str(exc))
+
     observation_month = f'{latest_month[:4]}-{latest_month[4:]}'
     social_month = _month_value(social)
     social_observation_month = f'{social_month[:4]}-{social_month[4:]}' if social_month else observation_month
-    return {'region_name': region_name, 'period': period, 'latest_month': observation_month, 'monthly_trend': monthly_trend, 'consumption_by_category': consumption_by_category, 'regional_comparison': regional_comparison, 'observations': [
+    return {'region_name': region_name, 'period': period, 'latest_month': observation_month, 'monthly_trend': monthly_trend, 'consumption_by_category': consumption_by_category, 'regional_comparison': regional_comparison, 'nationwide_comparison': nationwide_comparison, 'observations': [
         {'metric': '월간 순 방문자 수', 'value': f'{latest_unique_visitors:,.0f}명', 'period': observation_month, 'source': f'{source_prefix} 순 방문자 수 및 숙박 비율 (이동통신 기반 외지인)'},
         {'metric': '전년동월 외지인 방문자 증감률', 'value': f'{visitor_yoy_change:.1f}%', 'period': observation_month, 'source': f'{source_prefix} 월간 순 방문자 수 (이동통신 기반 외지인)'},
         {'metric': '월간 외지인 관광소비 총액', 'value': f'{spending_krw:,.0f}원', 'period': observation_month, 'source': f'{source_prefix} 관광소비 추이_외지인'},
@@ -1079,7 +1107,12 @@ async def generate_report(request: ReportRequest) -> ReportResponse:
         raise HTTPException(status_code=502, detail={'code': 'OPENAI_INVALID_OUTPUT', 'message': 'OpenAI 보고서 형식을 검증하지 못했습니다.'}) from exc
 
 
-async def generate_orchestrated_report(region_code: str, request: ReportRequest) -> ReportResponse:
+async def generate_orchestrated_report(
+    region_code: str,
+    request: ReportRequest,
+    *,
+    snapshot: dict[str, Any] | None = None,
+) -> ReportResponse:
     """지역 근거→공식 사례→적합성→기획→품질 검토 Agent를 고정 순서로 실행합니다."""
     if request.planning_brief and request.planning_brief.region_code != region_code:
         raise HTTPException(status_code=422, detail={'code': 'BRIEF_REGION_MISMATCH', 'message': '기획 조건의 지역과 선택 지역이 다릅니다.'})
@@ -1087,7 +1120,7 @@ async def generate_orchestrated_report(region_code: str, request: ReportRequest)
     api_key = (ENV_VALUES.get('OPENAI_API_KEY') or '').strip()
     if not api_key:
         raise HTTPException(status_code=503, detail={'code': 'OPENAI_KEY_MISSING', 'message': 'AI 서버의 OpenAI 키가 설정되지 않았습니다.'})
-    snapshot = build_region_snapshot(request.region_name)
+    snapshot = snapshot or build_region_snapshot(request.region_name)
     try:
         result = await orchestrate_strategy_report(
             project_root=PROJECT_ROOT,
@@ -1127,10 +1160,18 @@ def _job_error_message(exc: HTTPException) -> str:
     return str(detail or 'AI 전략기획서를 생성하지 못했습니다.')
 
 
-def _persist_completed_strategy_report(job_id: str, region_code: str, report: ReportResponse) -> None:
+def _persist_completed_strategy_report(
+    job_id: str,
+    region_code: str,
+    report: ReportResponse,
+    snapshot: dict[str, Any] | None = None,
+) -> None:
     """완료된 기획안을 MySQL과 로컬 서버 문서 폴더에 한 번만 영구 저장합니다."""
     payload = report.model_dump(mode='json')
     save_strategy_report(job_id, region_code, payload)
+    if snapshot:
+        # 보고서 본문·예측값이 아니라 생성에 사용한 실제 원자료 관측값만 별도로 저장합니다.
+        save_strategy_measurement_baseline(job_id, region_code, snapshot)
     # 문서 생성 실패가 AI 기획안 본문 저장을 되돌리지는 않도록 파일 출력은 별도로 보호합니다.
     try:
         write_document(job_id, 'docx', create_strategy_proposal_document(payload).getvalue())
@@ -1174,15 +1215,17 @@ async def _run_strategy_report_job(job_id: str, region_code: str, request: Repor
     job = STRATEGY_REPORT_JOBS[job_id]
     job.update(status='running', message='지역 원자료와 공식 근거를 확인하고 있습니다.', error='')
     _persist_job_state_best_effort(job_id, job)
+    snapshot: dict[str, Any] | None = None
     try:
-        report = await generate_orchestrated_report(region_code, request)
+        snapshot = build_region_snapshot(request.region_name)
+        report = await generate_orchestrated_report(region_code, request, snapshot=snapshot)
     except HTTPException as exc:
         message = _job_error_message(exc)
         # 개발 중 크레딧·할당량 문제에서는 기존 화면 검토용 원자료 샘플을 사용합니다.
         # 실제 OpenAI 결과와 혼동되지 않도록 generation_mode는 offline_sample으로 유지됩니다.
         if re.search(r'credit|quota|billing|크레딧|잔액', message, flags=re.IGNORECASE):
             try:
-                snapshot = build_region_snapshot(request.region_name)
+                snapshot = snapshot or build_region_snapshot(request.region_name)
                 report = ReportResponse(**build_offline_sample_report(region_code, snapshot), planning_brief=without_reference_text(request.planning_brief))
             except (FileNotFoundError, KeyError, ValueError) as sample_exc:
                 job.update(status='failed', message='기획서 생성을 완료하지 못했습니다.', error=str(sample_exc))
@@ -1197,7 +1240,7 @@ async def _run_strategy_report_job(job_id: str, region_code: str, request: Repor
         job.update(status='completed', message='AI 전략기획서 생성이 완료되었습니다.', report=report)
     if job.get('status') == 'completed' and job.get('report'):
         try:
-            _persist_completed_strategy_report(job_id, region_code, job['report'])
+            _persist_completed_strategy_report(job_id, region_code, job['report'], snapshot=snapshot)
         except Exception as exc:
             # 저장 실패는 생성 결과를 없애지 않고, 서버 로그에서 DB 연결을 점검할 수 있게 남깁니다.
             LOGGER.exception('Strategy report persistence failed: job_id=%s error=%s', job_id, type(exc).__name__)
@@ -1218,6 +1261,45 @@ async def read_saved_strategy_reports() -> list[dict[str, Any]]:
     except Exception as exc:
         LOGGER.exception('Strategy report list failed: %s', type(exc).__name__)
         raise HTTPException(status_code=503, detail={'code': 'STRATEGY_STORE_UNAVAILABLE', 'message': '저장 기획서 DB에 연결하지 못했습니다. MySQL 설정을 확인해 주세요.'}) from exc
+
+
+@app.get('/ai/v1/strategy-reports/{report_id}/measurements')
+async def read_saved_strategy_measurements(report_id: str) -> dict[str, list[dict[str, Any]]]:
+    """저장된 기획안의 생성 당시 기준값과 이후 실제 관측값을 구분해 조회합니다."""
+    try:
+        if not read_strategy_report(report_id):
+            raise HTTPException(status_code=404, detail={'code': 'STRATEGY_REPORT_NOT_FOUND', 'message': '저장된 기획안을 찾지 못했습니다.'})
+        return list_strategy_measurements(report_id)
+    except HTTPException:
+        raise
+    except Exception as exc:
+        LOGGER.exception('Strategy measurement read failed: %s', type(exc).__name__)
+        raise HTTPException(status_code=503, detail={'code': 'STRATEGY_STORE_UNAVAILABLE', 'message': '측정 기록 DB에 연결하지 못했습니다. MySQL 설정을 확인해 주세요.'}) from exc
+
+
+@app.post('/ai/v1/strategy-reports/{report_id}/measurements')
+async def create_saved_strategy_measurement(
+    report_id: str,
+    request: StrategyMeasurementFollowupRequest,
+) -> dict[str, str]:
+    """공식 원자료로 확인한 후속 실측치만 기획안 평가 기록에 추가합니다."""
+    try:
+        if not read_strategy_report(report_id):
+            raise HTTPException(status_code=404, detail={'code': 'STRATEGY_REPORT_NOT_FOUND', 'message': '저장된 기획안을 찾지 못했습니다.'})
+        save_strategy_measurement_followup(
+            report_id,
+            request.metric_name,
+            request.observed_month,
+            request.observed_value,
+            request.unit,
+            request.source_references,
+        )
+        return {'status': 'saved', 'message': '실제 관측값을 저장했습니다. 목표·예상값과는 별도로 비교됩니다.'}
+    except HTTPException:
+        raise
+    except Exception as exc:
+        LOGGER.exception('Strategy measurement save failed: %s', type(exc).__name__)
+        raise HTTPException(status_code=503, detail={'code': 'STRATEGY_STORE_UNAVAILABLE', 'message': '측정 기록 DB에 연결하지 못했습니다. MySQL 설정을 확인해 주세요.'}) from exc
 
 
 @app.get('/ai/v1/strategy-reports/{report_id}')
@@ -1644,7 +1726,7 @@ async def download_region_strategy_proposal(region_code: str, report: ReportResp
 
 @app.post('/ai/v1/demo/{region_code}/strategy-proposal.pptx')
 async def download_region_strategy_presentation(region_code: str, report: ReportResponse) -> StreamingResponse:
-    """같은 구조화 보고서를 지도·그래프·로드맵 중심의 5장 PowerPoint로 내려보냅니다."""
+    """같은 구조화 보고서를 진단·전략·목표·로드맵 중심의 8장 PowerPoint로 내려보냅니다."""
     try:
         presentation = create_strategy_proposal_presentation(report.model_dump())
     except (KeyError, TypeError, ValueError) as exc:
