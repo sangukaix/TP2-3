@@ -77,14 +77,15 @@ def _append_metrics(
 ) -> None:
     """한 ZIP에서 학습 가능한 7개 월별 수치를 같은 YYYYMM 키로 수집합니다."""
     print()
-    print("데이타 수집")
+    print("10-1 : 데이타 수집")
+    print("archive를 받아서 _read_interesting_rows 함수 호출을 수행해서 파일이름을 받아옴 ")
     for file_name, rows in _read_interesting_rows(archive):
-        print("archive를 받아서 _read_interesting_rows 함수 호출을 수행해서 파일이름을 받아옴 ")
+        
         is_visitor = '순 방문자 수 및 숙박 비율' in file_name
-        print(file_name , "안에 순 방문자 수 및 숙박 비율 이름을 찾음 : ", is_visitor)
+        print(file_name , "안에 순 방문자 수 및 숙박 비율 이름을 찾음 10-2 : ", is_visitor)
 
         for row in rows:
-            # print("row: ",row)
+            # print("10-3 : row: ",row)
 
             month = str(row.get('기준년월') or row.get('기준연월') or '').strip()
             if len(month) != 6 or not month.isdigit():
@@ -125,24 +126,24 @@ def _read_nested_bundle(series: dict[str, dict[str, float]]) -> None:
         for entry in root_archive.infolist():
             
             if not entry.filename.endswith('.zip') or not any(
-                # section in entry.filename for section in ('/숙박_체류시간/', '/관광소비/', '/방문자/')
-                section in entry.filename for section in ('/방문자/')
+                section in entry.filename for section in ('/숙박_체류시간/', '/관광소비/', '/방문자/')
+                # section in entry.filename for section in ('/방문자/')
             ):
                 continue
-            print(entry)
+            # print(entry)
             with zipfile.ZipFile(io.BytesIO(root_archive.read(entry))) as inner_archive:
 
-                # print(root_archive.read(entry))
-                print("읽은 zip 파일의 내용을 바이트로 읽어옮 ")
+                print(root_archive.read(entry))
+                print("[9]읽은 zip 파일의 내용을 바이트로 읽어옮 ")
 
-                print('_append_metrics 함수 호출')
+                print('[10]_append_metrics 함수 호출')
                 _append_metrics(inner_archive, **series)
-                print('_append_metrics 함수 끝')
+                print('[11]_append_metrics 함수 끝')
 
 
                 print("io.BytesIO zip을 inner_archive로 명명 : ")
                 print(inner_archive)
-                print("end of _read_nested_bundle 함수 " , )
+                print("[12]end of _read_nested_bundle 함수 " , )
 
 
 
@@ -170,9 +171,10 @@ def load_gangnam_monthly_demand() -> pd.DataFrame:
     }
 
 
-    print('_read_nested_bundle(series) 호출')
+    print('[7]_read_nested_bundle(series) 호출')
     _read_nested_bundle(series)
-    _read_latest_july(series)
+    print('[8]_read_latest_july(series) 호출')
+    # _read_latest_july(series)
 
     # 세 지표가 모두 존재하는 월만 공통 키로 사용합니다. 부분 월을 억지로 0으로 채우지 않습니다.
     common_months = sorted(set.intersection(*(set(values) for values in series.values())))

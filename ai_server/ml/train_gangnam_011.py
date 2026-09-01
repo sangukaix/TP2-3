@@ -99,15 +99,18 @@ def write_processed_dataset() -> pd.DataFrame:
     ZIP 읽기 → 같은 월 데이터 합치기 → DataFrame 만들기 → CSV 저장 순서입니다.
     """
     print()
-    print("write_processed_dataset()함수 ")
+    print("[3] write_processed_dataset()함수 ")
     print("[전처리] 방문자 데이터를 모으는 중입니다...")
     data = {}
 
     # # 프로젝트의 공식 전처리 함수가 중첩 ZIP과 여러 CSV 표를 정확히 읽습니다.
     # # 여기서는 그 결과에서 이번 예제에 필요한 두 열만 선택합니다.
 
-    print("load_gangnam_monthly_demand()함수 ")
+    print("[4]load_gangnam_monthly_demand()함수 ")
     all_data = load_gangnam_monthly_demand()
+    print("[5]load_gangnam_monthly_demand()함수 끝 : 뒤에 더 해야 함. ")
+
+    print('[6]all data를 data 로 만듦')
     # data = all_data[["year_month", "visitors"]].copy()
     # data["visitors"] = data["visitors"].round().astype(int)
 
@@ -120,9 +123,9 @@ def write_processed_dataset() -> pd.DataFrame:
 
 def read_data() -> pd.DataFrame:
     """원본 ZIP을 읽어 하나의 월별 표(DataFrame)로 가져옵니다."""
-    print("[1] 데이터 읽기")
+    print("read_data함수 내 : [1] 데이터 읽기")
 
-    print("write_processed_dataset()함수 호출") 
+    print("write_processed_dataset()함수 호출[2]") 
     data = write_processed_dataset()
 
     print(f"    행 수: {len(data)}개")
@@ -210,7 +213,6 @@ def main() -> None:
 
     print("PROJECT_ROOT : ", PROJECT_ROOT)
     print()
-   
 
 
 
@@ -218,6 +220,8 @@ def main() -> None:
 
     print("read_data() 함수 호출 과 판다스 data객체 생성")
     data = read_data()
+
+    
     # data = prepare_data(data)
     # x, y = make_input_and_answer(data)
     # train_x, test_x, train_y, test_y = split_data(x, y)
@@ -230,3 +234,11 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+# 실행하기
+#  .\backend\.venv\Scripts\python.exe -m ai_server.ml.train_gangnam_011    
+
+# print한 내용 저장하기 
+# & ".\backend\.venv\Scripts\python.exe" -m ai_server.ml.train_gangnam_009 `
+#    > ".\training_result.txt" 2>&1
