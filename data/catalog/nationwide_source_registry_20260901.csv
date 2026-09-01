@@ -1,0 +1,2 @@
+source_id,source_name,source_page_url,downloaded_at,file_name,file_hash,date_range,geographic_level,unit,filters,license_or_usage_note,methodology_notes,status
+mois-admin-code-20260201,행정기관(행정동) 및 관할구역(법정동) 코드,https://www.mois.go.kr/frt/bbs/type001/commonSelectBoardArticle.do?bbsId=BBSMSTR_000000000052&nttId=122595,2026-09-01,jscode20260201.zip,3f573808e88ce51f20ebee5b19131097dde6e6fc8a1c7c7092e93310cc156384,2026-02-01,전국 행정구역,code,현존 코드 ZIP,행정안전부 공개 첨부자료,2026-02-01 시행 법정동 코드 중 시군구 level을 지역 매핑 검증에 사용,reviewed

@@ -97,6 +97,26 @@ class EvidenceAgent:
                 'published_or_updated_at': observation.get('period') or snapshot.get('latest_month', ''),
             })
         trace.append({'agent': 'evidence', 'stage': 'dataset', 'status': 'completed', 'items': len(sources)})
+        # 전국 비교는 MySQL에서 검증한 12개월 요약일 때만 별도 출처로 추가합니다.
+        # 관측 수치와 peer 비교의 원본 ID를 분리해 Planner가 출처 없는 순위·평균을 만들지 못하게 합니다.
+        nationwide = snapshot.get('nationwide_comparison') or {}
+        if nationwide.get('available'):
+            for record in nationwide.get('source_records') or []:
+                source_id = str(record.get('source_id') or '')
+                if not source_id:
+                    continue
+                sources.append({
+                    'source_id': source_id,
+                    'source_type': 'nationwide_dataset',
+                    'title': str(record.get('title') or '한국관광 데이터랩 전국 비교 원자료'),
+                    'source_url': str(record.get('source_url') or 'https://datalab.visitkorea.or.kr/'),
+                    'summary': f"전국 비교 기준 기간: {nationwide.get('period') or ''}",
+                    'observation_period': nationwide.get('period') or '',
+                    'published_or_updated_at': nationwide.get('comparison_period') or '',
+                })
+            trace.append({'agent': 'evidence', 'stage': 'nationwide_comparison', 'status': 'completed', 'items': len(nationwide.get('source_records') or [])})
+        elif nationwide:
+            trace.append({'agent': 'evidence', 'stage': 'nationwide_comparison', 'status': 'skipped', 'items': 0})
         # ML은 공식 관측값과 구분된 내부 계산 근거입니다. 수치표를 RAG에 저장하지 않습니다.
         ml = snapshot.get('ml_analysis') or {}
         if ml.get('status') == 'available':
@@ -179,6 +199,8 @@ class EvidenceAgent:
                         'planning_brief': planning_brief,
                         'period': snapshot['period'],
                         'observations': snapshot.get('observations') or [],
+                        # 전국 peer 비교는 MySQL 검증 완료 상태일 때만 조사 질문의 맥락으로 사용합니다.
+                        'nationwide_comparison': snapshot.get('nationwide_comparison') or {},
                         'ml_analysis': ml,
                         'research_questions': [
                             *(ml.get('research_questions') or []),
