@@ -1,174 +1,191 @@
-"""초보자용 강남구 방문자 수 학습 파일.
+"""초보자용 강남구 방문자 수 학습 예제.
 
-이 파일의 핵심 흐름은 다음과 같습니다.
+이 파일은 운영 서버의 모델을 바꾸지 않는 학습 연습용 파일입니다.
 
-    데이터 준비 → Target 하나 학습 → 기존 결과와 합치기 → 저장
+전체 흐름
+1. 월별 데이터 읽기
+2. 학습에 사용할 열 선택
+3. 과거 데이터와 테스트 데이터 나누기
+4. 머신러닝 모델 학습
+5. 예측값과 실제값 비교
+6. 연습용 모델 파일 저장
 
-기본 Target은 visitors입니다. 저장 형식은 기존 AI 서버와 같기 때문에,
-아직 학습하지 않은 Target은 전년 같은 달 기준선으로 동작합니다.
+실행 방법
+    프로젝트 루트에서 다음 명령을 실행합니다.
+
+    .\\backend\\.venv\\Scripts\\python.exe -m ai_server.ml.train_gangnam_007
+
+이 파일이 저장하는 파일은
+artifacts/ml/11680/learning_demo_007_visitors_model.joblib 입니다.
+운영 서버가 사용하는 demand_model.joblib은 수정하지 않습니다.
 """
 
 from __future__ import annotations
 
-import argparse
-import json
-from datetime import datetime, timezone
+from pathlib import Path
 
 import joblib
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error
 
-from .evaluation import BASELINE, TEST_MONTHS, VALIDATION_MONTHS, select_and_evaluate
-from .gangnam_data import REGION_CODE, write_processed_dataset
-from .gangnam_forecast import (
-    ARTIFACT_DIRECTORY,
-    FEATURE_NAMES,
-    FEATURE_NAMES_BY_TARGET,
-    MODEL_PATH,
-    METADATA_PATH,
-    MODEL_VERSION,
-    TARGET_LABELS,
-    _factory_for,
-    _recursive_test,
-    _training_frame,
-)
-from .validation import TARGETS, data_fingerprint
+from .gangnam_data import write_processed_dataset
 
 
-def choose_targets() -> list[str]:
-    """사용자가 이번에 학습할 Target을 선택합니다.
+# 이 파일이 있는 위치를 기준으로 프로젝트 루트 경로를 계산합니다.
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
-    아무 옵션이 없으면 가장 이해하기 쉬운 visitors 하나만 학습합니다.
+# 연습 결과를 저장할 별도 파일입니다. 운영 모델 파일과 이름이 다릅니다.
+DEMO_MODEL_PATH = PROJECT_ROOT / "artifacts" / "ml" / "11680" / "learning_demo_007_visitors_model.joblib"
+
+
+def read_data() -> pd.DataFrame:
+    """원본 ZIP을 읽어 월별 DataFrame을 준비합니다.
+
+    실제 ZIP 해석은 기존 전처리 함수를 사용합니다.
+    이 함수의 역할은 '데이터를 가져오는 단계'라고 이해하면 됩니다.
     """
-    parser = argparse.ArgumentParser(description="강남구 Target별 단계적 학습")
-    parser.add_argument("--target", action="append", choices=TARGETS, help="학습할 Target")
-    parser.add_argument("--all", action="store_true", help="7개 Target 전체 학습")
-    args = parser.parse_args()
 
-    if args.all:
-        return list(TARGETS)
-    return args.target or ["visitors"]
+    print("[1단계] 데이터를 읽는 중입니다...")
+    data = write_processed_dataset()
+    print(f"       데이터 행 수: {len(data)}개")
+    print(f"       데이터 기간: {data['year_month'].min()} ~ {data['year_month'].max()}")
+    return data
 
 
-def load_data():
-    """원본 ZIP을 읽고 학습용 월별 CSV를 준비합니다."""
-    return write_processed_dataset()
+def clean_data(data: pd.DataFrame) -> pd.DataFrame:
+    """학습에 필요한 열만 남기고 날짜 순서대로 정렬합니다."""
+
+    print("[2단계] 데이터를 정리하는 중입니다...")
+
+    # 이번 예제에서는 방문자 수 하나만 학습합니다.
+    simple_data = data[["year_month", "visitors"]].copy()
+
+    # year_month가 문자열이어도 계산할 수 있도록 숫자로 변환합니다.
+    simple_data["year_month"] = simple_data["year_month"].astype(int)
+
+    # 데이터가 오래된 월부터 정렬되어 있는지 보장합니다.
+    simple_data = simple_data.sort_values("year_month").reset_index(drop=True)
+
+    # 비어 있는 값이 있으면 학습할 수 없으므로 제거합니다.
+    simple_data = simple_data.dropna()
+
+    print(f"       정리 후 데이터 행 수: {len(simple_data)}개")
+    return simple_data
 
 
-def train_one_target(data, target_name: str) -> tuple[object | None, dict]:
-    """Target 하나를 학습하고 Validation/Test 성능을 계산합니다."""
-    features, target_values, baseline_values, months = _training_frame(data, target_name)
-    model_factory = _factory_for(target_name)
-    model, evaluation = select_and_evaluate(
-        features,
-        target_values,
-        baseline_values,
-        model_factory,
-    )
-    evaluation["target_period"] = f"{months[0]}~{months[-1]}"
-    print(f"[{target_name}] 선택 모델: {evaluation['selected_model']}")
-    return model, evaluation
+def make_features(data: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
+    """날짜에서 모델이 사용할 입력값 X와 정답 y를 만듭니다."""
+
+    print("[3단계] 학습용 입력값과 정답을 만드는 중입니다...")
+
+    # year_month 예: 202607 -> 연도 2026, 월 7
+    year = data["year_month"] // 100
+    month = data["year_month"] % 100
+
+    # X는 모델에게 보여주는 정보입니다.
+    features = pd.DataFrame({"year": year, "month": month})
+
+    # y는 모델이 맞혀야 하는 정답입니다.
+    target = data["visitors"]
+
+    print("       X(입력값): year, month")
+    print("       y(정답): visitors")
+    return features, target
 
 
-def load_previous_models() -> tuple[dict, dict]:
-    """이전에 저장한 모델을 읽습니다. 없으면 빈 사전으로 시작합니다."""
-    if not MODEL_PATH.exists() or not METADATA_PATH.exists():
-        return {"models": {}}, {"evaluation": {}}
+def split_by_time(
+    features: pd.DataFrame,
+    target: pd.Series,
+    test_month_count: int = 4,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+    """시간 순서를 지키면서 앞부분은 학습용, 뒷부분은 테스트용으로 나눕니다."""
 
-    artifact = joblib.load(MODEL_PATH)
-    metadata = json.loads(METADATA_PATH.read_text(encoding="utf-8"))
-    return artifact, metadata
+    print("[4단계] 학습용과 테스트용 데이터를 나누는 중입니다...")
 
+    # 관광 데이터는 시간 순서가 중요하므로 무작위로 섞지 않습니다.
+    split_index = len(features) - test_month_count
+    train_features = features.iloc[:split_index]
+    test_features = features.iloc[split_index:]
+    train_target = target.iloc[:split_index]
+    test_target = target.iloc[split_index:]
 
-def prepare_missing_targets(data, models: dict, evaluations: dict) -> None:
-    """학습하지 않은 Target을 기준선 상태로 준비합니다."""
-    for target_name in TARGETS:
-        if target_name in evaluations:
-            models.setdefault(target_name, None)
-            continue
-
-        # 평가 형식만 만들고, 실제 모델은 저장하지 않습니다.
-        _, baseline_result = train_one_target(data, target_name)
-        baseline_result["selected_model"] = BASELINE
-        baseline_result["selection_basis"] = "not_trained_yet_baseline_only"
-        baseline_result["selected_model_metrics"] = baseline_result["baseline_metrics"]
-        evaluations[target_name] = baseline_result
-        models[target_name] = None
+    print(f"       학습 데이터: {len(train_features)}개")
+    print(f"       테스트 데이터: {len(test_features)}개")
+    return train_features, test_features, train_target, test_target
 
 
-def build_metadata(data, evaluations: dict, models: dict) -> dict:
-    """AI 서버가 예측에 사용할 metadata를 만듭니다."""
-    months = _training_frame(data, "visitors")[3]
-    test_start = len(months) - TEST_MONTHS
-    validation_start = test_start - VALIDATION_MONTHS
-    trained_targets = [
-        name for name in TARGETS
-        if evaluations[name]["selected_model"] != BASELINE
-    ]
+def train_model(
+    train_features: pd.DataFrame,
+    train_target: pd.Series,
+) -> LinearRegression:
+    """LinearRegression 모델을 만들고 학습시킵니다."""
 
-    return {
-        "version": MODEL_VERSION,
-        "region_code": REGION_CODE,
-        "region_name": "서울특별시 강남구",
-        "trained_at": datetime.now(timezone.utc).isoformat(),
-        "data_fingerprint": data_fingerprint(data),
-        "target": TARGET_LABELS,
-        "observation_count": len(data),
-        "feature_names": list(FEATURE_NAMES),
-        "feature_names_by_target": FEATURE_NAMES_BY_TARGET,
-        "train_target_period": f"{months[0]}~{months[validation_start - 1]}",
-        "validation_period": f"{months[validation_start]}~{months[test_start - 1]}",
-        "test_period": f"{months[test_start]}~{months[-1]}",
-        "baseline": BASELINE,
-        "evaluation": evaluations,
-        "recursive_evaluation": _recursive_test(data, evaluations),
-        "trained_targets": trained_targets,
-        "limitations": [
-            "Target을 하나씩 학습할 수 있습니다.",
-            "학습하지 않은 Target은 전년 같은 달 기준선을 사용합니다.",
-            "예측은 기존 이력의 자연 추세이며 정책 효과가 아닙니다.",
-        ],
-    }
+    print("[5단계] 머신러닝 모델을 학습하는 중입니다...")
+
+    # LinearRegression은 입력값과 정답의 관계를 직선으로 학습하는 간단한 모델입니다.
+    model = LinearRegression()
+    model.fit(train_features, train_target)
+
+    print("       학습 완료")
+    return model
 
 
-def save_for_server(data, models: dict, evaluations: dict) -> None:
-    """기존 AI 서버가 읽는 모델과 metadata를 저장합니다."""
-    fingerprint = data_fingerprint(data)
-    artifact = {
-        "version": MODEL_VERSION,
-        "region_code": REGION_CODE,
-        "data_fingerprint": fingerprint,
-        "feature_names": FEATURE_NAMES,
-        "models": models,
-        "latest_observed_month": str(data["year_month"].iloc[-1]),
-    }
-    metadata = build_metadata(data, evaluations, models)
+def check_result(
+    model: LinearRegression,
+    test_features: pd.DataFrame,
+    test_target: pd.Series,
+) -> None:
+    """테스트 데이터로 예측하고 실제값과 비교합니다."""
 
-    ARTIFACT_DIRECTORY.mkdir(parents=True, exist_ok=True)
-    joblib.dump(artifact, MODEL_PATH)
-    METADATA_PATH.write_text(
-        json.dumps(metadata, ensure_ascii=False, indent=2),
-        encoding="utf-8",
-    )
+    print("[6단계] 예측값과 실제값을 비교하는 중입니다...")
+    predicted = model.predict(test_features)
+    error = mean_absolute_error(test_target, predicted)
 
-    print("\n저장 완료")
-    print(f"모델: {MODEL_PATH}")
-    print(f"정보: {METADATA_PATH}")
-    print(f"학습된 Target: {metadata['trained_targets']}")
+    print(f"       평균 오차: {error:,.0f}명")
+    print()
+    print("       실제 방문자 수  →  모델 예측 방문자 수")
+
+    for actual, prediction in zip(test_target, predicted):
+        print(f"       {actual:>12,.0f}명  →  {prediction:>12,.0f}명")
+
+
+def save_model(model: LinearRegression) -> None:
+    """학습한 연습용 모델을 별도 파일로 저장합니다."""
+
+    print("[7단계] 연습용 모델을 저장하는 중입니다...")
+    DEMO_MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
+    joblib.dump(model, DEMO_MODEL_PATH)
+    print(f"       저장 완료: {DEMO_MODEL_PATH}")
 
 
 def main() -> None:
-    """프로그램의 실행 순서를 보여주는 함수입니다."""
-    target_names = choose_targets()
-    data = load_data()
-    old_artifact, old_metadata = load_previous_models()
+    """위의 함수를 정해진 순서로 실행합니다."""
 
-    models = dict(old_artifact.get("models") or {})
-    evaluations = dict(old_metadata.get("evaluation") or {})
-    prepare_missing_targets(data, models, evaluations)
+    print("강남구 방문자 수 학습 예제를 시작합니다.\n")
 
-    for target_name in target_names:
-        models[target_name], evaluations[target_name] = train_one_target(data, target_name)
+    # 1. 데이터 읽기
+    raw_data = read_data()
 
-    save_for_server(data, models, evaluations)
+    # 2. 데이터 정리
+    clean = clean_data(raw_data)
+
+    # 3. X와 y 만들기
+    features, target = make_features(clean)
+
+    # 4. 학습용/테스트용 나누기
+    train_x, test_x, train_y, test_y = split_by_time(features, target)
+
+    # 5. 학습
+    model = train_model(train_x, train_y)
+
+    # 6. 결과 확인
+    check_result(model, test_x, test_y)
+
+    # 7. 별도 파일 저장
+    save_model(model)
+
+    print("\n학습 예제가 끝났습니다.")
 
 
 if __name__ == "__main__":

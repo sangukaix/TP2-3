@@ -54,7 +54,9 @@ ML_TABLE_NAMES = (
 
 def _read_interesting_rows(archive: zipfile.ZipFile) -> Iterable[tuple[str, list[dict[str, str]]]]:
     """검증한 7개 월별 Target 표만 선택해 다른 정의의 표가 섞이지 않게 합니다."""
+    # print(archive)
     for entry in archive.infolist():
+        # print(entry)
         if not entry.filename.lower().endswith('.csv'):
             continue
         if not any(name in entry.filename for name in ML_TABLE_NAMES):
@@ -74,9 +76,16 @@ def _append_metrics(
     lodging_searches: dict[str, float],
 ) -> None:
     """한 ZIP에서 학습 가능한 7개 월별 수치를 같은 YYYYMM 키로 수집합니다."""
+    print()
+    print("데이타 수집")
     for file_name, rows in _read_interesting_rows(archive):
+        print("archive를 받아서 _read_interesting_rows 함수 호출을 수행해서 파일이름을 받아옴 ")
         is_visitor = '순 방문자 수 및 숙박 비율' in file_name
+        print(file_name , "안에 순 방문자 수 및 숙박 비율 이름을 찾음 : ", is_visitor)
+
         for row in rows:
+            # print("row: ",row)
+
             month = str(row.get('기준년월') or row.get('기준연월') or '').strip()
             if len(month) != 6 or not month.isdigit():
                 continue
@@ -100,18 +109,41 @@ def _append_metrics(
 
 def _read_nested_bundle(series: dict[str, dict[str, float]]) -> None:
     """새로 받은 바깥 ZIP 안의 연도별 ZIP을 메모리에서 열어 2024~2026 자료를 읽습니다."""
+
+    
+    print(f"{RAW_BUNDLE} 파일이 있는지 체크 : 없으면 에러 띄움 ")
     if not RAW_BUNDLE.exists():
         raise FileNotFoundError(f'강남구 원본 묶음을 찾지 못했습니다: {RAW_BUNDLE}')
     # 바깥 ZIP은 여러 연도·자료 종류의 ZIP을 포함하므로, 안쪽 파일까지 순서대로 엽니다.
     # 읽은 바이트는 메모리 버퍼로만 전달해 data/raw 원본을 수정하지 않습니다.
+
+
+    print("RAW_BUNDLE zip 파일 내부에 있는 zip파일을 검색 ")
     with zipfile.ZipFile(RAW_BUNDLE) as root_archive:
+
+
         for entry in root_archive.infolist():
+            
             if not entry.filename.endswith('.zip') or not any(
-                section in entry.filename for section in ('/숙박_체류시간/', '/관광소비/', '/방문자/')
+                # section in entry.filename for section in ('/숙박_체류시간/', '/관광소비/', '/방문자/')
+                section in entry.filename for section in ('/방문자/')
             ):
                 continue
+            print(entry)
             with zipfile.ZipFile(io.BytesIO(root_archive.read(entry))) as inner_archive:
+
+                # print(root_archive.read(entry))
+                print("읽은 zip 파일의 내용을 바이트로 읽어옮 ")
+
+                print('_append_metrics 함수 호출')
                 _append_metrics(inner_archive, **series)
+                print('_append_metrics 함수 끝')
+
+
+                print("io.BytesIO zip을 inner_archive로 명명 : ")
+                print(inner_archive)
+                print("end of _read_nested_bundle 함수 " , )
+
 
 
 def _read_latest_july(series: dict[str, dict[str, float]]) -> None:
@@ -129,11 +161,16 @@ def _read_latest_july(series: dict[str, dict[str, float]]) -> None:
 
 def load_gangnam_monthly_demand() -> pd.DataFrame:
     """2024-01부터 최신 관측월까지의 공통 월별 방문자·소비·숙박일 시계열을 반환합니다."""
+
+    print('series:변수 설정 - dictionary형으로 저장 : 빈 값으로 초기화 [방문자수 : ]')
     series: dict[str, dict[str, float]] = {
         'visitors': {}, 'spending_krw': {}, 'lodging_nights': {},
         'lodging_rate_pct': {}, 'stay_minutes': {},
         'navigation_searches': {}, 'lodging_searches': {},
     }
+
+
+    print('_read_nested_bundle(series) 호출')
     _read_nested_bundle(series)
     _read_latest_july(series)
 
