@@ -519,21 +519,21 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 24px
 /* 세 업무 화면의 선택 지역명은 기획안 생성 화면의 크기·색상으로 통일합니다. */
 .workspace-content .selected-region-heading h2,.strategy-page .work-page-header h1{margin:0;color:#163b61;font-size:23px;font-weight:700;letter-spacing:-1px}.workspace-content .dashboard-section--hero .selected-region-heading h2{font-size:23px}@media (max-width:500px){.workspace-content .selected-region-heading h2,.strategy-page .work-page-header h1{font-size:20px}}
 
-/* 501~1700px에서는 데스크톱 캔버스와 요소 크기를 그대로 보존하고 가로 스크롤로 확인합니다. */
-@media (min-width:501px) and (max-width:1699px){
-  body{min-width:1700px;overflow-x:auto}
-  .tourism-home,.workspace-shell{width:1700px;min-width:1700px;margin:0}
+/* 501~1920px에서는 데스크톱 캔버스와 요소 크기를 그대로 보존하고 가로 스크롤로 확인합니다. */
+@media (min-width:501px) and (max-width:1919px){
+  body{min-width:1920px;overflow-x:auto}
+  .tourism-home,.workspace-shell{width:1920px;min-width:1920px;margin:0}
   .tourism-home{overflow-x:visible}
   .workspace-shell{position:relative}
-  .workspace-main{width:1476px;margin-left:224px}
+  .workspace-main{width:1696px;margin-left:224px}
   .workspace-sidebar{position:absolute;left:0;right:auto;transform:none}
 }
 
-/* 1700px 이상에서는 전체 서비스 캔버스를 가운데 1700px로 고정합니다. */
-@media (min-width:1700px){
-  .tourism-home,.workspace-shell{width:1700px;margin-right:auto;margin-left:auto}
-  .workspace-main{width:1476px;margin-left:224px}
-  .workspace-sidebar{left:50%;right:auto;transform:translateX(-850px)}
+/* 1920px 이상에서는 전체 서비스 캔버스를 가운데 1920px로 고정합니다. */
+@media (min-width:1920px){
+  .tourism-home,.workspace-shell{width:1920px;margin-right:auto;margin-left:auto}
+  .workspace-main{width:1696px;margin-left:224px}
+  .workspace-sidebar{left:50%;right:auto;transform:translateX(-960px)}
 }
 
 /* 메인 CTA는 기존 124×47px을 기준으로 폭 2배, 높이 1.5배로 키웁니다. */
@@ -586,14 +586,23 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 24px
 
 /* 메인 페이지는 상위 영역의 overflow 설정과 무관하게 브라우저 화면에 직접 고정합니다. */
 .tourism-home{padding-top:64px}
-.tourism-home>.home-header{position:fixed!important;top:0!important;right:auto;left:0;width:min(1700px,100%);z-index:2000!important}
+.tourism-home>.home-header{position:fixed!important;top:0!important;right:auto;left:0;width:min(1920px,100%);z-index:2000!important}
 
 /* 업무 페이지도 같은 공통 로고 바를 브라우저 화면에 직접 고정합니다. */
 .workspace-shell{padding-top:64px}
-.workspace-shell>.workspace-global-header{position:fixed!important;top:0!important;right:auto;left:0;width:min(1700px,100%);z-index:2000!important}
-@media(min-width:1700px){.tourism-home>.home-header,.workspace-shell>.workspace-global-header{left:50%;transform:translateX(-50%)}}
-@media(max-width:760px){
+.workspace-shell>.workspace-global-header{position:fixed!important;top:0!important;right:auto;left:0;width:min(1920px,100%);z-index:2000!important}
+@media(min-width:1920px){.tourism-home>.home-header,.workspace-shell>.workspace-global-header{left:50%;transform:translateX(-50%)}}
+@media(max-width:500px){
   .tourism-home,.workspace-shell{padding-top:58px}
   .workspace-shell .workspace-topbar{top:58px!important}
 }
-@media(min-width:601px) and (max-width:760px){.workspace-shell .workspace-sidebar{top:58px;height:calc(100vh - 58px)}}
+
+/* 501px 이상 웹 화면: 1920px에서 정한 업무 패널 폭을 가로 스크롤 구간에서도 그대로 유지합니다. */
+@media (min-width:501px){
+  .workspace-content .dashboard-section,.tourism-work-page{width:min(1580px,100%)}
+  .dashboard-top-grid--map-first{grid-template-columns:minmax(540px,1.35fr) minmax(600px,1.2fr)}
+  .planning-layout{grid-template-columns:minmax(0,1fr) 520px}
+  .strategy-workspace,.proposal-workspace{grid-template-columns:minmax(0,1fr) 570px}
+  .saved-board-page{width:min(1300px,calc(100% - 36px))}
+  .home-workflow-layout{grid-template-columns:minmax(278px,.43fr) minmax(0,1.57fr);max-width:1460px}
+}
