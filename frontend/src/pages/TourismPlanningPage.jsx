@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { ArrowRight, CalendarDays, Check, CircleHelp, Coins, Layers3, LoaderCircle, Paperclip, Save, ShieldCheck, Sparkles, X } from 'lucide-react'
 import WorkspaceShell from '../components/WorkspaceShell'
 import RegionWorkspacePicker from '../components/RegionWorkspacePicker'
@@ -42,17 +42,17 @@ function PlanningForm({ region, dataState, onDirtyChange, onSaveReady }) {
   // 모든 입력 변경은 한 함수로 모아 저장 전 경고(dirty 상태)와 안내 문구를 일관되게 갱신합니다.
   const update = (changes) => { setBrief((current) => ({ ...current, ...changes })); setDirty(true); setMessage(''); setError('') }
   // 서버 요청 전에 브라우저에서도 기본 형식(금액·날짜)을 먼저 검사합니다.
-  const save = () => {
+  const save = useCallback(() => {
     const problem = validatePlanningBrief(brief)
     if (problem) { setError(problem); return false }
     try { savePlanningDraft(brief); setDirty(false); setMessage('이 브라우저에 기획 조건을 저장했습니다.'); setError(''); return true }
     catch { setError('브라우저 저장 공간이 부족합니다. 첨부자료를 줄여 다시 저장해 주세요.'); return false }
-  }
+  }, [brief])
   // 상단의 임시저장 버튼도 같은 저장·검증 함수를 사용하도록 부모 화면에 함수를 전달합니다.
   useEffect(() => {
     onSaveReady?.(save)
     return () => onSaveReady?.(null)
-  }, [onSaveReady, brief, dirty])
+  }, [onSaveReady, save])
   // 생성 버튼은 장시간 걸리는 AI 작업을 서버에 등록한 뒤 /strategy로 이동합니다.
   // 중복 클릭은 submitting ref로 막고, 실제 진행 상태는 작업 ID로 복원합니다.
   const generate = async (event) => {

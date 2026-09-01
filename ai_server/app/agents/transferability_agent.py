@@ -102,6 +102,8 @@ class TransferabilityAgent:
             },
             schema_name='tourism_case_transferability',
             schema=TRANSFERABILITY_SCHEMA,
-            reasoning_effort='high',
-            max_output_tokens=9000,
+            # 후보 사례를 새로 조사하는 단계가 아니라 이미 수집된 사례를 정해진 6개 기준으로
+            # 비교하는 단계입니다. medium이면 구조화 판단 품질을 유지하면서 장시간 timeout을 줄입니다.
+            reasoning_effort='medium',
+            max_output_tokens=7000,
         )

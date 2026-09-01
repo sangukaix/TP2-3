@@ -166,7 +166,7 @@ AI Server가 Backend의 내부 Feature Snapshot API를 호출할지, Backend가 
 
 학습은 일반 웹 요청에서 실행하지 않는다. 서비스에서는 저장된 모델을 불러와 예측만 한다.
 
-### 강남구 1차 구현
+### 등록 지역 ML 구현
 
 ```text
 data/raw/서울특별시/서울특별시_강남구-*.zip (2024~2026, 읽기 전용)
@@ -179,6 +179,28 @@ data/raw/서울특별시/서울특별시_강남구-*.zip (2024~2026, 읽기 전�
 → GET /ai/v1/demo/11680/dashboard
 → 최근 3개월 관측 + 향후 3개월 예측 차트
 ```
+
+직접 내려받은 CSV 구조가 같은 지역은 `ai_server/ml/regional_datalab_data.py`가 공통 열 정의를 검증하고,
+`<region>_data.py`는 지역 코드·원본 위치만 선언한다. `RegionForecastSettings`는 지역별 Joblib·메타데이터
+경로를 분리한다. 현재 계양구(`28245`, 2024.01~2026.06)도 이 경로로 등록되어 있다. 새 시군구는 24개월 이상
+공통 Target, 월 연속성, 지역 코드, 시간순 기준선 비교를 통과한 뒤에만 `region_registry.py`에 등록한다.
+`_build_registered_ml_dashboard()`는 등록 지역에 같은 카드·그래프·소비 패턴 UI를 적용하고, 등록되지 않은
+지역은 예측을 만들지 않은 관측 원자료 대시보드를 그대로 사용한다.
+
+### 지역 확장 카탈로그와 사전점검
+
+```text
+공식 원본을 data/raw/<시도>/<시군구>에 그대로 보관
+  → data/catalog/region_data_registry.csv에 코드·경로·출처 상태 등록
+  → check_regions.py: 경로·7개 Target·월 연속성·관측 기간 점검 (읽기 전용)
+  → standard_region_pipeline.py: 표준 CSV를 공통 학습 함수로 연결
+  → train_regions.py: 지역 코드별 Joblib·메타데이터 저장
+  → region_registry.py: 해당 지역만 대시보드·기획 근거에 등록
+```
+
+`data/raw/`와 기존 `data/raw/SOURCE_REGISTRY.csv`는 수정하지 않는다. 원본마다 정확한 공식 다운로드 URL,
+다운로드 날짜, 이용 조건을 팀이 카탈로그에 기록하고 `provenance_status=verified`로 확인하기 전에는
+`ready_with_provenance_warnings`를 유지한다. 코드가 출처를 추정하거나 검증 완료로 바꾸지 않는다.
 
 강남구 저장 모델은 방문자·소비액·평균 숙박일·숙박방문 비율·평균 체류시간·내비게이션 검색·숙박검색 7개 Target을 같은 시간 분리 규칙으로 평가한다. Target별 후보모델이 Validation에서 전년 동월 기준선보다 나쁠 때는 기준선을 선택한다. 업종별 소비 패턴은 아직 별도 모델이 아니며 최신 관측 비중을 적용한 표시용 가정이다.
 
@@ -214,6 +236,12 @@ data/raw/서울특별시/서울특별시_강남구-*.zip (2024~2026, 읽기 전�
 
 공식 성공사례는 `data/rag/official_case_studies.jsonl`에 검수된 사례 카드로 보관한다. 라이브 웹 검색은
 최근 사례를 보강하고, RAG는 이미 검수한 사례의 운영 방식·성과·적용 조건을 재사용한다.
+현재 검수 카드는 강진 반값여행, 디지털 관광주민증, 야간관광 특화도시 성과,
+전주시 야간관광 예산서 4건이다. 전국 월별 수치가 늘어도 사례 문서는 자동으로 늘지 않으므로
+`check_case_registry` 검증을 통과한 공식 성과·예산·운영 문서를 별도로 추가한다.
+
+전국 확장 시 원본·전처리 수치·지역 모델·정책 문서를 한 저장소에 섞지 않는다. 자세한 현재/운영 구조는
+`docs/NATIONAL_DATA_AND_CASE_STORAGE.md`를 따른다.
 
 ## 7-1. 전략 Agent 고정 흐름
 
@@ -226,6 +254,40 @@ Reviewer Agent       → 출처·사례 오용·일반론·실행 가능성 검�
 ```
 
 Case Scout와 Evidence 수집은 병렬로 실행하고, Planner는 두 결과와 지역 적합성 평가를 모두 받은 뒤에만 작성한다.
+
+### 전략기획 작업 영속화
+
+`strategy_report_jobs`는 queued/running/completed/failed 상태와 첨부 본문을 제거한 요청 조건을 MySQL에
+저장한다. AI Server 재시작 시 첨부가 없던 작업은 다시 예약하고, 첨부가 있던 작업은 본문 비저장 원칙상
+자동 복구하지 않고 재요청을 안내한다. 완료 결과는 `strategy_reports`, Word/PPT는 서버 문서 저장소에 보관한다.
+
+Word의 비교 그래프는 저장 ML의 자연추세만 예측으로 표시한다. 사용자가 목표율을 직접 입력한 경우에만
+별도 목표선을 산술 계산하며, 정책 미실행 반사실·사업효과·추가 매출 예측으로 부르지 않는다.
+
+등록 ML 지역의 AI snapshot은 `region_registry`의 `load_history()`를 관측 기준으로 재사용한다.
+따라서 최신월 보완 ZIP이 있는 강남구도 화면·기획안 관측값·ML 전망이 같은 마지막 확정월을 사용한다.
+SNS처럼 별도 원본의 공개가 늦은 지표는 값을 최신월로 당기지 않고 해당 지표의 실제 기준월을 함께 표시한다.
+
+Planner 자동 재작성에는 검수받은 기존 초안을 반드시 전달한다. 최초 작성처럼 40여 개 근거 전체를 다시
+전송하지 않고, 관측값·ML·사용자 조건과 기존 초안이 인용했거나 Transferability가 추천한 사례를 중심으로
+최대 16개 출처를 전달한다. 재작성은 `medium` 추론으로 지적 필드만 고쳐 출력 중단과 비용을 줄인다.
+
+### 기획안 결정적 품질 게이트
+
+```text
+Planner 구조화 JSON
+  → plan_quality_gate.py
+      ├─ 실제 source_id 인용 여부
+      ├─ 정확히 5개 집행 단계와 일정·행동·산출물
+      ├─ 대상·참여/혜택/운영 방식의 구체성
+      ├─ 비용 항목×수량×단가 또는 비교견적 산식
+      └─ 기준월·주기·원자료가 있는 KPI
+  → Reviewer Agent
+  → 미달 시 Planner 1회 보완 → 최종 Reviewer
+```
+
+이 게이트는 기획 내용을 새로 만들지 않는다. 코드로 판정 가능한 누락만 Reviewer와 Planner에게 전달해,
+그럴듯하지만 출처·집행 방식이 비어 있는 결과가 승인되는 것을 막는다.
 
 ## 8. LLM 출력 규약
 

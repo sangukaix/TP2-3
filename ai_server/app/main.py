@@ -33,9 +33,22 @@ from .agents.project_learning_assistant_agent import ProjectLearningAssistantAge
 from .tourism_open_api import TourismOpenApiClient
 from .planning_brief import PlanningBrief, brief_fingerprint, extract_brief_reference, without_reference_text
 from .project_learning_catalog import ProjectLearningCatalog, build_project_learning_catalog
-from .strategy_store import initialize_strategy_store, list_strategy_reports, read_document, read_strategy_report, save_strategy_report, write_document
-from ..ml.gangnam_data import load_gangnam_monthly_demand, load_latest_consumption_shares, load_latest_lodging_metrics
+from .strategy_store import (
+    initialize_strategy_store,
+    list_interrupted_strategy_jobs,
+    list_strategy_reports,
+    read_document,
+    read_strategy_job,
+    read_strategy_report,
+    save_strategy_job,
+    save_strategy_report,
+    update_strategy_job_state,
+    write_document,
+)
+from ..ml.gangnam_data import load_latest_consumption_shares
 from ..ml.region_service import predict_region_demand
+from ..ml.region_registry import get_region_pipeline
+from ..ml.region_catalog import list_region_data_catalog
 from ..ml.planning_evidence import PlanningMlEvidence, build_planning_ml_evidence
 from ..ml.learning_catalog import MlLearningCatalog, build_ml_learning_catalog
 
@@ -60,6 +73,29 @@ async def initialize_mysql_strategy_store() -> None:
     """
     try:
         initialize_strategy_store()
+        # 프로세스 재시작 전에 실행 중이던 작업은 MySQL 요청을 읽어 다시 예약합니다.
+        # 첨부문서 본문은 저장하지 않으므로 첨부가 있던 작업은 안전하게 실패 처리합니다.
+        for stored_job in list_interrupted_strategy_jobs():
+            job_id = stored_job['job_id']
+            if stored_job.get('had_transient_references'):
+                message = 'AI 서버가 재시작되어 첨부문서가 있던 작업은 자동 재개할 수 없습니다. 다시 생성해 주세요.'
+                update_strategy_job_state(job_id, 'failed', message, 'TRANSIENT_REFERENCE_LOST')
+                STRATEGY_REPORT_JOBS[job_id] = {
+                    **stored_job, 'status': 'failed', 'message': message, 'error': 'TRANSIENT_REFERENCE_LOST',
+                }
+                continue
+            try:
+                request = ReportRequest.model_validate(stored_job.get('request') or {})
+            except ValueError:
+                message = '저장된 작업 요청을 복구하지 못했습니다. 기획안을 다시 생성해 주세요.'
+                update_strategy_job_state(job_id, 'failed', message, 'INVALID_PERSISTED_REQUEST')
+                continue
+            STRATEGY_REPORT_JOBS[job_id] = {
+                'region_code': stored_job['region_code'], 'region_name': stored_job['region_name'],
+                'status': 'queued', 'message': 'AI 서버 재시작 후 작업을 다시 이어갑니다.', 'error': '',
+            }
+            update_strategy_job_state(job_id, 'queued', 'AI 서버 재시작 후 작업을 다시 이어갑니다.')
+            asyncio.create_task(_run_strategy_report_job(job_id, stored_job['region_code'], request))
     except Exception as exc:
         LOGGER.warning('MySQL strategy store is unavailable: %s', type(exc).__name__)
 
@@ -351,6 +387,14 @@ def _normalize_region_name(value: str) -> str:
 def _find_region_directory(region_name: str) -> Path:
     """브라우저의 지역명은 미리 발견한 원본 폴더와만 대응해 경로 주입을 막습니다."""
     requested_name = _normalize_region_name(region_name)
+    # 전국 확장 카탈로그에 등록된 단일 ZIP·CSV 경로를 먼저 사용합니다.
+    # 강남구처럼 시군구 하위 폴더 없이 ZIP 한 개로 받은 원본도 같은 보고서 흐름에 연결됩니다.
+    try:
+        for entry in list_region_data_catalog(enabled_only=True):
+            if _normalize_region_name(entry.region_name) == requested_name and entry.raw_path.exists():
+                return entry.raw_path
+    except (FileNotFoundError, ValueError):
+        pass
     for sido_directory in RAW_DATA_DIRECTORY.iterdir() if RAW_DATA_DIRECTORY.exists() else []:
         if not sido_directory.is_dir():
             continue
@@ -452,6 +496,51 @@ def _build_monthly_trend(visitor_rows: list[dict[str, str]], spending_rows: list
     ]
 
 
+def _registered_region_history(region_name: str) -> tuple[str, Any] | None:
+    """등록 ML 지역이면 모델 학습과 동일한 최신 공식 월별 표를 반환합니다.
+
+    일반 원본 묶음과 최신월 보완 ZIP을 따로 읽으면 AI 기획안의 관측 기준월과
+    ML 기준월이 달라질 수 있습니다. 등록 지역은 학습 전처리 함수를 재사용해
+    화면·관측 근거·ML 전망의 마지막 확정월을 맞춥니다.
+    """
+    requested_name = _normalize_region_name(region_name)
+    for entry in list_region_data_catalog(enabled_only=True):
+        if _normalize_region_name(entry.region_name) != requested_name:
+            continue
+        try:
+            pipeline = get_region_pipeline(entry.region_code)
+        except ValueError:
+            return None
+        if pipeline.load_history is None:
+            return None
+        history = pipeline.load_history()
+        if history.empty:
+            raise ValueError(f'{region_name} 등록 ML 원자료에 월별 관측값이 없습니다.')
+        return entry.region_code, history
+    return None
+
+
+def _monthly_trend_from_registered_history(history: Any) -> list[dict[str, Any]]:
+    """등록 지역의 공통 Target 표에서 최근 12개월 방문·소비 추세를 만듭니다."""
+    records = history.tail(12).to_dict(orient='records')
+    if not records:
+        raise ValueError('등록 ML 원자료의 월별 추세가 비어 있습니다.')
+    base_visitors = float(records[0]['visitors'])
+    base_spending = float(records[0]['spending_krw'])
+    if base_visitors <= 0 or base_spending <= 0:
+        raise ValueError('등록 ML 원자료의 추세 기준값은 0보다 커야 합니다.')
+    return [
+        {
+            'month': f"{str(row['year_month'])[:4]}.{str(row['year_month'])[4:]}",
+            'visitor_index': round(float(row['visitors']) / base_visitors * 100, 1),
+            'spending_index': round(float(row['spending_krw']) / base_spending * 100, 1),
+            'visitors': round(float(row['visitors'])),
+            'spending_krw': round(float(row['spending_krw'])),
+        }
+        for row in records
+    ]
+
+
 def _percent_change(current: float, previous: float) -> float:
     """직전 월이 0이 아닌 경우에만 전월 대비 증감률을 계산합니다."""
     if previous == 0:
@@ -491,18 +580,21 @@ def _select_display_forecasts(forecasts: list[dict[str, Any]]) -> tuple[list[dic
     return forecasts[:3], None
 
 
-def _build_gangnam_ml_dashboard() -> DashboardResponse:
-    """강남구의 최근 3개월 관측값과 다음 3개월 저장 모델 예측을 대시보드 형태로 만듭니다.
+def _build_registered_ml_dashboard(region_code: str, region_name: str) -> DashboardResponse:
+    """등록·검증된 어느 지역이든 최근 관측값과 저장 ML 전망을 같은 대시보드로 변환합니다.
 
-    기존 일반 지역 대시보드는 원본을 바로 읽는 구조를 유지합니다. 강남구만 새 중첩
-    ZIP 원본을 학습 파이프라인으로 정규화했으므로, 이 함수가 저장 모델의 결과를
-    기존 화면 응답 형식으로 바꿔 전달합니다. 지도·경계 코드는 전혀 건드리지 않습니다.
+    지도와 화면 구조는 지역에 따라 복사하지 않습니다. 지역별 차이는 등록표의 원자료 함수와
+    Joblib 산출물뿐이며, 원자료 검증을 통과하지 않은 지역은 이 함수로 들어올 수 없습니다.
     """
+    pipeline = get_region_pipeline(region_code)
+    if pipeline.region_name != region_name or pipeline.load_history is None:
+        raise ValueError('ML_REGION_MISMATCH: 등록 모델과 요청 지역이 다릅니다.')
     target_month = _next_calendar_month()
-    latest_observed_month = str(load_gangnam_monthly_demand()['year_month'].iloc[-1])
+    history = pipeline.load_history()
+    latest_observed_month = str(history['year_month'].iloc[-1])
     # 최신 원자료가 늦게 공개돼도, 다음 달부터 3개월을 끊김 없이 보여 줄 만큼만 재귀 예측합니다.
     required_horizon = max(4, _months_between(latest_observed_month, target_month) + 2)
-    forecast_result = predict_region_demand('11680', required_horizon)
+    forecast_result = predict_region_demand(region_code, required_horizon)
     visible_forecasts, previous_forecast = _select_display_forecasts(forecast_result['forecasts'])
     if not visible_forecasts:
         raise ValueError('현재 달 다음의 예측값을 만들지 못했습니다.')
@@ -515,9 +607,12 @@ def _build_gangnam_ml_dashboard() -> DashboardResponse:
     visitor_change = _percent_change(next_forecast['visitors'], comparison_visitors)
     spending_change = _percent_change(next_forecast['spending_krw'], comparison_spending)
     next_month_label = f"{int(next_forecast['month'][4:])}월"
-    latest_lodging_rate, _, _ = load_latest_lodging_metrics()
+    latest_lodging_rate = float(forecast_result['latest_observed_metrics']['lodging_rate_pct'])
     lodging_nights_change = next_forecast['lodging_nights'] - comparison_lodging
-    comparison_label = f"{int(previous_forecast['month'][4:])}월 예상 대비" if previous_forecast else '7월 대비'
+    comparison_label = (
+        f"{int(previous_forecast['month'][4:])}월 예상 대비"
+        if previous_forecast else f"{int(latest_observed_month[4:])}월 대비"
+    )
 
     # 공식 원자료의 마지막 확정월은 7월이므로 8월은 모델이 계산한 현재월 추정값입니다.
     # 화면은 6·7월 실제값과 8·9·10월 예측값을 보여 주어 오늘 날짜(8월)가 축 안에 들어오게 합니다.
@@ -538,23 +633,33 @@ def _build_gangnam_ml_dashboard() -> DashboardResponse:
         for row in trend_rows
     ]
 
-    # 업종별 데이터는 현재 월별 장기 시계열이 충분하지 않아 업종마다 별도 ML로 예측하지 않습니다.
-    # 대신 저장된 전체 소비액 ML 모델의 향후 3개월 예측 평균에 최신 관측 비중을 적용합니다.
-    # 즉, 총 소비액 평균은 ML 결과이고 업종별 배분은 공식 원자료의 최신 비중이라는 역할 분리입니다.
+    # 업종별 데이터는 별도 ML Target이 아닙니다. 총소비액의 향후 3개월 ML 평균에, 같은 지역
+    # 원자료에서 확인한 최신 업종 비중만 적용합니다. 이 역할 분리를 모든 등록 지역에 동일하게 적용합니다.
     forecast_average_spending_krw = round(sum(row['spending_krw'] for row in visible_forecasts) / len(visible_forecasts))
+    try:
+        observed_categories = build_region_dashboard(region_name).diagnostic.consumption_categories
+    except FileNotFoundError:
+        # 강남구 초기 ZIP 묶음은 일반 대시보드가 요구하는 연인원 표를 포함하지 않습니다.
+        # 해당 지역의 검증된 최신 소비 표에서만 비중을 읽는 호환 경로를 남깁니다.
+        if region_code != '11680':
+            raise
+        observed_categories = [
+            ConsumptionCategory(name=str(row['name']), share=float(row['share']), amount_krw=0)
+            for row in load_latest_consumption_shares()[:4]
+        ]
     consumption_categories = [
         ConsumptionCategory(
-            name=str(category['name']),
-            share=float(category['share']),
-            amount_krw=round(forecast_average_spending_krw * float(category['share']) / 100),
+            name=str(category.name),
+            share=float(category.share),
+            amount_krw=round(forecast_average_spending_krw * float(category.share) / 100),
         )
-        for category in load_latest_consumption_shares()[:4]
+        for category in observed_categories[:4]
     ]
     metadata = forecast_result['model']
     return DashboardResponse(
-        region_name='서울특별시 강남구',
+        region_name=region_name,
         latest_month=f"{next_forecast['month'][:4]}-{next_forecast['month'][4:]}",
-        source='한국관광 데이터랩 강남구 공식 다운로드 원본 + 저장된 ML 예측 모델',
+        source=f'한국관광 데이터랩 {region_name} 공식 다운로드 원본 + 저장된 ML 예측 모델',
         metrics=[
             DashboardMetric(
                 label=f'{next_month_label} 예상 방문자 수',
@@ -603,6 +708,11 @@ def _build_gangnam_ml_dashboard() -> DashboardResponse:
             limitation=metadata['limitations'][0],
         ),
     )
+
+
+def _build_gangnam_ml_dashboard() -> DashboardResponse:
+    """기존 테스트·호출부 호환용 강남구 래퍼입니다."""
+    return _build_registered_ml_dashboard('11680', '서울특별시 강남구')
 
 
 def build_sido_comparison(sido_name: str) -> SidoComparisonResponse:
@@ -801,6 +911,29 @@ def build_region_snapshot(region_name: str) -> dict[str, Any]:
     spending_krw = _number(_value_by_contains(spending, '소비액(천원)')) * 1000
     latest_month = _month_value(visitor)
     latest_unique_visitors = unique_visitors_by_month.get(latest_month, visitors)
+    visitor_yoy_change = _number(_value_by_contains(visitor, '방문자수증감률'))
+    lodging_rate = _number(_value_by_contains(stay, '숙박자 비율'))
+    lodging_nights = _number(_value_by_contains(nights, '평균 숙박일수'))
+    navigation_searches = _number(_value_by_contains(navigation, '목적지 검색량'))
+
+    # 등록 지역은 학습에 사용한 최신월 보완 원본까지 포함해 관측값과 ML 기준월을 일치시킵니다.
+    registered = _registered_region_history(region_name)
+    registered_region_code = ''
+    if registered:
+        registered_region_code, history = registered
+        monthly_trend = _monthly_trend_from_registered_history(history)
+        latest_history = history.iloc[-1]
+        latest_month = str(latest_history['year_month'])
+        latest_unique_visitors = float(latest_history['visitors'])
+        spending_krw = float(latest_history['spending_krw'])
+        lodging_rate = float(latest_history['lodging_rate_pct'])
+        lodging_nights = float(latest_history['lodging_nights'])
+        navigation_searches = float(latest_history['navigation_searches'])
+        # 전년 동월이 있을 때만 같은 정의의 순 방문자 수로 증감률을 다시 계산합니다.
+        previous_year_month = str(int(latest_month[:4]) - 1) + latest_month[4:]
+        year_ago = history[history['year_month'].astype(str) == previous_year_month]
+        if not year_ago.empty and float(year_ago.iloc[-1]['visitors']) > 0:
+            visitor_yoy_change = _percent_change(latest_unique_visitors, float(year_ago.iloc[-1]['visitors']))
     # AI가 포괄적인 관광 일반론 대신 실제 소비 구조를 보고 기획하도록, 최신 월 업종대분류를 함께 제공합니다.
     consumption_by_category = sorted([
         {
@@ -811,6 +944,16 @@ def build_region_snapshot(region_name: str) -> dict[str, Any]:
         for row in spending_rows
         if _month_value(row) == latest_month and row.get('업종대분류명') != '전체'
     ], key=lambda item: item['spending_krw'], reverse=True)
+    if registered_region_code == '11680':
+        # 강남구는 최신 소비 ZIP의 업종 비중도 7월까지 있어 같은 관측월 금액으로 맞춥니다.
+        consumption_by_category = [
+            {
+                'category': str(item['name']),
+                'share_percent': float(item['share']),
+                'spending_krw': round(spending_krw * float(item['share']) / 100),
+            }
+            for item in load_latest_consumption_shares()
+        ]
     source_prefix = f'한국관광 데이터랩 · {region_name}'
     period = f"{monthly_trend[0]['month'].replace('.', '-')} ~ {monthly_trend[-1]['month'].replace('.', '-')}"
     regional_comparison: dict[str, Any]
@@ -848,14 +991,16 @@ def build_region_snapshot(region_name: str) -> dict[str, Any]:
             'reason': '같은 기간 원본을 갖춘 동일 시도 시군구가 2곳 미만이어서 비교하지 않음',
         }
     observation_month = f'{latest_month[:4]}-{latest_month[4:]}'
+    social_month = _month_value(social)
+    social_observation_month = f'{social_month[:4]}-{social_month[4:]}' if social_month else observation_month
     return {'region_name': region_name, 'period': period, 'latest_month': observation_month, 'monthly_trend': monthly_trend, 'consumption_by_category': consumption_by_category, 'regional_comparison': regional_comparison, 'observations': [
         {'metric': '월간 순 방문자 수', 'value': f'{latest_unique_visitors:,.0f}명', 'period': observation_month, 'source': f'{source_prefix} 순 방문자 수 및 숙박 비율 (이동통신 기반 외지인)'},
-        {'metric': '전년동월 외지인 방문자 증감률', 'value': f'{_number(_value_by_contains(visitor, "방문자수증감률")):.1f}%', 'period': observation_month, 'source': f'{source_prefix} 방문자 수(연인원) 추이 (이동통신 기반 외지인)'},
+        {'metric': '전년동월 외지인 방문자 증감률', 'value': f'{visitor_yoy_change:.1f}%', 'period': observation_month, 'source': f'{source_prefix} 월간 순 방문자 수 (이동통신 기반 외지인)'},
         {'metric': '월간 외지인 관광소비 총액', 'value': f'{spending_krw:,.0f}원', 'period': observation_month, 'source': f'{source_prefix} 관광소비 추이_외지인'},
-        {'metric': '외지인 숙박 방문 비율', 'value': f'{_number(_value_by_contains(stay, "숙박자 비율")):.1f}%', 'period': observation_month, 'source': f'{source_prefix} 순 방문자 수 및 숙박 비율 (이동통신 기반 외지인)'},
-        {'metric': '외지인 평균 숙박일수', 'value': f'{_number(_value_by_contains(nights, "평균 숙박일수")):.2f}일', 'period': observation_month, 'source': f'{source_prefix} 평균 숙박일 (이동통신 기반 외지인)'},
-        {'metric': '내비게이션 목적지 검색량', 'value': f'{_number(_value_by_contains(navigation, "목적지 검색량")):,.0f}건', 'period': observation_month, 'source': f'{source_prefix} 내비게이션 목적지 유형별 검색량'},
-        {'metric': 'SNS 언급량', 'value': f'{_number(_value_by_contains(social, "검색량(건)")):,.0f}건', 'period': observation_month, 'source': f'{source_prefix} SNS 언급량'},
+        {'metric': '외지인 숙박 방문 비율', 'value': f'{lodging_rate:.1f}%', 'period': observation_month, 'source': f'{source_prefix} 숙박방문자 비율 추이 (이동통신 기반 외지인)'},
+        {'metric': '외지인 평균 숙박일수', 'value': f'{lodging_nights:.2f}일', 'period': observation_month, 'source': f'{source_prefix} 평균 숙박일 (이동통신 기반 외지인)'},
+        {'metric': '내비게이션 목적지 검색량', 'value': f'{navigation_searches:,.0f}건', 'period': observation_month, 'source': f'{source_prefix} 내비게이션 목적지 유형별 검색량'},
+        {'metric': 'SNS 언급량', 'value': f'{_number(_value_by_contains(social, "검색량(건)")):,.0f}건', 'period': social_observation_month, 'source': f'{source_prefix} SNS 언급량'},
     ]}
 
 
@@ -1007,10 +1152,28 @@ def _strategy_job_response(job_id: str) -> StrategyReportJobResponse:
     )
 
 
+def _job_persistence_payload(request: ReportRequest) -> tuple[dict[str, Any], bool]:
+    """재시작용 요청에서 첨부문서 본문을 제거하고 첨부 존재 여부만 반환합니다."""
+    had_transient_references = bool(request.planning_brief and request.planning_brief.references)
+    persisted_request = request.model_dump(mode='json')
+    if request.planning_brief:
+        persisted_request['planning_brief'] = without_reference_text(request.planning_brief).model_dump(mode='json')
+    return persisted_request, had_transient_references
+
+
+def _persist_job_state_best_effort(job_id: str, job: dict[str, Any]) -> None:
+    """MySQL 장애가 대시보드·현재 메모리 작업까지 중단시키지 않도록 상태 저장만 보호합니다."""
+    try:
+        update_strategy_job_state(job_id, job['status'], job['message'], job.get('error', ''))
+    except Exception as exc:
+        LOGGER.warning('Strategy job state persistence failed: job_id=%s error=%s', job_id, type(exc).__name__)
+
+
 async def _run_strategy_report_job(job_id: str, region_code: str, request: ReportRequest) -> None:
     """긴 Agent 작업을 HTTP 요청 수명과 분리해 서버에서 끝까지 실행합니다."""
     job = STRATEGY_REPORT_JOBS[job_id]
     job.update(status='running', message='지역 원자료와 공식 근거를 확인하고 있습니다.', error='')
+    _persist_job_state_best_effort(job_id, job)
     try:
         report = await generate_orchestrated_report(region_code, request)
     except HTTPException as exc:
@@ -1039,6 +1202,7 @@ async def _run_strategy_report_job(job_id: str, region_code: str, request: Repor
             # 저장 실패는 생성 결과를 없애지 않고, 서버 로그에서 DB 연결을 점검할 수 있게 남깁니다.
             LOGGER.exception('Strategy report persistence failed: job_id=%s error=%s', job_id, type(exc).__name__)
             job.update(message='기획안은 생성됐지만 MySQL 저장에 실패했습니다. 서버 DB 설정을 확인해 주세요.')
+    _persist_job_state_best_effort(job_id, job)
 
 
 @app.get('/ai/health')
@@ -1216,10 +1380,13 @@ async def read_sido_comparison(sido_name: str) -> SidoComparisonResponse:
 async def read_region_dashboard(region_code: str, region_name: str) -> DashboardResponse:
     """선택 지역의 관측 대시보드 또는 강남구 저장 모델 예측 대시보드를 반환합니다."""
     try:
-        # 강남구는 2024~2026 원본을 대상으로 검증·저장한 3개월 ML 예측을 사용합니다.
-        # 다른 지역은 학습 모델이 없으므로 기존의 관측 원자료 표시를 그대로 유지합니다.
-        if _normalize_region_name(region_name) == _normalize_region_name('서울특별시 강남구'):
-            return _build_gangnam_ml_dashboard()
+        # 등록·검증된 지역은 같은 ML 대시보드를 사용하고, 아직 등록되지 않은 지역은 관측 원자료만 표시합니다.
+        try:
+            pipeline = get_region_pipeline(region_code)
+        except ValueError:
+            pipeline = None
+        if pipeline and _normalize_region_name(region_name) == _normalize_region_name(pipeline.region_name):
+            return _build_registered_ml_dashboard(region_code, pipeline.region_name)
         return build_region_dashboard(region_name)
     except (FileNotFoundError, KeyError, ValueError) as exc:
         raise HTTPException(
@@ -1335,6 +1502,18 @@ async def start_region_strategy_report_job(region_code: str, request: ReportRequ
         'message': 'AI 전략기획서 생성 요청을 등록했습니다.',
         'error': '',
     }
+    # 첨부 본문은 메모리에서만 Agent에 전달합니다. MySQL에는 첨부를 제거한 조건과
+    # 재시작 가능 여부만 저장해 개인정보·참고문서 비저장 원칙을 지킵니다.
+    persisted_request, had_transient_references = _job_persistence_payload(request)
+    try:
+        save_strategy_job(
+            job_id, region_code, request.region_name, 'queued',
+            'AI 전략기획서 생성 요청을 등록했습니다.',
+            request_payload=persisted_request,
+            had_transient_references=had_transient_references,
+        )
+    except Exception as exc:
+        LOGGER.warning('Strategy job initial persistence failed: job_id=%s error=%s', job_id, type(exc).__name__)
     asyncio.create_task(_run_strategy_report_job(job_id, region_code, request))
     return _strategy_job_response(job_id)
 
@@ -1343,6 +1522,25 @@ async def start_region_strategy_report_job(region_code: str, request: ReportRequ
 async def read_region_strategy_report_job(region_code: str, job_id: str) -> StrategyReportJobResponse:
     """페이지를 이동했다 돌아와도 같은 작업 ID로 결과와 진행 상태를 다시 읽습니다."""
     job = STRATEGY_REPORT_JOBS.get(job_id)
+    if not job:
+        try:
+            stored_job = read_strategy_job(job_id)
+        except Exception:
+            stored_job = None
+        if stored_job:
+            report = None
+            if stored_job['status'] == 'completed':
+                try:
+                    stored_report = read_strategy_report(job_id)
+                    report = ReportResponse.model_validate(stored_report) if stored_report else None
+                except Exception:
+                    report = None
+            job = {
+                'region_code': stored_job['region_code'], 'region_name': stored_job['region_name'],
+                'status': stored_job['status'], 'message': stored_job['message'],
+                'error': stored_job['error'], 'report': report,
+            }
+            STRATEGY_REPORT_JOBS[job_id] = job
     if not job or job.get('region_code') != region_code:
         raise HTTPException(status_code=404, detail={'code': 'STRATEGY_JOB_NOT_FOUND', 'message': '진행 중인 전략기획 작업을 찾지 못했습니다.'})
     return _strategy_job_response(job_id)

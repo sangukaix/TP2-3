@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-import json
 from hashlib import sha256
 from pathlib import Path
 from typing import Any
 
 from ..openai_responses import OpenAIResponseError, create_structured_response
 from ..rag_store import OfficialTourismRagStore
+from ..case_registry import load_curated_case_registry
 from .evidence_agent import _url_is_allowed, allowed_domains
 from .prompts import CASE_STUDY_RESEARCH_INSTRUCTIONS
 
@@ -66,10 +66,7 @@ def _load_curated_case_cards(project_root: Path, domains: list[str]) -> list[dic
     if not registry_path.exists():
         return []
     cards: list[dict[str, Any]] = []
-    for line in registry_path.read_text(encoding='utf-8-sig').splitlines():
-        if not line.strip():
-            continue
-        record = json.loads(line)
+    for record in load_curated_case_registry(registry_path):
         source_url = str(record.get('source_url') or '')
         if not _url_is_allowed(source_url, domains):
             continue

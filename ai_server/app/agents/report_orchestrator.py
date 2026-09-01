@@ -6,12 +6,14 @@ from copy import deepcopy
 from hashlib import sha256
 import asyncio
 import json
+import logging
 from pathlib import Path
 from time import monotonic, perf_counter
 from typing import Any
 
 from .case_study_agent import CaseStudyAgent
 from .evidence_agent import EvidenceAgent
+from .plan_quality_gate import build_plan_quality_precheck, merge_quality_precheck
 from ..openai_responses import OpenAIResponseError
 from .planner_agent import PlannerAgent
 from .reviewer_agent import ReviewerAgent
@@ -23,6 +25,30 @@ from ...ml.planning_evidence import build_planning_ml_evidence
 # 기획 작성과 품질 검수는 매번 새로 실행하므로 보고서 품질 검증 과정은 생략되지 않습니다.
 _EVIDENCE_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
 _CASE_STUDY_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
+LOGGER = logging.getLogger(__name__)
+
+
+async def _run_openai_stage(stage_code: str, stage_label: str, awaitable: Any) -> Any:
+    """실패 메시지에 Agent 단계를 붙여 재시도 전에 병목을 찾을 수 있게 합니다."""
+    started = perf_counter()
+    LOGGER.info('Strategy Agent stage started: %s', stage_code)
+    try:
+        result = await awaitable
+    except OpenAIResponseError as exc:
+        LOGGER.warning(
+            'Strategy Agent stage failed: %s code=%s duration_ms=%s',
+            stage_code, exc.code, round((perf_counter() - started) * 1000),
+        )
+        raise OpenAIResponseError(
+            f'{stage_code.upper()}_{exc.code}',
+            f'{stage_label} 단계에서 처리하지 못했습니다: {exc.message}',
+            status_code=exc.status_code,
+        ) from exc
+    LOGGER.info(
+        'Strategy Agent stage completed: %s duration_ms=%s',
+        stage_code, round((perf_counter() - started) * 1000),
+    )
+    return result
 
 
 def _evidence_cache_key(
@@ -168,20 +194,20 @@ async def orchestrate_strategy_report(
     case_study_agent = CaseStudyAgent(project_root=project_root, env_values=env_values)
     started = perf_counter()
     evidence_result, case_result = await asyncio.gather(
-        _collect_evidence(
+        _run_openai_stage('evidence', '지역 근거 조사', _collect_evidence(
             agent=evidence_agent,
             env_values=env_values,
             region_code=region_code,
             snapshot=snapshot,
             planning_brief=planning_brief,
-        ),
-        _collect_case_studies(
+        )),
+        _run_openai_stage('case_scout', '공식 사례 조사', _collect_case_studies(
             agent=case_study_agent,
             env_values=env_values,
             region_code=region_code,
             snapshot=snapshot,
             planning_brief=planning_brief,
-        ),
+        )),
     )
     evidence_pack, evidence_cache_hit = evidence_result
     # 사용자가 입력한 여건을 snapshot(공식 관측값)에 섞지 않습니다.
@@ -221,8 +247,10 @@ async def orchestrate_strategy_report(
         or 'gpt-5.6'
     ).strip()
     started = perf_counter()
-    transfer_assessment = await TransferabilityAgent(api_key=api_key, model=transfer_model).assess(
-        evidence_pack=evidence_pack,
+    transfer_assessment = await _run_openai_stage(
+        'transferability',
+        '지역 적용 가능성 검토',
+        TransferabilityAgent(api_key=api_key, model=transfer_model).assess(evidence_pack=evidence_pack),
     )
     evidence_pack['transfer_assessment'] = transfer_assessment
     trace.append({
@@ -237,11 +265,19 @@ async def orchestrate_strategy_report(
     reviewer = ReviewerAgent(api_key=api_key, model=review_model)
 
     started = perf_counter()
-    draft = await planner.write(evidence_pack)
+    draft = await _run_openai_stage('planner_draft', '기획안 초안 작성', planner.write(evidence_pack))
     trace.append({'agent': 'planner', 'stage': 'draft', 'status': 'completed', 'duration_ms': round((perf_counter() - started) * 1000)})
 
     started = perf_counter()
-    review = await reviewer.review(evidence_pack=evidence_pack, draft_report=draft)
+    precheck = build_plan_quality_precheck(evidence_pack, draft)
+    review = await _run_openai_stage(
+        'reviewer_first',
+        '기획안 1차 검수',
+        reviewer.review(
+            evidence_pack=evidence_pack, draft_report=draft, deterministic_precheck=precheck,
+        ),
+    )
+    review = merge_quality_precheck(review, precheck)
     trace.append({'agent': 'reviewer', 'stage': 'first_review', 'status': 'completed', 'score': review['overall_score'], 'duration_ms': round((perf_counter() - started) * 1000)})
 
     revised = False
@@ -250,7 +286,11 @@ async def orchestrate_strategy_report(
         original_draft = draft
         started = perf_counter()
         try:
-            draft = await planner.write(evidence_pack, revision_feedback=review)
+            draft = await planner.write(
+                evidence_pack,
+                revision_feedback=review,
+                previous_draft=original_draft,
+            )
         except OpenAIResponseError as exc:
             # 외부 모델이 수정 요청을 거절하거나 지연되어도 검수되지 않은 결과를 승인하거나
             # API 전체를 실패시키지 않고, 기존 초안과 실패한 검수 상태를 그대로 반환합니다.
@@ -269,7 +309,11 @@ async def orchestrate_strategy_report(
 
             started = perf_counter()
             try:
-                review = await reviewer.review(evidence_pack=evidence_pack, draft_report=draft)
+                precheck = build_plan_quality_precheck(evidence_pack, draft)
+                review = await reviewer.review(
+                    evidence_pack=evidence_pack, draft_report=draft, deterministic_precheck=precheck,
+                )
+                review = merge_quality_precheck(review, precheck)
             except OpenAIResponseError as exc:
                 review['approved'] = False
                 review['final_review_error_code'] = exc.code
