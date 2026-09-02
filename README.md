@@ -129,7 +129,7 @@ npm run dev -- --host 0.0.0.0 --port 5176 --strictPort
 
 `start-dev.ps1`에서 `Python virtual environment was not found` 오류가 나오면 프로젝트 루트에서 `.\setup-dev.ps1`를 먼저 실행합니다.
 
-같은 이더넷 네트워크의 팀원이 접속할 때는 `start-dev.ps1` 실행 후 표시되는 PC의 LAN IPv4 주소를 사용합니다. 현재 예시는 `http://192.168.0.22:5176`이며, PC마다 `ipconfig`로 확인합니다. Windows 방화벽에서 5176 인바운드 허용이 필요할 수 있습니다.
+같은 네트워크의 팀원이 접속할 때는 `start-dev.ps1` 실행 후 표시되는 현재 PC의 LAN 주소를 사용합니다. 네트워크 어댑터가 여러 개면 주소가 여러 줄 표시될 수 있으며, 같은 네트워크 대역의 주소를 선택합니다. Windows 방화벽에서 5176 인바운드 허용이 필요할 수 있습니다.
 
 ## 지도 Backend 실행
 

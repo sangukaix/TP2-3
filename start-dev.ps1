@@ -26,4 +26,19 @@ Start-DevTerminal "TOUR Frontend $frontendPort" (Join-Path $projectRoot 'fronten
 
 Write-Host "TP2-3 Backend $backendPort, AI Server $aiPort, and Frontend $frontendPort started in separate windows."
 Write-Host "Local URL: http://localhost:$frontendPort"
-Write-Host "Team LAN URL: http://192.168.0.22:$frontendPort"
+$lanAddresses = @(
+  [System.Net.Dns]::GetHostAddresses([System.Net.Dns]::GetHostName()) |
+    Where-Object {
+      $_.AddressFamily -eq [System.Net.Sockets.AddressFamily]::InterNetwork -and
+      -not [System.Net.IPAddress]::IsLoopback($_)
+    } |
+    ForEach-Object { $_.IPAddressToString } |
+    Sort-Object -Unique
+)
+if ($lanAddresses.Count -gt 0) {
+  foreach ($lanAddress in $lanAddresses) {
+    Write-Host "Team LAN URL: http://${lanAddress}:$frontendPort"
+  }
+} else {
+  Write-Host 'Team LAN URL: ipconfig에서 현재 PC의 IPv4 주소를 확인해 주세요.'
+}
