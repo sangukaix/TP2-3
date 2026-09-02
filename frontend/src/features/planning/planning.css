@@ -94,3 +94,11 @@
 /* 임시저장은 조건 입력 카드와 분리해, 지역명 헤더의 오른쪽 끝에서 언제든 저장할 수 있게 합니다. */
 .planning-header-save{display:inline-flex;align-items:center;gap:7px;margin-left:auto;padding:10px 13px;border:1px solid #a9c8d9;border-radius:8px;color:#1d6986;background:#f7fcfe;box-shadow:0 3px 9px rgb(34 108 145 / 8%);font-size:11px;font-weight:700;cursor:pointer}.planning-header-save:hover:not(:disabled){border-color:#6daec9;background:#edf9fc}.planning-header-save:disabled{cursor:default;opacity:.55}
 .planning-inline-status{margin-top:14px;padding:0 4px;color:#71889a;font-size:11px}.planning-inline-status p{margin:0;line-height:1.6}.planning-inline-status .planning-error{color:#b45959}
+
+/* 앱 화면에서는 임시저장을 지역명과 같은 첫 줄의 오른쪽에 둡니다. */
+@media(max-width:500px){
+  .planning-page .work-page-header{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px 10px}
+  .planning-page .work-page-header>div:first-child{grid-column:1;grid-row:1}
+  .planning-page .planning-header-save{grid-column:2;grid-row:1;margin-left:0}
+  .planning-page .work-region-picker{grid-column:1 / -1;grid-row:2;width:100%;min-width:0}
+}
