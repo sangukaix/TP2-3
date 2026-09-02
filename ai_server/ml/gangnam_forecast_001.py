@@ -1,11 +1,15 @@
-"""초보자가 읽기 쉽도록 정리한 독립적인 강남구 예측 모듈입니다.
+"""초보자가 읽기 쉽도록 정리한 강남구 예측 모듈입니다.
 
-다른 forecast 파일을 import하지 않습니다.
-따라서 이 파일 안에서 데이터 준비, 학습, 평가, 예측 과정을 확인할 수 있습니다.
+원본 gangnam_forecast.py의 학습 방법을 그대로 사용하지 않고,
+같은 흐름을 더 알아보기 쉬운 여러 단계의 코드로 작성했습니다.
+
+주의:
+    현재 서버는 원본 모듈을 사용합니다. 이 파일을 사용하려면
+    train_gangnam_001.py 같은 실행 파일에서 이 모듈을 import해야 합니다.
 """
 
-# gangnam_forecast_002.py
-# 함수 저장 방식을 초보자 수준으로 표현한 독립 버전입니다.
+# gangnam_forecast_001.py
+# 초보수준의 코드로 수정함. 
 
 from __future__ import annotations
 
@@ -81,10 +85,8 @@ class RegionForecastSettings:
 
     region_code: str
     region_name: str
-    # 최신 월별 데이터를 읽는 함수입니다.
-    load_monthly_function: Callable[[], pd.DataFrame]
-    # 데이터를 전처리하고 DataFrame으로 반환하는 함수입니다.
-    processed_data_function: Callable[[], pd.DataFrame]
+    load_monthly: Callable[[], pd.DataFrame]
+    write_processed: Callable[[], pd.DataFrame]
     artifact_directory: Path
     model_version: str = MODEL_VERSION
 
@@ -486,8 +488,7 @@ def _recursive_test(
 
 def train_region_models(settings: RegionForecastSettings) -> dict[str, Any]:
     """한 지역의 모든 지표를 학습하고 모델 파일을 저장합니다."""
-    # 설정 상자에 저장해 둔 전처리 함수를 실행합니다.
-    monthly = settings.processed_data_function()
+    monthly = settings.write_processed()
     evaluation = {}
     models = {}
     target_months = None
@@ -595,8 +596,7 @@ def predict_region_future_months(
         raise ValueError("예측 기간은 3개월 이상 24개월 이하여야 합니다.")
 
     artifact, metadata = _load_region_artifact(settings)
-    # 설정 상자에 저장해 둔 데이터 읽기 함수를 실행합니다.
-    monthly = settings.load_monthly_function()
+    monthly = settings.load_monthly()
 
     saved_fingerprint = artifact.get("data_fingerprint")
     current_fingerprint = data_fingerprint(monthly)
@@ -645,8 +645,8 @@ def predict_region_future_months(
 GANGNAM_FORECAST_SETTINGS = RegionForecastSettings(
     region_code=REGION_CODE,
     region_name="서울특별시 강남구",
-    load_monthly_function=load_gangnam_monthly_demand,
-    processed_data_function=write_processed_dataset,
+    load_monthly=load_gangnam_monthly_demand,
+    write_processed=write_processed_dataset,
     artifact_directory=ARTIFACT_DIRECTORY,
     model_version=MODEL_VERSION,
 )

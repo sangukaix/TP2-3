@@ -7,8 +7,9 @@
 기존의 train_gangnam_models()를 그대로 호출하므로
 모델, 데이터, 평가 방법은 기존 train_gangnam.py와 같습니다.
 """
-# train_gangnam_014.py 
+# train_gangnam_014.py 에서 수정 
 # 초보자 수준의 코드로 수정한 파일
+
 
 from __future__ import annotations
 
@@ -45,12 +46,29 @@ def main() -> None:
     print("강남구 모델 학습을 시작합니다.")
 
     # 실제 학습과 모델 파일 저장은 기존 함수가 담당합니다.
+    print("#### 2 train_gangnam_models 호출")
     metadata = train_gangnam_models()
 
     # 전체 메타데이터 대신 확인에 필요한 요약만 출력합니다.
+    print('#### 3 make_summary')
     summary = make_summary(metadata)
     print(json.dumps(summary, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
+
+    print('#### 1')
+    print()
+
     main()
+
+
+### 
+# 실행방법 : python -m ai_server.ml.train_gangnam_014
+# 
+# 실행하기
+#  .\backend\.venv\Scripts\python.exe -m ai_server.ml.train_gangnam    
+
+# print한 내용 저장하기 
+# & ".\backend\.venv\Scripts\python.exe" -m ai_server.ml.train_gangnam `
+#    > ".\training_result.txt" 2>&1
