@@ -6,6 +6,7 @@
 
 # gangnam_forecast_002.py
 # 함수 저장 방식을 초보자 수준으로 표현한 독립 버전입니다.
+# gangnam_forecast_003.py으로 변경
 
 from __future__ import annotations
 
@@ -127,10 +128,16 @@ def _next_month(year_month: str) -> str:
 
 def _season_features(target_month: str) -> list[float]:
     """월 정보를 계절성 입력값인 sin과 cos으로 바꿉니다."""
+
+    print('월 정보를 계절성 입력값인 sin과 cos으로 바꿉니다.\n')
     month_number = int(target_month[4:])
+    print('month_number:\n',month_number,'\n')
     angle = 2 * pi * month_number / 12
+    print('angle:\n',angle,'\n')
     month_sin = sin(angle)
+    print('month_sin:\n',month_sin,'\n')
     month_cos = cos(angle)
+    print('month_cos:\n',month_cos,'\n')
     return [month_sin, month_cos]
 
 
@@ -168,13 +175,22 @@ def _univariate_feature_row(
     target_month: str,
 ) -> list[float]:
     """지표 하나의 과거값으로 한 줄의 입력값을 만듭니다."""
+
+    print('_univariate_feature_row 함수 내부')
     if len(history) < 12:
         raise ValueError("12개월 이상의 과거 관측값이 필요합니다.")
 
+    
     old_1_month = history[-1]
+    print('과거 전 한달:',old_1_month)
     old_3_months = history[-3]
+    print('과거 전 3달:',old_3_months)
     old_12_months = history[-12]
+    print('과거 전 12달:',old_12_months)
+
+
     season_values = _season_features(target_month)
+    print('_season_features(target_month) :\n ',season_values,'\n')
 
     return [
         old_1_month,
@@ -189,6 +205,8 @@ def make_supervised_frame(
     monthly: pd.DataFrame,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, list[str], np.ndarray, np.ndarray]:
     """방문자·소비액의 과거값을 다음 달을 맞히는 학습표로 바꿉니다."""
+
+    print('make_supervised_frame 함수 호출 in gangnam_forecast.py ')
     months = monthly["year_month"].astype(str).tolist()
     visitors = monthly["visitors"].astype(float).tolist()
     spending = monthly["spending_krw"].astype(float).tolist()
@@ -225,22 +243,37 @@ def make_univariate_supervised_frame(
     target_key: str,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, list[str]]:
     """하나의 지표를 과거값으로 예측하는 학습표를 만듭니다."""
+
+    print('make_univariate_supervised_frame 내부')
     if target_key not in monthly.columns:
         raise ValueError(f"학습표에 {target_key} 열이 없습니다.")
 
+
+
     months = monthly["year_month"].astype(str).tolist()
+    print('monthly["year_month"].astype(str).tolist()값\n',months,'\n')
     values = monthly[target_key].astype(float).tolist()
+    print('monthly[target_key].astype(float).tolist()값\n',values,'\n')
+
+    print('features, targets,baseline, target_months 초기화')
     features = []
     targets = []
     baseline = []
     target_months = []
 
+
     for index in range(12, len(months)):
+        print('index(index=12부터 시작하는 이유는 12개월 전 값(lag_12) 을 피처와 기준모델에 사용하기 때문입니다.):',index,'\n')
         feature = _univariate_feature_row(values[:index], months[index])
+        print('feature:\n',feature,'\n')
         features.append(feature)
+        print('features:\n',features,'\n')
         targets.append(values[index])
+        print('targets:\n','\n')
         baseline.append(values[index - 12])
+        print('baseline:\n','\n')
         target_months.append(months[index])
+        print('target_months:\n','\n')
 
     return (
         np.asarray(features),
@@ -276,15 +309,21 @@ def _random_forest() -> RandomForestRegressor:
 
 def _factory_for(target_key: str) -> Callable[[], Any]:
     """지표에 맞는 모델을 반환합니다."""
+
+    print('_factory_for 함수 호출 in gangnam_forecast.py\n')
     random_forest_targets = {
         "visitors",
         "navigation_searches",
         "lodging_searches",
     }
+    print(random_forest_targets)
 
     if target_key in random_forest_targets:
+        print("target_key:",target_key)
         return _random_forest
 
+    print("LinearRegression 을 반환")
+    print(LinearRegression,'\n')
     return LinearRegression
 
 
@@ -293,6 +332,11 @@ def _training_frame(
     target_key: str,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, list[str]]:
     """지표 종류에 맞는 학습용 입력값, 정답값, 기준선을 반환합니다."""
+
+    print('_training_frame 호출한 내부\n\n ')
+
+
+    print('visitors , spending_krw 이 공유된 target \n\n ')
     shared_targets = {"visitors", "spending_krw"}
 
     if target_key in shared_targets:
@@ -304,12 +348,22 @@ def _training_frame(
             visitor_baseline,
             spending_baseline,
         ) = make_supervised_frame(monthly)
+        print('make_supervised_frame(monthly)가 반환하는 6개의 값을 각각 변수에 나누어 저장하는 것\n')
+        print('features,visitor_targets,spending_targets,months,vsitor_baseline,spending_baseline을 생성\n')
+
 
         if target_key == "visitors":
+            print('target_key가 visition인 경우:\n\n')
+            print('target_key가 visitors이면 features, visitor_targets, visitor_baseline, months 를 출력 \n\n',features, '\n\n',visitor_targets, '\n\n',visitor_baseline, '\n\n',months)
+            print('#################################################################################################\n')
             return features, visitor_targets, visitor_baseline, months
+        
 
+        print('최종 반환하는 features, spending_targets, spending_baseline, months 를 출력 \n\n',features,'\n\n', visitor_targets,'\n\n', visitor_baseline,'\n\n', months)
+        print('******************************************************************************************************\n')
         return features, spending_targets, spending_baseline, months
 
+    print('최종 반환된 파라미터로 출력한 make_univariate_supervised_frame(monthly, target_key) \n\n',make_univariate_supervised_frame(monthly, target_key))
     return make_univariate_supervised_frame(monthly, target_key)
 
 
@@ -487,30 +541,60 @@ def _recursive_test(
 def train_region_models(settings: RegionForecastSettings) -> dict[str, Any]:
     """한 지역의 모든 지표를 학습하고 모델 파일을 저장합니다."""
     # 설정 상자에 저장해 둔 전처리 함수를 실행합니다.
-    monthly = settings.processed_data_function()
+    print('train_region_models in gangnam_forecast.py\n')
+
+    print('processed_data_function in gangnam_forecast.py\n')
+
+    
+
+    print("processed_data_function 함수를 monthly 에 반영 in gangnam_forecast.py \n ")
+
+    print('processed_data_function = write_processed_dataset() 함수를 실행하고, 그 함수가 반환한 결과를 monthly[pandas data frame]에 저장한다.')
+    monthly = settings.processed_data_function()  
+    print("monthly 값:" , monthly)
     evaluation = {}
     models = {}
     target_months = None
 
+    print('Symbol : 00000000000')
+    print('monthly(판다스 데이타프레임):\n',monthly,'\n',evaluation,'\n',target_months,'\n')
+
     for target_name in TARGETS:
+
+        print("debug: target_name[TARGETS]  : \n", target_name,'\n')
+
+
         features, targets, baseline, months = _training_frame(
             monthly,
             target_name,
         )
+
+        print('features, targets, baseline, months 값 =  _training_frame( monthly, target_name,)\n',features,'\n', targets,'\n', baseline,'\n', months)
+
+
+        print('_factory_for(target_name)실행\n')
         model_factory = _factory_for(target_name)
+
+        print('features targets baseline model_factory 을 변수로 select_and_evaluate 실행\n')
         model, result = select_and_evaluate(
             features,
             targets,
             baseline,
             model_factory,
         )
+
+        print('models[target_name]에 model 데이타 저장\n ')
         models[target_name] = model
+
+        print('evaluation[target_name]에 result 데이타 저장\n ')
         evaluation[target_name] = result
 
         if target_months is None:
             target_months = months
 
+    print('data_fingerprint(monthly)함수 실행\n')
     fingerprint = data_fingerprint(monthly)
+
     artifact = {
         "version": settings.model_version,
         "region_code": settings.region_code,
@@ -519,10 +603,19 @@ def train_region_models(settings: RegionForecastSettings) -> dict[str, Any]:
         "models": models,
         "latest_observed_month": str(monthly["year_month"].iloc[-1]),
     }
+    print('artifact\n')
+
+
 
     test_start = len(target_months) - TEST_MONTHS
+    print('test_start (월)')
     validation_start = test_start - VALIDATION_MONTHS
+    print('validation_start(월)')
+
+    print('_recursive_test(monthly, evaluation) 실행\n')
     recursive_evaluation = _recursive_test(monthly, evaluation)
+    print('recursive_evaluation:\n',recursive_evaluation)
+
 
     metadata = {
         "version": settings.model_version,
@@ -556,14 +649,22 @@ def train_region_models(settings: RegionForecastSettings) -> dict[str, Any]:
         ],
     }
 
+    print(metadata,'\n')
+
     settings.artifact_directory.mkdir(parents=True, exist_ok=True)
+
+    
     joblib.dump(artifact, settings.artifact_directory / "demand_model.joblib")
+    print('demand_model.joblib 생성 완료 \n ')
 
     metadata_path = settings.artifact_directory / "demand_model.metadata.json"
     metadata_path.write_text(
         json.dumps(metadata, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+    print('metadata_path:',metadata_path,'\n')
+
+    print("final metadat:",metadata,'\n')
 
     return metadata
 
@@ -654,6 +755,8 @@ GANGNAM_FORECAST_SETTINGS = RegionForecastSettings(
 
 def train_gangnam_models() -> dict[str, Any]:
     """강남구 모델 학습을 시작하는 함수입니다."""
+
+    print("train_region_models(GANGNAM_FORECAST_SETTINGS) : gangnam_forecast.py")
     return train_region_models(GANGNAM_FORECAST_SETTINGS)
 
 

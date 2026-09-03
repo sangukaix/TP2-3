@@ -6,6 +6,8 @@
 
 # gangnam_forecast_002.py
 # 함수 저장 방식을 초보자 수준으로 표현한 독립 버전입니다.
+# gangnam_forecast_003.py으로 변경
+
 
 from __future__ import annotations
 
@@ -168,13 +170,22 @@ def _univariate_feature_row(
     target_month: str,
 ) -> list[float]:
     """지표 하나의 과거값으로 한 줄의 입력값을 만듭니다."""
+
+    print('_univariate_feature_row 함수 내부')
     if len(history) < 12:
         raise ValueError("12개월 이상의 과거 관측값이 필요합니다.")
 
+    
     old_1_month = history[-1]
+    print('과거 전 한달:',old_1_month)
     old_3_months = history[-3]
+    print('과거 전 3달:',old_3_months)
     old_12_months = history[-12]
+    print('과거 전 12달:',old_12_months)
+
+
     season_values = _season_features(target_month)
+    print('_season_features(target_month) : ',season_values,'\n')
 
     return [
         old_1_month,
@@ -189,6 +200,8 @@ def make_supervised_frame(
     monthly: pd.DataFrame,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, list[str], np.ndarray, np.ndarray]:
     """방문자·소비액의 과거값을 다음 달을 맞히는 학습표로 바꿉니다."""
+
+    print('make_supervised_frame 함수 호출 in gangnam_forecast.py ')
     months = monthly["year_month"].astype(str).tolist()
     visitors = monthly["visitors"].astype(float).tolist()
     spending = monthly["spending_krw"].astype(float).tolist()
@@ -225,22 +238,37 @@ def make_univariate_supervised_frame(
     target_key: str,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, list[str]]:
     """하나의 지표를 과거값으로 예측하는 학습표를 만듭니다."""
+
+    print('make_univariate_supervised_frame 내부')
     if target_key not in monthly.columns:
         raise ValueError(f"학습표에 {target_key} 열이 없습니다.")
 
+
+
     months = monthly["year_month"].astype(str).tolist()
+    print('monthly["year_month"].astype(str).tolist()값\n',months,'\n')
     values = monthly[target_key].astype(float).tolist()
+    print('monthly[target_key].astype(float).tolist()값\n',values,'\n')
+
+    print('features, targets,baseline, target_months 초기화')
     features = []
     targets = []
     baseline = []
     target_months = []
 
+
     for index in range(12, len(months)):
+        print('index:',index,'\n')
         feature = _univariate_feature_row(values[:index], months[index])
+        print(feature,'\n')
         features.append(feature)
+        print(features,'\n')
         targets.append(values[index])
+        print(targets,'\n')
         baseline.append(values[index - 12])
+        print(baseline,'\n')
         target_months.append(months[index])
+        print(target_months,'\n')
 
     return (
         np.asarray(features),
@@ -276,15 +304,21 @@ def _random_forest() -> RandomForestRegressor:
 
 def _factory_for(target_key: str) -> Callable[[], Any]:
     """지표에 맞는 모델을 반환합니다."""
+
+    print('_factory_for 함수 호출 in gangnam_forecast.py\n')
     random_forest_targets = {
         "visitors",
         "navigation_searches",
         "lodging_searches",
     }
+    print(random_forest_targets)
 
     if target_key in random_forest_targets:
+        print("target_key:",target_key)
         return _random_forest
 
+    print("LinearRegression 을 반환")
+    print(LinearRegression,'\n')
     return LinearRegression
 
 
@@ -293,6 +327,10 @@ def _training_frame(
     target_key: str,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, list[str]]:
     """지표 종류에 맞는 학습용 입력값, 정답값, 기준선을 반환합니다."""
+
+    print('_training_frame 호출한 내부\n\n ')
+
+
     shared_targets = {"visitors", "spending_krw"}
 
     if target_key in shared_targets:
@@ -304,12 +342,17 @@ def _training_frame(
             visitor_baseline,
             spending_baseline,
         ) = make_supervised_frame(monthly)
+        print('make_supervised_frame(monthly)가 반환하는 6개의 값을 각각 변수에 나누어 저장하는 것\n')
 
         if target_key == "visitors":
+            print('target_key가 visition인 경우:\n\n')
+            print('target_key가 visitors이면 features, visitor_targets, visitor_baseline, months 를 출력 \n\n',features, visitor_targets, visitor_baseline, months)
             return features, visitor_targets, visitor_baseline, months
 
+        print('최종 반환하는 features, spending_targets, spending_baseline, months 를 출력 \n\n',features, visitor_targets, visitor_baseline, months)
         return features, spending_targets, spending_baseline, months
 
+    print('최종 반환된 파라미터로 출력한 make_univariate_supervised_frame(monthly, target_key) \n\n',make_univariate_supervised_frame(monthly, target_key))
     return make_univariate_supervised_frame(monthly, target_key)
 
 
@@ -491,17 +534,33 @@ def train_region_models(settings: RegionForecastSettings) -> dict[str, Any]:
 
     print('processed_data_function in gangnam_forecast.py\n')
 
+    
+
     print("processed_data_function 함수를 monthly 에 반영 in gangnam_forecast.py \n ")
-    monthly = settings.processed_data_function()
+
+    print('processed_data_function = write_processed_dataset() 함수를 실행하고, 그 함수가 반환한 결과를 monthly에 저장한다.')
+    monthly = settings.processed_data_function()  
+    print("monthly 값:" , monthly)
     evaluation = {}
     models = {}
     target_months = None
 
+    print('Symbol : 00000000000')
+    print(monthly,'\n',evaluation,'\n',target_months,'\n')
+
     for target_name in TARGETS:
+
+        print("debug: target_name  : \n", target_name,'\n')
+
+
         features, targets, baseline, months = _training_frame(
             monthly,
             target_name,
         )
+
+        print('features, targets, baseline, months 값 =  _training_frame( monthly, target_name,)\n',features,'\n', targets,'\n', baseline,'\n', months)
+
+
         model_factory = _factory_for(target_name)
         model, result = select_and_evaluate(
             features,
