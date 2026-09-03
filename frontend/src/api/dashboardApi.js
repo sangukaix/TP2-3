@@ -1,15 +1,4 @@
 /**
- * FastAPI가 준비된 뒤 프론트엔드가 호출할 API 모음입니다.
- * Vite는 vite.config.js의 proxy를 통해 /api 요청을 TP2-3 Backend로 전달합니다.
- */
-export async function getRegionDashboard(regionCode) {
-  const response = await fetch(`/api/v1/regions/${regionCode}/dashboard`)
-
-  if (!response.ok) throw new Error('지역 관광 대시보드 데이터를 불러오지 못했습니다.')
-  return response.json()
-}
-
-/**
  * VWorld 키는 Backend에서만 사용합니다.
  * React는 이 API를 호출해 키가 제거된 시군구 GeoJSON만 받습니다.
  */
@@ -26,14 +15,6 @@ export async function getSidoBoundaries() {
   const response = await fetch('/api/v1/boundaries/sido')
 
   if (!response.ok) throw new Error('시도 행정구역 경계를 불러오지 못했습니다.')
-  return response.json()
-}
-
-/** 강남구 관광지 Open API의 실제 연결을 확인하는 작은 테스트용 호출입니다. */
-export async function getGangnamTourismOpenApiDemo() {
-  const response = await fetch('/api/v1/demo/gangnam-tourism')
-
-  if (!response.ok) throw new Error('강남구 관광 Open API 데이터를 불러오지 못했습니다.')
   return response.json()
 }
 
