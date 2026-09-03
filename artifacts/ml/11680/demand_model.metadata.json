@@ -2,7 +2,7 @@
   "version": "demand-v3.0",
   "region_code": "11680",
   "region_name": "서울특별시 강남구",
-  "trained_at": "2026-09-02T11:38:55.443159+00:00",
+  "trained_at": "2026-09-03T03:05:16.377322+00:00",
   "data_fingerprint": "f04a08a5847ad172b0abdeb3fcb68c7234dda5b3b59d033b0454b4a0857b7ce5",
   "target": {
     "visitors": "월간 외지인 순 방문자 수",
