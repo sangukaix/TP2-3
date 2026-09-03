@@ -102,3 +102,21 @@
   .planning-page .planning-header-save{grid-column:2;grid-row:1;margin-left:0}
   .planning-page .work-region-picker{grid-column:1 / -1;grid-row:2;width:100%;min-width:0}
 }
+
+/* 기획안 생성 화면에서 요청한 주요 안내문·조건·요약 텍스트를 1.2배로 표시합니다. */
+.planning-page .work-page-header h1{font-size:27.6px}
+.planning-page .work-region-picker span{font-size:13.2px}
+.planning-page .work-region-picker select{height:45.6px;font-size:14.4px}
+.planning-page .planning-section-number{font-size:12px}
+.planning-page .planning-section h2{font-size:18px}
+.planning-page .planning-choice button{font-size:14.4px}
+.planning-page .planning-hint{font-size:13.2px}
+.planning-page .planning-extra>summary{font-size:15.6px}
+.planning-page .planning-extra>summary>span{font-size:12px}
+.planning-page .planning-inline-status{font-size:13.2px}
+.planning-page .planning-summary>header>span{font-size:13.2px}
+.planning-page .planning-summary h2{font-size:18px}
+.planning-page .planning-summary dt{font-size:12px}
+.planning-page .planning-summary dd{font-size:14.4px}
+.planning-page .planning-summary dd small{font-size:12px}
+.planning-page .planning-summary-generate{font-size:15.6px!important}

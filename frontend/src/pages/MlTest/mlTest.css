@@ -77,3 +77,28 @@
 .folder-root-label span,.folder-branches summary p,.folder-branches summary>b,.folder-branches summary code,.folder-branches li code{font-size:10px}.agent-input-row span,.agent-parallel>p,.agent-parallel b,.agent-sequence b,.agent-parallel article p,.agent-sequence article p,.agent-output span{font-size:10px}.agent-parallel h3,.agent-sequence h3,.agent-output b{font-size:12px}.ml-architecture header p,.ml-architecture>div>section>b,.ml-architecture-step b{font-size:10px}.ml-architecture-step span{font-size:9px}
 
 @media(min-width:501px){.ml-test-page{width:100%}.ml-test-layout{grid-template-columns:minmax(0,1fr) 538px}.learning-architecture-layout{grid-template-columns:minmax(0,1fr) 540px}}
+
+/* 머신러닝 결과 화면의 탭·안내·상태·챗봇을 업무 화면 공통 1.2배 비율로 맞춥니다. */
+.ml-test-page .learning-section-nav a{font-size:13.2px}
+.ml-test-page .ml-test-hero p{font-size:12px}
+.ml-test-page .ml-test-hero h1{font-size:31.2px}
+.ml-test-page .ml-test-hero>div>span{font-size:15.6px}
+.ml-test-page .ml-test-hero label{font-size:13.2px}
+.ml-test-page .ml-test-hero select{font-size:14.4px}
+.ml-test-page .ml-test-state{font-size:15.6px}
+.ml-test-page .ml-chat h2{font-size:16.8px}
+.ml-test-page .ml-chat>header p,
+.ml-test-page .ml-chat>header i{font-size:10.8px}
+.ml-test-page .ml-chat-context,
+.ml-test-page .ml-chat-empty>p,
+.ml-test-page .ml-chat-empty button,
+.ml-test-page .ml-chat-message,
+.ml-test-page .ml-chat-thinking,
+.ml-test-page .ml-chat-error{font-size:12px}
+.ml-test-page .ml-chat-empty>b{font-size:13.2px}
+.ml-test-page .ml-chat-message small,
+.ml-test-page .ml-chat-message li,
+.ml-test-page .ml-chat-tags span,
+.ml-test-page .ml-chat-message em,
+.ml-test-page .ml-chat>footer{font-size:10.8px}
+.ml-test-page .ml-chat-composer textarea{font-size:13.2px}
