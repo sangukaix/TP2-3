@@ -75,6 +75,6 @@ export default function WorkspaceAssistantPanel({ region, report, onApplyPatch, 
       {error && <p className="workspace-chat-error">{error}</p>}
     </div>
     {latestPatch && onApplyPatch && <button className="workspace-chat-apply" type="button" onClick={() => onApplyPatch(latestPatch)}>이 수정안을 기획안에 반영</button>}
-    <footer className="workspace-chat-composer"><label><input type="checkbox" checked={useWebSearch} onChange={(event) => setUseWebSearch(event.target.checked)} /><Globe2 size={13} />웹 검색</label><div><textarea rows="2" value={question} onChange={(event) => setQuestion(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); ask() } }} placeholder="기획안에 대해 질문하세요" /><button type="button" onClick={() => ask()} disabled={!question.trim() || loading} aria-label="질문 전송"><Send size={15} /></button></div></footer>
+    <footer className="workspace-chat-composer"><label><input type="checkbox" checked={useWebSearch} onChange={(event) => setUseWebSearch(event.target.checked)} /><Globe2 size={13} />웹 검색</label><div><textarea rows="2" value={question} onChange={(event) => setQuestion(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); ask() } }} placeholder="분석 결과나 기획안에 대해 질문하세요!" /><button type="button" onClick={() => ask()} disabled={!question.trim() || loading} aria-label="질문 전송"><Send size={15} /></button></div></footer>
   </aside>
 }

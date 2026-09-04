@@ -93,7 +93,12 @@ export default function TourismAssistant({ open, onClose, region, report, onAppl
         {latestPatch && <button className="assistant-apply" type="button" onClick={() => onApplyPatch(latestPatch)}><Check size={16} />기획안 수정안 적용</button>}
         <footer>
           <label><input type="checkbox" checked={useWebSearch} onChange={(event) => setUseWebSearch(event.target.checked)} /><Globe2 size={14} />공식 웹 자료도 검색</label>
-          <div><textarea rows="2" value={question} onChange={(event) => setQuestion(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendQuestion() } }} placeholder="분석 결과나 기획안에 대해 질문하세요" /><button type="button" onClick={() => sendQuestion()} disabled={!question.trim() || isLoading} aria-label="질문 보내기"><Send size={16} /></button></div>
+          <div>
+            <textarea rows="2" value={question} onChange={(event) => setQuestion(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendQuestion() } }} placeholder="분석 결과나 기획안에 대해 질문하세요" />
+            <button type="button" onClick={() => sendQuestion()} disabled={!question.trim() || isLoading} aria-label="질문 보내기">
+              <Send size={16} />
+            </button>
+          </div>
         </footer>
       </aside>
     </>
