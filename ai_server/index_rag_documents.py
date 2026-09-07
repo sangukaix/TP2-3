@@ -35,7 +35,9 @@ async def index_file(input_path: Path) -> int:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description='공식 관광 문서를 ChromaDB에 색인합니다.')
-    parser.add_argument('--input', type=Path, default=Path('data/rag/official_documents.jsonl'))
+    # 기본값은 사용자가 제공한 공식 PDF의 페이지 청크입니다. 이 작업은 한 번만 임베딩을
+    # 생성해 ChromaDB에 영구 저장하며, local_first 실행 중에는 새 유료 호출을 만들지 않습니다.
+    parser.add_argument('--input', type=Path, default=Path('data/rag/official_reference_chunks.jsonl'))
     args = parser.parse_args()
     if not args.input.exists():
         raise SystemExit(f'입력 파일을 찾지 못했습니다: {args.input}')

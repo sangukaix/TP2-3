@@ -1,0 +1,1259 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/oytfau",
+    "id": "oytfau",
+    "slide": 10,
+    "layoutId": "baae435f-1231-42ea-a17e-79d6b2040f4c",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "86fd9854-2576-42dc-ac87-eb76a11bc07a",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#F4F7FA",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1600,
+      "height": 900
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Noto Sans KR"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "baae435f-1231-42ea-a17e-79d6b2040f4c",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "86fd9854-2576-42dc-ac87-eb76a11bc07a",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "86fd9854-2576-42dc-ac87-eb76a11bc07a",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/nqpc7a1w",
+      "id": "1",
+      "name": "island-photo",
+      "bbox": [
+        1037,
+        4,
+        560,
+        893
+      ],
+      "alt": "해안 관광 사진",
+      "contentType": "image/png",
+      "imageFit": "cover",
+      "asset": {
+        "assetId": "c6a9c29f-7087-42ef-9a0d-2934b50836e6",
+        "contentType": "image/png",
+        "byteLength": 861434
+      }
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/pcvq5k3q",
+      "id": "2",
+      "name": "eyebrow",
+      "bbox": [
+        107,
+        113,
+        371,
+        31
+      ],
+      "geometry": "rect",
+      "text": "U I / U X   P L A N N I N G",
+      "textPreview": "U I / U X   P L A N N I N G",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Noto Sans KR",
+        "color": "#4F555B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "U I / U X   P L A N N I N G"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "U I / U X   P L A N N I N G",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "U I / U X   P L A N N I N G",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/obm9wfm5",
+      "id": "3",
+      "name": "title",
+      "bbox": [
+        107,
+        153,
+        853,
+        74
+      ],
+      "geometry": "rect",
+      "text": "주요 화면 구성 및 UI 기획",
+      "textPreview": "주요 화면 구성 및 UI 기획",
+      "resolvedFontSize": 55,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 55,
+        "typeface": "Noto Sans KR",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "주요 화면 구성 및 UI 기획"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "주요 화면 구성 및 UI 기획",
+          "resolvedTextStyle": {
+            "fontSize": 55,
+            "typeface": "Noto Sans KR",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "주요 화면 구성 및 ",
+              "fontSize": 55,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "alignment": "left"
+            },
+            {
+              "index": 2,
+              "text": "UI 기획",
+              "fontSize": 55,
+              "typeface": "Noto Sans KR",
+              "color": "#00C1D4",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/fmt8zalo",
+      "id": "4",
+      "name": "title-rule",
+      "bbox": [
+        107,
+        238,
+        831,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 2
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/elk7q543",
+      "id": "5",
+      "name": "intro",
+      "bbox": [
+        107,
+        299,
+        798,
+        100
+      ],
+      "geometry": "rect",
+      "text": "본 서비스는 사용자 친화적인 인터페이스를 통해 복잡한 데이터를 직관적으로 전\n달합니다. 각 화면은 공공기관의 의사결정을 지원하기 위해 최적화된 레이아웃을\n제공합니다.",
+      "textPreview": "본 서비스는 사용자 친화적인 인터페이스를 통해 복잡한 데이터를 직관적으로 전 | 달합니다. 각 화면은 공공기관의 의사결정을 지원하기 위해 최적화된 레이아웃을 | 제공합니다.",
+      "resolvedFontSize": 18,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 18,
+        "typeface": "Noto Sans KR",
+        "color": "#4F555B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "본 서비스는 사용자 친화적인 인터페이스를 통해 복잡한 데이터를 직관적으로 전"
+          },
+          {
+            "index": 2,
+            "text": "달합니다. 각 화면은 공공기관의 의사결정을 지원하기 위해 최적화된 레이아웃을"
+          },
+          {
+            "index": 3,
+            "text": "제공합니다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "본 서비스는 사용자 친화적인 인터페이스를 통해 복잡한 데이터를 직관적으로 전",
+          "lineSpacingPercent": 135000,
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left",
+            "lineSpacing": 1.35
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "본 서비스는 사용자 친화적인 인터페이스를 통해 복잡한 데이터를 직관적으로 전",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "alignment": "left",
+              "lineSpacing": 1.35
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "달합니다. 각 화면은 공공기관의 의사결정을 지원하기 위해 최적화된 레이아웃을",
+          "lineSpacingPercent": 135000,
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left",
+            "lineSpacing": 1.35
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "달합니다. 각 화면은 공공기관의 의사결정을 지원하기 위해 최적화된 레이아웃을",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "alignment": "left",
+              "lineSpacing": 1.35
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "제공합니다.",
+          "lineSpacingPercent": 135000,
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left",
+            "lineSpacing": 1.35
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "제공합니다.",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "alignment": "left",
+              "lineSpacing": 1.35
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1obq103u",
+      "id": "6",
+      "name": "dashboard-rail",
+      "bbox": [
+        107,
+        445,
+        0,
+        125
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 4
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/gn29sfm9",
+      "id": "7",
+      "name": "dashboard-title",
+      "bbox": [
+        140,
+        450,
+        371,
+        36
+      ],
+      "geometry": "rect",
+      "text": "메인 및 대시보드",
+      "textPreview": "메인 및 대시보드",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 22,
+        "typeface": "Noto Sans KR",
+        "color": "#004EA2",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "메인 및 대시보드"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "메인 및 대시보드",
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "메인 및 대시보드",
+              "fontSize": 22,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ri98vqlc",
+      "id": "8",
+      "name": "dashboard-body",
+      "bbox": [
+        140,
+        496,
+        365,
+        91
+      ],
+      "geometry": "rect",
+      "text": "지역 선택 기능과 방문객 수, 소비 현황 등 핵심 지\n표 위젯을 전면에 배치하여 즉각적인 통찰을 제공합\n니다.",
+      "textPreview": "지역 선택 기능과 방문객 수, 소비 현황 등 핵심 지 | 표 위젯을 전면에 배치하여 즉각적인 통찰을 제공합 | 니다.",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 17,
+        "typeface": "Noto Sans KR",
+        "color": "#6E747B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "지역 선택 기능과 방문객 수, 소비 현황 등 핵심 지"
+          },
+          {
+            "index": 2,
+            "text": "표 위젯을 전면에 배치하여 즉각적인 통찰을 제공합"
+          },
+          {
+            "index": 3,
+            "text": "니다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "지역 선택 기능과 방문객 수, 소비 현황 등 핵심 지",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "지역 선택 기능과 방문객 수, 소비 현황 등 핵심 지",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "표 위젯을 전면에 배치하여 즉각적인 통찰을 제공합",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "표 위젯을 전면에 배치하여 즉각적인 통찰을 제공합",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "니다.",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "니다.",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6h07ml47",
+      "id": "9",
+      "name": "analysis-rail",
+      "bbox": [
+        548,
+        445,
+        0,
+        125
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 4
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sza1wj65",
+      "id": "10",
+      "name": "analysis-title",
+      "bbox": [
+        582,
+        450,
+        371,
+        36
+      ],
+      "geometry": "rect",
+      "text": "분석 및 예측 화면",
+      "textPreview": "분석 및 예측 화면",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 22,
+        "typeface": "Noto Sans KR",
+        "color": "#004EA2",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "분석 및 예측 화면"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "분석 및 예측 화면",
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "분석 및 예측 화면",
+              "fontSize": 22,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/t0j25o7q",
+      "id": "11",
+      "name": "analysis-body",
+      "bbox": [
+        582,
+        496,
+        365,
+        91
+      ],
+      "geometry": "rect",
+      "text": "다각도 차트와 함께 머신러닝 기반의 미래 관광 수\n요 타임라인을 직관적인 UI로 시각화하여 제공합니\n다.",
+      "textPreview": "다각도 차트와 함께 머신러닝 기반의 미래 관광 수 | 요 타임라인을 직관적인 UI로 시각화하여 제공합니 | 다.",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 17,
+        "typeface": "Noto Sans KR",
+        "color": "#6E747B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "다각도 차트와 함께 머신러닝 기반의 미래 관광 수"
+          },
+          {
+            "index": 2,
+            "text": "요 타임라인을 직관적인 UI로 시각화하여 제공합니"
+          },
+          {
+            "index": 3,
+            "text": "다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "다각도 차트와 함께 머신러닝 기반의 미래 관광 수",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "다각도 차트와 함께 머신러닝 기반의 미래 관광 수",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "요 타임라인을 직관적인 UI로 시각화하여 제공합니",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "요 타임라인을 직관적인 UI로 시각화하여 제공합니",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "다.",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "다.",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6dsjutof",
+      "id": "12",
+      "name": "report-card",
+      "bbox": [
+        107,
+        630,
+        400,
+        132
+      ],
+      "geometry": "rect",
+      "fillColor": "#FFFFFF",
+      "lineColor": "#D7DEE5",
+      "lineWidth": 1
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7e1k3yp0",
+      "id": "13",
+      "name": "report-card-title",
+      "bbox": [
+        130,
+        657,
+        258,
+        30
+      ],
+      "geometry": "rect",
+      "text": "AI 리포트 및 챗봇",
+      "textPreview": "AI 리포트 및 챗봇",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 17,
+        "typeface": "Noto Sans KR",
+        "color": "#00C1D4",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "AI 리포트 및 챗봇"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "AI 리포트 및 챗봇",
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#00C1D4",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "AI 리포트 및 챗봇",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#00C1D4",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kbq1sj69",
+      "id": "14",
+      "name": "report-card-body",
+      "bbox": [
+        130,
+        696,
+        326,
+        27
+      ],
+      "geometry": "rect",
+      "text": "가독성 높은 전략 텍스트 및",
+      "textPreview": "가독성 높은 전략 텍스트 및",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Noto Sans KR",
+        "color": "#4F555B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "가독성 높은 전략 텍스트 및"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "가독성 높은 전략 텍스트 및",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "가독성 높은 전략 텍스트 및",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/lcz21o7u",
+      "id": "15",
+      "name": "report-card-orange",
+      "bbox": [
+        130,
+        725,
+        292,
+        27
+      ],
+      "geometry": "rect",
+      "text": "자연어 대화형 인터페이스",
+      "textPreview": "자연어 대화형 인터페이스",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Noto Sans KR",
+        "color": "#FF6B00",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "자연어 대화형 인터페이스"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "자연어 대화형 인터페이스",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#FF6B00",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "자연어 대화형 인터페이스",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#FF6B00",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/y98jq9o3",
+      "id": "16",
+      "name": "map-card",
+      "bbox": [
+        537,
+        630,
+        401,
+        132
+      ],
+      "geometry": "rect",
+      "fillColor": "#FFFFFF",
+      "lineColor": "#D7DEE5",
+      "lineWidth": 1
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/jahkzepo",
+      "id": "17",
+      "name": "map-card-title",
+      "bbox": [
+        562,
+        657,
+        258,
+        30
+      ],
+      "geometry": "rect",
+      "text": "지도 서비스 기획",
+      "textPreview": "지도 서비스 기획",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 17,
+        "typeface": "Noto Sans KR",
+        "color": "#00C1D4",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "지도 서비스 기획"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "지도 서비스 기획",
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#00C1D4",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "지도 서비스 기획",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#00C1D4",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/47ul436d",
+      "id": "18",
+      "name": "map-card-body",
+      "bbox": [
+        562,
+        696,
+        326,
+        27
+      ],
+      "geometry": "rect",
+      "text": "카카오맵 기반 핫플레이스",
+      "textPreview": "카카오맵 기반 핫플레이스",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Noto Sans KR",
+        "color": "#4F555B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "카카오맵 기반 핫플레이스"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "카카오맵 기반 핫플레이스",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "카카오맵 기반 핫플레이스",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 19,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/p832d87y",
+      "id": "19",
+      "name": "map-card-orange",
+      "bbox": [
+        562,
+        725,
+        292,
+        27
+      ],
+      "geometry": "rect",
+      "text": "관광지 클러스터링 시각화",
+      "textPreview": "관광지 클러스터링 시각화",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Noto Sans KR",
+        "color": "#FF6B00",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "관광지 클러스터링 시각화"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "관광지 클러스터링 시각화",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#FF6B00",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "관광지 클러스터링 시각화",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#FF6B00",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

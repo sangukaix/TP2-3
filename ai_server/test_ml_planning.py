@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import unittest
+from datetime import date
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
@@ -60,7 +61,7 @@ class MlValidationTest(unittest.TestCase):
 
     def test_unknown_schedule_compares_three_and_six_months(self) -> None:
         """일정 미정은 3·6개월 후보를 모두 계산해 Agent가 근거로 선택하게 합니다."""
-        result = build_planning_ml_evidence('11680', '서울특별시 강남구')
+        result = build_planning_ml_evidence('11680', '서울특별시 강남구', as_of_date=date(2026, 8, 1))
         self.assertEqual(result.status, 'available')
         self.assertEqual(len(result.forecasts), 6)
         self.assertTrue(result.source_id.startswith('ml:11680:'))
@@ -69,6 +70,18 @@ class MlValidationTest(unittest.TestCase):
         self.assertEqual(result.horizon_policy['selection_basis'], 'unknown_compare_3_and_6_months')
         self.assertEqual([window['months'] for window in result.horizon_policy['decision_windows']], [3, 6])
         self.assertGreater(result.forecasts[0].navigation_searches, 0)
+
+    def test_model_and_horizon_reliability_are_separate(self) -> None:
+        """숫자가 생성됐다고 기준선보다 우수하다고 포장하지 않습니다."""
+        result = build_planning_ml_evidence('11680', '서울특별시 강남구', as_of_date=date(2026, 9, 2))
+        metrics = result.evaluation['metrics']
+        for signal in result.signals:
+            self.assertEqual(signal['model_reliability'], metrics[signal['metric']]['model_reliability'])
+        for metric in metrics.values():
+            if metric['test_mae'] > metric['baseline_test_mae']:
+                self.assertEqual(metric['model_reliability'], 'below_baseline_on_test')
+            if metric['selected_model'].startswith('seasonal_naive'):
+                self.assertEqual(metric['model_reliability'], 'seasonal_baseline')
 
     def test_user_schedule_predicts_through_requested_end_month(self) -> None:
         """희망 기간이 뒤에서 시작해도 시작월이 아니라 종료월까지 예측해 필요한 월만 집계합니다."""
@@ -83,7 +96,7 @@ class MlValidationTest(unittest.TestCase):
 
     def test_horizon_policy_marks_months_after_three_as_exploratory(self) -> None:
         """6개월 계산을 3개월 재귀 검증과 같은 정확도로 포장하지 않는지 확인합니다."""
-        policy = resolve_planning_horizon(None, '202607')
+        policy = resolve_planning_horizon(None, '202607', as_of_date=date(2026, 8, 1))
         self.assertEqual(policy.forecast_horizon_months, 6)
         self.assertEqual(policy.decision_windows[0].reliability, 'short_term_backtested')
         self.assertEqual(policy.decision_windows[1].reliability, 'exploratory_longer_horizon')

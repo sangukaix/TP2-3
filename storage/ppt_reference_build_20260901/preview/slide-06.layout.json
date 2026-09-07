@@ -1,0 +1,84 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/kwtaw5",
+    "id": "kwtaw5",
+    "slide": 6,
+    "layoutId": "9d660734-37cf-4950-878e-422213d4b0c0",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "4fbd39b1-634b-4c86-a064-b443514441ef",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#FFFFFF",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1600,
+      "height": 900
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    }
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "9d660734-37cf-4950-878e-422213d4b0c0",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "4fbd39b1-634b-4c86-a064-b443514441ef",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "4fbd39b1-634b-4c86-a064-b443514441ef",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/8b6l8b6t",
+      "id": "1",
+      "name": "reference-slide-06",
+      "bbox": [
+        0,
+        0,
+        1600,
+        900
+      ],
+      "alt": "사용자 제공 관광 전략 PPT 참고 시안 6페이지",
+      "contentType": "image/png",
+      "imageFit": "fill",
+      "asset": {
+        "assetId": "20458e03-e9f0-4c26-8144-8214fc31049a",
+        "contentType": "image/png",
+        "byteLength": 582902
+      }
+    }
+  ],
+  "composeRuns": []
+}

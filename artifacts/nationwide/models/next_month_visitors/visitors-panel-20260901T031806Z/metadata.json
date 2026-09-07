@@ -1,0 +1,25 @@
+{
+  "model_version": "visitors-panel-20260901T031806Z",
+  "target": "next_month_visitors",
+  "model_name": "random_forest_seasonal_residual",
+  "decision_status": "rejected",
+  "artifact_file": "model.joblib",
+  "artifact_sha256": "32f85735f90cadf63b39d13af1ebb7a88f34c3dff95e2bfdd9fabdc3a7cd7c55",
+  "training_start_month": "2025-01",
+  "training_end_month": "2025-06",
+  "supported_region_count": 131,
+  "feature_count": 13,
+  "limitations": [
+    "지역코드는 관광데이터랩 내부 후보이며 공식 코드표 최종 승인이 필요함",
+    "테스트 기간이 6개월이므로 장기 일반화 성능을 보장하지 않음",
+    "예측값은 인과 효과나 사업 성과 보장값이 아님"
+  ],
+  "libraries": {
+    "python": "3.12.13",
+    "numpy": "2.5.2",
+    "pandas": "3.0.5",
+    "scikit_learn": "1.9.0",
+    "joblib": "1.6.0"
+  },
+  "created_at_utc": "2026-09-01T03:18:06.247552+00:00"
+}

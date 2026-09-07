@@ -14,10 +14,17 @@ from typing import Any
 from .case_study_agent import CaseStudyAgent
 from .evidence_agent import EvidenceAgent
 from .plan_quality_gate import build_plan_quality_precheck, merge_quality_precheck
+from .planning_requirements import (
+    QUALITY_CONTRACT_VERSION, build_completion_checklist, candidate_delivery_issues,
+)
 from ..openai_responses import OpenAIResponseError
+from ..evidence_sources import merge_evidence_sources
+from ..llm.errors import LLMProviderError
+from ..llm.router import LLMRouter
 from .planner_agent import PlannerAgent
 from .reviewer_agent import ReviewerAgent
 from .transferability_agent import TransferabilityAgent
+from .decision_facts import build_decision_facts
 from ...ml.planning_evidence import build_planning_ml_evidence
 
 
@@ -25,7 +32,17 @@ from ...ml.planning_evidence import build_planning_ml_evidence
 # 기획 작성과 품질 검수는 매번 새로 실행하므로 보고서 품질 검증 과정은 생략되지 않습니다.
 _EVIDENCE_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
 _CASE_STUDY_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
+# 지역 맞춤 사례 조사 관점·후보 다양성 계약을 바꾸면 같은 서버 안의 기존 조사 캐시도 재사용하지 않습니다.
+RESEARCH_CONTRACT_VERSION = '2026-09-07-nationwide-execution-evidence-v3'
 LOGGER = logging.getLogger(__name__)
+
+
+def _rag_registry_hash(agent: Any, filename: str) -> str:
+    """검수 RAG 레지스트리가 바뀌면 짧은 조사 캐시도 즉시 무효화합니다."""
+    if not hasattr(agent, 'project_root'):
+        return ''
+    path = agent.project_root / 'data' / 'rag' / filename
+    return sha256(path.read_bytes()).hexdigest() if path.exists() else ''
 
 
 async def _run_openai_stage(stage_code: str, stage_label: str, awaitable: Any) -> Any:
@@ -34,7 +51,7 @@ async def _run_openai_stage(stage_code: str, stage_label: str, awaitable: Any) -
     LOGGER.info('Strategy Agent stage started: %s', stage_code)
     try:
         result = await awaitable
-    except OpenAIResponseError as exc:
+    except (OpenAIResponseError, LLMProviderError) as exc:
         LOGGER.warning(
             'Strategy Agent stage failed: %s code=%s duration_ms=%s',
             stage_code, exc.code, round((perf_counter() - started) * 1000),
@@ -60,6 +77,8 @@ def _evidence_cache_key(
     planning_brief: dict[str, Any] | None = None,
 ) -> str:
     relevant_settings = {
+        'contract_version': RESEARCH_CONTRACT_VERSION,
+        'routing': getattr(agent, 'llm_router', None).public_config() if getattr(agent, 'llm_router', None) else None,
         'region_code': region_code,
         'snapshot': snapshot,
         'planning_brief': planning_brief,
@@ -71,6 +90,11 @@ def _evidence_cache_key(
         'chroma_directory': env_values.get('CHROMA_PERSIST_DIRECTORY'),
         # 테스트 대역과 실제 Agent가 같은 캐시를 공유하지 않게 합니다.
         'agent_type': f'{type(agent).__module__}.{type(agent).__qualname__}',
+        'case_registry_hash': _rag_registry_hash(agent, 'official_case_studies.jsonl'),
+        # 정책·지표 해석 PDF를 새로 등록하면 이전 1시간 근거 캐시를 재사용하지 않습니다.
+        'reference_registry_hash': _rag_registry_hash(agent, 'official_reference_documents.jsonl'),
+        # 원문 페이지 청크도 실제 RAG 입력이므로 재생성·보완하면 근거 캐시를 즉시 비웁니다.
+        'reference_chunk_registry_hash': _rag_registry_hash(agent, 'official_reference_chunks.jsonl'),
     }
     serialized = json.dumps(relevant_settings, ensure_ascii=False, sort_keys=True, default=str)
     return sha256(serialized.encode('utf-8')).hexdigest()
@@ -98,7 +122,7 @@ async def _collect_evidence(
         return deepcopy(cached[1]), True
 
     evidence_pack = await agent.collect(region_code=region_code, snapshot=snapshot, planning_brief=planning_brief)
-    if ttl_seconds:
+    if ttl_seconds and not any(row.get('status') == 'failed' for row in evidence_pack.get('trace') or []):
         # 오래된 항목을 함께 정리해 개발 서버에서 캐시가 계속 커지지 않게 합니다.
         expired_keys = [key for key, (created_at, _) in _EVIDENCE_CACHE.items() if now - created_at >= ttl_seconds]
         for key in expired_keys:
@@ -116,10 +140,16 @@ def _case_study_cache_key(
     planning_brief: dict[str, Any] | None = None,
 ) -> str:
     relevant_settings = {
+        'contract_version': RESEARCH_CONTRACT_VERSION,
+        'routing': getattr(agent, 'llm_router', None).public_config() if getattr(agent, 'llm_router', None) else None,
         'region_code': region_code,
         'snapshot': snapshot,
         'planning_brief': planning_brief,
         'case_research_model': env_values.get('OPENAI_CASE_RESEARCH_MODEL'),
+        'case_registry_hash': _rag_registry_hash(agent, 'official_case_studies.jsonl'),
+        # Case Scout도 같은 RAG 참고문서를 받아 적용 조건을 판별하므로 별도 캐시를 무효화합니다.
+        'reference_registry_hash': _rag_registry_hash(agent, 'official_reference_documents.jsonl'),
+        'reference_chunk_registry_hash': _rag_registry_hash(agent, 'official_reference_chunks.jsonl'),
         'research_model': env_values.get('OPENAI_RESEARCH_MODEL'),
         'web_enabled': env_values.get('ENABLE_CASE_STUDY_WEB_RESEARCH'),
         'allowed_domains': env_values.get('TOURISM_ALLOWED_RESEARCH_DOMAINS'),
@@ -153,7 +183,8 @@ async def _collect_case_studies(
         return deepcopy(cached[1]), True
 
     case_pack = await agent.collect(region_code=region_code, snapshot=snapshot, planning_brief=planning_brief)
-    if ttl_seconds:
+    # 한 번의 통신 오류를 6시간 캐시해 다음 기획에도 자료가 빠지는 일을 막습니다.
+    if ttl_seconds and not any(row.get('status') == 'failed' for row in case_pack.get('trace') or []):
         expired_keys = [key for key, (created_at, _) in _CASE_STUDY_CACHE.items() if now - created_at >= ttl_seconds]
         for key in expired_keys:
             _CASE_STUDY_CACHE.pop(key, None)
@@ -178,6 +209,11 @@ async def orchestrate_strategy_report(
     ).strip()
     review_model = str(env_values.get('OPENAI_REVIEW_MODEL') or report_model).strip()
     trace: list[dict[str, Any]] = []
+    # Agent는 Provider를 고르지 않고 Router에 요청만 전달합니다. 실행 당시 설정은 trace에 고정합니다.
+    llm_router = LLMRouter(project_root=project_root, env_values=env_values)
+    trace.append({'agent': 'llm_router', 'stage': 'routing_snapshot', 'status': 'completed',
+                  'routing': llm_router.public_config(), 'effective_routes': llm_router.effective_routes()})
+    await _run_openai_stage('local_preflight', '로컬 모델 연결 확인', llm_router.preflight_local_models())
 
     # OpenAI가 개입하기 전에 저장 모델로 숫자를 계산합니다. 원본 snapshot·사용자 조건은 변경하지 않습니다.
     snapshot = deepcopy(snapshot)
@@ -185,13 +221,14 @@ async def orchestrate_strategy_report(
         build_planning_ml_evidence, region_code, snapshot['region_name'], planning_brief,
     )
     snapshot['ml_analysis'] = ml_evidence.model_dump(mode='json')
+    snapshot['decision_facts'] = build_decision_facts(snapshot)
     trace.append({'agent': 'ml', 'stage': 'forecast_evidence', 'status': ml_evidence.status,
                   'reason_code': ml_evidence.reason_code,
                   'forecast_horizon_months': ml_evidence.horizon_policy.get('forecast_horizon_months'),
                   'selection_basis': ml_evidence.horizon_policy.get('selection_basis')})
 
-    evidence_agent = EvidenceAgent(project_root=project_root, env_values=env_values)
-    case_study_agent = CaseStudyAgent(project_root=project_root, env_values=env_values)
+    evidence_agent = EvidenceAgent(project_root=project_root, env_values=env_values, llm_router=llm_router)
+    case_study_agent = CaseStudyAgent(project_root=project_root, env_values=env_values, llm_router=llm_router)
     started = perf_counter()
     evidence_result, case_result = await asyncio.gather(
         _run_openai_stage('evidence', '지역 근거 조사', _collect_evidence(
@@ -217,6 +254,7 @@ async def orchestrate_strategy_report(
     case_pack, case_cache_hit = case_result
     trace.extend(evidence_pack.pop('trace', []))
     trace.extend(case_pack.pop('trace', []))
+    trace.extend(llm_router.consume_trace())
     trace.append({
         'agent': 'evidence',
         'stage': 'cache' if evidence_cache_hit else 'complete',
@@ -231,14 +269,15 @@ async def orchestrate_strategy_report(
     })
 
     evidence_pack['benchmark_cases'] = case_pack.get('benchmark_cases') or []
+    evidence_pack['case_search_policy'] = case_pack.get('case_search_policy') or {}
+    evidence_pack['case_search_coverage'] = case_pack.get('case_search_coverage') or {}
     evidence_pack['research_gaps'] = list(dict.fromkeys([
         *(evidence_pack.get('research_gaps') or []),
         *(case_pack.get('research_gaps') or []),
     ]))
-    sources = [*(evidence_pack.get('sources') or []), *(case_pack.get('sources') or [])]
-    evidence_pack['sources'] = list({
-        str(source['source_id']): source for source in sources if source.get('source_id')
-    }.values())
+    evidence_pack['sources'] = merge_evidence_sources(
+        evidence_pack.get('sources') or [], case_pack.get('sources') or [],
+    )
 
     transfer_model = str(
         env_values.get('OPENAI_TRANSFER_MODEL')
@@ -246,13 +285,52 @@ async def orchestrate_strategy_report(
         or env_values.get('OPENAI_MODEL')
         or 'gpt-5.6'
     ).strip()
+    evidence_pack['quality_contract_version'] = QUALITY_CONTRACT_VERSION
     started = perf_counter()
     transfer_assessment = await _run_openai_stage(
         'transferability',
         '지역 적용 가능성 검토',
-        TransferabilityAgent(api_key=api_key, model=transfer_model).assess(evidence_pack=evidence_pack),
+        TransferabilityAgent(api_key=api_key, model=transfer_model, llm_router=llm_router).assess(evidence_pack=evidence_pack),
     )
+    trace.extend(llm_router.consume_trace())
+    # 저장된 사례가 실제 지역 문제에 부족하다고 Qwen이 판단한 경우에만 공식 웹 보강 1회를 허용합니다.
+    if (llm_router.local_first and not llm_router.student_budget
+            and transfer_assessment.get('selection_status') == 'needs_evidence' and not case_pack.get('web_research_attempted')):
+        augmented = await _run_openai_stage('case_scout_supplement', '부족한 공식 사례 보강', case_study_agent.collect(
+            region_code=region_code, snapshot=snapshot, planning_brief=planning_brief, force_web=True,
+        ))
+        trace.extend(augmented.pop('trace', []))
+        trace.extend(llm_router.consume_trace())
+        previous_cases = {row['source_id']: row for row in evidence_pack['benchmark_cases']}
+        previous_cases.update({row['source_id']: row for row in augmented.get('benchmark_cases') or []})
+        evidence_pack['benchmark_cases'] = list(previous_cases.values())
+        evidence_pack['case_search_policy'] = augmented.get('case_search_policy') or evidence_pack.get('case_search_policy', {})
+        evidence_pack['case_search_coverage'] = augmented.get('case_search_coverage') or evidence_pack.get('case_search_coverage', {})
+        evidence_pack['sources'] = merge_evidence_sources(
+            evidence_pack['sources'], augmented.get('sources') or [],
+        )
+        evidence_pack['research_gaps'] = list(dict.fromkeys(evidence_pack['research_gaps'] + augmented.get('research_gaps', [])))
+        if augmented.get('web_research_attempted') and augmented.get('benchmark_cases'):
+            transfer_assessment = await _run_openai_stage('transferability_recheck', '보강 사례 적용성 재검토',
+                TransferabilityAgent(api_key=api_key, model=transfer_model, llm_router=llm_router).assess(evidence_pack=evidence_pack))
     evidence_pack['transfer_assessment'] = transfer_assessment
+    # 본문 작성자는 후보 선정 JSON을 고칠 수 없다. 작성 가능한 누락이 있을 때만 Qwen에게
+    # 보유 근거로 1회 보완시킨다. 새 검색/유료 폴백/무제한 재시도는 하지 않는다.
+    candidate_issues = candidate_delivery_issues(evidence_pack, transfer_assessment)
+    if llm_router.local_first and candidate_issues and len(evidence_pack.get('benchmark_cases') or []) >= 2:
+        try:
+            repaired = await TransferabilityAgent(api_key=api_key, model=transfer_model, llm_router=llm_router).assess(
+                evidence_pack=evidence_pack, revision_feedback=candidate_issues,
+            )
+        except (OpenAIResponseError, LLMProviderError) as exc:
+            trace.append({'agent': 'transferability', 'stage': 'candidate_repair', 'status': 'failed', 'error_code': exc.code})
+        else:
+            transfer_assessment = repaired
+            evidence_pack['transfer_assessment'] = repaired
+            trace.append({'agent': 'transferability', 'stage': 'candidate_repair', 'status': 'completed',
+                          'remaining_issues': len(candidate_delivery_issues(evidence_pack, repaired)),
+                          'selection_status': repaired.get('selection_status')})
+        trace.extend(llm_router.consume_trace())
     trace.append({
         'agent': 'transferability',
         'stage': 'assessment',
@@ -260,28 +338,34 @@ async def orchestrate_strategy_report(
         'recommended_cases': len(transfer_assessment.get('recommended_case_ids') or []),
         'duration_ms': round((perf_counter() - started) * 1000),
     })
+    trace.extend(llm_router.consume_trace())
 
-    planner = PlannerAgent(api_key=api_key, model=report_model, report_schema=report_schema)
-    reviewer = ReviewerAgent(api_key=api_key, model=review_model)
+    planner = PlannerAgent(api_key=api_key, model=report_model, report_schema=report_schema, llm_router=llm_router)
+    reviewer = ReviewerAgent(api_key=api_key, model=review_model, llm_router=llm_router)
 
     started = perf_counter()
     draft = await _run_openai_stage('planner_draft', '기획안 초안 작성', planner.write(evidence_pack))
     trace.append({'agent': 'planner', 'stage': 'draft', 'status': 'completed', 'duration_ms': round((perf_counter() - started) * 1000)})
+    trace.extend(llm_router.consume_trace())
 
     started = perf_counter()
     precheck = build_plan_quality_precheck(evidence_pack, draft)
-    review = await _run_openai_stage(
-        'reviewer_first',
-        '기획안 1차 검수',
-        reviewer.review(
-            evidence_pack=evidence_pack, draft_report=draft, deterministic_precheck=precheck,
-        ),
-    )
-    review = merge_quality_precheck(review, precheck)
-    trace.append({'agent': 'reviewer', 'stage': 'first_review', 'status': 'completed', 'score': review['overall_score'], 'duration_ms': round((perf_counter() - started) * 1000)})
+    review_failed = False
+    try:
+        review = await reviewer.review(evidence_pack=evidence_pack, draft_report=draft, deterministic_precheck=precheck)
+    except (OpenAIResponseError, LLMProviderError) as exc:
+        # 작성 이후 연결이 끊겨도 초안을 버리지 않습니다. 검수 실패를 점수나 승인으로 위장하지 않습니다.
+        review_failed = True
+        review = {'approved': False, 'overall_score': 0, 'dimension_scores': {}, 'strengths': [], 'issues': [],
+                  'review_error_code': exc.code, 'summary': '1차 검수를 완료하지 못했습니다. 초안은 보존했으며 품질 점수는 미평가입니다.'}
+        trace.append({'agent': 'reviewer', 'stage': 'first_review', 'status': 'failed', 'error_code': exc.code})
+    else:
+        review = merge_quality_precheck(review, precheck)
+        trace.append({'agent': 'reviewer', 'stage': 'first_review', 'status': 'completed', 'score': review['overall_score'], 'duration_ms': round((perf_counter() - started) * 1000)})
+    trace.extend(llm_router.consume_trace())
 
     revised = False
-    if not review['approved']:
+    if not review['approved'] and not review_failed:
         revised = True
         original_draft = draft
         started = perf_counter()
@@ -291,7 +375,7 @@ async def orchestrate_strategy_report(
                 revision_feedback=review,
                 previous_draft=original_draft,
             )
-        except OpenAIResponseError as exc:
+        except (OpenAIResponseError, LLMProviderError) as exc:
             # 외부 모델이 수정 요청을 거절하거나 지연되어도 검수되지 않은 결과를 승인하거나
             # API 전체를 실패시키지 않고, 기존 초안과 실패한 검수 상태를 그대로 반환합니다.
             draft = original_draft
@@ -306,15 +390,17 @@ async def orchestrate_strategy_report(
             })
         else:
             trace.append({'agent': 'planner', 'stage': 'revision', 'status': 'completed', 'duration_ms': round((perf_counter() - started) * 1000)})
+            trace.extend(llm_router.consume_trace())
 
             started = perf_counter()
             try:
                 precheck = build_plan_quality_precheck(evidence_pack, draft)
                 review = await reviewer.review(
                     evidence_pack=evidence_pack, draft_report=draft, deterministic_precheck=precheck,
+                    final_pass=not llm_router.local_first,
                 )
                 review = merge_quality_precheck(review, precheck)
-            except OpenAIResponseError as exc:
+            except (OpenAIResponseError, LLMProviderError) as exc:
                 review['approved'] = False
                 review['final_review_error_code'] = exc.code
                 trace.append({
@@ -325,10 +411,43 @@ async def orchestrate_strategy_report(
                     'duration_ms': round((perf_counter() - started) * 1000),
                 })
             else:
-                trace.append({'agent': 'reviewer', 'stage': 'final_review', 'status': 'completed', 'score': review['overall_score'], 'duration_ms': round((perf_counter() - started) * 1000)})
+                trace.append({'agent': 'reviewer', 'stage': 'local_recheck' if llm_router.local_first else 'final_review', 'status': 'completed', 'score': review['overall_score'], 'duration_ms': round((perf_counter() - started) * 1000)})
+                trace.extend(llm_router.consume_trace())
+
+    if llm_router.local_first:
+        review['final_audit_completed'] = False
+        if review.get('approved'):
+            started = perf_counter()
+            local_review = deepcopy(review)
+            try:
+                precheck = build_plan_quality_precheck(evidence_pack, draft)
+                audit_pack = {**evidence_pack, 'local_review_findings': local_review}
+                review = await reviewer.review(evidence_pack=audit_pack, draft_report=draft,
+                                               deterministic_precheck=precheck, final_pass=True)
+                review = merge_quality_precheck(review, precheck)
+                review['final_audit_completed'] = True
+                trace.append({'agent': 'reviewer', 'stage': 'cloud_final_audit', 'status': 'completed',
+                              'score': review['overall_score'], 'duration_ms': round((perf_counter() - started) * 1000)})
+            except (OpenAIResponseError, LLMProviderError) as exc:
+                review = local_review
+                review.update({'approved': False, 'final_audit_completed': False, 'final_review_error_code': exc.code,
+                               'summary': '로컬 사전 검수 후 독립 최종 검수를 완료하지 못했습니다. 집행 승인 상태가 아닙니다.'})
+        else:
+            trace.append({'agent': 'reviewer', 'stage': 'cloud_final_audit', 'status': 'skipped',
+                          'reason': 'local_quality_gate_not_passed'})
 
     review['revised_once'] = revised
+    # LLM에는 상위 8개만 보내지만 화면에는 코드 점검 전체와 구체적인 보완 목록을 남긴다.
+    all_checks = build_plan_quality_precheck(evidence_pack, draft, limit=None)
+    review['validation_findings'] = all_checks['issues']
+    review['quality_contract_version'] = QUALITY_CONTRACT_VERSION
+    review['completion_checklist'] = build_completion_checklist(
+        {**review, 'issues': [*(review.get('issues') or []), *all_checks['issues']]}, evidence_pack, draft,
+    )
+    # 실패한 폴백도 마지막까지 남기되 첨부 본문은 저장하지 않습니다.
+    trace.extend(llm_router.consume_trace())
     return {
+        'planning_decision': transfer_assessment,
         'ml_analysis': snapshot['ml_analysis'],
         'report': draft,
         'quality_review': review,

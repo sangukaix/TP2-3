@@ -30,6 +30,37 @@
 
 현재 평가표는 모델 등록이 아닙니다. 데이터가 짧은 지역에 강남 모델을 복사하거나, 평가하지 않은 예측을 기획 근거로 쓰지 않기 위한 품질 게이트입니다.
 
+## 직접 CSV snapshot의 전국 비교 보강
+
+관광데이터랩 원본이 category ZIP이 아니라 연도별 직접 CSV로 보관된 지역은
+`tools/build_direct_csv_staging.py`를 사용한다. 이 도구는 ML 학습표를 재사용하지 않고,
+materialization manifest의 SHA-256을 확인한 뒤 연인원·내/외지인 소비·순 방문자·숙박·체류의
+9개 공식 표를 표준 staging schema로 변환한다. 따라서 전국 비교의 `visitors`(연인원)를
+ML target의 `visitors`(순 방문자)로 바꾸는 일이 없다.
+
+예: 계양구를 기존 전국 staging에 추가하는 재현 절차는 아래와 같다. 기존 파일은 primary로
+유지하고, `merge_monthly_staging.py`가 충돌을 audit한다. import는 기본 dry-run이며,
+검증이 끝난 뒤에만 `--apply`를 명시한다.
+
+```powershell
+.\backend\.venv\Scripts\python.exe -m data_pipeline.tools.build_direct_csv_staging `
+  --region-code 28245 `
+  --snapshot-manifest data/interim/local_source_snapshot/20260904_incheon/local_source_snapshot_manifest.csv `
+  --output-dir data/processed/nationwide/local_snapshot_staging/28245
+
+.\backend\.venv\Scripts\python.exe -m data_pipeline.tools.merge_monthly_staging `
+  --primary data/processed/nationwide/merged_nationwide_staging/tourism_monthly_staging.csv `
+  --secondary data/processed/nationwide/local_snapshot_staging/28245/tourism_monthly_staging.csv `
+  --output-dir data/processed/nationwide/merged_with_local_snapshot_20260904
+
+.\backend\.venv\Scripts\python.exe -m data_pipeline.tools.build_planning_context `
+  --input-csv data/processed/nationwide/merged_with_local_snapshot_20260904/tourism_monthly_staging.csv `
+  --output-dir data/processed/nationwide/planning_context_with_local_snapshot_20260904
+```
+
+MySQL delta bundle과 `--apply` 적재 명령은 데이터 출처·행 수·conflict audit을 확인한 뒤에만
+실행한다. 실행 결과와 해석 경계는 `docs/DATA_SOURCE_USAGE.md`의 직접 CSV snapshot 항목에 남긴다.
+
 ## 검증
 
 프로젝트 루트에서 다음 명령으로 전국 파이프라인 테스트를 실행한다.

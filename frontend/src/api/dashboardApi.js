@@ -164,6 +164,25 @@ export async function getAiRegionDashboard(regionCode, regionName) {
 }
 
 /**
+ * 새 기획안을 만들기 전에 마지막 확정 관측월과 ML 재학습 필요 여부를 확인합니다.
+ * 이 조회는 대시보드·저장 기획안을 바꾸지 않으며 LLM/OpenAI를 호출하지 않습니다.
+ */
+export async function getStrategyGenerationReadiness(regionCode, regionName) {
+  const params = new URLSearchParams({ region_name: regionName })
+  const response = await fetch(`/ai/v1/demo/${regionCode}/generation-readiness?${params}`)
+  const result = await response.json().catch(() => null)
+  if (!response.ok) throw new Error(result?.detail?.message || '기획안 생성에 필요한 데이터 최신성을 확인하지 못했습니다.')
+  return result
+}
+
+/** 서버가 검증·학습 완료한 지역 목록입니다. 프론트엔드에 목록을 중복 관리하지 않습니다. */
+export async function getAiRegionCatalog() {
+  const response = await fetch('/ai/v1/regions/catalog')
+  if (!response.ok) throw new Error('분석 가능한 지역 목록을 불러오지 못했습니다.')
+  return response.json()
+}
+
+/**
  * 지역 상세 팝업의 관광자원 정보입니다.
  * 인증키는 AI 서버 .env에서만 읽으며, 이 호출은 OpenAI를 사용하지 않습니다.
  */

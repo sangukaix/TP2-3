@@ -86,7 +86,7 @@ def load_nationwide_comparison(region_code: str, env_values: dict[str, Any]) -> 
             if source_ids:
                 placeholders = ",".join(["%s"] * len(source_ids))
                 cursor.execute(
-                    f"SELECT source_id, source_name, source_page_url, date_range FROM data_source WHERE source_id IN ({placeholders})",
+                    f"SELECT source_id, source_name, file_name, source_page_url, date_range FROM data_source WHERE source_id IN ({placeholders})",
                     source_ids,
                 )
                 source_rows = cursor.fetchall()
@@ -130,11 +130,18 @@ def load_nationwide_comparison(region_code: str, env_values: dict[str, Any]) -> 
         "source_records": [
             {
                 "source_id": row["source_id"],
-                "title": row["source_name"],
+                "title": f"{row['source_name']} · {row['file_name']}" if row.get('file_name') else row['source_name'],
                 "source_url": row["source_page_url"] or "https://datalab.visitkorea.or.kr/",
                 "date_range": row["date_range"] or "",
             }
             for row in source_rows
         ],
-        "limitation": "관측된 12개월 비교와 유사 지표 거리다. 정책 실행 효과·전국 평균·인과관계를 뜻하지 않는다.",
+        "metric_definitions": {
+            "spend_per_visitor_krw": {
+                "label": "관광소비/방문지표 비율",
+                "population_alignment_verified": False,
+                "usage": "서로 다른 집계표의 비율이다. 표본 일치 검증 전에는 실제 관광객 1인의 평균 결제액·객단가로 해석하지 않는다.",
+            },
+        },
+        "limitation": "관측된 12개월 비교와 유사 지표 거리다. 정책 실행 효과·전국 평균·인과관계를 뜻하지 않는다. 소비/방문 비율의 분자·분모 표본 일치는 미검증이다.",
     }

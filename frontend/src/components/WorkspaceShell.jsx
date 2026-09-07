@@ -32,6 +32,8 @@ export default function WorkspaceShell({ children }) {
               ? 'OpenAI · Agent AI 구조'
               : currentPath === '/react-test'
                 ? 'React · Vite 구조'
+                : currentPath === '/llm-control'
+                  ? 'AI Router · LLM Control Center'
           : '지역관광 전략 업무공간'
 
   return (

@@ -4,11 +4,17 @@ from __future__ import annotations
 
 from collections import Counter
 from pathlib import Path
+import sys
 
 from ..case_registry import load_curated_case_registry
 
 
 def main() -> None:
+    # Windows PowerShell 기본 CP949에서도 공식 사례명·지역명이 깨지지 않게 한다.
+    try:
+        sys.stdout.reconfigure(encoding='utf-8', errors='backslashreplace')
+    except (AttributeError, OSError):
+        pass
     project_root = Path(__file__).resolve().parents[3]
     path = project_root / 'data' / 'rag' / 'official_case_studies.jsonl'
     cards = load_curated_case_registry(path)
@@ -20,4 +26,3 @@ def main() -> None:
 
 if __name__ == '__main__':
     main()
-

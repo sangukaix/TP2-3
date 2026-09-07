@@ -70,17 +70,20 @@ def _sample_report() -> dict:
 class ProposalPresentationTest(unittest.TestCase):
     """PPT 다운로드가 서버에서 재현 가능한지 확인합니다."""
 
-    def test_generates_eight_slide_strategy_deck(self) -> None:
+    def test_generates_twelve_slide_strategy_deck(self) -> None:
         output = create_strategy_proposal_presentation(_sample_report())
         presentation = Presentation(output)
-        self.assertEqual(len(presentation.slides), 8)
+        self.assertGreaterEqual(len(presentation.slides), 12)
         all_text = '\n'.join(
             shape.text
             for slide in presentation.slides
             for shape in slide.shapes
             if hasattr(shape, 'text')
         )
-        for label in ('핵심 판단과 제안', '문제와 기회', 'ML 자연추세', '5단계 실행 로드맵', '주요 공식 출처'):
+        for label in (
+            '야간 체류와 상권 소비', '핵심 기획', '실행 가이드', '자연추세',
+            '견적', '시범사업 이후', '근거·데이터', '머신러닝 예측치', '감사합니다',
+        ):
             self.assertIn(label, all_text)
 
 

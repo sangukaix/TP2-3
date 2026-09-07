@@ -12,6 +12,9 @@ from .region_catalog import PROJECT_ROOT, RegionDataCatalogEntry
 from .regional_datalab_data import StandardDatalabRegion, load_standard_datalab_monthly_demand, write_standard_datalab_dataset
 
 
+STANDARD_DATALAB_ADAPTER_TYPES = {'standard_datalab_csv', 'standard_datalab_archive'}
+
+
 @dataclass(frozen=True)
 class StandardPipelineFunctions:
     """등록표가 필요한 학습·예측·이력 함수의 묶음입니다."""
@@ -22,8 +25,8 @@ class StandardPipelineFunctions:
 
 
 def build_standard_pipeline_functions(entry: RegionDataCatalogEntry) -> StandardPipelineFunctions:
-    """카탈로그의 표준 CSV 지역을 코드 복사 없이 ML 공통 알고리즘에 연결합니다."""
-    if entry.adapter_type != 'standard_datalab_csv':
+    """표준 CSV 또는 category ZIP 지역을 코드 복사 없이 같은 ML 계약에 연결합니다."""
+    if entry.adapter_type not in STANDARD_DATALAB_ADAPTER_TYPES:
         raise ValueError(f'ML_STANDARD_ADAPTER_UNSUPPORTED: {entry.adapter_type}')
     spec = StandardDatalabRegion(
         region_code=entry.region_code,

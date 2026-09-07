@@ -1,0 +1,312 @@
+{"kind":"deck","id":"pr/lzujhn","name":"Deck"}
+{"kind":"layout","layoutId":"86fd9854-2576-42dc-ac87-eb76a11bc07a","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"baae435f-1231-42ea-a17e-79d6b2040f4c","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/5lmslu","slide":1,"title":"TOURISM AI","textShapes":9}
+{"kind":"textbox","id":"sh/wnu5gjy5","slide":1,"name":"background-wordmark","text":"TOURISM AI","textPreview":"TOURISM AI","textChars":10,"textLines":1,"bbox":[-58,300,1720,310]}
+{"kind":"shape","id":"sh/vml4nehk","slide":1,"name":"center-top-vertical","bbox":[800,94,0,132]}
+{"kind":"shape","id":"sh/ulcne9gf","slide":1,"name":"center-bottom-vertical","bbox":[800,673,0,131]}
+{"kind":"shape","id":"sh/9k3ml4zu","slide":1,"name":"title-panel","bbox":[367,222,868,451]}
+{"kind":"shape","id":"sh/8ju5czy9","slide":1,"name":"title-panel-top","bbox":[367,222,868,0]}
+{"kind":"textbox","id":"sh/7y14juho","slide":1,"name":"security-label","text":"대 외 비   문 서","textPreview":"대 외 비   문 서","textChars":11,"textLines":1,"bbox":[694,310,296,34]}
+{"kind":"textbox","id":"sh/mxsnapg3","slide":1,"name":"cover-title-line1","text":"지역 관광 데이터 분석 및","textPreview":"지역 관광 데이터 분석 및","textChars":14,"textLines":1,"bbox":[448,382,707,75]}
+{"kind":"textbox","id":"sh/dgn6x8zy","slide":1,"name":"cover-title-line2","text":"AI 전략 지원 웹서비스 기획안","textPreview":"AI 전략 지원 웹서비스 기획안","textChars":17,"textLines":1,"bbox":[439,463,727,74]}
+{"kind":"shape","id":"sh/sfe5o3yd","slide":1,"name":"date-rule-left","bbox":[642,579,49,0]}
+{"kind":"textbox","id":"sh/61sn25wj","slide":1,"name":"cover-date","text":"2026년 09월 01일","textPreview":"2026년 09월 01일","textChars":13,"textLines":1,"bbox":[708,561,275,40]}
+{"kind":"shape","id":"sh/r21ovad4","slide":1,"name":"date-rule-right","bbox":[1001,579,49,0]}
+{"kind":"textbox","id":"sh/s3a54fep","slide":1,"name":"org-title","text":"데이터 혁신 전략실","textPreview":"데이터 혁신 전략실","textChars":10,"textLines":1,"bbox":[1325,109,170,34]}
+{"kind":"shape","id":"sh/t4j6xkva","slide":1,"name":"org-orange-rule","bbox":[1427,146,68,0]}
+{"kind":"textbox","id":"sh/idsnylwn","slide":1,"name":"org-owner","text":"수석 전략 기획자 /\n박 서 준 실장","textPreview":"수석 전략 기획자 / | 박 서 준 실장","textChars":20,"textLines":2,"bbox":[1370,167,125,63]}
+{"kind":"textbox","id":"sh/je1orqd8","slide":1,"name":"report-number","text":"보 고 서  번 호  2 0 2 6 - 0 1","textPreview":"보 고 서  번 호  2 0 2 6 - 0 1","textChars":25,"textLines":1,"bbox":[110,663,369,31]}
+{"kind":"textbox","id":"sh/4za50vet","slide":1,"name":"report-topic","text":"공공 데이터 기반\n관광 활성화","textPreview":"공공 데이터 기반 | 관광 활성화","textChars":16,"textLines":2,"bbox":[110,706,369,106]}
+{"kind":"shape","id":"sh/50j6t0vy","slide":1,"name":"corner-tl-h","bbox":[68,65,31,0]}
+{"kind":"shape","id":"sh/29cnapwr","slide":1,"name":"corner-tl-v","bbox":[68,65,0,31]}
+{"kind":"shape","id":"sh/3alo3udc","slide":1,"name":"corner-br-h","bbox":[1531,834,31,0]}
+{"kind":"shape","id":"sh/zexkvmto","slide":1,"name":"corner-br-v","bbox":[1562,803,0,31]}
+{"kind":"notes","id":"nt/5lmslu","slide":1,"text":"[Sources]\n- User-provided visual reference: C:\\Users\\Admin\\Desktop\\ppt예시안 이미지\\1.png"}
+{"kind":"slide","id":"sl/nun9j9","slide":2,"title":"지역 관광 데이터 분석 시스템","textShapes":25}
+{"kind":"textbox","id":"sh/pc3u1sf2","slide":2,"name":"top-brand","text":"지역 관광 데이터 분석 시스템","textPreview":"지역 관광 데이터 분석 시스템","textChars":16,"textLines":1,"bbox":[90,39,414,32]}
+{"kind":"textbox","id":"sh/2psvqdwr","slide":2,"name":"top-date","text":"2026. 09. 01","textPreview":"2026. 09. 01","textChars":12,"textLines":1,"bbox":[1370,34,170,28]}
+{"kind":"shape","id":"sh/nq1czixc","slide":2,"name":"top-rule","bbox":[3,103,1594,0]}
+{"kind":"shape","id":"sh/cfudwnet","slide":2,"name":"contents-rail","bbox":[3,103,505,797]}
+{"kind":"textbox","id":"sh/xg3u5sfe","slide":2,"name":"contents-vertical","text":"CONTENTS","textPreview":"CONTENTS","textChars":8,"textLines":1,"bbox":[-91,437,710,110]}
+{"kind":"textbox","id":"sh/adcvudwn","slide":2,"name":"contents-en","text":"T A B L E   O F   C O N T E N T S","textPreview":"T A B L E   O F   C O N T E N T S","textChars":33,"textLines":1,"bbox":[45,423,418,37]}
+{"kind":"textbox","id":"sh/belc3ix8","slide":2,"name":"contents-ko","text":"목차 안내","textPreview":"목차 안내","textChars":5,"textLines":1,"bbox":[132,483,250,68]}
+{"kind":"shape","id":"sh/sjqtk3ep","slide":2,"name":"contents-orange","bbox":[216,565,74,0]}
+{"kind":"textbox","id":"sh/dkzut8fa","slide":2,"name":"toc-0-0-num","text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[570,334,44,32]}
+{"kind":"textbox","id":"sh/xszmlsru","slide":2,"name":"toc-0-0-label","text":"프로젝트 개요 및 기획 배경","textPreview":"프로젝트 개요 및 기획 배경","textChars":15,"textLines":1,"bbox":[625,333,440,34]}
+{"kind":"shape","id":"sh/crqls7q9","slide":2,"name":"toc-0-0-rule","bbox":[570,376,480,0]}
+{"kind":"textbox","id":"sh/bqh4j29o","slide":2,"name":"toc-0-1-num","text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[570,408,44,32]}
+{"kind":"textbox","id":"sh/apo3qx83","slide":2,"name":"toc-0-1-label","text":"문제 정의 및 서비스 목표","textPreview":"문제 정의 및 서비스 목표","textChars":14,"textLines":1,"bbox":[625,407,440,34]}
+{"kind":"shape","id":"sh/lgzmpcr6","slide":2,"name":"toc-0-1-rule","bbox":[570,450,480,0]}
+{"kind":"textbox","id":"sh/kfq5w7ql","slide":2,"name":"toc-0-2-num","text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[570,482,44,32]}
+{"kind":"textbox","id":"sh/juh4n290","slide":2,"name":"toc-0-2-label","text":"주요 사용자 및 활용 시나리오","textPreview":"주요 사용자 및 활용 시나리오","textChars":16,"textLines":1,"bbox":[625,481,440,34]}
+{"kind":"shape","id":"sh/yt83ux8f","slide":2,"name":"toc-0-2-rule","bbox":[570,524,480,0]}
+{"kind":"textbox","id":"sh/tkjmtcr2","slide":2,"name":"toc-0-3-num","text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[570,556,44,32]}
+{"kind":"textbox","id":"sh/8ja5krqh","slide":2,"name":"toc-0-3-label","text":"핵심 기능 7가지 정의","textPreview":"핵심 기능 7가지 정의","textChars":12,"textLines":1,"bbox":[625,555,440,34]}
+{"kind":"shape","id":"sh/sz2xcf25","slide":2,"name":"toc-0-3-rule","bbox":[570,598,480,0]}
+{"kind":"textbox","id":"sh/d0by5kja","slide":2,"name":"toc-0-4-num","text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[570,630,44,32]}
+{"kind":"textbox","id":"sh/qx0fapkz","slide":2,"name":"toc-0-4-label","text":"서비스 이용 Flow 및 산출물","textPreview":"서비스 이용 Flow 및 산출물","textChars":17,"textLines":1,"bbox":[625,629,440,34]}
+{"kind":"shape","id":"sh/ry9g3a1k","slide":2,"name":"toc-0-4-rule","bbox":[570,672,480,0]}
+{"kind":"textbox","id":"sh/032xgz21","slide":2,"name":"toc-1-0-num","text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[1122,334,44,32]}
+{"kind":"textbox","id":"sh/14by94jm","slide":2,"name":"toc-1-0-label","text":"차별화 포인트 및 경쟁력","textPreview":"차별화 포인트 및 경쟁력","textChars":13,"textLines":1,"bbox":[1177,333,410,34]}
+{"kind":"shape","id":"sh/e1kfepkv","slide":2,"name":"toc-1-0-rule","bbox":[1122,376,455,0]}
+{"kind":"textbox","id":"sh/f2tg7u1g","slide":2,"name":"toc-1-1-num","text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[1122,408,44,32]}
+{"kind":"textbox","id":"sh/g7ix4v2x","slide":2,"name":"toc-1-1-label","text":"데이터 및 AI/ML 모델 구조","textPreview":"데이터 및 AI/ML 모델 구조","textChars":17,"textLines":1,"bbox":[1177,407,410,34]}
+{"kind":"shape","id":"sh/h8rex032","slide":2,"name":"toc-1-1-rule","bbox":[1122,450,455,0]}
+{"kind":"textbox","id":"sh/z2x0jyl0","slide":2,"name":"toc-1-2-num","text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[1122,482,44,32]}
+{"kind":"textbox","id":"sh/y1ojad4f","slide":2,"name":"toc-1-2-label","text":"주요 화면 구성 및 UI 기획","textPreview":"주요 화면 구성 및 UI 기획","textChars":16,"textLines":1,"bbox":[1177,481,410,34]}
+{"kind":"shape","id":"sh/lofil83q","slide":2,"name":"toc-1-2-rule","bbox":[1122,524,455,0]}
+{"kind":"textbox","id":"sh/kn61c3m5","slide":2,"name":"toc-1-3-num","text":"09","textPreview":"09","textChars":2,"textLines":1,"bbox":[1122,556,44,32]}
+{"kind":"textbox","id":"sh/byx0fylo","slide":2,"name":"toc-1-3-label","text":"시스템 아키텍처 및 기술 스택","textPreview":"시스템 아키텍처 및 기술 스택","textChars":16,"textLines":1,"bbox":[1177,555,410,34]}
+{"kind":"shape","id":"sh/ax4z6t43","slide":2,"name":"toc-1-3-rule","bbox":[1122,598,455,0]}
+{"kind":"textbox","id":"sh/x0fih83u","slide":2,"name":"toc-1-4-num","text":"10","textPreview":"10","textChars":2,"textLines":1,"bbox":[1122,630,44,32]}
+{"kind":"textbox","id":"sh/cz6h83m9","slide":2,"name":"toc-1-4-label","text":"기대 효과 및 향후 확장 방향","textPreview":"기대 효과 및 향후 확장 방향","textChars":16,"textLines":1,"bbox":[1177,629,410,34]}
+{"kind":"shape","id":"sh/nud0be5s","slide":2,"name":"toc-1-4-rule","bbox":[1122,672,455,0]}
+{"kind":"notes","id":"nt/nun9j9","slide":2,"text":"[Sources]\n- User-provided visual reference: C:\\Users\\Admin\\Desktop\\ppt예시안 이미지\\2.png"}
+{"kind":"slide","id":"sl/2eusug","slide":3,"title":"S E C T I O N   0 1","textShapes":13}
+{"kind":"textbox","id":"sh/ip0z2d4v","slide":3,"name":"section","text":"S E C T I O N   0 1","textPreview":"S E C T I O N   0 1","textChars":19,"textLines":1,"bbox":[105,107,259,31]}
+{"kind":"textbox","id":"sh/3q9gvi5g","slide":3,"name":"title","text":"프로젝트 개요 및 기획 배경","textPreview":"프로젝트 개요 및 기획 배경","textChars":15,"textLines":1,"bbox":[104,148,900,74]}
+{"kind":"shape","id":"sh/sf2h87mx","slide":3,"name":"title-rule","bbox":[104,236,835,0]}
+{"kind":"textbox","id":"sh/dgbi1sni","slide":3,"name":"intro","text":"관광 데이터의 양적 팽창에도 불구하고 전문 인력 부족으로 실질적인 정책 반영에 한계를 겪\n고 있습니다. 지자체는 객관적 근거 기반의 의사결정이 절실한 상황입니다.","textPreview":"관광 데이터의 양적 팽창에도 불구하고 전문 인력 부족으로 실질적인 정책 반영에 한계를 겪 | 고 있습니다. 지자체는 객관적 근거 기반의 의사결정이 절실한 상황입니다.","textChars":90,"textLines":2,"bbox":[105,297,844,81]}
+{"kind":"shape","id":"sh/qd0z6x47","slide":3,"name":"decision-rail","bbox":[105,409,0,105]}
+{"kind":"textbox","id":"sh/re90z25s","slide":3,"name":"decision-title","text":"의사결정 체계 마련","textPreview":"의사결정 체계 마련","textChars":10,"textLines":1,"bbox":[132,413,338,39]}
+{"kind":"textbox","id":"sh/0j2hc7m9","slide":3,"name":"decision-body","text":"파편화된 공공데이터를 통합하여 지자체 담당자가\n즉각 활용 가능한 분석 환경을 구축합니다.","textPreview":"파편화된 공공데이터를 통합하여 지자체 담당자가 | 즉각 활용 가능한 분석 환경을 구축합니다.","textChars":49,"textLines":2,"bbox":[132,461,383,69]}
+{"kind":"shape","id":"sh/1kbi5cnu","slide":3,"name":"activation-rail","bbox":[547,409,0,105]}
+{"kind":"textbox","id":"sh/9g7md4bi","slide":3,"name":"activation-title","text":"지역 관광 활성화","textPreview":"지역 관광 활성화","textChars":9,"textLines":1,"bbox":[574,413,338,39]}
+{"kind":"textbox","id":"sh/8fy5kzux","slide":3,"name":"activation-body","text":"데이터 공백을 메우고 증거 기반의 정책 수립을 지\n원하여 지역 경쟁력을 강화합니다.","textPreview":"데이터 공백을 메우고 증거 기반의 정책 수립을 지 | 원하여 지역 경쟁력을 강화합니다.","textChars":46,"textLines":2,"bbox":[574,461,388,69]}
+{"kind":"shape","id":"sh/7ep4butc","slide":3,"name":"release-card","bbox":[105,571,405,135]}
+{"kind":"shape","id":"sh/mdgnipcr","slide":3,"name":"release-card-rail","bbox":[105,571,0,135]}
+{"kind":"textbox","id":"sh/hkr6hobe","slide":3,"name":"release-label","text":"배포 예정일","textPreview":"배포 예정일","textChars":6,"textLines":1,"bbox":[133,598,225,31]}
+{"kind":"textbox","id":"sh/wjy5ojut","slide":3,"name":"release-value","text":"2026.09","textPreview":"2026.09","textChars":7,"textLines":1,"bbox":[133,637,170,54]}
+{"kind":"textbox","id":"sh/vipofet8","slide":3,"name":"release-suffix","text":"RELEASE","textPreview":"RELEASE","textChars":7,"textLines":1,"bbox":[300,652,155,27]}
+{"kind":"shape","id":"sh/uhgnm9c3","slide":3,"name":"strategy-card","bbox":[535,571,405,135]}
+{"kind":"shape","id":"sh/xonm5kba","slide":3,"name":"strategy-card-rail","bbox":[535,571,0,135]}
+{"kind":"textbox","id":"sh/cne5cfup","slide":3,"name":"strategy-label","text":"주요 전략","textPreview":"주요 전략","textChars":5,"textLines":1,"bbox":[564,598,225,31]}
+{"kind":"textbox","id":"sh/o7i5sf2l","slide":3,"name":"strategy-value","text":"AI+DATA","textPreview":"AI+DATA","textChars":7,"textLines":1,"bbox":[564,637,175,54]}
+{"kind":"textbox","id":"sh/psr6lk36","slide":3,"name":"strategy-suffix","text":"INTEGRATED","textPreview":"INTEGRATED","textChars":10,"textLines":1,"bbox":[739,652,175,27]}
+{"kind":"image","id":"im/gjulkjyp","slide":3,"name":"tourism-photo","alt":"겨울 관광 현장 사진","bbox":[1036,3,561,894]}
+{"kind":"notes","id":"nt/2eusug","slide":3,"text":"[Sources]\n- User-provided visual reference: C:\\Users\\Admin\\Desktop\\ppt예시안 이미지\\3.png"}
+{"kind":"slide","id":"sl/ktu9ob","slide":4,"title":"P R O B L E M   &   O B J E C T I V E","textShapes":11}
+{"kind":"textbox","id":"sh/5g3uxkri","slide":4,"name":"eyebrow","text":"P R O B L E M   &   O B J E C T I V E","textPreview":"P R O B L E M   &   O B J E C T I V E","textChars":37,"textLines":1,"bbox":[104,87,383,31]}
+{"kind":"textbox","id":"sh/4fudofax","slide":4,"name":"title","text":"문제 정의 및\n서비스 목표","textPreview":"문제 정의 및 | 서비스 목표","textChars":14,"textLines":2,"bbox":[102,140,890,201]}
+{"kind":"shape","id":"sh/vq1cra90","slide":4,"name":"orange-rule","bbox":[102,353,101,0]}
+{"kind":"textbox","id":"sh/upsbi5sv","slide":4,"name":"feature-0","text":"데이터 수집","textPreview":"데이터 수집","textChars":6,"textLines":1,"bbox":[102,411,204,51]}
+{"kind":"textbox","id":"sh/hsjut0r6","slide":4,"name":"feature-1","text":"맞춤 시각화","textPreview":"맞춤 시각화","textChars":6,"textLines":1,"bbox":[325,411,204,51]}
+{"kind":"textbox","id":"sh/wradkval","slide":4,"name":"feature-2","text":"수요 예측","textPreview":"수요 예측","textChars":5,"textLines":1,"bbox":[548,411,204,51]}
+{"kind":"textbox","id":"sh/7mhcnq94","slide":4,"name":"feature-3","text":"AI 전략 제안","textPreview":"AI 전략 제안","textChars":8,"textLines":1,"bbox":[771,411,204,51]}
+{"kind":"textbox","id":"sh/ml8belsj","slide":4,"name":"feature-4","text":"의사결정 지원","textPreview":"의사결정 지원","textChars":7,"textLines":1,"bbox":[102,483,204,51]}
+{"kind":"textbox","id":"sh/sfy9snat","slide":4,"name":"feature-5","text":"실행 가능성","textPreview":"실행 가능성","textChars":6,"textLines":1,"bbox":[325,483,204,51]}
+{"kind":"textbox","id":"sh/dg7a1sre","slide":4,"name":"feature-6","text":"정책 최적화","textPreview":"정책 최적화","textChars":6,"textLines":1,"bbox":[548,483,204,51]}
+{"kind":"textbox","id":"sh/qdgrqdsn","slide":4,"name":"feature-7","text":"원스톱 체계","textPreview":"원스톱 체계","textChars":6,"textLines":1,"bbox":[771,483,204,51]}
+{"kind":"shape","id":"sh/repszi98","slide":4,"name":"body-rail","bbox":[104,603,0,216]}
+{"kind":"textbox","id":"sh/4re9onah","slide":4,"name":"body","text":"현재의 관광 데이터 서비스는 단순 통계 수치 조회에 그쳐 실제 정책 수립에 활용하기 어\n렵습니다. 본 서비스는 데이터 수집부터 AI 전략 제안을 잇는 원스톱 의사결정 체계를 구\n축합니다.\n\n단순 통계를 넘어 머신러닝 기반의 미래 수요를 예측하고, 실무자가 즉시 정책에 반영할\n수 있는 구체적이고 실행 가능한 전략적 통찰력을 제공하는 것을 최우선 목표로 합니다.","textPreview":"현재의 관광 데이터 서비스는 단순 통계 수치 조회에 그쳐 실제 정책 수립에 활용하기 어 | 렵습니다. 본 서비스는 데이터 수집부터 AI 전략 제안을 잇는 원스톱 의사결정 체계를 구 | 축합니다. |  | 단순 통계를 넘어 머신러닝 기반의 미래 수...","textChars":201,"textLines":6,"bbox":[134,613,878,212]}
+{"kind":"image","id":"im/r6pwbel0","slide":4,"name":"city-photo","alt":"도시 관광 인프라 사진","bbox":[1074,0,526,900]}
+{"kind":"notes","id":"nt/ktu9ob","slide":4,"text":"[Sources]\n- User-provided visual reference: C:\\Users\\Admin\\Desktop\\ppt예시안 이미지\\4.png"}
+{"kind":"slide","id":"sl/xwsvfx","slide":5,"title":"주요 사용자 및 활용 시나리오","textShapes":15}
+{"kind":"textbox","id":"sh/knqtojeh","slide":5,"name":"title","text":"주요 사용자 및 활용 시나리오","textPreview":"주요 사용자 및 활용 시나리오","textChars":16,"textLines":1,"bbox":[402,100,796,70]}
+{"kind":"shape","id":"sh/jmxsvedc","slide":5,"name":"title-rule","bbox":[682,172,68,0]}
+{"kind":"textbox","id":"sh/i1orm9wr","slide":5,"name":"subtitle","text":"지역 관광 데이터 분석 및 AI 전략 지원 웹서비스 기획안","textPreview":"지역 관광 데이터 분석 및 AI 전략 지원 웹서비스 기획안","textChars":32,"textLines":1,"bbox":[430,205,740,36]}
+{"kind":"shape","id":"sh/x0fat4v6","slide":5,"name":"audience-card-0","bbox":[87,316,448,477]}
+{"kind":"textbox","id":"sh/wz69kzel","slide":5,"name":"audience-pill-0","text":"지자체 관광 담당자","textPreview":"지자체 관광 담당자","textChars":10,"textLines":1,"bbox":[117,357,388,50]}
+{"kind":"shape","id":"sh/vyxsred0","slide":5,"name":"bank-roof","bbox":[277,452,72,28]}
+{"kind":"shape","id":"sh/axori9wf","slide":5,"name":"bank-entablature","bbox":[279,478,68,9]}
+{"kind":"shape","id":"sh/9wfap4vu","slide":5,"name":"bank-column-0","bbox":[286,486,10,42]}
+{"kind":"shape","id":"sh/8vm9gzep","slide":5,"name":"bank-column-1","bbox":[306,486,10,42]}
+{"kind":"shape","id":"sh/2xsbi98r","slide":5,"name":"bank-column-2","bbox":[326,486,10,42]}
+{"kind":"shape","id":"sh/ny1sbe9c","slide":5,"name":"bank-base","bbox":[276,526,74,9]}
+{"kind":"shape","id":"sh/ozatkjqx","slide":5,"name":"person-head-0","bbox":[247,540,17,17]}
+{"kind":"shape","id":"sh/p0jadori","slide":5,"name":"person-body-0","bbox":[241,558,29,18]}
+{"kind":"shape","id":"sh/e98re98v","slide":5,"name":"person-head-1","bbox":[286,540,17,17]}
+{"kind":"shape","id":"sh/fahs7u9g","slide":5,"name":"person-body-1","bbox":[280,558,29,18]}
+{"kind":"shape","id":"sh/0vatgzql","slide":5,"name":"person-head-2","bbox":[325,540,17,17]}
+{"kind":"shape","id":"sh/1wja94r6","slide":5,"name":"person-body-2","bbox":[319,558,29,18]}
+{"kind":"textbox","id":"sh/q58rap8j","slide":5,"name":"audience-body-0","text":"데이터 기반 신규 관광 상품 기획 및 정책 예산 편성의\n객관적 근거 확보","textPreview":"데이터 기반 신규 관광 상품 기획 및 정책 예산 편성의 | 객관적 근거 확보","textChars":40,"textLines":2,"bbox":[117,622,388,62]}
+{"kind":"shape","id":"sh/r6hs3u94","slide":5,"name":"audience-divider-0","bbox":[117,681,388,0]}
+{"kind":"textbox","id":"sh/vad8bqpw","slide":5,"name":"audience-role-0","text":"역할: 정책 및 예산 수립","textPreview":"역할: 정책 및 예산 수립","textChars":14,"textLines":1,"bbox":[122,724,378,34]}
+{"kind":"shape","id":"sh/u947ilob","slide":5,"name":"audience-card-1","bbox":[576,316,448,477]}
+{"kind":"textbox","id":"sh/hcfqd072","slide":5,"name":"audience-pill-1","text":"공공 및 유관 기관","textPreview":"공공 및 유관 기관","textChars":10,"textLines":1,"bbox":[606,357,388,50]}
+{"kind":"shape","id":"sh/gb6pkv6h","slide":5,"name":"chart-axis-y","bbox":[766,454,0,65]}
+{"kind":"shape","id":"sh/3ex8fap8","slide":5,"name":"chart-axis-x","bbox":[766,519,65,0]}
+{"kind":"shape","id":"sh/ido7m5on","slide":5,"name":"chart-line-1","bbox":[778,481,18,18]}
+{"kind":"shape","id":"sh/5gfqh07y","slide":5,"name":"chart-line-2","bbox":[796,481,14,10]}
+{"kind":"shape","id":"sh/4f6pov6d","slide":5,"name":"chart-line-3","bbox":[810,467,22,24]}
+{"kind":"textbox","id":"sh/jito36po","slide":5,"name":"analytics-glyph","text":"◔  ▮▮▮  ◉","textPreview":"◔  ▮▮▮  ◉","textChars":9,"textLines":1,"bbox":[734,540,135,42]}
+{"kind":"textbox","id":"sh/yhk7a1o3","slide":5,"name":"audience-body-1","text":"지역별 관광 현황 실시간 모니터링 및 핵심 성과 지표\n(KPI) 효율적 관리","textPreview":"지역별 관광 현황 실시간 모니터링 및 핵심 성과 지표 | (KPI) 효율적 관리","textChars":42,"textLines":2,"bbox":[606,622,388,62]}
+{"kind":"shape","id":"sh/oni5k7m1","slide":5,"name":"audience-divider-1","bbox":[606,681,388,0]}
+{"kind":"textbox","id":"sh/9ormdcnm","slide":5,"name":"audience-role-1","text":"역할: 모니터링 및 KPI 관리","textPreview":"역할: 모니터링 및 KPI 관리","textChars":17,"textLines":1,"bbox":[611,724,378,34]}
+{"kind":"shape","id":"sh/ml0nix4v","slide":5,"name":"audience-card-2","bbox":[1066,316,448,477]}
+{"kind":"textbox","id":"sh/nm94b25g","slide":5,"name":"audience-pill-2","text":"지역 관광 사업자","textPreview":"지역 관광 사업자","textChars":9,"textLines":1,"bbox":[1096,357,388,50]}
+{"kind":"shape","id":"sh/0jylgnm5","slide":5,"name":"shop-awning","bbox":[1251,452,76,27]}
+{"kind":"shape","id":"sh/1k7m9snq","slide":5,"name":"shop-body","bbox":[1260,477,58,48]}
+{"kind":"shape","id":"sh/ehg3ex4z","slide":5,"name":"shop-window","bbox":[1270,490,20,22]}
+{"kind":"shape","id":"sh/zip4725k","slide":5,"name":"shop-door","bbox":[1298,490,12,35]}
+{"kind":"textbox","id":"sh/kf25srm9","slide":5,"name":"shops-glyph","text":"▰  ▦  ♜","textPreview":"▰  ▦  ♜","textChars":7,"textLines":1,"bbox":[1223,540,135,42]}
+{"kind":"textbox","id":"sh/lgbmlwnu","slide":5,"name":"audience-body-2","text":"방문객 소비 트렌드 분석을 통한 타깃 마케팅 전략 수\n립 및 서비스 품질 개선 지원","textPreview":"방문객 소비 트렌드 분석을 통한 타깃 마케팅 전략 수 | 립 및 서비스 품질 개선 지원","textChars":46,"textLines":2,"bbox":[1096,622,388,62]}
+{"kind":"shape","id":"sh/ho3axkzu","slide":5,"name":"audience-divider-2","bbox":[1096,681,388,0]}
+{"kind":"textbox","id":"sh/wnatozy9","slide":5,"name":"audience-role-2","text":"역할: 마케팅 및 서비스 개선","textPreview":"역할: 마케팅 및 서비스 개선","textChars":16,"textLines":1,"bbox":[1101,724,378,34]}
+{"kind":"textbox","id":"sh/vm1svuh4","slide":5,"name":"footer-left","text":"지역 관광 데이터 분석 및 AI 전략 지원 솔루션","textPreview":"지역 관광 데이터 분석 및 AI 전략 지원 솔루션","textChars":27,"textLines":1,"bbox":[87,830,380,24]}
+{"kind":"shape","id":"sh/ulsbmpgj","slide":5,"name":"footer-dot","bbox":[1278,833,10,10]}
+{"kind":"textbox","id":"sh/5c3a14z6","slide":5,"name":"footer-right","text":"AI Data-Driven Decision Making","textPreview":"AI Data-Driven Decision Making","textChars":30,"textLines":1,"bbox":[1300,823,245,26]}
+{"kind":"notes","id":"nt/xwsvfx","slide":5,"text":"[Sources]\n- User-provided visual reference: C:\\Users\\Admin\\Desktop\\ppt예시안 이미지\\5.png"}
+{"kind":"slide","id":"sl/4wre0o","slide":6,"title":"핵심 기능 7가지 정의","textShapes":10}
+{"kind":"textbox","id":"sh/qhsbqhsj","slide":6,"name":"title","text":"핵심 기능 7가지 정의","textPreview":"핵심 기능 7가지 정의","textChars":12,"textLines":1,"bbox":[561,92,850,85]}
+{"kind":"shape","id":"sh/r21sjm94","slide":6,"name":"title-rule","bbox":[501,226,1096,0]}
+{"kind":"shape","id":"sh/4fqtorad","slide":6,"name":"function-row-0","bbox":[562,310,975,66]}
+{"kind":"textbox","id":"sh/5gzahcry","slide":6,"name":"function-num-0","text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[594,329,50,34]}
+{"kind":"textbox","id":"sh/id8bmhs7","slide":6,"name":"function-label-0","text":"지역 검색 및 선택: 전국 시군구 단위의 간편한 대상지 설정","textPreview":"지역 검색 및 선택: 전국 시군구 단위의 간편한 대상지 설정","textChars":33,"textLines":1,"bbox":[646,327,850,36]}
+{"kind":"shape","id":"sh/3ehsfm9s","slide":6,"name":"function-row-1","bbox":[562,397,975,66]}
+{"kind":"textbox","id":"sh/gbqtk7ah","slide":6,"name":"function-num-1","text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[594,416,50,34]}
+{"kind":"textbox","id":"sh/hczadcrm","slide":6,"name":"function-label-1","text":"관광 데이터 대시보드: 방문객, 소비, SNS 트렌드 시각화","textPreview":"관광 데이터 대시보드: 방문객, 소비, SNS 트렌드 시각화","textChars":33,"textLines":1,"bbox":[646,414,850,36]}
+{"kind":"shape","id":"sh/5gvi94ru","slide":6,"name":"function-row-2","bbox":[562,484,975,66]}
+{"kind":"textbox","id":"sh/4fmhgzq9","slide":6,"name":"function-num-2","text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[594,503,50,34]}
+{"kind":"textbox","id":"sh/3ut07u9o","slide":6,"name":"function-label-2","text":"지역 특성 분석: SWOT 분석을 포함한 지역별 관광 강약점 도출","textPreview":"지역 특성 분석: SWOT 분석을 포함한 지역별 관광 강약점 도출","textChars":36,"textLines":1,"bbox":[646,501,850,36]}
+{"kind":"shape","id":"sh/itkzep83","slide":6,"name":"bottom-band","bbox":[501,628,1096,272]}
+{"kind":"textbox","id":"sh/hsbi5kri","slide":6,"name":"analysis-tag","text":"A I  &  D A T A  A N A L Y S I S","textPreview":"A I  &  D A T A  A N A L Y S I S","textChars":32,"textLines":1,"bbox":[562,689,264,38]}
+{"kind":"textbox","id":"sh/gr2hcfqx","slide":6,"name":"function-more-left","text":"④ 수요 예측: 머신러닝 기반 미래 관광객 수 및 소비 패턴 예측\n⑤ AI 전략 리포트: 분석 데이터를 근거로 한 최적의 관광 활성화\n방안 제안","textPreview":"④ 수요 예측: 머신러닝 기반 미래 관광객 수 및 소비 패턴 예측 | ⑤ AI 전략 리포트: 분석 데이터를 근거로 한 최적의 관광 활성화 | 방안 제안","textChars":80,"textLines":3,"bbox":[562,756,493,103]}
+{"kind":"textbox","id":"sh/vqt03a9c","slide":6,"name":"function-more-right","text":"⑥ AI 챗봇: 선택 지역 데이터에 특화된 실시간 질의응답 기능\n⑦ 지도 시각화: 카카오맵 연동을 통한 공간적 관광 밀집도 분석","textPreview":"⑥ AI 챗봇: 선택 지역 데이터에 특화된 실시간 질의응답 기능 | ⑦ 지도 시각화: 카카오맵 연동을 통한 공간적 관광 밀집도 분석","textChars":71,"textLines":2,"bbox":[1069,756,510,103]}
+{"kind":"image","id":"im/8fqpwnqx","slide":6,"name":"visitor-photo","alt":"관광객 현장 사진","bbox":[0,0,503,900]}
+{"kind":"notes","id":"nt/4wre0o","slide":6,"text":"[Sources]\n- User-provided visual reference: C:\\Users\\Admin\\Desktop\\ppt예시안 이미지\\6.png"}
+{"kind":"slide","id":"sl/73dd5u","slide":7,"title":"S E R V I C E   P L A N N I N G","textShapes":16}
+{"kind":"textbox","id":"sh/ah03i5gv","slide":7,"name":"eyebrow","text":"S E R V I C E   P L A N N I N G","textPreview":"S E R V I C E   P L A N N I N G","textChars":31,"textLines":1,"bbox":[96,78,300,28]}
+{"kind":"textbox","id":"sh/xkrmtkfm","slide":7,"name":"title","text":"서비스 이용 Flow 및 산출물","textPreview":"서비스 이용 Flow 및 산출물","textChars":17,"textLines":1,"bbox":[96,107,850,68]}
+{"kind":"shape","id":"sh/cji5kfy1","slide":7,"name":"title-rule","bbox":[96,181,1400,0]}
+{"kind":"shape","id":"sh/zmt4vuxs","slide":7,"name":"step-0-rule","bbox":[109,261,319,0]}
+{"kind":"textbox","id":"sh/yl0nmpg7","slide":7,"name":"step-0-label","text":"STEP 01","textPreview":"STEP 01","textChars":7,"textLines":1,"bbox":[109,299,180,28]}
+{"kind":"textbox","id":"sh/lobmx4fi","slide":7,"name":"step-0-title","text":"지역 선택 및 로딩","textPreview":"지역 선택 및 로딩","textChars":10,"textLines":1,"bbox":[109,341,310,38]}
+{"kind":"textbox","id":"sh/kn25ozyd","slide":7,"name":"step-0-body","text":"사용자 정의 지역 설정 및 데이터랩 기반 맞춤형\n데이터셋 자동 큐레이션","textPreview":"사용자 정의 지역 설정 및 데이터랩 기반 맞춤형 | 데이터셋 자동 큐레이션","textChars":39,"textLines":2,"bbox":[109,389,320,117]}
+{"kind":"shape","id":"sh/7at4zuxo","slide":7,"name":"step-1-rule","bbox":[465,261,319,0]}
+{"kind":"textbox","id":"sh/m9knqpg3","slide":7,"name":"step-1-label","text":"STEP 02","textPreview":"STEP 02","textChars":7,"textLines":1,"bbox":[465,299,180,28]}
+{"kind":"textbox","id":"sh/kv250vi1","slide":7,"name":"step-1-title","text":"대시보드 및 분석","textPreview":"대시보드 및 분석","textChars":9,"textLines":1,"bbox":[465,341,310,38]}
+{"kind":"textbox","id":"sh/5gv690zm","slide":7,"name":"step-1-body","text":"방문객 및 소비 시각화 차트와 데이터 근거 기반\n지역별 SWOT 분석 결과 도출을 통한 전략적 통\n찰 제공.","textPreview":"방문객 및 소비 시각화 차트와 데이터 근거 기반 | 지역별 SWOT 분석 결과 도출을 통한 전략적 통 | 찰 제공.","textChars":60,"textLines":3,"bbox":[465,389,320,117]}
+{"kind":"shape","id":"sh/itknyl0v","slide":7,"name":"step-2-rule","bbox":[821,261,319,0]}
+{"kind":"textbox","id":"sh/juto7qhg","slide":7,"name":"step-2-label","text":"STEP 03","textPreview":"STEP 03","textChars":7,"textLines":1,"bbox":[821,299,180,28]}
+{"kind":"textbox","id":"sh/sjmp4vid","slide":7,"name":"step-2-title","text":"수요 예측 및 리포트","textPreview":"수요 예측 및 리포트","textChars":11,"textLines":1,"bbox":[821,341,310,38]}
+{"kind":"textbox","id":"sh/tkv6d0zy","slide":7,"name":"step-2-body","text":"시계열 모델 기반 관광 수요 예측 및 AI 해석이\n포함된 PDF 전략 보고서 발행","textPreview":"시계열 모델 기반 관광 수요 예측 및 AI 해석이 | 포함된 PDF 전략 보고서 발행","textChars":45,"textLines":2,"bbox":[821,389,320,117]}
+{"kind":"shape","id":"sh/6h472l07","slide":7,"name":"step-3-rule","bbox":[1177,261,319,0]}
+{"kind":"textbox","id":"sh/7idobqhs","slide":7,"name":"step-3-label","text":"STEP 04","textPreview":"STEP 04","textChars":7,"textLines":1,"bbox":[1177,299,180,28]}
+{"kind":"textbox","id":"sh/gn6p8fi9","slide":7,"name":"step-3-title","text":"AI 챗봇 전략 활용","textPreview":"AI 챗봇 전략 활용","textChars":11,"textLines":1,"bbox":[1177,341,310,38]}
+{"kind":"textbox","id":"sh/hof6hkzu","slide":7,"name":"step-3-body","text":"RAG 기반 AI 챗봇과의 심층 질의응답을 통한 실\n무 정책 반영 및 최종 의사결정을 지원하는 고도\n화 프로세스.","textPreview":"RAG 기반 AI 챗봇과의 심층 질의응답을 통한 실 | 무 정책 반영 및 최종 의사결정을 지원하는 고도 | 화 프로세스.","textChars":63,"textLines":3,"bbox":[1177,389,320,117]}
+{"kind":"shape","id":"sh/p4b6l0ry","slide":7,"name":"value-panel","bbox":[107,575,1386,247]}
+{"kind":"shape","id":"sh/o325sfad","slide":7,"name":"value-panel-rail","bbox":[107,575,0,247]}
+{"kind":"textbox","id":"sh/32toja9s","slide":7,"name":"value-title","text":"AI 전략 지원 웹서비스 핵심 가치","textPreview":"AI 전략 지원 웹서비스 핵심 가치","textChars":19,"textLines":1,"bbox":[162,630,506,38]}
+{"kind":"textbox","id":"sh/210nq5s7","slide":7,"name":"value-body","text":"본 웹서비스는 공공 관광 데이터를 인공지능 기술과 결합하여 실질적인 정책 수립을 지원합니다. 데이터 로딩부터 AI 리포트 생성, 챗봇을 통한 정책 질의까지 이어지는 통합 Flow를\n통해 지자체의 관광 경쟁력을 극대화합니다. 데이터 기반의 객관적인 분석과 AI의 미래 예측을 통해 의사결정의 정확성을 높이고 지역 경제 활성화를 위한 맞춤형 전략을 제시하는 것\n을 목표로 합니다.","textPreview":"본 웹서비스는 공공 관광 데이터를 인공지능 기술과 결합하여 실질적인 정책 수립을 지원합니다. 데이터 로딩부터 AI 리포트 생성, 챗봇을 통한 정책 질의까지 이어지는 통합 Flow를 | 통해 지자체의 관광 경쟁력을 극대화합니다. 데이터 기반의 객관...","textChars":210,"textLines":3,"bbox":[162,678,1281,105]}
+{"kind":"notes","id":"nt/73dd5u","slide":7,"text":"[Sources]\n- User-provided visual reference: C:\\Users\\Admin\\Desktop\\ppt예시안 이미지\\7.png"}
+{"kind":"slide","id":"sl/9gsx0w","slide":8,"title":"D I F F E R E N T I A T I O N   &   C O M P E T I T I V E N E S S","textShapes":22}
+{"kind":"textbox","id":"sh/c3qhwz6h","slide":8,"name":"eyebrow","text":"D I F F E R E N T I A T I O N   &   C O M P E T I T I V E N E S S","textPreview":"D I F F E R E N T I A T I O N   &   C O M P E T I T I V E N E S S","textChars":65,"textLines":1,"bbox":[108,71,471,30]}
+{"kind":"textbox","id":"sh/b2hg3upw","slide":8,"name":"title","text":"차별화 포인트 및 경쟁력","textPreview":"차별화 포인트 및 경쟁력","textChars":13,"textLines":1,"bbox":[108,117,827,76]}
+{"kind":"shape","id":"sh/q1ozu9ob","slide":8,"name":"title-rule","bbox":[108,219,1372,0]}
+{"kind":"shape","id":"sh/lszy9o7y","slide":8,"name":"grid","bbox":[108,292,1371,552]}
+{"kind":"shape","id":"sh/0rqh0j6t","slide":8,"name":"grid-v","bbox":[793,292,0,552]}
+{"kind":"shape","id":"sh/zqhg7ep8","slide":8,"name":"grid-h","bbox":[108,567,1371,0]}
+{"kind":"textbox","id":"sh/yp8zy9on","slide":8,"name":"diff-num-0","text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[108,301,57,48]}
+{"kind":"textbox","id":"sh/1wfyxk7u","slide":8,"name":"diff-title-0","text":"데이터 가치 사슬 구축","textPreview":"데이터 가치 사슬 구축","textChars":12,"textLines":1,"bbox":[173,303,563,48]}
+{"kind":"textbox","id":"sh/gv6xof69","slide":8,"name":"diff-body-0","text":"단순한 통계 조회를 넘어 AI 모델을 통해 2026년 관광 트렌드 등 미래 수요를 정\n확히 예측하고 선제적 대응 전략을 제시하여 데이터의 실질적 가치를 창출합니\n다.","textPreview":"단순한 통계 조회를 넘어 AI 모델을 통해 2026년 관광 트렌드 등 미래 수요를 정 | 확히 예측하고 선제적 대응 전략을 제시하여 데이터의 실질적 가치를 창출합니 | 다.","textChars":92,"textLines":3,"bbox":[108,373,620,98]}
+{"kind":"textbox","id":"sh/yxwbyl87","slide":8,"name":"diff-plus-0","text":"+ 예측 기반 전략 제안","textPreview":"+ 예측 기반 전략 제안","textChars":13,"textLines":1,"bbox":[108,453,379,32]}
+{"kind":"textbox","id":"sh/zy5crq9s","slide":8,"name":"diff-plus-orange-0","text":"+","textPreview":"+","textChars":1,"textLines":1,"bbox":[108,453,14,32]}
+{"kind":"textbox","id":"sh/0jet0vqd","slide":8,"name":"diff-num-1","text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[854,301,57,48]}
+{"kind":"textbox","id":"sh/lk7ut0ry","slide":8,"name":"diff-title-1","text":"전국 단위 확장 분석","textPreview":"전국 단위 확장 분석","textChars":11,"textLines":1,"bbox":[919,303,563,48]}
+{"kind":"textbox","id":"sh/mlgb258j","slide":8,"name":"diff-body-1","text":"특정 지역에 국한되지 않는 전국 단위 확장형 분석 프레임워크를 적용하여 광범\n위한 데이터 수집 및 비교 분석을 가능하게 합니다.","textPreview":"특정 지역에 국한되지 않는 전국 단위 확장형 분석 프레임워크를 적용하여 광범 | 위한 데이터 수집 및 비교 분석을 가능하게 합니다.","textChars":71,"textLines":2,"bbox":[854,373,620,98]}
+{"kind":"textbox","id":"sh/nmpcva94","slide":8,"name":"diff-plus-1","text":"+ 범용적 분석 모델 적용","textPreview":"+ 범용적 분석 모델 적용","textChars":14,"textLines":1,"bbox":[854,453,379,32]}
+{"kind":"textbox","id":"sh/8nyt4vqp","slide":8,"name":"diff-plus-orange-1","text":"+","textPreview":"+","textChars":1,"textLines":1,"bbox":[854,453,14,32]}
+{"kind":"textbox","id":"sh/9o7ux07u","slide":8,"name":"diff-num-2","text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[108,641,57,48]}
+{"kind":"textbox","id":"sh/apgb658f","slide":8,"name":"diff-title-2","text":"LLM 및 RAG 결합 기술","textPreview":"LLM 및 RAG 결합 기술","textChars":15,"textLines":1,"bbox":[173,643,563,48]}
+{"kind":"textbox","id":"sh/vqpczap0","slide":8,"name":"diff-body-2","text":"최신 LLM과 RAG 기술을 결합하여 단순 수치 나열이 아닌, 데이터 근거에 기반\n한 신뢰도 높은 AI 해석 및 맞춤형 정책 리포트를 자동 생성하여 제공합니다.","textPreview":"최신 LLM과 RAG 기술을 결합하여 단순 수치 나열이 아닌, 데이터 근거에 기반 | 한 신뢰도 높은 AI 해석 및 맞춤형 정책 리포트를 자동 생성하여 제공합니다.","textChars":89,"textLines":2,"bbox":[108,713,620,98]}
+{"kind":"textbox","id":"sh/ru9sna58","slide":8,"name":"diff-plus-2","text":"+ 고신뢰도 AI 정책 리포트","textPreview":"+ 고신뢰도 AI 정책 리포트","textChars":16,"textLines":1,"bbox":[108,793,379,32]}
+{"kind":"textbox","id":"sh/6t0bu5on","slide":8,"name":"diff-plus-orange-2","text":"+","textPreview":"+","textChars":1,"textLines":1,"bbox":[108,793,14,32]}
+{"kind":"textbox","id":"sh/twrapkne","slide":8,"name":"diff-num-3","text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[854,641,57,48]}
+{"kind":"textbox","id":"sh/svitwf6t","slide":8,"name":"diff-title-3","text":"데이터 기반 의사결정","textPreview":"데이터 기반 의사결정","textChars":11,"textLines":1,"bbox":[919,643,563,48]}
+{"kind":"textbox","id":"sh/jqpsja5c","slide":8,"name":"diff-body-3","text":"복잡한 관광 데이터를 공공 행정에 즉시 활용 가능한 인사이트로 변환하여, 지자\n체 및 공공기관의 과학적이고 효율적인 정책 수립을 강력하게 지원합니다.","textPreview":"복잡한 관광 데이터를 공공 행정에 즉시 활용 가능한 인사이트로 변환하여, 지자 | 체 및 공공기관의 과학적이고 효율적인 정책 수립을 강력하게 지원합니다.","textChars":83,"textLines":2,"bbox":[854,713,620,98]}
+{"kind":"textbox","id":"sh/ipgrq5or","slide":8,"name":"diff-plus-3","text":"+ 실효성 있는 정책 지원","textPreview":"+ 실효성 있는 정책 지원","textChars":14,"textLines":1,"bbox":[854,793,379,32]}
+{"kind":"textbox","id":"sh/5sral0n2","slide":8,"name":"diff-plus-orange-3","text":"+","textPreview":"+","textChars":1,"textLines":1,"bbox":[854,793,14,32]}
+{"kind":"notes","id":"nt/9gsx0w","slide":8,"text":"[Sources]\n- User-provided visual reference: C:\\Users\\Admin\\Desktop\\ppt예시안 이미지\\8.png"}
+{"kind":"slide","id":"sl/ge700x","slide":9,"title":"T E C H N I C A L   F R A M E W O R K","textShapes":10}
+{"kind":"textbox","id":"sh/43ylgjmt","slide":9,"name":"eyebrow","text":"T E C H N I C A L   F R A M E W O R K","textPreview":"T E C H N I C A L   F R A M E W O R K","textChars":37,"textLines":1,"bbox":[106,111,371,31]}
+{"kind":"textbox","id":"sh/54729o3e","slide":9,"name":"title","text":"데이터 및 AI/ML 모델 구조","textPreview":"데이터 및 AI/ML 모델 구조","textChars":17,"textLines":1,"bbox":[106,152,853,74]}
+{"kind":"shape","id":"sh/65g3i94z","slide":9,"name":"title-rule","bbox":[106,238,770,0]}
+{"kind":"textbox","id":"sh/rq9kbelk","slide":9,"name":"intro","text":"본 서비스는 한국관광 데이터랩 및 공공데이터 API를 통해 실시간 데이터를 수\n집하고 전처리하는 통합 파이프라인을 구축합니다.","textPreview":"본 서비스는 한국관광 데이터랩 및 공공데이터 API를 통해 실시간 데이터를 수 | 집하고 전처리하는 통합 파이프라인을 구축합니다.","textChars":70,"textLines":2,"bbox":[106,301,792,73]}
+{"kind":"shape","id":"sh/srilkjmp","slide":9,"name":"prediction-rail","bbox":[106,418,0,94]}
+{"kind":"textbox","id":"sh/tsr2do3a","slide":9,"name":"prediction-title","text":"수요 예측 모델 (PREDICTION)","textPreview":"수요 예측 모델 (PREDICTION)","textChars":21,"textLines":1,"bbox":[140,421,584,34]}
+{"kind":"textbox","id":"sh/m9wj6p4f","slide":9,"name":"prediction-body","text":"LSTM 및 Prophet 시계열 모델과 회귀 모델을 병합 활용하며, MAE와 RMSE 지표를 통해 예측\n성능의 정밀도를 검증합니다.","textPreview":"LSTM 및 Prophet 시계열 모델과 회귀 모델을 병합 활용하며, MAE와 RMSE 지표를 통해 예측 | 성능의 정밀도를 검증합니다.","textChars":74,"textLines":2,"bbox":[140,462,769,60]}
+{"kind":"shape","id":"sh/7u5kzu50","slide":9,"name":"rag-rail","bbox":[106,553,0,94]}
+{"kind":"textbox","id":"sh/re10juh0","slide":9,"name":"rag-title","text":"AI 전략 생성 (RAG SYSTEM)","textPreview":"AI 전략 생성 (RAG SYSTEM)","textChars":21,"textLines":1,"bbox":[140,556,584,34]}
+{"kind":"textbox","id":"sh/6dsjap0f","slide":9,"name":"rag-body","text":"RAG(검색 증강 생성) 기반 LLM을 도입하여 지자체 맞춤형 정밀 보고서를 자동 생성하는 프로세\n스를 구현합니다.","textPreview":"RAG(검색 증강 생성) 기반 LLM을 도입하여 지자체 맞춤형 정밀 보고서를 자동 생성하는 프로세 | 스를 구현합니다.","textChars":64,"textLines":2,"bbox":[140,597,769,60]}
+{"kind":"textbox","id":"sh/tgjil4z6","slide":9,"name":"tech-tag-0","text":"시계열 분석","textPreview":"시계열 분석","textChars":6,"textLines":1,"bbox":[106,703,103,32]}
+{"kind":"textbox","id":"sh/sfa1czil","slide":9,"name":"tech-tag-1","text":"RAG 모델","textPreview":"RAG 모델","textChars":6,"textLines":1,"bbox":[229,703,94,32]}
+{"kind":"textbox","id":"sh/jqh0fuh4","slide":9,"name":"tech-tag-2","text":"실시간 파이프라인","textPreview":"실시간 파이프라인","textChars":9,"textLines":1,"bbox":[342,703,138,32]}
+{"kind":"image","id":"im/mp4vi18b","slide":9,"name":"palace-photo","alt":"궁궐 관광 사진","bbox":[975,0,625,900]}
+{"kind":"notes","id":"nt/ge700x","slide":9,"text":"[Sources]\n- User-provided visual reference: C:\\Users\\Admin\\Desktop\\ppt예시안 이미지\\9.png"}
+{"kind":"slide","id":"sl/oytfau","slide":10,"title":"U I / U X   P L A N N I N G","textShapes":13}
+{"kind":"textbox","id":"sh/pcvq5k3q","slide":10,"name":"eyebrow","text":"U I / U X   P L A N N I N G","textPreview":"U I / U X   P L A N N I N G","textChars":27,"textLines":1,"bbox":[107,113,371,31]}
+{"kind":"textbox","id":"sh/obm9wfm5","slide":10,"name":"title","text":"주요 화면 구성 및 UI 기획","textPreview":"주요 화면 구성 및 UI 기획","textChars":16,"textLines":1,"bbox":[107,153,853,74]}
+{"kind":"shape","id":"sh/fmt8zalo","slide":10,"name":"title-rule","bbox":[107,238,831,0]}
+{"kind":"textbox","id":"sh/elk7q543","slide":10,"name":"intro","text":"본 서비스는 사용자 친화적인 인터페이스를 통해 복잡한 데이터를 직관적으로 전\n달합니다. 각 화면은 공공기관의 의사결정을 지원하기 위해 최적화된 레이아웃을\n제공합니다.","textPreview":"본 서비스는 사용자 친화적인 인터페이스를 통해 복잡한 데이터를 직관적으로 전 | 달합니다. 각 화면은 공공기관의 의사결정을 지원하기 위해 최적화된 레이아웃을 | 제공합니다.","textChars":92,"textLines":3,"bbox":[107,299,798,100]}
+{"kind":"shape","id":"sh/1obq103u","slide":10,"name":"dashboard-rail","bbox":[107,445,0,125]}
+{"kind":"textbox","id":"sh/gn29sfm9","slide":10,"name":"dashboard-title","text":"메인 및 대시보드","textPreview":"메인 및 대시보드","textChars":9,"textLines":1,"bbox":[140,450,371,36]}
+{"kind":"textbox","id":"sh/ri98vqlc","slide":10,"name":"dashboard-body","text":"지역 선택 기능과 방문객 수, 소비 현황 등 핵심 지\n표 위젯을 전면에 배치하여 즉각적인 통찰을 제공합\n니다.","textPreview":"지역 선택 기능과 방문객 수, 소비 현황 등 핵심 지 | 표 위젯을 전면에 배치하여 즉각적인 통찰을 제공합 | 니다.","textChars":61,"textLines":3,"bbox":[140,496,365,91]}
+{"kind":"shape","id":"sh/6h07ml47","slide":10,"name":"analysis-rail","bbox":[548,445,0,125]}
+{"kind":"textbox","id":"sh/sza1wj65","slide":10,"name":"analysis-title","text":"분석 및 예측 화면","textPreview":"분석 및 예측 화면","textChars":10,"textLines":1,"bbox":[582,450,371,36]}
+{"kind":"textbox","id":"sh/t0j25o7q","slide":10,"name":"analysis-body","text":"다각도 차트와 함께 머신러닝 기반의 미래 관광 수\n요 타임라인을 직관적인 UI로 시각화하여 제공합니\n다.","textPreview":"다각도 차트와 함께 머신러닝 기반의 미래 관광 수 | 요 타임라인을 직관적인 UI로 시각화하여 제공합니 | 다.","textChars":58,"textLines":3,"bbox":[582,496,365,91]}
+{"kind":"shape","id":"sh/6dsjutof","slide":10,"name":"report-card","bbox":[107,630,400,132]}
+{"kind":"textbox","id":"sh/7e1k3yp0","slide":10,"name":"report-card-title","text":"AI 리포트 및 챗봇","textPreview":"AI 리포트 및 챗봇","textChars":11,"textLines":1,"bbox":[130,657,258,30]}
+{"kind":"textbox","id":"sh/kbq1sj69","slide":10,"name":"report-card-body","text":"가독성 높은 전략 텍스트 및","textPreview":"가독성 높은 전략 텍스트 및","textChars":15,"textLines":1,"bbox":[130,696,326,27]}
+{"kind":"textbox","id":"sh/lcz21o7u","slide":10,"name":"report-card-orange","text":"자연어 대화형 인터페이스","textPreview":"자연어 대화형 인터페이스","textChars":13,"textLines":1,"bbox":[130,725,292,27]}
+{"kind":"shape","id":"sh/y98jq9o3","slide":10,"name":"map-card","bbox":[537,630,401,132]}
+{"kind":"textbox","id":"sh/jahkzepo","slide":10,"name":"map-card-title","text":"지도 서비스 기획","textPreview":"지도 서비스 기획","textChars":9,"textLines":1,"bbox":[562,657,258,30]}
+{"kind":"textbox","id":"sh/47ul436d","slide":10,"name":"map-card-body","text":"카카오맵 기반 핫플레이스","textPreview":"카카오맵 기반 핫플레이스","textChars":13,"textLines":1,"bbox":[562,696,326,27]}
+{"kind":"textbox","id":"sh/p832d87y","slide":10,"name":"map-card-orange","text":"관광지 클러스터링 시각화","textPreview":"관광지 클러스터링 시각화","textChars":13,"textLines":1,"bbox":[562,725,292,27]}
+{"kind":"image","id":"im/nqpc7a1w","slide":10,"name":"island-photo","alt":"해안 관광 사진","bbox":[1037,4,560,893]}
+{"kind":"notes","id":"nt/oytfau","slide":10,"text":"[Sources]\n- User-provided visual reference: C:\\Users\\Admin\\Desktop\\ppt예시안 이미지\\10.png"}
+{"kind":"slide","id":"sl/ymcjsl","slide":11,"title":"T E C H   S T A C K   &   I N F R A S T R U C T U R E","textShapes":11}
+{"kind":"textbox","id":"sh/5sf25s7i","slide":11,"name":"eyebrow","text":"T E C H   S T A C K   &   I N F R A S T R U C T U R E","textPreview":"T E C H   S T A C K   &   I N F R A S T R U C T U R E","textChars":53,"textLines":1,"bbox":[106,51,534,31]}
+{"kind":"textbox","id":"sh/4r61w76d","slide":11,"name":"title","text":"시스템 아키텍처 및\n기술 스택","textPreview":"시스템 아키텍처 및 | 기술 스택","textChars":16,"textLines":2,"bbox":[106,99,821,170]}
+{"kind":"shape","id":"sh/vmx0zipg","slide":11,"name":"short-rule","bbox":[106,286,81,0]}
+{"kind":"shape","id":"sh/ulojqd8v","slide":11,"name":"stack-card-0","bbox":[106,388,426,89]}
+{"kind":"shape","id":"sh/hof21s7m","slide":11,"name":"stack-card-0-rail","bbox":[106,388,0,89]}
+{"kind":"textbox","id":"sh/gn61sn61","slide":11,"name":"stack-card-0-title","text":"Frontend","textPreview":"Frontend","textChars":8,"textLines":1,"bbox":[131,410,281,29]}
+{"kind":"textbox","id":"sh/7yd0vipk","slide":11,"name":"stack-card-0-body","text":"React, Vite, Tailwind CSS","textPreview":"React, Vite, Tailwind CSS","textChars":25,"textLines":1,"bbox":[131,444,360,25]}
+{"kind":"shape","id":"sh/6x4jmd8z","slide":11,"name":"stack-card-1","bbox":[551,388,426,89]}
+{"kind":"shape","id":"sh/kvqlwfep","slide":11,"name":"stack-card-1-rail","bbox":[551,388,0,89]}
+{"kind":"textbox","id":"sh/5wz25kfa","slide":11,"name":"stack-card-1-title","text":"Backend","textPreview":"Backend","textChars":7,"textLines":1,"bbox":[576,410,281,29]}
+{"kind":"textbox","id":"sh/it83u5wj","slide":11,"name":"stack-card-1-body","text":"Python FastAPI 고성능 서버","textPreview":"Python FastAPI 고성능 서버","textChars":21,"textLines":1,"bbox":[576,444,360,25]}
+{"kind":"shape","id":"sh/juhk3ax4","slide":11,"name":"stack-card-2","bbox":[106,497,426,89]}
+{"kind":"shape","id":"sh/wrqlsvet","slide":11,"name":"stack-card-2-rail","bbox":[106,497,0,89]}
+{"kind":"textbox","id":"sh/xsz210fe","slide":11,"name":"stack-card-2-title","text":"ML/AI","textPreview":"ML/AI","textChars":5,"textLines":1,"bbox":[131,519,281,29]}
+{"kind":"textbox","id":"sh/a5o3q5wn","slide":11,"name":"stack-card-2-body","text":"PyTorch & LangChain LLM","textPreview":"PyTorch & LangChain LLM","textChars":23,"textLines":1,"bbox":[131,553,360,25]}
+{"kind":"shape","id":"sh/vqhkzqx8","slide":11,"name":"stack-card-3","bbox":[551,497,426,89]}
+{"kind":"shape","id":"sh/gnal4zex","slide":11,"name":"stack-card-3-rail","bbox":[551,497,0,89]}
+{"kind":"textbox","id":"sh/hojmd4fi","slide":11,"name":"stack-card-3-title","text":"Infrastructure","textPreview":"Infrastructure","textChars":14,"textLines":1,"bbox":[576,519,281,29]}
+{"kind":"textbox","id":"sh/pkz2xk7m","slide":11,"name":"stack-card-3-body","text":"AWS EC2, S3, RDS 클라우드","textPreview":"AWS EC2, S3, RDS 클라우드","textChars":21,"textLines":1,"bbox":[576,553,360,25]}
+{"kind":"textbox","id":"sh/oj6loz61","slide":11,"name":"body","text":"본 서비스는 최신 웹 기술과 AI 프레임워크를 결합하여 안정적인 분석 환경을 제공합니다.\nFrontend는 React와 Vite, Tailwind CSS를 통해 고성능 반응형 UI를 구현하며, Backend\n는 Python FastAPI로 데이터 처리 효율을 극대화합니다. ML/AI 영역에서는 PyTorch 기반의\n수요 예측 모델과 LangChain 기반 LLM 오케스트레이션을 통해 지능형 에이전트 기능을 수\n행합니다. 전체 인프라는 AWS EC2, S3, RDS를 활용하여 최적화된 클라우드 아키텍처로 설\n계되었습니다.","textPreview":"본 서비스는 최신 웹 기술과 AI 프레임워크를 결합하여 안정적인 분석 환경을 제공합니다. | Frontend는 React와 Vite, Tailwind CSS를 통해 고성능 반응형 UI를 구현하며, Backend | 는 Python FastAPI로...","textChars":293,"textLines":6,"bbox":[136,657,854,243]}
+{"kind":"image","id":"im/ja1grixs","slide":11,"name":"workspace-photo","alt":"개발 환경 이미지","bbox":[1076,0,524,900]}
+{"kind":"notes","id":"nt/ymcjsl","slide":11,"text":"[Sources]\n- User-provided visual reference: C:\\Users\\Admin\\Desktop\\ppt예시안 이미지\\11.png"}
+{"kind":"slide","id":"sl/diqbj0","slide":12,"title":"기대 효과 및 향후 확장 방향","textShapes":19}
+{"kind":"textbox","id":"sh/c7ypkvqp","slide":12,"name":"title","text":"기대 효과 및 향후 확장 방향","textPreview":"기대 효과 및 향후 확장 방향","textChars":16,"textLines":1,"bbox":[471,238,667,77]}
+{"kind":"shape","id":"sh/b6porqp4","slide":12,"name":"column-line-1","bbox":[580,354,0,382]}
+{"kind":"shape","id":"sh/qlg7il8j","slide":12,"name":"column-line-2","bbox":[1026,354,0,382]}
+{"kind":"textbox","id":"sh/pk76pg7y","slide":12,"name":"expected-pill","text":"기대 효과","textPreview":"기대 효과","textChars":5,"textLines":1,"bbox":[86,354,425,49]}
+{"kind":"shape","id":"sh/ojypgbqd","slide":12,"name":"expected-card","bbox":[86,434,425,134]}
+{"kind":"textbox","id":"sh/3i5on6ps","slide":12,"name":"expected-body","text":"과학적 분석을 통한 정책 실효성 증대 및 불필요한\n예산 절감으로 관광 행정 효율성을 극대화합니다.","textPreview":"과학적 분석을 통한 정책 실효성 증대 및 불필요한 | 예산 절감으로 관광 행정 효율성을 극대화합니다.","textChars":54,"textLines":2,"bbox":[115,476,366,72]}
+{"kind":"textbox","id":"sh/2hw7e18n","slide":12,"name":"indicator-pill","text":"분석 고도화 지표","textPreview":"분석 고도화 지표","textChars":9,"textLines":1,"bbox":[86,608,425,49]}
+{"kind":"shape","id":"sh/9grq1k72","slide":12,"name":"indicator-circle-0","bbox":[95,685,52,52]}
+{"kind":"textbox","id":"sh/8fipsfqx","slide":12,"name":"indicator-glyph-0","text":"⌁","textPreview":"⌁","textChars":1,"textLines":1,"bbox":[104,692,34,34]}
+{"kind":"shape","id":"sh/yxk7q9o7","slide":12,"name":"indicator-circle-1","bbox":[166,685,52,52]}
+{"kind":"textbox","id":"sh/zyd8jeps","slide":12,"name":"indicator-glyph-1","text":"◔","textPreview":"◔","textChars":1,"textLines":1,"bbox":[175,692,34,34]}
+{"kind":"shape","id":"sh/0zmpsj6x","slide":12,"name":"indicator-circle-2","bbox":[237,685,52,52]}
+{"kind":"textbox","id":"sh/l0vqlo7i","slide":12,"name":"indicator-glyph-2","text":"▦","textPreview":"▦","textChars":1,"textLines":1,"bbox":[246,692,34,34]}
+{"kind":"shape","id":"sh/qtk7m9ov","slide":12,"name":"indicator-circle-3","bbox":[308,685,52,52]}
+{"kind":"textbox","id":"sh/but8fepg","slide":12,"name":"indicator-glyph-3","text":"▤","textPreview":"▤","textChars":1,"textLines":1,"bbox":[317,692,34,34]}
+{"kind":"shape","id":"sh/cv2poj61","slide":12,"name":"indicator-circle-4","bbox":[379,685,52,52]}
+{"kind":"textbox","id":"sh/dwbqho7m","slide":12,"name":"indicator-glyph-4","text":"⚡","textPreview":"⚡","textChars":1,"textLines":1,"bbox":[388,692,34,34]}
+{"kind":"shape","id":"sh/apo7ytof","slide":12,"name":"indicator-circle-5","bbox":[450,685,52,52]}
+{"kind":"textbox","id":"sh/vqx8rypk","slide":12,"name":"indicator-glyph-5","text":"◎","textPreview":"◎","textChars":1,"textLines":1,"bbox":[459,692,34,34]}
+{"kind":"textbox","id":"sh/rap4jq5c","slide":12,"name":"service-pill","text":"서비스 확장 및 고도화","textPreview":"서비스 확장 및 고도화","textChars":12,"textLines":1,"bbox":[611,354,383,49]}
+{"kind":"textbox","id":"sh/69gnq5or","slide":12,"name":"service-body","text":"실시간 유동인구 연동 및 외국인 관광객 정밀 분석 기\n능을 추가하여 글로벌 관광 수요에 기민하게 대응합니\n다.","textPreview":"실시간 유동인구 연동 및 외국인 관광객 정밀 분석 기 | 능을 추가하여 글로벌 관광 수요에 기민하게 대응합니 | 다.","textChars":61,"textLines":3,"bbox":[611,451,383,115]}
+{"kind":"textbox","id":"sh/tc7ml0n2","slide":12,"name":"service-note","text":"* AI 기반의 예측 모델을 도입하여 향후 관광 트렌드 변화에 대\n한 선제적인 의사결정 지원 체계를 구축할 예정입니다.","textPreview":"* AI 기반의 예측 모델을 도입하여 향후 관광 트렌드 변화에 대 | 한 선제적인 의사결정 지원 체계를 구축할 예정입니다.","textChars":66,"textLines":2,"bbox":[611,583,383,77]}
+{"kind":"textbox","id":"sh/sby5svmx","slide":12,"name":"service-scope","text":"범위: 글로벌 및 실시간","textPreview":"범위: 글로벌 및 실시간","textChars":13,"textLines":1,"bbox":[611,688,383,49]}
+{"kind":"textbox","id":"sh/fyp4na58","slide":12,"name":"private-pill","text":"민간 데이터 융합","textPreview":"민간 데이터 융합","textChars":9,"textLines":1,"bbox":[1096,354,425,49]}
+{"kind":"textbox","id":"sh/exgnu54n","slide":12,"name":"private-body","text":"카드사, 통신사 등 민간 데이터 결합을 통한 정밀한 지역 상\n권 분석 및 개인화된 관광 전략 서비스 제공으로 지역 경제\n활성화를 견인합니다.","textPreview":"카드사, 통신사 등 민간 데이터 결합을 통한 정밀한 지역 상 | 권 분석 및 개인화된 관광 전략 서비스 제공으로 지역 경제 | 활성화를 견인합니다.","textChars":78,"textLines":3,"bbox":[1096,451,425,122]}
+{"kind":"shape","id":"sh/10rmpkne","slide":12,"name":"private-info","bbox":[1264,522,18,18]}
+{"kind":"textbox","id":"sh/gzi5wfmt","slide":12,"name":"private-info-label","text":"i","textPreview":"i","textChars":1,"textLines":1,"bbox":[1268,522,10,15]}
+{"kind":"textbox","id":"sh/3294ra5k","slide":12,"name":"private-goal","text":"핵심 목표: 지역 경제 활성화","textPreview":"핵심 목표: 지역 경제 활성화","textChars":16,"textLines":1,"bbox":[1096,603,361,34]}
+{"kind":"textbox","id":"sh/210nyp4z","slide":12,"name":"private-scope","text":"협력: 민간 데이터 거버넌스","textPreview":"협력: 민간 데이터 거버넌스","textChars":15,"textLines":1,"bbox":[1096,688,425,49]}
+{"kind":"notes","id":"nt/diqbj0","slide":12,"text":"[Sources]\n- User-provided visual reference: C:\\Users\\Admin\\Desktop\\ppt예시안 이미지\\12.png"}

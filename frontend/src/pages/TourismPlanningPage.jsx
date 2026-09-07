@@ -5,7 +5,7 @@ import RegionWorkspacePicker from '../components/RegionWorkspacePicker'
 import PlanningBriefSummary from '../features/planning/PlanningBriefSummary'
 import { readPlanningDraft, savePlanningDraft, validatePlanningBrief } from '../features/planning/planningBrief'
 import { readActiveStrategyJob, saveActiveStrategyJob, useWorkspaceRegionData } from './tourismWorkspace'
-import { startAiStrategyReportJob, uploadPlanningReference } from '../api/dashboardApi'
+import { getStrategyGenerationReadiness, startAiStrategyReportJob, uploadPlanningReference } from '../api/dashboardApi'
 import '../App.css'
 import '../features/planning/planning.css'
 
@@ -29,6 +29,7 @@ function PlanningForm({ region, dataState, onDirtyChange, onSaveReady }) {
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const [uploading, setUploading] = useState(false)
+  const [freshness, setFreshness] = useState({ status: 'loading', can_generate: false, message: '최신 분석 데이터를 확인하고 있습니다.' })
   const submitting = useRef(false)
   const [dirty, setDirty] = useState(false)
   useEffect(() => {
@@ -39,6 +40,15 @@ function PlanningForm({ region, dataState, onDirtyChange, onSaveReady }) {
     return () => window.removeEventListener('beforeunload', guard)
   }, [dirty, onDirtyChange])
   const activeJob = readActiveStrategyJob(region.code)
+  // 생성만 보호하고, 대시보드·저장 기획안 조회에는 영향을 주지 않는 서버 최신성 계약입니다.
+  useEffect(() => {
+    let active = true
+    setFreshness({ status: 'loading', can_generate: false, message: '최신 분석 데이터를 확인하고 있습니다.' })
+    getStrategyGenerationReadiness(region.code, region.name)
+      .then((result) => { if (active) setFreshness(result?.data_freshness || { status: 'unavailable', can_generate: false, message: '데이터 최신성 정보를 받지 못했습니다.' }) })
+      .catch((requestError) => { if (active) setFreshness({ status: 'unavailable', can_generate: false, message: requestError.message }) })
+    return () => { active = false }
+  }, [region.code, region.name])
   // 모든 입력 변경은 한 함수로 모아 저장 전 경고(dirty 상태)와 안내 문구를 일관되게 갱신합니다.
   const update = (changes) => { setBrief((current) => ({ ...current, ...changes })); setDirty(true); setMessage(''); setError('') }
   // 서버 요청 전에 브라우저에서도 기본 형식(금액·날짜)을 먼저 검사합니다.
@@ -57,6 +67,7 @@ function PlanningForm({ region, dataState, onDirtyChange, onSaveReady }) {
   // 중복 클릭은 submitting ref로 막고, 실제 진행 상태는 작업 ID로 복원합니다.
   const generate = async (event) => {
     event.preventDefault()
+    if (!activeJob && !freshness.can_generate) { setError(freshness.message); return }
     if (submitting.current || uploading || !save()) return
     submitting.current = true; setBusy(true)
     try {
@@ -119,12 +130,14 @@ function PlanningForm({ region, dataState, onDirtyChange, onSaveReady }) {
       {(error || message || dirty || dataState === 'error') && <div className="planning-inline-status" aria-live="polite">{error ? <p role="alert" className="planning-error">{error}</p> : (message || dirty) && <p>{message || '저장하지 않은 변경사항이 있습니다.'}</p>}
         {dataState === 'error' && <p className="planning-error">지역 원자료를 불러오지 못했습니다. 서버 연결을 확인해 주세요.</p>}</div>}
     </div>
-    <aside className="planning-summary-column"><PlanningBriefSummary brief={brief} regionName={region.name} title="아래 조건으로 기획안 생성" /><button type="submit" disabled={busy || uploading || dataState !== 'ready'} className="planning-primary planning-summary-generate">{busy ? <LoaderCircle className="planning-spinner" size={16} /> : <Sparkles size={16} />}{busy ? '생성 요청 중…' : activeJob ? '생성 중인 기획안 보기' : '기획안 생성'}<ArrowRight size={16} /></button></aside>
+    <aside className="planning-summary-column"><PlanningBriefSummary brief={brief} regionName={region.name} title="아래 조건으로 기획안 생성" />
+      {freshness.status !== 'loading' && (freshness.missing_month_count > 0 || !freshness.can_generate) && <section className={`planning-freshness ${freshness.can_generate ? '' : 'is-blocked'}`} aria-live="polite"><strong>{freshness.can_generate ? '데이터 반영 안내' : '데이터 업데이트 필요'}</strong><p>{freshness.message}</p>{Array.isArray(freshness.required_steps) && freshness.required_steps.length > 0 && <ol>{freshness.required_steps.map((step) => <li key={step}>{step}</li>)}</ol>}</section>}
+      <button type="submit" disabled={!activeJob && (busy || uploading || dataState !== 'ready' || !freshness.can_generate)} className="planning-primary planning-summary-generate">{busy ? <LoaderCircle className="planning-spinner" size={16} /> : <Sparkles size={16} />}{busy ? '생성 요청 중…' : activeJob ? '생성 중인 기획안 보기' : freshness.status === 'loading' ? '데이터 확인 중…' : freshness.can_generate ? '기획안 생성' : '데이터 업데이트 후 생성'}<ArrowRight size={16} /></button></aside>
   </form>
 }
 
 export default function TourismPlanningPage() {
-  const { region, chooseRegion, state } = useWorkspaceRegionData()
+  const { region, regions, chooseRegion, state } = useWorkspaceRegionData()
   const [dirty, setDirty] = useState(false)
   const [saveDraft, setSaveDraft] = useState(null)
   // 다른 지역으로 바꾸기 전, 아직 저장하지 않은 사업 여건이 있으면 한 번 확인합니다.
@@ -133,5 +146,5 @@ export default function TourismPlanningPage() {
     if (dirty && !window.confirm('저장하지 않은 변경사항이 있습니다. 저장하지 않고 지역을 변경할까요?')) return
     setDirty(false); chooseRegion(code)
   }
-  return <WorkspaceShell><main className="tourism-work-page planning-page"><header className="work-page-header"><div><h1>{region.name}</h1></div><RegionWorkspacePicker region={region} label="분석지역 변경" onChange={changeRegion} /><button type="button" className="planning-header-save" disabled={!saveDraft} onClick={() => saveDraft?.()}><Save size={15} />임시저장</button></header><PlanningForm key={region.code} region={region} dataState={state} onDirtyChange={setDirty} onSaveReady={setSaveDraft} /></main></WorkspaceShell>
+  return <WorkspaceShell><main className="tourism-work-page planning-page"><header className="work-page-header"><div><h1>{region.name}</h1></div><RegionWorkspacePicker region={region} regions={regions} label="분석지역 변경" onChange={changeRegion} /><button type="button" className="planning-header-save" disabled={!saveDraft} onClick={() => saveDraft?.()}><Save size={15} />임시저장</button></header><PlanningForm key={region.code} region={region} dataState={state} onDirtyChange={setDirty} onSaveReady={setSaveDraft} /></main></WorkspaceShell>
 }

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import Any, Literal
+from datetime import date
 from pydantic import BaseModel, Field
 
 from .horizon_policy import resolve_planning_horizon
@@ -64,11 +65,27 @@ def _compact_evaluation(model: dict[str, Any], forecast_horizon_months: int) -> 
     metrics = {}
     recursive = model['recursive_evaluation']['by_horizon']
     for key, result in model['evaluation'].items():
+        # 최종 Test로 모델을 다시 선택하지 않습니다. 저장 모델은 유지하되 어떤 전망을
+        # 강한 의사결정 근거로 쓸 수 없는지, 1~3개월 재귀 평가까지 구분해 전달합니다.
+        weak_horizons = [str(horizon) for horizon, row in recursive[key].items()
+                         if row['selected']['mae'] > row['baseline']['mae']]
+        if result['selected_model'].startswith('seasonal_naive'):
+            reliability = 'seasonal_baseline'
+        elif result['selected_model_metrics']['mae'] > result['baseline_metrics']['mae']:
+            reliability = 'below_baseline_on_test'
+        elif weak_horizons:
+            reliability = 'mixed_recursive_performance'
+        elif not result['beats_baseline_on_test']:
+            reliability = 'no_test_improvement'
+        else:
+            reliability = 'limited_backtest_support'
         metrics[key] = {
             'selected_model': result['selected_model'],
             'test_mae': result['selected_model_metrics']['mae'],
             'baseline_test_mae': result['baseline_metrics']['mae'],
             'beats_baseline_on_test': result['beats_baseline_on_test'],
+            'model_reliability': reliability,
+            'recursive_horizons_worse_than_baseline': weak_horizons,
             'recursive_mae': {
                 horizon: {
                     'selected': row['selected']['mae'], 'baseline': row['baseline']['mae'],
@@ -93,6 +110,8 @@ def build_planning_ml_evidence(
     region_code: str,
     region_name: str,
     planning_brief: dict[str, Any] | None = None,
+    *,
+    as_of_date: date | None = None,
 ) -> PlanningMlEvidence:
     """지역키·데이터 버전·시험 기록이 맞는 모델만 기획안에 넣습니다. 없으면 수치를 만들지 않습니다."""
     identity = {'region_code': str(region_code), 'region_name': region_name}
@@ -108,7 +127,7 @@ def build_planning_ml_evidence(
         history = pipeline.load_history()
         validate_monthly_data(history, str(region_code))
         latest_observed_month = str(history['year_month'].iloc[-1])
-        horizon_policy = resolve_planning_horizon(planning_brief, latest_observed_month)
+        horizon_policy = resolve_planning_horizon(planning_brief, latest_observed_month, as_of_date=as_of_date)
         # 온라인 재학습 없이 저장 모델을 필요한 범위까지만 재귀 호출합니다.
         prediction = pipeline.predict(horizon_policy.forecast_horizon_months)
         model = prediction['model']
@@ -154,6 +173,7 @@ def build_planning_ml_evidence(
         # 실패할 때 경로·내부 예외를 사용자나 프롬프트에 흘리지 않고 관측 자료만으로 계속 진행합니다.
         return PlanningMlEvidence(status='unavailable', reason_code='ML_DATA_OR_MODEL_UNAVAILABLE', **identity)
 
+    evaluation = _compact_evaluation(model, horizon_policy.forecast_horizon_months)
     source_id = f"ml:{region_code}:{model['version']}:{prediction['latest_observed_month']}"
     period = f'{forecasts[0].month}~{forecasts[-1].month}'
     signals, questions = [], []
@@ -179,6 +199,7 @@ def build_planning_ml_evidence(
             signals.append({
                 'kind': 'forecast_signal', 'window_label': window.label,
                 'window_months': window.months, 'reliability': window.reliability,
+                'model_reliability': evaluation['metrics'][metric]['model_reliability'],
                 'metric': metric, 'period': window_period,
                 'aggregation': f'{window.months}_month_sum' if use_sum else f'{window.months}_month_average',
                 'forecast_value': forecast_value, 'previous_year_same_months_value': previous_value,
@@ -201,10 +222,11 @@ def build_planning_ml_evidence(
         model_version=model['version'], data_fingerprint=model['data_fingerprint'],
         horizon_policy=horizon_policy.model_payload(),
         forecasts=forecasts, signals=signals, research_questions=questions,
-        evaluation=_compact_evaluation(model, horizon_policy.forecast_horizon_months),
+        evaluation=evaluation,
         cautions=[
             '관측 사실·ML 전망·사업 목표를 분리합니다. 전망은 정책 미실행 결과나 인과효과가 아닙니다.',
             '시험 표본이 적습니다. 지표·horizon별 기준선 대비 오차를 확인하고 우수성을 일반화하지 않습니다.',
+            'below_baseline_on_test 또는 mixed_recursive_performance 전망은 단독 선정 근거·성과 목표로 쓰지 않습니다. seasonal_baseline은 전년 동월 반복이며 고도화 모델의 개선 성과가 아닙니다.',
             '관광소비액은 지역 사업자의 순이익이 아닙니다. 방문자와 소비 표본이 같다는 확인 없이 1인당 소비를 계산하지 않습니다.',
             '업종별 비중 변화·SNS 언급량·쿠폰 지급 효과·사업의 추가 매출은 이 모델이 학습한 대상이 아닙니다.',
             '내비게이션·숙박 검색량은 관심 신호이며 실제 방문·예약 건수로 해석하지 않습니다.',

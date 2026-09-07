@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
-import { getAiRegionDashboard } from '../api/dashboardApi'
+import { getAiRegionCatalog, getAiRegionDashboard } from '../api/dashboardApi'
 
-/** 현재 원자료 ZIP을 검증해 연결한 지역 목록입니다. */
+/** AI 서버가 아직 시작되지 않은 첫 화면에도 사용할 최소 기본값입니다.
+ * 실제 선택 목록은 useWorkspaceRegionData가 서버 카탈로그에서 자동으로 갱신합니다.
+ */
 export const SUPPORTED_TOURISM_REGIONS = [
   { code: '11680', name: '서울특별시 강남구' },
-  { code: '28245', name: '인천광역시 계양구' },
-  { code: '28260', name: '인천광역시 서구' },
-  { code: '28720', name: '인천광역시 옹진군' },
 ]
 
 export const DEFAULT_TOURISM_REGION = SUPPORTED_TOURISM_REGIONS[0]
@@ -27,8 +26,31 @@ export function saveWorkspaceRegion(region) { window.localStorage.setItem(REGION
 /** 선택 지역의 실제 최신 월 지표를 불러오는 공통 Hook입니다. */
 export function useWorkspaceRegionData() {
   const [region, setRegion] = useState(readWorkspaceRegion)
+  const [regions, setRegions] = useState(SUPPORTED_TOURISM_REGIONS)
   const [dashboard, setDashboard] = useState(null)
   const [state, setState] = useState('loading')
+  // 지원 지역은 AI 서버 카탈로그가 단일 기준입니다. 새 지역의 원본 검증·모델 학습이
+  // 끝나면 React 코드를 다시 고치지 않아도 다음 새로고침에서 선택할 수 있습니다.
+  useEffect(() => {
+    let active = true
+    getAiRegionCatalog()
+      .then((payload) => {
+        const nextRegions = Array.isArray(payload?.regions)
+          ? payload.regions.map((item) => ({ code: item.region_code, name: item.region_name }))
+          : []
+        if (!active || nextRegions.length === 0) return
+        setRegions(nextRegions)
+        setRegion((current) => {
+          const next = nextRegions.find((item) => item.code === current.code) || nextRegions[0]
+          if (next.code !== current.code || next.name !== current.name) saveWorkspaceRegion(next)
+          return next
+        })
+      })
+      .catch(() => {
+        // 서버 재시작 중에도 기존에 선택한 기본 지역 화면은 계속 열 수 있게 둡니다.
+      })
+    return () => { active = false }
+  }, [])
   useEffect(() => {
     let active = true
     getAiRegionDashboard(region.code, region.name)
@@ -37,10 +59,10 @@ export function useWorkspaceRegionData() {
     return () => { active = false }
   }, [region])
   const chooseRegion = (code) => {
-    const next = SUPPORTED_TOURISM_REGIONS.find((item) => item.code === code) || DEFAULT_TOURISM_REGION
+    const next = regions.find((item) => item.code === code) || regions[0] || DEFAULT_TOURISM_REGION
     saveWorkspaceRegion(next); setDashboard(null); setState('loading'); setRegion(next)
   }
-  return { region, chooseRegion, dashboard, state }
+  return { region, regions, chooseRegion, dashboard, state }
 }
 
 export function formatCompactWon(value) {

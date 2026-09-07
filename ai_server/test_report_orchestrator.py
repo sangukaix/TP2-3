@@ -17,6 +17,7 @@ from ai_server.app.agents.report_orchestrator import (
 )
 from ai_server.app.agents.transferability_agent import TransferabilityAgent
 from ai_server.app.openai_responses import OpenAIResponseError
+from ai_server.app.llm.errors import LLMProviderError
 from ai_server.app.proposal_document import create_strategy_proposal_document
 from ai_server.app.case_registry import load_curated_case_registry
 
@@ -25,7 +26,13 @@ def _draft(title: str) -> dict:
     return {
         'summary': title,
         'observed_findings': [],
-        'strategies': [],
+        'strategies': [{
+            'solution': '참여 조건을 정해 예약형 시범 프로그램을 운영합니다.',
+            'budget': '운영 수량 × 비교견적 단가',
+            'kpi': '기준월 원자료의 취소 제외 결제 합계를 월별로 같은 범위 비교집단과 비교. 착수 전 기준선을 확인해 목표를 정함.', 'evidence': 'dataset:1, case:1',
+            'implementation_steps': [{'step': i, 'schedule': f'{i}주', 'task': '운영 담당자가 참여 조건을 확인하고 모집·운영 기록을 작성',
+                                      'deliverable': '운영 기록'} for i in range(1, 6)],
+        }],
         'limitations': [],
     }
 
@@ -63,6 +70,16 @@ class FakeCaseStudyAgent:
             'research_gaps': [],
             'trace': [{'agent': 'case_scout', 'stage': 'official_case_web', 'status': 'completed', 'items': 1}],
         }
+
+
+class ChunkedEvidenceAgent(FakeEvidenceAgent):
+    async def collect(self, **kwargs: object) -> dict:
+        result = await super().collect(**kwargs)
+        result['sources'].extend([
+            {'source_id': 'pdf:seminar', 'chunk_id': f'pdf:seminar:p{i}',
+             'source_type': 'rag', 'summary': f'page {i}'} for i in (1, 2)
+        ])
+        return result
 
 
 class FakeTransferabilityAgent:
@@ -127,6 +144,7 @@ class FakeReviewerAgent:
 
 
 class FailingRevisionPlanner(FakePlannerAgent):
+    error_type = OpenAIResponseError
     async def write(
         self,
         evidence_pack: dict,
@@ -136,7 +154,7 @@ class FailingRevisionPlanner(FakePlannerAgent):
         del evidence_pack
         if revision_feedback:
             self.assert_previous_draft(previous_draft)
-            raise OpenAIResponseError('OPENAI_MODEL_OR_REQUEST_ERROR', '수정 요청 거절')
+            raise self.error_type('OPENAI_MODEL_OR_REQUEST_ERROR', '수정 요청 거절')
         return _draft('보존할 초안')
 
     @staticmethod
@@ -147,6 +165,10 @@ class FailingRevisionPlanner(FakePlannerAgent):
 
 class ReportOrchestratorTest(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
+        # 실제 관리자가 저장한 로컬 우선 모드/개인 GPU 연결과 테스트 설정을 격리합니다.
+        self.runtime_directory = TemporaryDirectory()
+        self.addCleanup(self.runtime_directory.cleanup)
+        self.project_root = Path(self.runtime_directory.name)
         _EVIDENCE_CACHE.clear()
         _CASE_STUDY_CACHE.clear()
         FakeEvidenceAgent.calls = 0
@@ -154,6 +176,24 @@ class ReportOrchestratorTest(unittest.IsolatedAsyncioTestCase):
         FakeTransferabilityAgent.calls = 0
         FakePlannerAgent.last_evidence_pack = None
         FakePlannerAgent.last_previous_draft = None
+
+    async def test_collected_pdf_pages_survive_orchestration(self) -> None:
+        FakeReviewerAgent.calls = 1
+        with (
+            patch('ai_server.app.agents.report_orchestrator.EvidenceAgent', ChunkedEvidenceAgent),
+            patch('ai_server.app.agents.report_orchestrator.CaseStudyAgent', FakeCaseStudyAgent),
+            patch('ai_server.app.agents.report_orchestrator.TransferabilityAgent', FakeTransferabilityAgent),
+            patch('ai_server.app.agents.report_orchestrator.PlannerAgent', FakePlannerAgent),
+            patch('ai_server.app.agents.report_orchestrator.ReviewerAgent', FakeReviewerAgent),
+        ):
+            result = await orchestrate_strategy_report(
+                project_root=self.project_root,
+                env_values={'OPENAI_API_KEY': 'test', 'OPENAI_REPORT_MODEL': 'test-model'},
+                region_code='11680', snapshot={'region_name': '서울특별시 강남구'}, report_schema={},
+            )
+        for sources in (FakePlannerAgent.last_evidence_pack['sources'], result['evidence_sources']):
+            self.assertEqual([row['chunk_id'] for row in sources if row.get('chunk_id')],
+                             ['pdf:seminar:p1', 'pdf:seminar:p2'])
 
     async def test_same_snapshot_reuses_only_evidence_collection(self) -> None:
         FakeReviewerAgent.calls = 1  # 두 호출 모두 첫 검수에서 바로 통과시킵니다.
@@ -165,7 +205,7 @@ class ReportOrchestratorTest(unittest.IsolatedAsyncioTestCase):
             patch('ai_server.app.agents.report_orchestrator.ReviewerAgent', FakeReviewerAgent),
         ):
             arguments = {
-                'project_root': Path('.'),
+                'project_root': self.project_root,
                 'env_values': {
                     'OPENAI_API_KEY': 'test',
                     'OPENAI_REPORT_MODEL': 'test-model',
@@ -186,7 +226,8 @@ class ReportOrchestratorTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(FakeTransferabilityAgent.calls, 2)
         self.assertEqual(FakePlannerAgent.last_evidence_pack['transfer_assessment']['recommended_case_ids'], ['case:1'])
         self.assertEqual(first['ml_analysis']['status'], 'available')
-        self.assertEqual(len(FakePlannerAgent.last_evidence_pack['snapshot']['ml_analysis']['forecasts']), 6)
+        ml = FakePlannerAgent.last_evidence_pack['snapshot']['ml_analysis']
+        self.assertEqual(len(ml['forecasts']), ml['horizon_policy']['forecast_horizon_months'])
         self.assertEqual(
             FakePlannerAgent.last_evidence_pack['snapshot']['ml_analysis']['horizon_policy']['selection_basis'],
             'unknown_compare_3_and_6_months',
@@ -203,7 +244,7 @@ class ReportOrchestratorTest(unittest.IsolatedAsyncioTestCase):
             patch('ai_server.app.agents.report_orchestrator.ReviewerAgent', FakeReviewerAgent),
         ):
             result = await orchestrate_strategy_report(
-                project_root=Path('.'),
+                project_root=self.project_root,
                 env_values={'OPENAI_API_KEY': 'test', 'OPENAI_REPORT_MODEL': 'test-model'},
                 region_code='11680',
                 snapshot={'region_name': '서울특별시 강남구'},
@@ -227,7 +268,7 @@ class ReportOrchestratorTest(unittest.IsolatedAsyncioTestCase):
             patch('ai_server.app.agents.report_orchestrator.ReviewerAgent', FakeReviewerAgent),
         ):
             result = await orchestrate_strategy_report(
-                project_root=Path('.'),
+                project_root=self.project_root,
                 env_values={'OPENAI_API_KEY': 'test', 'OPENAI_REPORT_MODEL': 'test-model'},
                 region_code='11680',
                 snapshot={'region_name': '서울특별시 강남구'},
@@ -246,6 +287,11 @@ class ReportOrchestratorTest(unittest.IsolatedAsyncioTestCase):
 
         self.assertEqual(result['recommended_case_ids'], [])
         self.assertIn('집행하지 않음', result['strategy_brief']['stop_or_scale_rule'])
+
+    async def test_hybrid_revision_failure_also_preserves_draft(self) -> None:
+        """Hybrid Provider 오류도 기존 OpenAI 오류처럼 승인되지 않은 초안을 보존합니다."""
+        with patch.object(FailingRevisionPlanner, 'error_type', LLMProviderError):
+            await self.test_revision_failure_preserves_reviewed_initial_draft()
 
     def test_curated_case_registry_uses_only_allowed_official_sources(self) -> None:
         cases = _load_curated_case_cards(

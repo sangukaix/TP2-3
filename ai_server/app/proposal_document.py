@@ -25,6 +25,8 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Inches, Pt, RGBColor
+from .report_projection import execution_target, select_report_forecast, target_series
+from .report_review_status import review_label
 
 
 INK = '203C60'
@@ -158,21 +160,15 @@ def _compact_text(value: Any, limit: int) -> str:
 
 def _execution_target(report: dict[str, Any]) -> tuple[float, float] | None:
     """사용자가 직접 입력한 목표율만 읽습니다. 입력이 없으면 임의 기본값을 만들지 않습니다."""
-    scenario = report.get('execution_scenario') or {}
-    if 'visitor_target_pct' not in scenario or 'spending_target_pct' not in scenario:
+    if not select_report_forecast(report)['complete']:
         return None
-    visitor_pct = float(scenario['visitor_target_pct'])
-    spending_pct = float(scenario['spending_target_pct'])
-    return max(0, min(visitor_pct, 20)), max(0, min(spending_pct, 30))
+    return execution_target(report)
 
 
 def _ml_forecast_rows(report: dict[str, Any]) -> list[dict[str, Any]]:
     """저장 모델이 만든 자연추세 전망만 문서용 월별 행으로 정리합니다."""
-    analysis = report.get('ml_analysis') or {}
-    if analysis.get('status') != 'available':
-        return []
     rows: list[dict[str, Any]] = []
-    for forecast in (analysis.get('forecasts') or [])[:6]:
+    for forecast in select_report_forecast(report)['rows']:
         month = str(forecast.get('month') or '')
         if len(month) == 6 and month.isdigit():
             month = f'{month[:4]}.{month[4:]}'
@@ -205,8 +201,7 @@ def _create_execution_comparison_chart(report: dict[str, Any]) -> BytesIO:
     for axis, natural, target_pct, ylabel, color in chart_specs:
         target_line = []
         if target_pct is not None and natural:
-            last_index = max(1, len(natural) - 1)
-            target_line = [value * (1 + target_pct / 100 * index / last_index) for index, value in enumerate(natural)]
+            target_line = target_series(natural, target_pct)
         values = natural + target_line
         spread = max(values) - min(values)
         padding = max(spread * 0.3, max(values) * 0.006, 1)
@@ -362,7 +357,7 @@ def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
     _set_run_font(run, size=22, bold=True, color=INK)
     subtitle = document.add_paragraph()
     subtitle.paragraph_format.space_after = Pt(12)
-    _set_run_font(subtitle.add_run(f"분석 기간 {report['period']} | 관광데이터랩 원자료와 공식 관광자료 기반"), size=9.5, color=MUTED)
+    _set_run_font(subtitle.add_run(f"{review_label(report)}\n분석 기간 {report['period']} | 관광데이터랩 원자료와 공식 관광자료 기반"), size=9.5, color=MUTED)
     _add_heading(document, '1. 핵심 제안')
     if report.get('planning_brief'):
         from .planning_brief import brief_summary
@@ -471,12 +466,13 @@ def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
         forecast_caution = document.add_paragraph()
         forecast_caution.alignment = WD_ALIGN_PARAGRAPH.CENTER
         _set_run_font(
-            forecast_caution.add_run('자연추세는 과거 이력 기반 전망이며, 사업의 인과효과나 추가 매출 예측이 아닙니다.'),
+            forecast_caution.add_run('자연추세는 과거 이력 기반 전망이며, 사업의 인과효과나 추가 매출 예측이 아닙니다. '
+                                     + ' '.join(select_report_forecast(report)['notes'])),
             size=8.2,
             color=MUTED,
         )
     else:
-        no_forecast = document.add_paragraph('검증된 저장 모델 전망이 없어 임의의 미실행·실행 수치를 만들지 않았습니다.')
+        no_forecast = document.add_paragraph(' '.join(select_report_forecast(report)['notes']) + ' 임의의 수치는 만들지 않았습니다.')
         for run in no_forecast.runs:
             _set_run_font(run, size=9, color=MUTED)
     effect_callout = document.add_table(rows=1, cols=1)

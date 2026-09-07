@@ -1,0 +1,506 @@
+{
+  "outputSlides": [
+    {
+      "outputSlide": 1,
+      "sourceSlide": 1,
+      "narrativeRole": "opening thesis",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "shapeIds": [
+            "sh/0bmd476t",
+            "sh/547294r6",
+            "sh/k3yl0zql",
+            "sh/7qp4be9c",
+            "sh/65g3298r",
+            "sh/ts7md4r2",
+            "sh/sryl4zqx",
+            "sh/fu94fe98",
+            "sh/utg3698n",
+            "sh/wn6dc7eh",
+            "sh/hofulsf2",
+            "sh/ul4vaxgb",
+            "sh/vmdcj2xw",
+            "sh/4r6dg7et",
+            "sh/5sfepcfe",
+            "sh/ipovexwn",
+            "sh/3qxwn2x8",
+            "sh/sfqdkrep",
+            "sh/dgzetcfa",
+            "sh/1cvuxc7e"
+          ],
+          "reason": "원본 디자인 개체를 유지하면서 강남구 기획안 문구와 표시값으로 교체"
+        }
+      ]
+    },
+    {
+      "outputSlide": 2,
+      "sourceSlide": 2,
+      "narrativeRole": "content map",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "shapeIds": [
+            "sh/je9crql0",
+            "sh/9072xkry",
+            "sh/ozy1ofad",
+            "sh/b29kza94",
+            "sh/a10jqpsj",
+            "sh/x4r21kru",
+            "sh/w3i1sfa9",
+            "sh/r65knqtk",
+            "sh/q5wjelsz",
+            "sh/ove9o7yd",
+            "sh/9wnqhczy",
+            "sh/mtwrmxg7",
+            "sh/nu58f2hs",
+            "sh/wjy9sry9",
+            "sh/xk7qlczu",
+            "sh/ahwrqhgj",
+            "sh/bip8jmho",
+            "sh/cnupgny5",
+            "sh/do3q9szq",
+            "sh/t8byxkn2",
+            "sh/s72xofmh",
+            "sh/76twva5c",
+            "sh/65kfmpor",
+            "sh/hcvy14ne",
+            "sh/gbmxszmt",
+            "sh/fadgzu58",
+            "sh/u94fqp4n",
+            "sh/p0vy54na",
+            "sh/4zmxwzmp",
+            "sh/mlgvq147",
+            "sh/nmpcj6ls",
+            "sh/onydsbmd",
+            "sh/9o7ulg3y",
+            "sh/a9gvulkj",
+            "sh/ba9cn6l4",
+            "sh/wbidwb29",
+            "sh/xcrupg3u",
+            "sh/id0vylkf"
+          ],
+          "reason": "원본 디자인 개체를 유지하면서 강남구 기획안 문구와 표시값으로 교체"
+        }
+      ]
+    },
+    {
+      "outputSlide": 3,
+      "sourceSlide": 3,
+      "narrativeRole": "evidence summary",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "shapeIds": [
+            "sh/cza94vmx",
+            "sh/d0jax03i",
+            "sh/298ryl4v",
+            "sh/3ah8rqlg",
+            "sh/obq90bml",
+            "sh/pcjqtg36",
+            "sh/m5cra54z",
+            "sh/n6ls3alk",
+            "sh/n2l4fq98",
+            "sh/m1c3mlsn",
+            "sh/943mhgre",
+            "sh/83ulovat",
+            "sh/v6l4jq94",
+            "sh/a5c3ql8z",
+            "sh/x8nml0ra",
+            "sh/w7ulsvqp",
+            "sh/ja54na9g",
+            "sh/i9w3u58v",
+            "sh/e10f2twf",
+            "sh/f29gbyx0"
+          ],
+          "reason": "원본 디자인 개체를 유지하면서 강남구 기획안 문구와 표시값으로 교체"
+        },
+        {
+          "action": "replace",
+          "shapeIds": [
+            "im/n2tc3y1g"
+          ],
+          "reason": "원본 사진 프레임을 한국관광공사 Open API의 강남구 공식 사진으로 교체"
+        }
+      ]
+    },
+    {
+      "outputSlide": 4,
+      "sourceSlide": 4,
+      "narrativeRole": "problem and objective analysis",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "shapeIds": [
+            "sh/1cj2d8b6",
+            "sh/0ba143al",
+            "sh/rm1k7yt4",
+            "sh/ql8jytsj",
+            "sh/doj29oba",
+            "sh/sna103ap",
+            "sh/3ihk3et8",
+            "sh/ih8ju9sn",
+            "sh/kbm987y5",
+            "sh/5cva1cfq",
+            "sh/i94r6xgz",
+            "sh/jadsz2xk",
+            "sh/w72947yt"
+          ],
+          "reason": "원본 디자인 개체를 유지하면서 강남구 기획안 문구와 표시값으로 교체"
+        },
+        {
+          "action": "replace",
+          "shapeIds": [
+            "im/694nal0r"
+          ],
+          "reason": "원본 사진 프레임을 한국관광공사 Open API의 강남구 공식 사진으로 교체"
+        }
+      ]
+    },
+    {
+      "outputSlide": 5,
+      "sourceSlide": 5,
+      "narrativeRole": "target user scenario",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "shapeIds": [
+            "sh/2l4zip8j",
+            "sh/dgbulwnm",
+            "sh/cf2tcr61",
+            "sh/z2tcnm5s",
+            "sh/yhkbe1o7",
+            "sh/l4bupwny",
+            "sh/032tgr6d",
+            "sh/n6dcr65o",
+            "sh/m5kbi1oj",
+            "sh/w32dkbuh",
+            "sh/x4vedgvm",
+            "sh/ahkvi1cb",
+            "sh/v2twb6dw",
+            "sh/k7mxovud",
+            "sh/58vehgvy",
+            "sh/i54fmlc7",
+            "sh/j6dwfqds",
+            "sh/sb6xsvu9",
+            "sh/tcfel0vu",
+            "sh/hgrmpwj2",
+            "sh/gfi5grih",
+            "sh/fe94nm1w",
+            "sh/ud0ne10b",
+            "sh/pkr6tgjy",
+            "sh/4ji5kbid",
+            "sh/3i94r61s",
+            "sh/2h0ni107",
+            "sh/5o7mhcju",
+            "sh/kny587i9",
+            "sh/atcjidg7",
+            "sh/vu5kbihc",
+            "sh/wve1knyx",
+            "sh/xwn2dszi",
+            "sh/ihw3mxg3",
+            "sh/ji5kf2ho",
+            "sh/kjelony9",
+            "sh/5kn2hszu",
+            "sh/e1sjatgz",
+            "sh/zmlk3yhk",
+            "sh/fid07u98",
+            "sh/ehkzepsn",
+            "sh/1kvi94re",
+            "sh/gjmhgzqt",
+            "sh/3md0bu94"
+          ],
+          "reason": "원본 디자인 개체를 유지하면서 강남구 기획안 문구와 표시값으로 교체"
+        }
+      ]
+    },
+    {
+      "outputSlide": 6,
+      "sourceSlide": 6,
+      "narrativeRole": "strategy components",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "shapeIds": [
+            "sh/yhg7epsj",
+            "sh/zi98nu94",
+            "sh/87ipkzal",
+            "sh/98rqt4r6",
+            "sh/ml07i9sv",
+            "sh/7m98ru9g",
+            "sh/oryp8fah",
+            "sh/pc76hkr2",
+            "sh/h4bupgn6",
+            "sh/w32twb6l",
+            "sh/v2tcn650",
+            "sh/u1kbu1ov",
+            "sh/5svutgni",
+            "sh/47mt0b6x",
+            "sh/j6dcr65c"
+          ],
+          "reason": "원본 디자인 개체를 유지하면서 강남구 기획안 문구와 표시값으로 교체"
+        },
+        {
+          "action": "replace",
+          "shapeIds": [
+            "im/lw3uh4be"
+          ],
+          "reason": "원본 사진 프레임을 한국관광공사 Open API의 강남구 공식 사진으로 교체"
+        }
+      ]
+    },
+    {
+      "outputSlide": 7,
+      "sourceSlide": 7,
+      "narrativeRole": "execution timeline",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "shapeIds": [
+            "sh/q143ylov",
+            "sh/cb2tkvap",
+            "sh/dcbud0ra",
+            "sh/ydkbm5sv",
+            "sh/zedcfa9g",
+            "sh/kzmdova1",
+            "sh/l0vuh0rm",
+            "sh/eh0ba1sr",
+            "sh/fi9c369c",
+            "sh/baxkjqlk",
+            "sh/a9ojq5kz",
+            "sh/xcz2l03q",
+            "sh/cbq1sv25",
+            "sh/n6x0fqlo",
+            "sh/25ojml43",
+            "sh/p8fih03e",
+            "sh/o761ov2t",
+            "sh/f2d0b6lc",
+            "sh/eh4jil4r",
+            "sh/id4ju1oz",
+            "sh/jedkn654",
+            "sh/4fm1wb6p",
+            "sh/50v2pgna"
+          ],
+          "reason": "원본 디자인 개체를 유지하면서 강남구 기획안 문구와 표시값으로 교체"
+        }
+      ]
+    },
+    {
+      "outputSlide": 8,
+      "sourceSlide": 8,
+      "narrativeRole": "peer comparison",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "shapeIds": [
+            "sh/i5wva1o3",
+            "sh/18byd4zy",
+            "sh/g72x4zyd",
+            "sh/ri9g7uhw",
+            "sh/6h0fypgb",
+            "sh/tkby9kzm",
+            "sh/sjix0zy1",
+            "sh/je9g3ahk",
+            "sh/id0fu50z",
+            "sh/o7ydoret",
+            "sh/98rehwve",
+            "sh/m5gvmhwn",
+            "sh/n6pwfmd8",
+            "sh/0jydkreh",
+            "sh/1k7edwv2",
+            "sh/ehgvihwr",
+            "sh/zipwbmdc",
+            "sh/kfixwbe1",
+            "sh/lgbepgvm",
+            "sh/tw7e9gnq",
+            "sh/svydgb65",
+            "sh/7u5w765k",
+            "sh/6twve1oz",
+            "sh/5sne5wne",
+            "sh/kredcr6t",
+            "sh/jq5w365o"
+          ],
+          "reason": "원본 디자인 개체를 유지하면서 강남구 기획안 문구와 표시값으로 교체"
+        }
+      ]
+    },
+    {
+      "outputSlide": 9,
+      "sourceSlide": 9,
+      "narrativeRole": "forecast chart and target scenario",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "shapeIds": [
+            "sh/1cfmhgne",
+            "sh/0b65obm9",
+            "sh/nex4jq5k",
+            "sh/mdonql4z",
+            "sh/9gzml0nq",
+            "sh/ofq5svm5",
+            "sh/bih4na5w",
+            "sh/ah8nu54b",
+            "sh/oza1gfyh",
+            "sh/p0ji9kf2",
+            "sh/2xsjepgb",
+            "sh/3y107axw",
+            "sh/cnu1kzyd"
+          ],
+          "reason": "원본 디자인 개체를 유지하면서 강남구 기획안 문구와 표시값으로 교체"
+        },
+        {
+          "action": "replace",
+          "shapeIds": [
+            "im/6lo7qlc3"
+          ],
+          "reason": "원본 사진 프레임을 한국관광공사 Open API의 강남구 공식 사진으로 교체"
+        },
+        {
+          "action": "add",
+          "newPrimitiveAllowed": true,
+          "zone": {
+            "left": 106,
+            "top": 500,
+            "width": 770,
+            "height": 260
+          },
+          "reason": "자연추세와 담당자 입력 목표의 차이를 보여 주는 편집 가능한 PowerPoint 선 그래프",
+          "mustNotOverlapInherited": true
+        }
+      ]
+    },
+    {
+      "outputSlide": 10,
+      "sourceSlide": 10,
+      "narrativeRole": "budget and KPI plan",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "shapeIds": [
+            "sh/xc3mho32",
+            "sh/cbu58j2h",
+            "sh/zelojyl8",
+            "sh/ydcnatkn",
+            "sh/l036l83y",
+            "sh/kzu5c32t",
+            "sh/725onyl4",
+            "sh/m1cnetkj",
+            "sh/s7yt4b21",
+            "sh/d87uxg3m",
+            "sh/q5gb21kb",
+            "sh/r6pcv6lw",
+            "sh/0bit8b2d",
+            "sh/1cru1g3y",
+            "sh/e9gb61k7",
+            "sh/fapcz6ls",
+            "sh/ozitcv29",
+            "sh/p0ru503u"
+          ],
+          "reason": "원본 디자인 개체를 유지하면서 강남구 기획안 문구와 표시값으로 교체"
+        },
+        {
+          "action": "replace",
+          "shapeIds": [
+            "im/mh4bm183"
+          ],
+          "reason": "원본 사진 프레임을 한국관광공사 Open API의 강남구 공식 사진으로 교체"
+        }
+      ]
+    },
+    {
+      "outputSlide": 11,
+      "sourceSlide": 11,
+      "narrativeRole": "AI evidence pipeline",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "shapeIds": [
+            "sh/xcryxg7y",
+            "sh/wbih4b6d",
+            "sh/n69grmpw",
+            "sh/250zy18b",
+            "sh/98rytw72",
+            "sh/o7ih0r6h",
+            "sh/72t03qp0",
+            "sh/61kzalof",
+            "sh/ofqtgnyt",
+            "sh/9gza9sze",
+            "sh/mdobedg3",
+            "sh/nehs7iho",
+            "sh/0b6tc3yx",
+            "sh/1cfa58zi",
+            "sh/epobatgr",
+            "sh/zaxs3yhc",
+            "sh/cn6t83y1",
+            "sh/dofa18z6",
+            "sh/tsnip0ny",
+            "sh/87ehgv6d"
+          ],
+          "reason": "원본 디자인 개체를 유지하면서 강남구 기획안 문구와 표시값으로 교체"
+        },
+        {
+          "action": "replace",
+          "shapeIds": [
+            "im/kf29ofmx"
+          ],
+          "reason": "원본 사진 프레임을 한국관광공사 Open API의 강남구 공식 사진으로 교체"
+        }
+      ]
+    },
+    {
+      "outputSlide": 12,
+      "sourceSlide": 12,
+      "narrativeRole": "decision summary and expansion",
+      "reuseMode": "duplicate-slide",
+      "editTargets": [
+        {
+          "action": "rewrite",
+          "shapeIds": [
+            "sh/alwbitsn",
+            "sh/1gbm9s3a",
+            "sh/0f2lgnmp",
+            "sh/ra943il8",
+            "sh/q903ad4n",
+            "sh/dcbm583y",
+            "sh/sb2lcnmd",
+            "sh/b6d4f2lc",
+            "sh/a543mx4r",
+            "sh/wvupgz6t",
+            "sh/xw3q94ne",
+            "sh/atc7epon",
+            "sh/bulo7u58",
+            "sh/orapcf6h",
+            "sh/9sj65kn2",
+            "sh/mps7a5or",
+            "sh/nq1o3a5w",
+            "sh/0nap8f6l",
+            "sh/1oj61kn6",
+            "sh/hkbm5wzu",
+            "sh/gj25cry9",
+            "sh/fit436ho",
+            "sh/uh0na1g3",
+            "sh/tgrm1wzy",
+            "sh/sfi58ryd",
+            "sh/7u94zmhs",
+            "sh/6t0n6hg7",
+            "sh/dcv6dgz2",
+            "sh/cbm5kbyh"
+          ],
+          "reason": "원본 디자인 개체를 유지하면서 강남구 기획안 문구와 표시값으로 교체"
+        }
+      ]
+    }
+  ],
+  "omittedSourceSlides": []
+}

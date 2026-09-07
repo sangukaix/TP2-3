@@ -66,6 +66,7 @@ class PlanningHorizonPolicy:
     coverage_complete: bool
     decision_windows: tuple[ForecastDecisionWindow, ...]
     notes: tuple[str, ...]
+    as_of_date: str = ''
 
     def model_payload(self) -> dict[str, Any]:
         """Pydantic 응답과 OpenAI 입력에 안전한 JSON 형태로 바꿉니다."""
@@ -75,6 +76,8 @@ class PlanningHorizonPolicy:
 def resolve_planning_horizon(
     planning_brief: dict[str, Any] | None,
     latest_observed_month: str,
+    *,
+    as_of_date: date | None = None,
 ) -> PlanningHorizonPolicy:
     """일정 미정은 3·6개월, 날짜 입력은 해당 종료월까지의 전망으로 결정합니다.
 
@@ -82,6 +85,7 @@ def resolve_planning_horizon(
     가능하지만 탐색 전망으로 명시하고, 12개월 밖 수치를 기획 근거로 만들지 않습니다.
     """
     forecast_start_index = _month_index(latest_observed_month) + 1
+    today = as_of_date or date.today()
     forecast_start_month = _month_from_index(forecast_start_index)
     brief = planning_brief or {}
     schedule_status = str(brief.get('schedule_status') or 'unknown')
@@ -89,21 +93,29 @@ def resolve_planning_horizon(
     requested_end = _date_month(brief.get('end_date'))
 
     if schedule_status == 'unknown' or not requested_start or not requested_end:
-        horizon = 6
-        windows = (
+        # 관측이 늦게 들어와도 지난 달 사업을 제안하지 않습니다. 모델은 누락 월부터
+        # 재귀 예측하되, 실행 후보는 오늘이 속한 월 이후만 잘라 집계합니다.
+        decision_start = max(forecast_start_index, _month_index(today.strftime('%Y%m')))
+        offset = decision_start - forecast_start_index
+        horizon = min(MAX_PLANNING_HORIZON_MONTHS, offset + 6)
+        windows = tuple(
             ForecastDecisionWindow(
-                label='3개월 실행 후보', start_month=forecast_start_month,
-                end_month=_month_from_index(forecast_start_index + 2), months=3,
-                forecast_start_index=0, forecast_end_index=2,
-                reliability='short_term_backtested',
-            ),
-            ForecastDecisionWindow(
-                label='6개월 실행 후보', start_month=forecast_start_month,
-                end_month=_month_from_index(forecast_start_index + 5), months=6,
-                forecast_start_index=0, forecast_end_index=5,
-                reliability='exploratory_longer_horizon',
-            ),
+                label=f'{duration}개월 실행 후보', start_month=_month_from_index(decision_start),
+                end_month=_month_from_index(decision_start + duration - 1), months=duration,
+                forecast_start_index=offset, forecast_end_index=offset + duration - 1,
+                reliability=('short_term_backtested' if offset + duration <= VALIDATED_RECURSIVE_HORIZON_MONTHS
+                             else 'exploratory_longer_horizon'),
+            )
+            for duration in (3, 6) if offset + duration <= MAX_PLANNING_HORIZON_MONTHS
         )
+        notes = [
+            '일정 미정은 현재 월 이후의 3개월·6개월 실행 후보를 비교합니다. 준비기간도 후보 기간에 포함합니다.',
+            '신뢰도는 실행기간 길이가 아니라 마지막 관측월로부터의 예측 거리로 판단합니다.',
+        ]
+        if offset:
+            notes.append('관측 공백 월도 내부 예측에는 포함하지만 이미 지난 달은 실행 후보의 합계에서 제외합니다.')
+        if len(windows) < 2:
+            notes.append('원자료가 오래되어 3·6개월 후보 전체를 12개월 예측 한도 안에서 만들 수 없습니다. 최신 관측자료가 필요합니다.')
         return PlanningHorizonPolicy(
             schedule_status='unknown', selection_basis='unknown_compare_3_and_6_months',
             forecast_horizon_months=horizon, forecast_start_month=forecast_start_month,
@@ -111,11 +123,8 @@ def resolve_planning_horizon(
             requested_start_month='', requested_end_month='',
             strategy_duration_min_months=3, strategy_duration_max_months=6,
             validated_recursive_horizon_months=VALIDATED_RECURSIVE_HORIZON_MONTHS,
-            coverage_complete=True, decision_windows=windows,
-            notes=(
-                '일정 미정이므로 3개월과 6개월 전망을 모두 비교해 사업 기간을 고릅니다.',
-                '4~6개월 전망은 장기 탐색값이며 1~3개월 재귀 백테스트와 같은 수준으로 주장하지 않습니다.',
-            ),
+            coverage_complete=len(windows) == 2, decision_windows=windows,
+            notes=tuple(notes), as_of_date=today.isoformat(),
         )
 
     requested_start_index = _month_index(requested_start)
@@ -126,8 +135,10 @@ def resolve_planning_horizon(
     forecast_end_index = forecast_start_index + horizon - 1
     overlap_start = max(forecast_start_index, requested_start_index)
     overlap_end = min(forecast_end_index, requested_end_index)
-    coverage_complete = requested_end_index <= forecast_end_index and requested_end_index >= forecast_start_index
+    coverage_complete = requested_start_index >= forecast_start_index and requested_end_index <= forecast_end_index
     notes: list[str] = []
+    if requested_end_index < _month_index(today.strftime('%Y%m')):
+        notes.append('희망 기간이 이미 종료되었습니다. 과거 자료 검토일 뿐 향후 실행안으로 승인하지 않습니다.')
     windows: tuple[ForecastDecisionWindow, ...] = ()
 
     if overlap_start <= overlap_end:
@@ -159,5 +170,5 @@ def resolve_planning_horizon(
         strategy_duration_min_months=duration, strategy_duration_max_months=duration,
         validated_recursive_horizon_months=VALIDATED_RECURSIVE_HORIZON_MONTHS,
         coverage_complete=coverage_complete, decision_windows=windows,
-        notes=tuple(notes),
+        notes=tuple(notes), as_of_date=today.isoformat(),
     )

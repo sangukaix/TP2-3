@@ -6,7 +6,10 @@ import json
 from typing import Any
 
 from ..openai_responses import create_structured_response
+from ..llm.models import LLMRequest
+from ..llm.router import LLMRouter
 from .prompts import PLANNER_INSTRUCTIONS
+from .plan_quality_gate import cited_source_ids
 
 
 def _build_revision_evidence_pack(
@@ -22,18 +25,24 @@ def _build_revision_evidence_pack(
     recommended_ids = {
         str(source_id) for source_id in (transfer.get('recommended_case_ids') or []) if source_id
     }
-    cited_ids = {
+    known_ids = {
         str(source.get('source_id'))
         for source in (evidence_pack.get('sources') or [])
-        if source.get('source_id') and str(source['source_id']) in previous_text
+        if source.get('source_id')
     }
+    cited_ids = cited_source_ids(previous_text, known_ids)
     priority_ids = recommended_ids | cited_ids
+    # 본문 수정에도 비교 후보의 지역 사실·사례 출처가 필요하다.
+    # 후보 JSON만 보존하고 source 목록에서 빼면 인용 검증이 실패할 수 있다.
+    for candidate in transfer.get('design_candidates') or []:
+        for key in ('evidence_source_ids', 'case_source_ids', 'supporting_case_ids'):
+            priority_ids.update(str(value) for value in candidate.get(key) or [] if value)
 
     selected_sources: list[dict[str, Any]] = []
     for source in evidence_pack.get('sources') or []:
         source_id = str(source.get('source_id') or '')
         source_type = str(source.get('source_type') or '')
-        if source_id in priority_ids or source_type in {'dataset', 'model_forecast'}:
+        if source_id in priority_ids or source_type in {'dataset', 'nationwide_dataset', 'model_forecast'}:
             selected_sources.append(source)
     # 기존 초안에 없던 공식 비교 근거가 필요할 수 있어 웹 근거를 최대 4건 보완합니다.
     selected_ids = {str(source.get('source_id') or '') for source in selected_sources}
@@ -59,6 +68,14 @@ def _build_revision_evidence_pack(
             if len(benchmark_cases) >= 3:
                 break
 
+    # 새 비교에 사용할 보완 사례도 해당 원문 source와 함께 보낸다.
+    case_ids = {str(case.get('source_id') or '') for case in benchmark_cases}
+    for source in evidence_pack.get('sources') or []:
+        source_id = str(source.get('source_id') or '')
+        if source_id in case_ids and source_id not in selected_ids:
+            selected_sources.append(source)
+            selected_ids.add(source_id)
+
     return {
         'region_code': evidence_pack.get('region_code'),
         'region_name': evidence_pack.get('region_name'),
@@ -66,16 +83,21 @@ def _build_revision_evidence_pack(
         'snapshot': evidence_pack.get('snapshot'),
         'planning_brief': evidence_pack.get('planning_brief'),
         'transfer_assessment': transfer,
+        'quality_contract_version': evidence_pack.get('quality_contract_version'),
+        'research_gaps': evidence_pack.get('research_gaps') or [],
         'benchmark_cases': benchmark_cases,
+        'case_search_policy': evidence_pack.get('case_search_policy') or {},
+        'case_search_coverage': evidence_pack.get('case_search_coverage') or {},
         'sources': selected_sources,
     }
 
 class PlannerAgent:
     """조사·사례 적합성 결과를 사람이 읽는 하나의 실행 기획안 JSON으로 정리하는 Agent입니다."""
-    def __init__(self, *, api_key: str, model: str, report_schema: dict[str, Any]) -> None:
+    def __init__(self, *, api_key: str, model: str, report_schema: dict[str, Any], llm_router: LLMRouter | None = None) -> None:
         self.api_key = api_key
         self.model = model
         self.report_schema = report_schema
+        self.llm_router = llm_router
 
     async def write(
         self,
@@ -111,6 +133,18 @@ class PlannerAgent:
                 '응답은 설명 없이 수정된 전체 기획안 JSON 한 개만 반환한다.'
             )
         # report_schema를 Responses API의 JSON schema로 넘겨 화면·Word·PPT가 같은 필드를 사용할 수 있게 합니다.
+        request = LLMRequest(
+            task='planner_revision' if revision_feedback else 'planner', agent='planner', model=None,
+            instructions=instructions, input_payload=payload, schema_name='regional_tourism_plan', schema=self.report_schema,
+            reasoning_effort='medium' if revision_feedback else 'high',
+            max_output_tokens=20000 if revision_feedback else 24000,
+            retry_max_output_tokens=28000 if revision_feedback else 32000,
+            openai_timeout_seconds=600,
+            local_max_output_tokens=14000 if revision_feedback else 16000,
+            local_evidence_tools=True,
+        )
+        if self.llm_router:
+            return await self.llm_router.generate(request)
         return await create_structured_response(
             api_key=self.api_key,
             model=self.model,
@@ -123,5 +157,7 @@ class PlannerAgent:
             reasoning_effort='medium' if revision_feedback else 'high',
             # Sol 고추론 모델은 내부 reasoning token도 이 한도에 포함하므로 재작성까지 안정적으로
             # 완료할 수 있도록 일반 답변보다 넉넉한 출력 예산을 둡니다.
-            max_output_tokens=14000 if revision_feedback else 16000,
+            max_output_tokens=20000 if revision_feedback else 24000,
+            retry_max_output_tokens=28000 if revision_feedback else 32000,
+            timeout_seconds=600,
         )
