@@ -1,7 +1,8 @@
-"""강남구 공식 ZIP 원본을 읽어 월별 학습용 표로 만드는 전처리 모듈입니다.
+"""강남구 공식 snapshot을 읽어 월별 학습용 표로 만드는 전처리 모듈입니다.
 
-data/raw는 수정하지 않습니다. 이 모듈은 중첩 ZIP을 메모리에서 읽고,
-학습 실행 시에만 data/processed/gangnam_monthly_demand.csv를 새로 만듭니다.
+수동 ``data/raw`` 원본과 최신 보완 다운로드는 모두 hash-검증
+``data/source_snapshots``에 불변 복제돼 있다. 이 모듈은 snapshot ZIP을
+메모리에서 읽고, 학습 실행 시에만 ``data/processed`` 파일을 새로 만든다.
 """
 
 from __future__ import annotations
@@ -18,14 +19,16 @@ from .validation import validate_monthly_data
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-# 지역코드와 원본 경로를 상수로 두면, 실행 위치가 달라도 같은 데이터 파일을 찾을 수 있습니다.
+# 지역코드와 snapshot 경로를 상수로 두면, 실행 위치가 달라도 같은 검증 원본을 찾을 수 있습니다.
 REGION_CODE = '11680'
-RAW_BUNDLE = PROJECT_ROOT / 'data' / 'raw' / '서울특별시' / '서울특별시_강남구-20260828T031131Z-1-001.zip'
-# 7월은 기존에 보관된 한국관광 데이터랩 다운로드에서만 제공됩니다. 원본 파일은 옮기거나 수정하지 않습니다.
+GANGNAM_SNAPSHOT_ROOT = PROJECT_ROOT / 'data' / 'source_snapshots' / '서울특별시' / '서울특별시_강남구'
+# 2026-07은 이전 공식 다운로드의 최신 보완본이다. 기존 수동 경로를 직접 읽지 않도록
+# 동일 hash 원본을 snapshot의 별도 보완 폴더에 보관한다.
+SUPPLEMENTAL_202607_ROOT = GANGNAM_SNAPSHOT_ROOT / 'supplemental_202607'
 # 대시보드와 같은 정의를 쓰기 위해 연인원이 아니라 체류자료의 월간 순 방문자 수를 사용합니다.
-LATEST_STAY_ZIP = PROJECT_ROOT / 'test-gangnam-dashboard' / 'download' / '강남구_숙박체류시간.zip'
-LATEST_SPENDING_ZIP = PROJECT_ROOT / 'test-gangnam-dashboard' / 'download' / '강남구_관광소비.zip'
-LATEST_VISITOR_ZIP = PROJECT_ROOT / 'test-gangnam-dashboard' / 'download' / '강남구_방문자.zip'
+LATEST_STAY_ZIP = SUPPLEMENTAL_202607_ROOT / '강남구_숙박체류시간.zip'
+LATEST_SPENDING_ZIP = SUPPLEMENTAL_202607_ROOT / '강남구_관광소비.zip'
+LATEST_VISITOR_ZIP = SUPPLEMENTAL_202607_ROOT / '강남구_방문자.zip'
 # 지역 코드별로 분리해 50개 이상 시군구의 전처리 표가 서로 덮어쓰지 않게 합니다.
 PROCESSED_PATH = PROJECT_ROOT / 'data' / 'processed' / 'ml' / REGION_CODE / 'monthly_demand.csv'
 
@@ -98,31 +101,32 @@ def _append_metrics(
                 navigation_searches[month] = _number(row['목적지 검색량'])
 
 
-def _read_nested_bundle(series: dict[str, dict[str, float]]) -> None:
-    """새로 받은 바깥 ZIP 안의 연도별 ZIP을 메모리에서 열어 2024~2026 자료를 읽습니다."""
-    if not RAW_BUNDLE.exists():
-        raise FileNotFoundError(f'강남구 원본 묶음을 찾지 못했습니다: {RAW_BUNDLE}')
-    # 바깥 ZIP은 여러 연도·자료 종류의 ZIP을 포함하므로, 안쪽 파일까지 순서대로 엽니다.
-    # 읽은 바이트는 메모리 버퍼로만 전달해 data/raw 원본을 수정하지 않습니다.
-    with zipfile.ZipFile(RAW_BUNDLE) as root_archive:
-        for entry in root_archive.infolist():
-            if not entry.filename.endswith('.zip') or not any(
-                section in entry.filename for section in ('/숙박_체류시간/', '/관광소비/', '/방문자/')
-            ):
-                continue
-            with zipfile.ZipFile(io.BytesIO(root_archive.read(entry))) as inner_archive:
-                _append_metrics(inner_archive, **series)
+def _read_snapshot_archives(series: dict[str, dict[str, float]]) -> None:
+    """불변 snapshot의 연도별 category ZIP에서 2024~2026 자료를 읽는다."""
+
+    if not GANGNAM_SNAPSHOT_ROOT.is_dir():
+        raise FileNotFoundError(f'강남구 snapshot을 찾지 못했습니다: {GANGNAM_SNAPSHOT_ROOT}')
+    # 3개 category의 2024~2026 공식 ZIP만 읽는다. 후속 최신 보완 ZIP은 아래 함수가
+    # 명시적으로 마지막에 적용하므로, 같은 월에 다른 다운로드가 조용히 선택되지 않는다.
+    for category in ('숙박_체류시간', '관광소비', '방문자'):
+        category_root = GANGNAM_SNAPSHOT_ROOT / category
+        archives = sorted(category_root.glob('20??_*.zip')) if category_root.is_dir() else []
+        if not archives:
+            raise FileNotFoundError(f'강남구 snapshot category 원본을 찾지 못했습니다: {category_root}')
+        for path in archives:
+            with zipfile.ZipFile(path) as archive:
+                _append_metrics(archive, **series)
 
 
-def _read_latest_july(series: dict[str, dict[str, float]]) -> None:
-    """7월 최신 관측값은 별도의 공식 다운로드 ZIP으로 보완합니다.
+def _read_latest_snapshot_supplement(series: dict[str, dict[str, float]]) -> None:
+    """7월 최신 관측값은 별도의 공식 snapshot 보완 ZIP으로 적용합니다.
 
     같은 월이 중복될 경우 최신 다운로드가 기존 값보다 우선합니다. 이 처리 덕분에
     갱신된 월 값이 모델 학습·대시보드 기준값으로 함께 사용됩니다.
     """
     for path in (LATEST_STAY_ZIP, LATEST_SPENDING_ZIP, LATEST_VISITOR_ZIP):
         if not path.exists():
-            raise FileNotFoundError(f'강남구 최신 월 원본을 찾지 못했습니다: {path}')
+            raise FileNotFoundError(f'강남구 최신월 snapshot 원본을 찾지 못했습니다: {path}')
         with zipfile.ZipFile(path) as archive:
             _append_metrics(archive, **series)
 
@@ -134,8 +138,8 @@ def load_gangnam_monthly_demand() -> pd.DataFrame:
         'lodging_rate_pct': {}, 'stay_minutes': {},
         'navigation_searches': {}, 'lodging_searches': {},
     }
-    _read_nested_bundle(series)
-    _read_latest_july(series)
+    _read_snapshot_archives(series)
+    _read_latest_snapshot_supplement(series)
 
     # 세 지표가 모두 존재하는 월만 공통 키로 사용합니다. 부분 월을 억지로 0으로 채우지 않습니다.
     common_months = sorted(set.intersection(*(set(values) for values in series.values())))

@@ -1,0 +1,264 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stay-up-ai.local/schemas/strategy_report_v1.schema.json",
+  "title": "STAY-UP AI Strategy Report v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generation_mode",
+    "status",
+    "region",
+    "claims",
+    "strategy",
+    "sources",
+    "quality_review",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "generation_mode": { "enum": ["openai", "offline_sample"] },
+    "status": { "enum": ["approved", "needs_review", "failed"] },
+    "region": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["region_code", "region_name", "period"],
+      "properties": {
+        "region_code": { "type": "string", "minLength": 2 },
+        "region_name": { "type": "string", "minLength": 2 },
+        "period": { "type": "string", "minLength": 7 }
+      }
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/claim" }
+    },
+    "strategy": { "$ref": "#/$defs/strategy" },
+    "sources": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/source" }
+    },
+    "quality_review": { "$ref": "#/$defs/qualityReview" },
+    "provenance": { "$ref": "#/$defs/provenance" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "generation_mode": { "const": "offline_sample" } },
+        "required": ["generation_mode"]
+      },
+      "then": {
+        "properties": { "status": { "enum": ["needs_review", "failed"] } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "status": { "const": "approved" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "quality_review": {
+            "properties": { "approved": { "const": true } },
+            "required": ["approved"]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim_id", "claim_type", "text", "source_ids", "confidence"],
+      "properties": {
+        "claim_id": { "type": "string", "pattern": "^claim-[0-9]{3,}$" },
+        "claim_type": {
+          "enum": ["observed", "forecast", "benchmark", "user_condition", "official_case", "hypothesis"]
+        },
+        "text": { "type": "string", "minLength": 1 },
+        "source_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "period": { "type": ["string", "null"] },
+        "confidence": { "enum": ["verified", "model_estimate", "hypothesis"] }
+      }
+    },
+    "strategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "mechanism_family",
+        "problem_claim_ids",
+        "solution_case_ids",
+        "start_date",
+        "end_date",
+        "steps",
+        "budget_items",
+        "kpis",
+        "expected_effects"
+      ],
+      "properties": {
+        "title": { "type": "string", "minLength": 5 },
+        "mechanism_family": { "type": "string", "minLength": 2 },
+        "problem_claim_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "solution_case_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "start_date": { "type": "string", "format": "date" },
+        "end_date": { "type": "string", "format": "date" },
+        "steps": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": { "$ref": "#/$defs/step" }
+        },
+        "budget_items": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/budgetItem" }
+        },
+        "kpis": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/kpi" }
+        },
+        "expected_effects": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/expectedEffect" }
+        }
+      }
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["step", "start_date", "end_date", "task", "deliverable"],
+      "properties": {
+        "step": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "start_date": { "type": "string", "format": "date" },
+        "end_date": { "type": "string", "format": "date" },
+        "task": { "type": "string", "minLength": 5 },
+        "deliverable": { "type": "string", "minLength": 2 },
+        "dependency": { "type": ["string", "null"] }
+      }
+    },
+    "budgetItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["item", "quantity", "unit", "unit_cost_krw", "calculation", "quote_required"],
+      "properties": {
+        "item": { "type": "string", "minLength": 2 },
+        "quantity": { "type": "number", "minimum": 0 },
+        "unit": { "type": "string", "minLength": 1 },
+        "unit_cost_krw": { "type": ["integer", "null"], "minimum": 0 },
+        "calculation": { "type": "string", "minLength": 1 },
+        "quote_required": { "type": "boolean" }
+      }
+    },
+    "kpi": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["metric", "baseline_period", "source_id", "frequency", "success_rule"],
+      "properties": {
+        "metric": { "type": "string", "minLength": 2 },
+        "baseline_period": { "type": "string", "minLength": 7 },
+        "source_id": { "type": "string", "minLength": 1 },
+        "frequency": { "type": "string", "minLength": 1 },
+        "success_rule": { "type": "string", "minLength": 3 }
+      }
+    },
+    "expectedEffect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statement", "claim_type", "validation_method"],
+      "properties": {
+        "statement": { "type": "string", "minLength": 3 },
+        "claim_type": { "const": "hypothesis" },
+        "validation_method": { "type": "string", "minLength": 3 }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "source_type", "title", "url", "content_hash"],
+      "properties": {
+        "source_id": { "type": "string", "minLength": 1 },
+        "source_type": { "enum": ["dataset", "model", "rag", "web", "user_input"] },
+        "title": { "type": "string", "minLength": 1 },
+        "url": { "type": ["string", "null"], "format": "uri" },
+        "content_hash": { "type": "string", "minLength": 8 },
+        "published_or_updated_at": { "type": ["string", "null"] }
+      }
+    },
+    "qualityReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approved", "overall_score", "dimension_scores", "critical_issues", "reviewed_at"],
+      "properties": {
+        "approved": { "type": "boolean" },
+        "overall_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "dimension_scores": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["evidence", "execution", "regional_fit", "budget_schedule", "clarity"],
+          "properties": {
+            "evidence": { "type": "number", "minimum": 0, "maximum": 100 },
+            "execution": { "type": "number", "minimum": 0, "maximum": 100 },
+            "regional_fit": { "type": "number", "minimum": 0, "maximum": 100 },
+            "budget_schedule": { "type": "number", "minimum": 0, "maximum": 100 },
+            "clarity": { "type": "number", "minimum": 0, "maximum": 100 }
+          }
+        },
+        "critical_issues": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "reviewed_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "data_fingerprint",
+        "model_version",
+        "prompt_version",
+        "rag_manifest_version",
+        "report_hash",
+        "revision"
+      ],
+      "properties": {
+        "data_fingerprint": { "type": "string", "minLength": 8 },
+        "model_version": { "type": ["string", "null"] },
+        "prompt_version": { "type": ["string", "null"] },
+        "rag_manifest_version": { "type": ["string", "null"] },
+        "report_hash": { "type": "string", "minLength": 8 },
+        "document_hash": { "type": ["string", "null"] },
+        "revision": { "type": "integer", "minimum": 1 },
+        "openai_usage": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "model": { "type": "string" },
+            "input_tokens": { "type": "integer", "minimum": 0 },
+            "output_tokens": { "type": "integer", "minimum": 0 },
+            "reasoning_tokens": { "type": "integer", "minimum": 0 },
+            "web_search_count": { "type": "integer", "minimum": 0 },
+            "latency_ms": { "type": "integer", "minimum": 0 },
+            "request_id": { "type": ["string", "null"] }
+          }
+        }
+      }
+    }
+  }
+}

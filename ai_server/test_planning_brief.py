@@ -1,6 +1,8 @@
 """사업 여건 검증·Agent 전달·작업 고정·문서 추출을 유료 API 없이 검증합니다."""
 import asyncio
+from datetime import date
 from io import BytesIO
+from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import AsyncMock, patch
 
@@ -11,6 +13,7 @@ from fastapi.testclient import TestClient
 from pydantic import ValidationError
 
 from ai_server.app import main
+from ai_server.ml.data_freshness import assess_data_freshness
 from ai_server.app.planning_brief import PlanningBrief, brief_fingerprint, extract_brief_reference
 from ai_server.app.agents.evidence_agent import EvidenceAgent
 from ai_server.app.agents.case_study_agent import CaseStudyAgent
@@ -32,6 +35,18 @@ class BriefContractTest(unittest.TestCase):
         self.assertIsNone(value['budget_max_krw'])
         self.assertIsNone(value['start_date'])
         self.assertEqual(value['resources_confirmed'], '')
+
+    def test_restart_payload_never_stores_attachment_text(self):
+        """작업 복구용 MySQL JSON에는 참고문서 이름과 본문을 남기지 않습니다."""
+        request = main.ReportRequest(
+            region_name='서울특별시 강남구',
+            planning_brief=brief(references=[{'name': 'memo.txt', 'text': '저장하면 안 되는 첨부 본문'}]),
+        )
+        payload, had_references = main._job_persistence_payload(request)
+
+        self.assertTrue(had_references)
+        self.assertEqual(payload['planning_brief']['references'], [])
+        self.assertNotIn('저장하면 안 되는 첨부 본문', str(payload))
 
     def test_invalid_conditions_rejected(self):
         for changes in [
@@ -91,7 +106,9 @@ class BriefAgentFlowTest(unittest.IsolatedAsyncioTestCase):
     async def test_changed_brief_invalidates_research_cache(self):
         _EVIDENCE_CACHE.clear(); _CASE_STUDY_CACHE.clear()
         FakeEvidenceAgent.calls = 0; FakeCaseStudyAgent.calls = 0; FakeReviewerAgent.calls = 1
-        settings = {'project_root': Path('.'), 'env_values': {'OPENAI_API_KEY': 'test'},
+        runtime_directory = TemporaryDirectory()
+        self.addCleanup(runtime_directory.cleanup)
+        settings = {'project_root': Path(runtime_directory.name), 'env_values': {'OPENAI_API_KEY': 'test'},
                     'region_code': '11680', 'snapshot': {'region_name': '서울특별시 강남구'}, 'report_schema': {}}
         with (
             patch('ai_server.app.agents.report_orchestrator.EvidenceAgent', FakeEvidenceAgent),
@@ -141,7 +158,8 @@ class BriefAgentFlowTest(unittest.IsolatedAsyncioTestCase):
                      'quality_review': {}, 'evidence_sources': [], 'research_gaps': [], 'agent_trace': []}
         with (
             patch.dict(main.ENV_VALUES, {'OPENAI_API_KEY': 'test'}),
-            patch('ai_server.app.main.build_region_snapshot', return_value={'region_name': request.region_name, 'period': '2026-07', 'observations': [], 'monthly_trend': []}),
+            patch('ai_server.app.main.build_region_snapshot', return_value={'region_name': request.region_name, 'period': '2026-07', 'latest_month': '202607', 'observations': [], 'monthly_trend': []}),
+            patch('ai_server.app.main.assess_data_freshness', side_effect=lambda month: assess_data_freshness(month, as_of_date=date(2026, 9, 5))),
             patch('ai_server.app.main.orchestrate_strategy_report', AsyncMock(return_value=generated)) as orchestrator,
         ):
             result = await main.generate_orchestrated_report('11680', request)

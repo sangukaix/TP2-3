@@ -1,0 +1,8 @@
+SOURCE: 관광전략_완전편집형_12장_PPT템플릿.pptx
+SLIDES: 12 / 1600×900
+TYPOGRAPHY: Noto Sans KR, 큰 제목과 16px 이상 본문
+PALETTE: #F4F7FA / #004EA2 / #00C1D4 / #FF6B00
+MEDIA: source image frames on slides 3, 4, 6, 9, 10, 11
+INSERTION CONTRACT: 모든 출력 슬라이드는 같은 번호의 원본 슬라이드를 복제하고 inherited 개체를 직접 편집한다.
+PLACEHOLDERS: source deck has no inherited empty placeholders; slide-local named objects are used.
+NEW PRIMITIVE: slide 9 only, native line chart in the cleared left-bottom zone.

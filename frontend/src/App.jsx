@@ -8,6 +8,7 @@ const TourismPlanningPage = lazy(() => import('./pages/TourismPlanningPage'))
 const SavedStrategyPlansPage = lazy(() => import('./pages/SavedStrategyPlansBoardPage'))
 const MlTestPage = lazy(() => import('./pages/MlTest/MlTestPage'))
 const LearningArchitecturePage = lazy(() => import('./pages/MlTest/LearningArchitecturePage'))
+const LlmControlPage = lazy(() => import('./pages/MlTest/LlmControlPage'))
 
 // 학습 주제별 wrapper를 App 바깥에 두어 화면이 다시 그려져도 챗봇 상태가 초기화되지 않게 합니다.
 function OpenAiLearningPage() {
@@ -42,6 +43,7 @@ export default function App() {
   if (path === '/ml-test') Page = MlTestPage
   if (path === '/openai-test') Page = OpenAiLearningPage
   if (path === '/react-test') Page = ReactLearningPage
+  if (path === '/llm-control') Page = LlmControlPage
 
   return <Suspense fallback={<PageLoading />}><Page /></Suspense>
 }

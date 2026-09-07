@@ -1,9 +1,13 @@
 """강남구 ML 전처리의 기간·누수 방지 규칙을 확인하는 단위 테스트입니다."""
 
 import unittest
+import numpy as np
 
 from ai_server.ml.gangnam_data import load_gangnam_monthly_demand
-from ai_server.ml.gangnam_forecast import FEATURE_NAMES, LODGING_FEATURE_NAMES, make_lodging_supervised_frame, make_supervised_frame
+from ai_server.ml.gangnam_forecast import (
+    FEATURE_NAMES, LODGING_FEATURE_NAMES, make_lodging_supervised_frame,
+    make_supervised_frame, make_univariate_supervised_frame,
+)
 
 
 class GangnamForecastTest(unittest.TestCase):
@@ -36,3 +40,24 @@ class GangnamForecastTest(unittest.TestCase):
         features, targets, baseline = make_lodging_supervised_frame(load_gangnam_monthly_demand())
         self.assertEqual(features.shape, (19, len(LODGING_FEATURE_NAMES)))
         self.assertEqual(targets.shape, baseline.shape)
+
+    def test_future_observation_cannot_change_an_earlier_feature_row(self) -> None:
+        """Target 2025-09 이하의 입력은 2025-10 이후 관측값을 보지 않는다."""
+        original = load_gangnam_monthly_demand()
+        changed = original.copy()
+        changed.loc[21, 'visitors'] *= 10  # 2025-10 관측값만 변조한 가상 원자료
+        before = make_supervised_frame(original)
+        after = make_supervised_frame(changed)
+        # 지도학습 행 0~8은 각각 2025-01~2025-09 target. 이후 월 값은 feature에 없다.
+        np.testing.assert_array_equal(before[0][:9], after[0][:9])
+        np.testing.assert_array_equal(before[1][:9], after[1][:9])
+        self.assertTrue(np.any(before[0][9:] != after[0][9:]))
+
+    def test_univariate_future_observation_cannot_change_earlier_rows(self) -> None:
+        original = load_gangnam_monthly_demand()
+        changed = original.copy()
+        changed.loc[21, 'lodging_nights'] *= 2
+        before = make_univariate_supervised_frame(original, 'lodging_nights')
+        after = make_univariate_supervised_frame(changed, 'lodging_nights')
+        np.testing.assert_array_equal(before[0][:9], after[0][:9])
+        np.testing.assert_array_equal(before[1][:9], after[1][:9])

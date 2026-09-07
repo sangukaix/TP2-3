@@ -1,0 +1,1212 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/zuager",
+    "id": "zuager",
+    "slide": 3,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#F4F7FA",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1600,
+      "height": 900
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Calibri Light",
+        "eastAsianTypeface": "Calibri Light",
+        "complexScriptTypeface": "Calibri Light"
+      },
+      "minorFont": {
+        "latinTypeface": "Calibri",
+        "eastAsianTypeface": "Calibri",
+        "complexScriptTypeface": "Calibri"
+      }
+    },
+    "typefaces": [
+      "Calibri",
+      "Calibri Light",
+      "Noto Sans KR"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/eh0bmlsj",
+      "id": "22",
+      "name": "tourism-photo",
+      "bbox": [
+        1036,
+        3,
+        561,
+        894
+      ],
+      "contentType": "image/png",
+      "imageCrop": {
+        "left": 0,
+        "top": 0.00188,
+        "right": 0,
+        "bottom": 0.00188
+      },
+      "asset": {
+        "assetId": "/ppt/media/image.png",
+        "contentType": "image/png",
+        "byteLength": 851551
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image.png",
+        "contentType": "image/png",
+        "byteLength": 851551
+      }
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/jmhszm9o",
+      "id": "2",
+      "name": "section",
+      "bbox": [
+        105,
+        107,
+        259,
+        31
+      ],
+      "geometry": "rect",
+      "text": "S E C T I O N   0 1",
+      "textPreview": "S E C T I O N   0 1",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "S E C T I O N   0 1"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "S E C T I O N   0 1",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "S E C T I O N   0 1",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/il8rqhs3",
+      "id": "3",
+      "name": "title",
+      "bbox": [
+        104,
+        148,
+        900,
+        74
+      ],
+      "geometry": "rect",
+      "text": "프로젝트 개요 및 기획 배경",
+      "textPreview": "프로젝트 개요 및 기획 배경",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "프로젝트 개요 및 기획 배경"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "프로젝트 개요 및 기획 배경",
+          "resolvedTextStyle": {
+            "fontSize": 54,
+            "typeface": "Noto Sans KR",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "프로젝트 개요 및 ",
+              "fontSize": 54,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "기획 배경",
+              "fontSize": 54,
+              "typeface": "Noto Sans KR",
+              "color": "#00C1D4",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/tcja5wrq",
+      "id": "4",
+      "name": "title-rule",
+      "bbox": [
+        104,
+        236,
+        835,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 2
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sbatwbal",
+      "id": "5",
+      "name": "intro",
+      "bbox": [
+        105,
+        297,
+        844,
+        81
+      ],
+      "geometry": "rect",
+      "text": "관광 데이터의 양적 팽창에도 불구하고 전문 인력 부족으로 실질적인 정책 반영에 한계를 겪\n고 있습니다. 지자체는 객관적 근거 기반의 의사결정이 절실한 상황입니다.",
+      "textPreview": "관광 데이터의 양적 팽창에도 불구하고 전문 인력 부족으로 실질적인 정책 반영에 한계를 겪 | 고 있습니다. 지자체는 객관적 근거 기반의 의사결정이 절실한 상황입니다.",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "관광 데이터의 양적 팽창에도 불구하고 전문 인력 부족으로 실질적인 정책 반영에 한계를 겪"
+          },
+          {
+            "index": 2,
+            "text": "고 있습니다. 지자체는 객관적 근거 기반의 의사결정이 절실한 상황입니다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "관광 데이터의 양적 팽창에도 불구하고 전문 인력 부족으로 실질적인 정책 반영에 한계를 겪",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 19,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "관광 데이터의 양적 팽창에도 불구하고 전문 인력 부족으로 실질적인 정책 반영에 한계를 겪",
+              "fontSize": 19,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "고 있습니다. 지자체는 객관적 근거 기반의 의사결정이 절실한 상황입니다.",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 19,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "고 있습니다. 지자체는 객관적 근거 기반의 의사결정이 절실한 상황입니다.",
+              "fontSize": 19,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7a1s3690",
+      "id": "6",
+      "name": "decision-rail",
+      "bbox": [
+        105,
+        409,
+        0,
+        105
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 3
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6psbu1sf",
+      "id": "7",
+      "name": "decision-title",
+      "bbox": [
+        132,
+        413,
+        338,
+        39
+      ],
+      "geometry": "rect",
+      "text": "의사결정 체계 마련",
+      "textPreview": "의사결정 체계 마련",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "의사결정 체계 마련"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "의사결정 체계 마련",
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "의사결정 체계 마련",
+              "fontSize": 22,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1g3a9gr2",
+      "id": "8",
+      "name": "decision-body",
+      "bbox": [
+        132,
+        461,
+        383,
+        69
+      ],
+      "geometry": "rect",
+      "text": "파편화된 공공데이터를 통합하여 지자체 담당자가\n즉각 활용 가능한 분석 환경을 구축합니다.",
+      "textPreview": "파편화된 공공데이터를 통합하여 지자체 담당자가 | 즉각 활용 가능한 분석 환경을 구축합니다.",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "파편화된 공공데이터를 통합하여 지자체 담당자가"
+          },
+          {
+            "index": 2,
+            "text": "즉각 활용 가능한 분석 환경을 구축합니다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "파편화된 공공데이터를 통합하여 지자체 담당자가",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "파편화된 공공데이터를 통합하여 지자체 담당자가",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "즉각 활용 가능한 분석 환경을 구축합니다.",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "즉각 활용 가능한 분석 환경을 구축합니다.",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/gfut0bah",
+      "id": "9",
+      "name": "activation-rail",
+      "bbox": [
+        547,
+        409,
+        0,
+        105
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 3
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/idon2hgb",
+      "id": "10",
+      "name": "activation-title",
+      "bbox": [
+        574,
+        413,
+        338,
+        39
+      ],
+      "geometry": "rect",
+      "text": "지역 관광 활성화",
+      "textPreview": "지역 관광 활성화",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "지역 관광 활성화"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "지역 관광 활성화",
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "지역 관광 활성화",
+              "fontSize": 22,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/jexobmhw",
+      "id": "11",
+      "name": "activation-body",
+      "bbox": [
+        574,
+        461,
+        388,
+        69
+      ],
+      "geometry": "rect",
+      "text": "데이터 공백을 메우고 증거 기반의 정책 수립을 지\n원하여 지역 경쟁력을 강화합니다.",
+      "textPreview": "데이터 공백을 메우고 증거 기반의 정책 수립을 지 | 원하여 지역 경쟁력을 강화합니다.",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "데이터 공백을 메우고 증거 기반의 정책 수립을 지"
+          },
+          {
+            "index": 2,
+            "text": "원하여 지역 경쟁력을 강화합니다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "데이터 공백을 메우고 증거 기반의 정책 수립을 지",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "데이터 공백을 메우고 증거 기반의 정책 수립을 지",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "원하여 지역 경쟁력을 강화합니다.",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "원하여 지역 경쟁력을 강화합니다.",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/4f654ryh",
+      "id": "12",
+      "name": "release-card",
+      "bbox": [
+        105,
+        571,
+        405,
+        135
+      ],
+      "geometry": "rect",
+      "fillColor": "#FFFFFF",
+      "lineWidth": 0
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5gf6dwf2",
+      "id": "13",
+      "name": "release-card-rail",
+      "bbox": [
+        105,
+        571,
+        0,
+        135
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 5
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6h8n6hg7",
+      "id": "14",
+      "name": "release-label",
+      "bbox": [
+        133,
+        598,
+        225,
+        31
+      ],
+      "geometry": "rect",
+      "text": "배포 예정일",
+      "textPreview": "배포 예정일",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "배포 예정일"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "배포 예정일",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "배포 예정일",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/rihofmxs",
+      "id": "15",
+      "name": "release-value",
+      "bbox": [
+        133,
+        637,
+        170,
+        54
+      ],
+      "geometry": "rect",
+      "text": "2026.09",
+      "textPreview": "2026.09",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "2026.09"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "2026.09",
+          "resolvedTextStyle": {
+            "fontSize": 38,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "2026.09",
+              "fontSize": 38,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sjq58ryd",
+      "id": "16",
+      "name": "release-suffix",
+      "bbox": [
+        300,
+        652,
+        155,
+        27
+      ],
+      "geometry": "rect",
+      "text": "RELEASE",
+      "textPreview": "RELEASE",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "RELEASE"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "RELEASE",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Noto Sans KR",
+            "color": "#00C1D4",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "RELEASE",
+              "fontSize": 14,
+              "typeface": "Noto Sans KR",
+              "color": "#00C1D4",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/tkz6hwfy",
+      "id": "17",
+      "name": "strategy-card",
+      "bbox": [
+        535,
+        571,
+        405,
+        135
+      ],
+      "geometry": "rect",
+      "fillColor": "#FFFFFF",
+      "lineWidth": 0
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ml4naxg3",
+      "id": "18",
+      "name": "strategy-card-rail",
+      "bbox": [
+        535,
+        571,
+        0,
+        135
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 5
+    },
+    {
+      "order": 19,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7md432ho",
+      "id": "19",
+      "name": "strategy-label",
+      "bbox": [
+        564,
+        598,
+        225,
+        31
+      ],
+      "geometry": "rect",
+      "text": "주요 전략",
+      "textPreview": "주요 전략",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "주요 전략"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "주요 전략",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "주요 전략",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 20,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/bq9kbyxg",
+      "id": "20",
+      "name": "strategy-value",
+      "bbox": [
+        564,
+        637,
+        175,
+        54
+      ],
+      "geometry": "rect",
+      "text": "AI+DATA",
+      "textPreview": "AI+DATA",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "AI+DATA"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "AI+DATA",
+          "resolvedTextStyle": {
+            "fontSize": 38,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "AI+DATA",
+              "fontSize": 38,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 21,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ap032twv",
+      "id": "21",
+      "name": "strategy-suffix",
+      "bbox": [
+        739,
+        652,
+        175,
+        27
+      ],
+      "geometry": "rect",
+      "text": "INTEGRATED",
+      "textPreview": "INTEGRATED",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "INTEGRATED"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "INTEGRATED",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Noto Sans KR",
+            "color": "#00C1D4",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "INTEGRATED",
+              "fontSize": 14,
+              "typeface": "Noto Sans KR",
+              "color": "#00C1D4",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

@@ -1,0 +1,1826 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/9gsx0w",
+    "id": "9gsx0w",
+    "slide": 8,
+    "layoutId": "baae435f-1231-42ea-a17e-79d6b2040f4c",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "86fd9854-2576-42dc-ac87-eb76a11bc07a",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#F4F7FA",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1600,
+      "height": 900
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Noto Sans KR"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "baae435f-1231-42ea-a17e-79d6b2040f4c",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "86fd9854-2576-42dc-ac87-eb76a11bc07a",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "86fd9854-2576-42dc-ac87-eb76a11bc07a",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/c3qhwz6h",
+      "id": "1",
+      "name": "eyebrow",
+      "bbox": [
+        108,
+        71,
+        471,
+        30
+      ],
+      "geometry": "rect",
+      "text": "D I F F E R E N T I A T I O N   &   C O M P E T I T I V E N E S S",
+      "textPreview": "D I F F E R E N T I A T I O N   &   C O M P E T I T I V E N E S S",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 15,
+        "typeface": "Noto Sans KR",
+        "color": "#004EA2",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "D I F F E R E N T I A T I O N   &   C O M P E T I T I V E N E S S"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "D I F F E R E N T I A T I O N   &   C O M P E T I T I V E N E S S",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "D I F F E R E N T I A T I O N   &   C O M P E T I T I V E N E S S",
+              "fontSize": 15,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/b2hg3upw",
+      "id": "2",
+      "name": "title",
+      "bbox": [
+        108,
+        117,
+        827,
+        76
+      ],
+      "geometry": "rect",
+      "text": "차별화 포인트 및 경쟁력",
+      "textPreview": "차별화 포인트 및 경쟁력",
+      "resolvedFontSize": 57,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 57,
+        "typeface": "Noto Sans KR",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "차별화 포인트 및 경쟁력"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "차별화 포인트 및 경쟁력",
+          "resolvedTextStyle": {
+            "fontSize": 57,
+            "typeface": "Noto Sans KR",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "차별화 ",
+              "fontSize": 57,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B",
+              "alignment": "left"
+            },
+            {
+              "index": 2,
+              "text": "포인트 및 경쟁력",
+              "fontSize": 57,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/q1ozu9ob",
+      "id": "3",
+      "name": "title-rule",
+      "bbox": [
+        108,
+        219,
+        1372,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 2
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/lszy9o7y",
+      "id": "4",
+      "name": "grid",
+      "bbox": [
+        108,
+        292,
+        1371,
+        552
+      ],
+      "geometry": "rect",
+      "fillColor": "#FFFFFF",
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/0rqh0j6t",
+      "id": "5",
+      "name": "grid-v",
+      "bbox": [
+        793,
+        292,
+        0,
+        552
+      ],
+      "geometry": "line",
+      "lineColor": "#E5EAF0",
+      "lineWidth": 2
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/zqhg7ep8",
+      "id": "6",
+      "name": "grid-h",
+      "bbox": [
+        108,
+        567,
+        1371,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#E5EAF0",
+      "lineWidth": 2
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/yp8zy9on",
+      "id": "7",
+      "name": "diff-num-0",
+      "bbox": [
+        108,
+        301,
+        57,
+        48
+      ],
+      "geometry": "rect",
+      "text": "01",
+      "textPreview": "01",
+      "resolvedFontSize": 39,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 39,
+        "typeface": "Noto Sans KR",
+        "color": "#00C1D4",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "01"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "01",
+          "resolvedTextStyle": {
+            "fontSize": 39,
+            "typeface": "Noto Sans KR",
+            "color": "#00C1D4",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "01",
+              "fontSize": 39,
+              "typeface": "Noto Sans KR",
+              "color": "#00C1D4",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1wfyxk7u",
+      "id": "8",
+      "name": "diff-title-0",
+      "bbox": [
+        173,
+        303,
+        563,
+        48
+      ],
+      "geometry": "rect",
+      "text": "데이터 가치 사슬 구축",
+      "textPreview": "데이터 가치 사슬 구축",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 32,
+        "typeface": "Noto Sans KR",
+        "color": "#18191B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "데이터 가치 사슬 구축"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "데이터 가치 사슬 구축",
+          "resolvedTextStyle": {
+            "fontSize": 32,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "데이터 가치 사슬 구축",
+              "fontSize": 32,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/gv6xof69",
+      "id": "9",
+      "name": "diff-body-0",
+      "bbox": [
+        108,
+        373,
+        620,
+        98
+      ],
+      "geometry": "rect",
+      "text": "단순한 통계 조회를 넘어 AI 모델을 통해 2026년 관광 트렌드 등 미래 수요를 정\n확히 예측하고 선제적 대응 전략을 제시하여 데이터의 실질적 가치를 창출합니\n다.",
+      "textPreview": "단순한 통계 조회를 넘어 AI 모델을 통해 2026년 관광 트렌드 등 미래 수요를 정 | 확히 예측하고 선제적 대응 전략을 제시하여 데이터의 실질적 가치를 창출합니 | 다.",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 17,
+        "typeface": "Noto Sans KR",
+        "color": "#4F555B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "단순한 통계 조회를 넘어 AI 모델을 통해 2026년 관광 트렌드 등 미래 수요를 정"
+          },
+          {
+            "index": 2,
+            "text": "확히 예측하고 선제적 대응 전략을 제시하여 데이터의 실질적 가치를 창출합니"
+          },
+          {
+            "index": 3,
+            "text": "다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "단순한 통계 조회를 넘어 AI 모델을 통해 2026년 관광 트렌드 등 미래 수요를 정",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "단순한 통계 조회를 넘어 AI 모델을 통해 2026년 관광 트렌드 등 미래 수요를 정",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "확히 예측하고 선제적 대응 전략을 제시하여 데이터의 실질적 가치를 창출합니",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "확히 예측하고 선제적 대응 전략을 제시하여 데이터의 실질적 가치를 창출합니",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "다.",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "다.",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/yxwbyl87",
+      "id": "10",
+      "name": "diff-plus-0",
+      "bbox": [
+        108,
+        453,
+        379,
+        32
+      ],
+      "geometry": "rect",
+      "text": "+ 예측 기반 전략 제안",
+      "textPreview": "+ 예측 기반 전략 제안",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Noto Sans KR",
+        "color": "#4F555B",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "+ 예측 기반 전략 제안"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "+ 예측 기반 전략 제안",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "+ 예측 기반 전략 제안",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/zy5crq9s",
+      "id": "11",
+      "name": "diff-plus-orange-0",
+      "bbox": [
+        108,
+        453,
+        14,
+        32
+      ],
+      "geometry": "rect",
+      "text": "+",
+      "textPreview": "+",
+      "resolvedFontSize": 18,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 18,
+        "typeface": "Noto Sans KR",
+        "color": "#FF6B00",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "+"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "+",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#FF6B00",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "+",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#FF6B00",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/0jet0vqd",
+      "id": "12",
+      "name": "diff-num-1",
+      "bbox": [
+        854,
+        301,
+        57,
+        48
+      ],
+      "geometry": "rect",
+      "text": "02",
+      "textPreview": "02",
+      "resolvedFontSize": 39,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 39,
+        "typeface": "Noto Sans KR",
+        "color": "#00C1D4",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "02"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "02",
+          "resolvedTextStyle": {
+            "fontSize": 39,
+            "typeface": "Noto Sans KR",
+            "color": "#00C1D4",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "02",
+              "fontSize": 39,
+              "typeface": "Noto Sans KR",
+              "color": "#00C1D4",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/lk7ut0ry",
+      "id": "13",
+      "name": "diff-title-1",
+      "bbox": [
+        919,
+        303,
+        563,
+        48
+      ],
+      "geometry": "rect",
+      "text": "전국 단위 확장 분석",
+      "textPreview": "전국 단위 확장 분석",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 32,
+        "typeface": "Noto Sans KR",
+        "color": "#18191B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "전국 단위 확장 분석"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "전국 단위 확장 분석",
+          "resolvedTextStyle": {
+            "fontSize": 32,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "전국 단위 확장 분석",
+              "fontSize": 32,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/mlgb258j",
+      "id": "14",
+      "name": "diff-body-1",
+      "bbox": [
+        854,
+        373,
+        620,
+        98
+      ],
+      "geometry": "rect",
+      "text": "특정 지역에 국한되지 않는 전국 단위 확장형 분석 프레임워크를 적용하여 광범\n위한 데이터 수집 및 비교 분석을 가능하게 합니다.",
+      "textPreview": "특정 지역에 국한되지 않는 전국 단위 확장형 분석 프레임워크를 적용하여 광범 | 위한 데이터 수집 및 비교 분석을 가능하게 합니다.",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 17,
+        "typeface": "Noto Sans KR",
+        "color": "#4F555B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "특정 지역에 국한되지 않는 전국 단위 확장형 분석 프레임워크를 적용하여 광범"
+          },
+          {
+            "index": 2,
+            "text": "위한 데이터 수집 및 비교 분석을 가능하게 합니다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "특정 지역에 국한되지 않는 전국 단위 확장형 분석 프레임워크를 적용하여 광범",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "특정 지역에 국한되지 않는 전국 단위 확장형 분석 프레임워크를 적용하여 광범",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "위한 데이터 수집 및 비교 분석을 가능하게 합니다.",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "위한 데이터 수집 및 비교 분석을 가능하게 합니다.",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/nmpcva94",
+      "id": "15",
+      "name": "diff-plus-1",
+      "bbox": [
+        854,
+        453,
+        379,
+        32
+      ],
+      "geometry": "rect",
+      "text": "+ 범용적 분석 모델 적용",
+      "textPreview": "+ 범용적 분석 모델 적용",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Noto Sans KR",
+        "color": "#4F555B",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "+ 범용적 분석 모델 적용"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "+ 범용적 분석 모델 적용",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "+ 범용적 분석 모델 적용",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/8nyt4vqp",
+      "id": "16",
+      "name": "diff-plus-orange-1",
+      "bbox": [
+        854,
+        453,
+        14,
+        32
+      ],
+      "geometry": "rect",
+      "text": "+",
+      "textPreview": "+",
+      "resolvedFontSize": 18,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 18,
+        "typeface": "Noto Sans KR",
+        "color": "#FF6B00",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "+"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "+",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#FF6B00",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "+",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#FF6B00",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/9o7ux07u",
+      "id": "17",
+      "name": "diff-num-2",
+      "bbox": [
+        108,
+        641,
+        57,
+        48
+      ],
+      "geometry": "rect",
+      "text": "03",
+      "textPreview": "03",
+      "resolvedFontSize": 39,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 39,
+        "typeface": "Noto Sans KR",
+        "color": "#00C1D4",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "03"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "03",
+          "resolvedTextStyle": {
+            "fontSize": 39,
+            "typeface": "Noto Sans KR",
+            "color": "#00C1D4",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "03",
+              "fontSize": 39,
+              "typeface": "Noto Sans KR",
+              "color": "#00C1D4",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/apgb658f",
+      "id": "18",
+      "name": "diff-title-2",
+      "bbox": [
+        173,
+        643,
+        563,
+        48
+      ],
+      "geometry": "rect",
+      "text": "LLM 및 RAG 결합 기술",
+      "textPreview": "LLM 및 RAG 결합 기술",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 32,
+        "typeface": "Noto Sans KR",
+        "color": "#18191B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "LLM 및 RAG 결합 기술"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "LLM 및 RAG 결합 기술",
+          "resolvedTextStyle": {
+            "fontSize": 32,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "LLM 및 RAG 결합 기술",
+              "fontSize": 32,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 19,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vqpczap0",
+      "id": "19",
+      "name": "diff-body-2",
+      "bbox": [
+        108,
+        713,
+        620,
+        98
+      ],
+      "geometry": "rect",
+      "text": "최신 LLM과 RAG 기술을 결합하여 단순 수치 나열이 아닌, 데이터 근거에 기반\n한 신뢰도 높은 AI 해석 및 맞춤형 정책 리포트를 자동 생성하여 제공합니다.",
+      "textPreview": "최신 LLM과 RAG 기술을 결합하여 단순 수치 나열이 아닌, 데이터 근거에 기반 | 한 신뢰도 높은 AI 해석 및 맞춤형 정책 리포트를 자동 생성하여 제공합니다.",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 17,
+        "typeface": "Noto Sans KR",
+        "color": "#4F555B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "최신 LLM과 RAG 기술을 결합하여 단순 수치 나열이 아닌, 데이터 근거에 기반"
+          },
+          {
+            "index": 2,
+            "text": "한 신뢰도 높은 AI 해석 및 맞춤형 정책 리포트를 자동 생성하여 제공합니다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "최신 LLM과 RAG 기술을 결합하여 단순 수치 나열이 아닌, 데이터 근거에 기반",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "최신 LLM과 RAG 기술을 결합하여 단순 수치 나열이 아닌, 데이터 근거에 기반",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "한 신뢰도 높은 AI 해석 및 맞춤형 정책 리포트를 자동 생성하여 제공합니다.",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "한 신뢰도 높은 AI 해석 및 맞춤형 정책 리포트를 자동 생성하여 제공합니다.",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 20,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ru9sna58",
+      "id": "20",
+      "name": "diff-plus-2",
+      "bbox": [
+        108,
+        793,
+        379,
+        32
+      ],
+      "geometry": "rect",
+      "text": "+ 고신뢰도 AI 정책 리포트",
+      "textPreview": "+ 고신뢰도 AI 정책 리포트",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Noto Sans KR",
+        "color": "#4F555B",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "+ 고신뢰도 AI 정책 리포트"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "+ 고신뢰도 AI 정책 리포트",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "+ 고신뢰도 AI 정책 리포트",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 21,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6t0bu5on",
+      "id": "21",
+      "name": "diff-plus-orange-2",
+      "bbox": [
+        108,
+        793,
+        14,
+        32
+      ],
+      "geometry": "rect",
+      "text": "+",
+      "textPreview": "+",
+      "resolvedFontSize": 18,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 18,
+        "typeface": "Noto Sans KR",
+        "color": "#FF6B00",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "+"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "+",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#FF6B00",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "+",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#FF6B00",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 22,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/twrapkne",
+      "id": "22",
+      "name": "diff-num-3",
+      "bbox": [
+        854,
+        641,
+        57,
+        48
+      ],
+      "geometry": "rect",
+      "text": "04",
+      "textPreview": "04",
+      "resolvedFontSize": 39,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 39,
+        "typeface": "Noto Sans KR",
+        "color": "#00C1D4",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "04"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "04",
+          "resolvedTextStyle": {
+            "fontSize": 39,
+            "typeface": "Noto Sans KR",
+            "color": "#00C1D4",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "04",
+              "fontSize": 39,
+              "typeface": "Noto Sans KR",
+              "color": "#00C1D4",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 23,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/svitwf6t",
+      "id": "23",
+      "name": "diff-title-3",
+      "bbox": [
+        919,
+        643,
+        563,
+        48
+      ],
+      "geometry": "rect",
+      "text": "데이터 기반 의사결정",
+      "textPreview": "데이터 기반 의사결정",
+      "resolvedFontSize": 32,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 32,
+        "typeface": "Noto Sans KR",
+        "color": "#18191B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "데이터 기반 의사결정"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "데이터 기반 의사결정",
+          "resolvedTextStyle": {
+            "fontSize": 32,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "데이터 기반 의사결정",
+              "fontSize": 32,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 24,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/jqpsja5c",
+      "id": "24",
+      "name": "diff-body-3",
+      "bbox": [
+        854,
+        713,
+        620,
+        98
+      ],
+      "geometry": "rect",
+      "text": "복잡한 관광 데이터를 공공 행정에 즉시 활용 가능한 인사이트로 변환하여, 지자\n체 및 공공기관의 과학적이고 효율적인 정책 수립을 강력하게 지원합니다.",
+      "textPreview": "복잡한 관광 데이터를 공공 행정에 즉시 활용 가능한 인사이트로 변환하여, 지자 | 체 및 공공기관의 과학적이고 효율적인 정책 수립을 강력하게 지원합니다.",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 17,
+        "typeface": "Noto Sans KR",
+        "color": "#4F555B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "복잡한 관광 데이터를 공공 행정에 즉시 활용 가능한 인사이트로 변환하여, 지자"
+          },
+          {
+            "index": 2,
+            "text": "체 및 공공기관의 과학적이고 효율적인 정책 수립을 강력하게 지원합니다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "복잡한 관광 데이터를 공공 행정에 즉시 활용 가능한 인사이트로 변환하여, 지자",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "복잡한 관광 데이터를 공공 행정에 즉시 활용 가능한 인사이트로 변환하여, 지자",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "체 및 공공기관의 과학적이고 효율적인 정책 수립을 강력하게 지원합니다.",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "체 및 공공기관의 과학적이고 효율적인 정책 수립을 강력하게 지원합니다.",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 25,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ipgrq5or",
+      "id": "25",
+      "name": "diff-plus-3",
+      "bbox": [
+        854,
+        793,
+        379,
+        32
+      ],
+      "geometry": "rect",
+      "text": "+ 실효성 있는 정책 지원",
+      "textPreview": "+ 실효성 있는 정책 지원",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Noto Sans KR",
+        "color": "#4F555B",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "+ 실효성 있는 정책 지원"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "+ 실효성 있는 정책 지원",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "+ 실효성 있는 정책 지원",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 26,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5sral0n2",
+      "id": "26",
+      "name": "diff-plus-orange-3",
+      "bbox": [
+        854,
+        793,
+        14,
+        32
+      ],
+      "geometry": "rect",
+      "text": "+",
+      "textPreview": "+",
+      "resolvedFontSize": 18,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 18,
+        "typeface": "Noto Sans KR",
+        "color": "#FF6B00",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "+"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "+",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#FF6B00",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "+",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#FF6B00",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

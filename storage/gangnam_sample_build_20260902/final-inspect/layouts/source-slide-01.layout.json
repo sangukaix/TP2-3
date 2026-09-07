@@ -1,0 +1,947 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/y90nupkv",
+    "id": "y90nupkv",
+    "slide": 1,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#F4F7FA",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1600,
+      "height": 900
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Calibri Light",
+        "eastAsianTypeface": "Calibri Light",
+        "complexScriptTypeface": "Calibri Light"
+      },
+      "minorFont": {
+        "latinTypeface": "Calibri",
+        "eastAsianTypeface": "Calibri",
+        "complexScriptTypeface": "Calibri"
+      }
+    },
+    "typefaces": [
+      "Calibri",
+      "Calibri Light",
+      "Noto Sans KR"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/0bmd476t",
+      "id": "21",
+      "name": "background-wordmark",
+      "bbox": [
+        -58,
+        300,
+        1720,
+        310
+      ],
+      "geometry": "rect",
+      "text": "TOURISM AI",
+      "textPreview": "TOURISM AI",
+      "resolvedFontSize": 20.67,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "none",
+        "autoFit": "shrinkText",
+        "autoFitScale": 0.86,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "TOURISM AI"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "TOURISM AI",
+          "resolvedTextStyle": {
+            "fontSize": 4,
+            "typeface": "Noto Sans KR",
+            "color": "#E7EDF4",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "TOURISM AI",
+              "fontSize": 4,
+              "typeface": "Noto Sans KR",
+              "color": "#E7EDF4",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/547294r6",
+      "id": "2",
+      "name": "center-top-vertical",
+      "bbox": [
+        800,
+        94,
+        0,
+        132
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 3
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/k3yl0zql",
+      "id": "3",
+      "name": "center-bottom-vertical",
+      "bbox": [
+        800,
+        673,
+        0,
+        131
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 3
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7qp4be9c",
+      "id": "4",
+      "name": "title-panel",
+      "bbox": [
+        367,
+        222,
+        868,
+        451
+      ],
+      "geometry": "rect",
+      "fillColor": "#FFFFFF",
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/65g3298r",
+      "id": "5",
+      "name": "title-panel-top",
+      "bbox": [
+        367,
+        222,
+        868,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 4
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ts7md4r2",
+      "id": "6",
+      "name": "security-label",
+      "bbox": [
+        694,
+        310,
+        296,
+        34
+      ],
+      "geometry": "rect",
+      "text": "정 책 검 토 용",
+      "textPreview": "정 책 검 토 용",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "정 책 검 토 용"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "정 책 검 토 용",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "정 책 검 토 용",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sryl4zqx",
+      "id": "7",
+      "name": "cover-title-line1",
+      "bbox": [
+        448,
+        382,
+        707,
+        75
+      ],
+      "geometry": "rect",
+      "text": "강남 이브닝 스테이 패스",
+      "textPreview": "강남 이브닝 스테이 패스",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "강남 이브닝 스테이 패스"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "강남 이브닝 스테이 패스",
+          "resolvedTextStyle": {
+            "fontSize": 58,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "강남 이브닝 스테이 패스",
+              "fontSize": 58,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/fu94fe98",
+      "id": "8",
+      "name": "cover-title-line2",
+      "bbox": [
+        439,
+        463,
+        727,
+        74
+      ],
+      "geometry": "rect",
+      "text": "야간·숙박 전환 3개월 시범사업",
+      "textPreview": "야간·숙박 전환 3개월 시범사업",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "야간·숙박 전환 3개월 시범사업"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "야간·숙박 전환 3개월 시범사업",
+          "resolvedTextStyle": {
+            "fontSize": 55,
+            "typeface": "Noto Sans KR",
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "야간·숙박 전환",
+              "fontSize": 55,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": " 3개월 시범사업",
+              "fontSize": 55,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/utg3698n",
+      "id": "9",
+      "name": "date-rule-left",
+      "bbox": [
+        642,
+        579,
+        49,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 2
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/wn6dc7eh",
+      "id": "10",
+      "name": "cover-date",
+      "bbox": [
+        708,
+        561,
+        275,
+        40
+      ],
+      "geometry": "rect",
+      "text": "2026년 09월 02일",
+      "textPreview": "2026년 09월 02일",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "2026년 09월 02일"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "2026년 09월 02일",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "2026년 09월 02일",
+              "fontSize": 21,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/hofulsf2",
+      "id": "11",
+      "name": "date-rule-right",
+      "bbox": [
+        1001,
+        579,
+        49,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 2
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ul4vaxgb",
+      "id": "12",
+      "name": "org-title",
+      "bbox": [
+        1325,
+        109,
+        170,
+        34
+      ],
+      "geometry": "rect",
+      "text": "서울특별시 강남구",
+      "textPreview": "서울특별시 강남구",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "서울특별시 강남구"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "서울특별시 강남구",
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "서울특별시 강남구",
+              "fontSize": 20,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vmdcj2xw",
+      "id": "13",
+      "name": "org-orange-rule",
+      "bbox": [
+        1427,
+        146,
+        68,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#FF6B00",
+      "lineWidth": 2
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/4r6dg7et",
+      "id": "14",
+      "name": "org-owner",
+      "bbox": [
+        1370,
+        167,
+        125,
+        63
+      ],
+      "geometry": "rect",
+      "text": "관광정책 검토용 /\n데이터·AI 샘플",
+      "textPreview": "관광정책 검토용 / | 데이터·AI 샘플",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "관광정책 검토용 /"
+          },
+          {
+            "index": 2,
+            "text": "데이터·AI 샘플"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "관광정책 검토용 /",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "right"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "관광정책 검토용 /",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "데이터·AI 샘플",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "right"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "데이터·AI 샘플",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5sfepcfe",
+      "id": "15",
+      "name": "report-number",
+      "bbox": [
+        110,
+        663,
+        369,
+        31
+      ],
+      "geometry": "rect",
+      "text": "보 고 서  번 호  G N - 2 0 2 6 - 0 1",
+      "textPreview": "보 고 서  번 호  G N - 2 0 2 6 - 0 1",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "보 고 서  번 호  G N - 2 0 2 6 - 0 1"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "보 고 서  번 호  G N - 2 0 2 6 - 0 1",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#00C1D4",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "보 고 서  번 호  G N - 2 0 2 6 - 0 1",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#00C1D4",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ipovexwn",
+      "id": "16",
+      "name": "report-topic",
+      "bbox": [
+        110,
+        706,
+        369,
+        106
+      ],
+      "geometry": "rect",
+      "text": "식음·쇼핑 소비를\n숙박으로 연결",
+      "textPreview": "식음·쇼핑 소비를 | 숙박으로 연결",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "식음·쇼핑 소비를"
+          },
+          {
+            "index": 2,
+            "text": "숙박으로 연결"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "식음·쇼핑 소비를",
+          "resolvedTextStyle": {
+            "fontSize": 42,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "식음·쇼핑 소비를",
+              "fontSize": 42,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "숙박으로 연결",
+          "resolvedTextStyle": {
+            "fontSize": 42,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "숙박으로 연결",
+              "fontSize": 42,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/3qxwn2x8",
+      "id": "17",
+      "name": "corner-tl-h",
+      "bbox": [
+        68,
+        65,
+        31,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 2
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sfqdkrep",
+      "id": "18",
+      "name": "corner-tl-v",
+      "bbox": [
+        68,
+        65,
+        0,
+        31
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 2
+    },
+    {
+      "order": 19,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/dgzetcfa",
+      "id": "19",
+      "name": "corner-br-h",
+      "bbox": [
+        1531,
+        834,
+        31,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 2
+    },
+    {
+      "order": 20,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1cvuxc7e",
+      "id": "20",
+      "name": "corner-br-v",
+      "bbox": [
+        1562,
+        803,
+        0,
+        31
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 2
+    }
+  ],
+  "composeRuns": []
+}

@@ -1,0 +1,185 @@
+{
+  "split": {
+    "train": {
+      "start": "2025-02",
+      "end": "2025-06",
+      "rows": 705
+    },
+    "validation": {
+      "start": "2025-07",
+      "end": "2025-12",
+      "rows": 846
+    },
+    "test": {
+      "start": "2026-01",
+      "end": "2026-06",
+      "rows": 846
+    }
+  },
+  "models": {
+    "seasonal_naive": {
+      "validation": {
+        "mae": 259084.76004728134,
+        "rmse": 356106.35506344296,
+        "mape_pct": 8.837153302582648,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      },
+      "test": {
+        "mae": 173228.52245862884,
+        "rmse": 293492.7659533824,
+        "mape_pct": 7.130172065843684,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      }
+    },
+    "recent_naive": {
+      "validation": {
+        "mae": 233317.62293144208,
+        "rmse": 324042.8410600784,
+        "mape_pct": 12.529916573286298,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      },
+      "test": {
+        "mae": 334680.5449172577,
+        "rmse": 514955.89014114626,
+        "mape_pct": 11.777901641977557,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      }
+    },
+    "seasonal_recent_blend": {
+      "validation": {
+        "mae": 217910.61052009457,
+        "rmse": 300534.6629034558,
+        "mape_pct": 8.23989844724101,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      },
+      "test": {
+        "mae": 162080.0103427896,
+        "rmse": 277762.5372288668,
+        "mape_pct": 6.750709275616205,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      }
+    },
+    "yoy_rate_naive": {
+      "validation": {
+        "mae": 202775.93152679046,
+        "rmse": 293409.1728479884,
+        "mape_pct": 9.093710001105705,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      },
+      "test": {
+        "mae": 212166.46578656253,
+        "rmse": 296123.39835831884,
+        "mape_pct": 10.472792623903793,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      }
+    },
+    "linear_regression": {
+      "validation": {
+        "mae": 397216.0088917416,
+        "rmse": 471851.2214336706,
+        "mape_pct": 24.69407318435673,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      },
+      "test": {
+        "mae": 303710.33955657954,
+        "rmse": 412143.03083883866,
+        "mape_pct": 16.792690618534444,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      }
+    },
+    "linear_seasonal_residual": {
+      "validation": {
+        "mae": 397216.1869074461,
+        "rmse": 471851.40596067044,
+        "mape_pct": 24.694083725862495,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      },
+      "test": {
+        "mae": 303710.3596484209,
+        "rmse": 412143.0494471236,
+        "mape_pct": 16.792692164628974,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      }
+    },
+    "linear_log_seasonal_ratio": {
+      "validation": {
+        "mae": 293075.3686999089,
+        "rmse": 448574.8638993365,
+        "mape_pct": 10.501340952012455,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      },
+      "test": {
+        "mae": 350697.0567800219,
+        "rmse": 520305.8161816725,
+        "mape_pct": 12.59482826091598,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      }
+    },
+    "random_forest": {
+      "validation": {
+        "mae": 194332.27444949409,
+        "rmse": 272730.2999063788,
+        "mape_pct": 8.531951611995767,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      },
+      "test": {
+        "mae": 199432.3051563505,
+        "rmse": 319463.67461363575,
+        "mape_pct": 8.236840665422791,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      }
+    },
+    "random_forest_seasonal_residual": {
+      "validation": {
+        "mae": 196159.55433744722,
+        "rmse": 275968.79483657493,
+        "mape_pct": 8.420150497688638,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      },
+      "test": {
+        "mae": 253912.6372010066,
+        "rmse": 389893.98261221295,
+        "mape_pct": 10.722296455143734,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      }
+    },
+    "random_forest_log_seasonal_ratio": {
+      "validation": {
+        "mae": 306023.85030053416,
+        "rmse": 440171.8625111284,
+        "mape_pct": 12.346534731827672,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      },
+      "test": {
+        "mae": 268681.8928715141,
+        "rmse": 406437.6669813157,
+        "mape_pct": 10.339042540434686,
+        "mape_sample_count": 846,
+        "sample_count": 846
+      }
+    }
+  },
+  "selection_metric": "validation_mae",
+  "selected_model": "random_forest",
+  "beats_seasonal_naive_on_validation": true,
+  "beats_seasonal_naive_on_test": false
+}

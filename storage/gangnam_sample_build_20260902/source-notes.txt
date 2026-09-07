@@ -1,0 +1,6 @@
+한국관광 데이터랩 처리본: data/processed/ml/11680/monthly_demand.csv
+강남구 모델 메타데이터: artifacts/ml/11680/demand_model.metadata.json
+전국 비교 처리본: data/processed/nationwide/merged_planning_context/
+공식 사례: data/rag/official_case_studies.jsonl
+공식 사진: 한국관광공사 국문관광정보 Open API / https://apis.data.go.kr/B551011/KorService2
+사진 원본 URL은 최종 슬라이드 speaker notes의 [Sources]에 기록한다.

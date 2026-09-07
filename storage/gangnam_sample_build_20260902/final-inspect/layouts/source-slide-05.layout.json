@@ -1,0 +1,1693 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/i107q5of",
+    "id": "i107q5of",
+    "slide": 5,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#F4F7FA",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1600,
+      "height": 900
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Calibri Light",
+        "eastAsianTypeface": "Calibri Light",
+        "complexScriptTypeface": "Calibri Light"
+      },
+      "minorFont": {
+        "latinTypeface": "Calibri",
+        "eastAsianTypeface": "Calibri",
+        "complexScriptTypeface": "Calibri"
+      }
+    },
+    "typefaces": [
+      "Calibri",
+      "Calibri Light",
+      "Noto Sans KR",
+      "Segoe UI Symbol"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/2l4zip8j",
+      "id": "45",
+      "name": "title",
+      "bbox": [
+        402,
+        100,
+        796,
+        70
+      ],
+      "geometry": "rect",
+      "text": "참여자별 역할과 이용 시나리오",
+      "textPreview": "참여자별 역할과 이용 시나리오",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "참여자별 역할과 이용 시나리오"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "참여자별 역할과 이용 시나리오",
+          "resolvedTextStyle": {
+            "fontSize": 52,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "참여자별 역할과 이용 시나리오",
+              "fontSize": 52,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/dgbulwnm",
+      "id": "2",
+      "name": "title-rule",
+      "bbox": [
+        682,
+        172,
+        68,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 4
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/cf2tcr61",
+      "id": "3",
+      "name": "subtitle",
+      "bbox": [
+        430,
+        205,
+        740,
+        36
+      ],
+      "geometry": "rect",
+      "text": "방문 수요를 야간 결제와 실제 숙박 완료까지 연결하는 3자 협업 구조",
+      "textPreview": "방문 수요를 야간 결제와 실제 숙박 완료까지 연결하는 3자 협업 구조",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "방문 수요를 야간 결제와 실제 숙박 완료까지 연결하는 3자 협업 구조"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "방문 수요를 야간 결제와 실제 숙박 완료까지 연결하는 3자 협업 구조",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "방문 수요를 야간 결제와 실제 숙박 완료까지 연결하는 3자 협업 구조",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/z2tcnm5s",
+      "id": "4",
+      "name": "audience-card-0",
+      "bbox": [
+        87,
+        316,
+        448,
+        477
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#FFFFFF",
+      "lineColor": "#D7DEE5",
+      "lineWidth": 1
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/yhkbe1o7",
+      "id": "5",
+      "name": "audience-pill-0",
+      "bbox": [
+        117,
+        357,
+        388,
+        50
+      ],
+      "geometry": "roundRect",
+      "text": "타지역 방문객",
+      "textPreview": "타지역 방문객",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 8,
+          "bottom": 0,
+          "left": 8
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "타지역 방문객"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "타지역 방문객",
+          "resolvedTextStyle": {
+            "fontSize": 19,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "타지역 방문객",
+              "fontSize": 19,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "#FFFFFF",
+      "lineColor": "#004EA2",
+      "lineWidth": 1
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/l4bupwny",
+      "id": "6",
+      "name": "bank-roof",
+      "bbox": [
+        277,
+        452,
+        72,
+        28
+      ],
+      "geometry": "triangle",
+      "fillColor": "#004EA2",
+      "lineWidth": 0
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/032tgr6d",
+      "id": "7",
+      "name": "bank-entablature",
+      "bbox": [
+        279,
+        478,
+        68,
+        9
+      ],
+      "geometry": "rect",
+      "fillColor": "#004EA2",
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/n6dcr65o",
+      "id": "8",
+      "name": "bank-column-0",
+      "bbox": [
+        286,
+        486,
+        10,
+        42
+      ],
+      "geometry": "rect",
+      "fillColor": "#004EA2",
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/m5kbi1oj",
+      "id": "9",
+      "name": "bank-column-1",
+      "bbox": [
+        306,
+        486,
+        10,
+        42
+      ],
+      "geometry": "rect",
+      "fillColor": "#004EA2",
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/w32dkbuh",
+      "id": "10",
+      "name": "bank-column-2",
+      "bbox": [
+        326,
+        486,
+        10,
+        42
+      ],
+      "geometry": "rect",
+      "fillColor": "#004EA2",
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/x4vedgvm",
+      "id": "11",
+      "name": "bank-base",
+      "bbox": [
+        276,
+        526,
+        74,
+        9
+      ],
+      "geometry": "rect",
+      "fillColor": "#004EA2",
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ahkvi1cb",
+      "id": "12",
+      "name": "person-head-0",
+      "bbox": [
+        247,
+        540,
+        17,
+        17
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#00C1D4",
+      "lineWidth": 0
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/v2twb6dw",
+      "id": "13",
+      "name": "person-body-0",
+      "bbox": [
+        241,
+        558,
+        29,
+        18
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#00C1D4",
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/k7mxovud",
+      "id": "14",
+      "name": "person-head-1",
+      "bbox": [
+        286,
+        540,
+        17,
+        17
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#00C1D4",
+      "lineWidth": 0
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/58vehgvy",
+      "id": "15",
+      "name": "person-body-1",
+      "bbox": [
+        280,
+        558,
+        29,
+        18
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#00C1D4",
+      "lineWidth": 0
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/i54fmlc7",
+      "id": "16",
+      "name": "person-head-2",
+      "bbox": [
+        325,
+        540,
+        17,
+        17
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#00C1D4",
+      "lineWidth": 0
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/j6dwfqds",
+      "id": "17",
+      "name": "person-body-2",
+      "bbox": [
+        319,
+        558,
+        29,
+        18
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#00C1D4",
+      "lineWidth": 0
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sb6xsvu9",
+      "id": "18",
+      "name": "audience-body-0",
+      "bbox": [
+        117,
+        622,
+        388,
+        62
+      ],
+      "geometry": "rect",
+      "text": "MICE·문화·쇼핑 방문자가 패스를 신청하고\n18시 이후 제휴 동선을 이용합니다.",
+      "textPreview": "MICE·문화·쇼핑 방문자가 패스를 신청하고 | 18시 이후 제휴 동선을 이용합니다.",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "MICE·문화·쇼핑 방문자가 패스를 신청하고"
+          },
+          {
+            "index": 2,
+            "text": "18시 이후 제휴 동선을 이용합니다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "MICE·문화·쇼핑 방문자가 패스를 신청하고",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "MICE·문화·쇼핑 방문자가 패스를 신청하고",
+              "fontSize": 15,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "18시 이후 제휴 동선을 이용합니다.",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "18시 이후 제휴 동선을 이용합니다.",
+              "fontSize": 15,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 19,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/tcfel0vu",
+      "id": "19",
+      "name": "audience-divider-0",
+      "bbox": [
+        117,
+        681,
+        388,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#E5EAF0",
+      "lineWidth": 2
+    },
+    {
+      "order": 20,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/hgrmpwj2",
+      "id": "20",
+      "name": "audience-role-0",
+      "bbox": [
+        122,
+        724,
+        378,
+        34
+      ],
+      "geometry": "rect",
+      "text": "행동: 방문 → 야간 소비 → 숙박 인증",
+      "textPreview": "행동: 방문 → 야간 소비 → 숙박 인증",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "행동: 방문 → 야간 소비 → 숙박 인증"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "행동: 방문 → 야간 소비 → 숙박 인증",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "행동: 방문 → 야간 소비 → 숙박 인증",
+              "fontSize": 14,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 21,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/gfi5grih",
+      "id": "21",
+      "name": "audience-card-1",
+      "bbox": [
+        576,
+        316,
+        448,
+        477
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#FFFFFF",
+      "lineColor": "#D7DEE5",
+      "lineWidth": 1
+    },
+    {
+      "order": 22,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/fe94nm1w",
+      "id": "22",
+      "name": "audience-pill-1",
+      "bbox": [
+        606,
+        357,
+        388,
+        50
+      ],
+      "geometry": "roundRect",
+      "text": "강남구·운영기관",
+      "textPreview": "강남구·운영기관",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 8,
+          "bottom": 0,
+          "left": 8
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "강남구·운영기관"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "강남구·운영기관",
+          "resolvedTextStyle": {
+            "fontSize": 19,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "강남구·운영기관",
+              "fontSize": 19,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "#FFFFFF",
+      "lineColor": "#004EA2",
+      "lineWidth": 1
+    },
+    {
+      "order": 23,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ud0ne10b",
+      "id": "23",
+      "name": "chart-axis-y",
+      "bbox": [
+        766,
+        454,
+        0,
+        65
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 7
+    },
+    {
+      "order": 24,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/pkr6tgjy",
+      "id": "24",
+      "name": "chart-axis-x",
+      "bbox": [
+        766,
+        519,
+        65,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 7
+    },
+    {
+      "order": 25,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/4ji5kbid",
+      "id": "25",
+      "name": "chart-line-1",
+      "bbox": [
+        778,
+        481,
+        18,
+        18
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 7
+    },
+    {
+      "order": 26,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/3i94r61s",
+      "id": "26",
+      "name": "chart-line-2",
+      "bbox": [
+        796,
+        481,
+        14,
+        10
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 7
+    },
+    {
+      "order": 27,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/2h0ni107",
+      "id": "27",
+      "name": "chart-line-3",
+      "bbox": [
+        810,
+        467,
+        22,
+        24
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 7
+    },
+    {
+      "order": 28,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5o7mhcju",
+      "id": "28",
+      "name": "analytics-glyph",
+      "bbox": [
+        734,
+        540,
+        135,
+        42
+      ],
+      "geometry": "rect",
+      "text": "◔  ▮▮▮  ◉",
+      "textPreview": "◔  ▮▮▮  ◉",
+      "resolvedFontSize": 19.53,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 0.81,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "◔  ▮▮▮"
+          },
+          {
+            "index": 2,
+            "text": "◉"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "◔  ▮▮▮  ◉",
+          "resolvedTextStyle": {
+            "fontSize": 28,
+            "typeface": "Segoe UI Symbol",
+            "color": "#00C1D4",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "◔  ▮▮▮  ◉",
+              "fontSize": 28,
+              "typeface": "Segoe UI Symbol",
+              "color": "#00C1D4",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 29,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kny587i9",
+      "id": "29",
+      "name": "audience-body-1",
+      "bbox": [
+        606,
+        622,
+        388,
+        62
+      ],
+      "geometry": "rect",
+      "text": "패스 운영, 참여업체 기준 관리, 월별 KPI와\n참여·비참여 집단을 비교합니다.",
+      "textPreview": "패스 운영, 참여업체 기준 관리, 월별 KPI와 | 참여·비참여 집단을 비교합니다.",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "패스 운영, 참여업체 기준 관리, 월별 KPI와"
+          },
+          {
+            "index": 2,
+            "text": "참여·비참여 집단을 비교합니다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "패스 운영, 참여업체 기준 관리, 월별 KPI와",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "패스 운영, 참여업체 기준 관리, 월별 KPI와",
+              "fontSize": 15,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "참여·비참여 집단을 비교합니다.",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "참여·비참여 집단을 비교합니다.",
+              "fontSize": 15,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 30,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/atcjidg7",
+      "id": "30",
+      "name": "audience-divider-1",
+      "bbox": [
+        606,
+        681,
+        388,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#E5EAF0",
+      "lineWidth": 2
+    },
+    {
+      "order": 31,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vu5kbihc",
+      "id": "31",
+      "name": "audience-role-1",
+      "bbox": [
+        611,
+        724,
+        378,
+        34
+      ],
+      "geometry": "rect",
+      "text": "역할: 품질관리·성과측정·의사결정",
+      "textPreview": "역할: 품질관리·성과측정·의사결정",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "역할: 품질관리·성과측정·의사결정"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "역할: 품질관리·성과측정·의사결정",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "역할: 품질관리·성과측정·의사결정",
+              "fontSize": 14,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 32,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/wve1knyx",
+      "id": "32",
+      "name": "audience-card-2",
+      "bbox": [
+        1066,
+        316,
+        448,
+        477
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#FFFFFF",
+      "lineColor": "#D7DEE5",
+      "lineWidth": 1
+    },
+    {
+      "order": 33,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/xwn2dszi",
+      "id": "33",
+      "name": "audience-pill-2",
+      "bbox": [
+        1096,
+        357,
+        388,
+        50
+      ],
+      "geometry": "roundRect",
+      "text": "식음·쇼핑·숙박업체",
+      "textPreview": "식음·쇼핑·숙박업체",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 8,
+          "bottom": 0,
+          "left": 8
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "식음·쇼핑·숙박업체"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "식음·쇼핑·숙박업체",
+          "resolvedTextStyle": {
+            "fontSize": 19,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "식음·쇼핑·숙박업체",
+              "fontSize": 19,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "fillColor": "#FFFFFF",
+      "lineColor": "#004EA2",
+      "lineWidth": 1
+    },
+    {
+      "order": 34,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ihw3mxg3",
+      "id": "34",
+      "name": "shop-awning",
+      "bbox": [
+        1251,
+        452,
+        76,
+        27
+      ],
+      "geometry": "trapezoid",
+      "fillColor": "#004EA2",
+      "lineWidth": 0
+    },
+    {
+      "order": 35,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ji5kf2ho",
+      "id": "35",
+      "name": "shop-body",
+      "bbox": [
+        1260,
+        477,
+        58,
+        48
+      ],
+      "geometry": "rect",
+      "fillColor": "#004EA2",
+      "lineWidth": 0
+    },
+    {
+      "order": 36,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kjelony9",
+      "id": "36",
+      "name": "shop-window",
+      "bbox": [
+        1270,
+        490,
+        20,
+        22
+      ],
+      "geometry": "rect",
+      "fillColor": "#FFFFFF",
+      "lineWidth": 0
+    },
+    {
+      "order": 37,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5kn2hszu",
+      "id": "37",
+      "name": "shop-door",
+      "bbox": [
+        1298,
+        490,
+        12,
+        35
+      ],
+      "geometry": "rect",
+      "fillColor": "#FFFFFF",
+      "lineWidth": 0
+    },
+    {
+      "order": 38,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/e1sjatgz",
+      "id": "38",
+      "name": "shops-glyph",
+      "bbox": [
+        1223,
+        540,
+        135,
+        42
+      ],
+      "geometry": "rect",
+      "text": "▰  ▦  ♜",
+      "textPreview": "▰  ▦  ♜",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "▰  ▦  ♜"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "▰  ▦  ♜",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Segoe UI Symbol",
+            "color": "#00C1D4",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "▰  ▦  ♜",
+              "fontSize": 27,
+              "typeface": "Segoe UI Symbol",
+              "color": "#00C1D4",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 39,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/zmlk3yhk",
+      "id": "39",
+      "name": "audience-body-2",
+      "bbox": [
+        1096,
+        622,
+        388,
+        62
+      ],
+      "geometry": "rect",
+      "text": "혜택을 제공하고 결제·쿠폰·숙박 완료 데이터를\n정해진 항목으로 제출합니다.",
+      "textPreview": "혜택을 제공하고 결제·쿠폰·숙박 완료 데이터를 | 정해진 항목으로 제출합니다.",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "혜택을 제공하고 결제·쿠폰·숙박 완료 데이터를"
+          },
+          {
+            "index": 2,
+            "text": "정해진 항목으로 제출합니다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "혜택을 제공하고 결제·쿠폰·숙박 완료 데이터를",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "혜택을 제공하고 결제·쿠폰·숙박 완료 데이터를",
+              "fontSize": 15,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "정해진 항목으로 제출합니다.",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "정해진 항목으로 제출합니다.",
+              "fontSize": 15,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 40,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/fid07u98",
+      "id": "40",
+      "name": "audience-divider-2",
+      "bbox": [
+        1096,
+        681,
+        388,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#E5EAF0",
+      "lineWidth": 2
+    },
+    {
+      "order": 41,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ehkzepsn",
+      "id": "41",
+      "name": "audience-role-2",
+      "bbox": [
+        1101,
+        724,
+        378,
+        34
+      ],
+      "geometry": "rect",
+      "text": "역할: 현장 운영·데이터 협력",
+      "textPreview": "역할: 현장 운영·데이터 협력",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "역할: 현장 운영·데이터 협력"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "역할: 현장 운영·데이터 협력",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "역할: 현장 운영·데이터 협력",
+              "fontSize": 14,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 42,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1kvi94re",
+      "id": "42",
+      "name": "footer-left",
+      "bbox": [
+        87,
+        830,
+        380,
+        24
+      ],
+      "geometry": "rect",
+      "text": "강남 이브닝 스테이 패스 | 3개월 데이터 검증형 시범사업",
+      "textPreview": "강남 이브닝 스테이 패스 | 3개월 데이터 검증형 시범사업",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "강남 이브닝 스테이 패스 | 3개월 데이터 검증형 시범사업"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "강남 이브닝 스테이 패스 | 3개월 데이터 검증형 시범사업",
+          "resolvedTextStyle": {
+            "fontSize": 13,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "강남 이브닝 스테이 패스 | 3개월 데이터 검증형 시범사업",
+              "fontSize": 13,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 43,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/gjmhgzqt",
+      "id": "43",
+      "name": "footer-dot",
+      "bbox": [
+        1278,
+        833,
+        10,
+        10
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#FF6B00",
+      "lineWidth": 0
+    },
+    {
+      "order": 44,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/3md0bu94",
+      "id": "44",
+      "name": "footer-right",
+      "bbox": [
+        1300,
+        823,
+        245,
+        26
+      ],
+      "geometry": "rect",
+      "text": "Evidence-Driven Tourism Pilot",
+      "textPreview": "Evidence-Driven Tourism Pilot",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Evidence-Driven Tourism Pilot"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Evidence-Driven Tourism Pilot",
+          "resolvedTextStyle": {
+            "fontSize": 12,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Evidence-Driven Tourism Pilot",
+              "fontSize": 12,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

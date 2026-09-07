@@ -1,0 +1,149 @@
+{
+  "outputSlides": [
+    {
+      "outputSlide": 1,
+      "sourceSlide": 1,
+      "reuseMode": "duplicate-slide",
+      "narrativeRole": "unchanged",
+      "editTargets": [
+        {
+          "action": "preserve",
+          "reason": "User-requested design edit; source theme retained"
+        }
+      ]
+    },
+    {
+      "outputSlide": 2,
+      "sourceSlide": 2,
+      "reuseMode": "duplicate-slide",
+      "narrativeRole": "unchanged",
+      "editTargets": [
+        {
+          "action": "preserve",
+          "reason": "User-requested design edit; source theme retained"
+        }
+      ]
+    },
+    {
+      "outputSlide": 3,
+      "sourceSlide": 3,
+      "reuseMode": "duplicate-slide",
+      "narrativeRole": "unchanged",
+      "editTargets": [
+        {
+          "action": "preserve",
+          "reason": "User-requested design edit; source theme retained"
+        }
+      ]
+    },
+    {
+      "outputSlide": 4,
+      "sourceSlide": 4,
+      "reuseMode": "duplicate-slide",
+      "narrativeRole": "unchanged",
+      "editTargets": [
+        {
+          "action": "preserve",
+          "reason": "User-requested design edit; source theme retained"
+        }
+      ]
+    },
+    {
+      "outputSlide": 5,
+      "sourceSlide": 5,
+      "reuseMode": "duplicate-slide",
+      "narrativeRole": "requested numeric/provenance redesign",
+      "editTargets": [
+        {
+          "action": "replace",
+          "reason": "User-requested design edit; source theme retained"
+        }
+      ]
+    },
+    {
+      "outputSlide": 6,
+      "sourceSlide": 6,
+      "reuseMode": "duplicate-slide",
+      "narrativeRole": "unchanged",
+      "editTargets": [
+        {
+          "action": "preserve",
+          "reason": "User-requested design edit; source theme retained"
+        }
+      ]
+    },
+    {
+      "outputSlide": 7,
+      "sourceSlide": 7,
+      "reuseMode": "duplicate-slide",
+      "narrativeRole": "unchanged",
+      "editTargets": [
+        {
+          "action": "preserve",
+          "reason": "User-requested design edit; source theme retained"
+        }
+      ]
+    },
+    {
+      "outputSlide": 8,
+      "sourceSlide": 8,
+      "reuseMode": "duplicate-slide",
+      "narrativeRole": "requested numeric/provenance redesign",
+      "editTargets": [
+        {
+          "action": "replace",
+          "reason": "User-requested design edit; source theme retained"
+        }
+      ]
+    },
+    {
+      "outputSlide": 9,
+      "sourceSlide": 9,
+      "reuseMode": "duplicate-slide",
+      "narrativeRole": "requested numeric/provenance redesign",
+      "editTargets": [
+        {
+          "action": "replace",
+          "reason": "User-requested design edit; source theme retained"
+        }
+      ]
+    },
+    {
+      "outputSlide": 10,
+      "sourceSlide": 10,
+      "reuseMode": "duplicate-slide",
+      "narrativeRole": "unchanged",
+      "editTargets": [
+        {
+          "action": "preserve",
+          "reason": "User-requested design edit; source theme retained"
+        }
+      ]
+    },
+    {
+      "outputSlide": 11,
+      "sourceSlide": 11,
+      "reuseMode": "duplicate-slide",
+      "narrativeRole": "requested numeric/provenance redesign",
+      "editTargets": [
+        {
+          "action": "replace",
+          "reason": "User-requested design edit; source theme retained"
+        }
+      ]
+    },
+    {
+      "outputSlide": 12,
+      "sourceSlide": 12,
+      "reuseMode": "duplicate-slide",
+      "narrativeRole": "unchanged",
+      "editTargets": [
+        {
+          "action": "preserve",
+          "reason": "User-requested design edit; source theme retained"
+        }
+      ]
+    }
+  ],
+  "omittedSourceSlides": []
+}

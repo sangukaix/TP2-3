@@ -1,0 +1,72 @@
+{
+  "split": {
+    "train": {
+      "start": "2025-01",
+      "end": "2025-06",
+      "rows": 786
+    },
+    "validation": {
+      "start": "2025-07",
+      "end": "2025-12",
+      "rows": 786
+    },
+    "test": {
+      "start": "2026-01",
+      "end": "2026-06",
+      "rows": 786
+    }
+  },
+  "models": {
+    "seasonal_naive": {
+      "validation": {
+        "mae": 223509.31933842239,
+        "rmse": 291520.0513275616,
+        "mape_pct": 8.959980574991357,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      },
+      "test": {
+        "mae": 144982.786259542,
+        "rmse": 209871.6810780621,
+        "mape_pct": 7.268151292950946,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      }
+    },
+    "linear_regression": {
+      "validation": {
+        "mae": 279988.5325539585,
+        "rmse": 328501.8239635414,
+        "mape_pct": 22.556211120611575,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      },
+      "test": {
+        "mae": 203891.47922501861,
+        "rmse": 256324.87748319097,
+        "mape_pct": 14.523083775793838,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      }
+    },
+    "random_forest": {
+      "validation": {
+        "mae": 140976.52381171612,
+        "rmse": 195575.22845406414,
+        "mape_pct": 8.106665451173335,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      },
+      "test": {
+        "mae": 187381.63493123575,
+        "rmse": 245774.67665425685,
+        "mape_pct": 9.76934049757384,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      }
+    }
+  },
+  "selection_metric": "validation_mae",
+  "selected_model": "random_forest",
+  "beats_seasonal_naive_on_validation": true
+}

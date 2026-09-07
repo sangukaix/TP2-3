@@ -1,0 +1,26 @@
+{
+  "model_version": "visitors-panel-20260901T040353Z",
+  "target": "next_month_visitors",
+  "model_name": "seasonal_naive",
+  "selection_candidate_model": "random_forest",
+  "decision_status": "baseline_only",
+  "artifact_file": "model.joblib",
+  "artifact_sha256": "5e6c9337e279d9d1aaa3483451859838bd2be4d6e64e485d12c45e3703488d7d",
+  "training_start_month": "2025-02",
+  "training_end_month": "2025-06",
+  "supported_region_count": 141,
+  "feature_count": 15,
+  "limitations": [
+    "지역코드는 2026-02-01 시행 행정안전부 법정동 코드와 Data Lab 내부 코드를 교차 검증함",
+    "테스트 기간이 6개월이므로 장기 일반화 성능을 보장하지 않음",
+    "예측값은 인과 효과나 사업 성과 보장값이 아님"
+  ],
+  "libraries": {
+    "python": "3.12.13",
+    "numpy": "2.5.2",
+    "pandas": "3.0.5",
+    "scikit_learn": "1.9.0",
+    "joblib": "1.6.0"
+  },
+  "created_at_utc": "2026-09-01T04:03:53.075608+00:00"
+}

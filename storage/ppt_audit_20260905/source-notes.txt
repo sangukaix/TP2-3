@@ -1,0 +1,1 @@
+Design source: tourism_strategy_12_slide_template.pptx. Only slides 5/8/9/11 redesigned. Other slide parts and all theme bytes preserved at package merge. New charts and tables remain native/editable.

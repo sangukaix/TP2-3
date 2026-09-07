@@ -1,0 +1,924 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/ge700x",
+    "id": "ge700x",
+    "slide": 9,
+    "layoutId": "baae435f-1231-42ea-a17e-79d6b2040f4c",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "86fd9854-2576-42dc-ac87-eb76a11bc07a",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#F4F7FA",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1600,
+      "height": 900
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Noto Sans KR"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "baae435f-1231-42ea-a17e-79d6b2040f4c",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "86fd9854-2576-42dc-ac87-eb76a11bc07a",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "86fd9854-2576-42dc-ac87-eb76a11bc07a",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/mp4vi18b",
+      "id": "1",
+      "name": "palace-photo",
+      "bbox": [
+        975,
+        0,
+        625,
+        900
+      ],
+      "alt": "궁궐 관광 사진",
+      "contentType": "image/png",
+      "imageFit": "cover",
+      "asset": {
+        "assetId": "78ce56d9-aefc-4eb8-81b9-297ed9c604fb",
+        "contentType": "image/png",
+        "byteLength": 883878
+      }
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/43ylgjmt",
+      "id": "2",
+      "name": "eyebrow",
+      "bbox": [
+        106,
+        111,
+        371,
+        31
+      ],
+      "geometry": "rect",
+      "text": "T E C H N I C A L   F R A M E W O R K",
+      "textPreview": "T E C H N I C A L   F R A M E W O R K",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Noto Sans KR",
+        "color": "#4F555B",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "T E C H N I C A L   F R A M E W O R K"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "T E C H N I C A L   F R A M E W O R K",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "T E C H N I C A L   F R A M E W O R K",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/54729o3e",
+      "id": "3",
+      "name": "title",
+      "bbox": [
+        106,
+        152,
+        853,
+        74
+      ],
+      "geometry": "rect",
+      "text": "데이터 및 AI/ML 모델 구조",
+      "textPreview": "데이터 및 AI/ML 모델 구조",
+      "resolvedFontSize": 56,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 56,
+        "typeface": "Noto Sans KR",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "데이터 및 AI/ML 모델 구조"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "데이터 및 AI/ML 모델 구조",
+          "resolvedTextStyle": {
+            "fontSize": 56,
+            "typeface": "Noto Sans KR",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "데이터 및 ",
+              "fontSize": 56,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B",
+              "alignment": "left"
+            },
+            {
+              "index": 2,
+              "text": "AI/ML 모델 구조",
+              "fontSize": 56,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/65g3i94z",
+      "id": "4",
+      "name": "title-rule",
+      "bbox": [
+        106,
+        238,
+        770,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 2
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/rq9kbelk",
+      "id": "5",
+      "name": "intro",
+      "bbox": [
+        106,
+        301,
+        792,
+        73
+      ],
+      "geometry": "rect",
+      "text": "본 서비스는 한국관광 데이터랩 및 공공데이터 API를 통해 실시간 데이터를 수\n집하고 전처리하는 통합 파이프라인을 구축합니다.",
+      "textPreview": "본 서비스는 한국관광 데이터랩 및 공공데이터 API를 통해 실시간 데이터를 수 | 집하고 전처리하는 통합 파이프라인을 구축합니다.",
+      "resolvedFontSize": 18,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 18,
+        "typeface": "Noto Sans KR",
+        "color": "#6E747B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "본 서비스는 한국관광 데이터랩 및 공공데이터 API를 통해 실시간 데이터를 수"
+          },
+          {
+            "index": 2,
+            "text": "집하고 전처리하는 통합 파이프라인을 구축합니다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "본 서비스는 한국관광 데이터랩 및 공공데이터 API를 통해 실시간 데이터를 수",
+          "lineSpacingPercent": 130000,
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.3
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "본 서비스는 한국관광 데이터랩 및 공공데이터 API를 통해 실시간 데이터를 수",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.3
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "집하고 전처리하는 통합 파이프라인을 구축합니다.",
+          "lineSpacingPercent": 130000,
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.3
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "집하고 전처리하는 통합 파이프라인을 구축합니다.",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.3
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/srilkjmp",
+      "id": "6",
+      "name": "prediction-rail",
+      "bbox": [
+        106,
+        418,
+        0,
+        94
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 4
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/tsr2do3a",
+      "id": "7",
+      "name": "prediction-title",
+      "bbox": [
+        140,
+        421,
+        584,
+        34
+      ],
+      "geometry": "rect",
+      "text": "수요 예측 모델 (PREDICTION)",
+      "textPreview": "수요 예측 모델 (PREDICTION)",
+      "resolvedFontSize": 19,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 19,
+        "typeface": "Noto Sans KR",
+        "color": "#004EA2",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "수요 예측 모델 (PREDICTION)"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "수요 예측 모델 (PREDICTION)",
+          "resolvedTextStyle": {
+            "fontSize": 19,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "수요 예측 모델 (PREDICTION)",
+              "fontSize": 19,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/m9wj6p4f",
+      "id": "8",
+      "name": "prediction-body",
+      "bbox": [
+        140,
+        462,
+        769,
+        60
+      ],
+      "geometry": "rect",
+      "text": "LSTM 및 Prophet 시계열 모델과 회귀 모델을 병합 활용하며, MAE와 RMSE 지표를 통해 예측\n성능의 정밀도를 검증합니다.",
+      "textPreview": "LSTM 및 Prophet 시계열 모델과 회귀 모델을 병합 활용하며, MAE와 RMSE 지표를 통해 예측 | 성능의 정밀도를 검증합니다.",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 17,
+        "typeface": "Noto Sans KR",
+        "color": "#6E747B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "LSTM 및 Prophet 시계열 모델과 회귀 모델을 병합 활용하며, MAE와 RMSE 지표를 통해 예측"
+          },
+          {
+            "index": 2,
+            "text": "성능의 정밀도를 검증합니다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "LSTM 및 Prophet 시계열 모델과 회귀 모델을 병합 활용하며, MAE와 RMSE 지표를 통해 예측",
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "LSTM 및 Prophet 시계열 모델과 회귀 모델을 병합 활용하며, MAE와 RMSE 지표를 통해 예측",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "성능의 정밀도를 검증합니다.",
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "성능의 정밀도를 검증합니다.",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7u5kzu50",
+      "id": "9",
+      "name": "rag-rail",
+      "bbox": [
+        106,
+        553,
+        0,
+        94
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 4
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/re10juh0",
+      "id": "10",
+      "name": "rag-title",
+      "bbox": [
+        140,
+        556,
+        584,
+        34
+      ],
+      "geometry": "rect",
+      "text": "AI 전략 생성 (RAG SYSTEM)",
+      "textPreview": "AI 전략 생성 (RAG SYSTEM)",
+      "resolvedFontSize": 19,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 19,
+        "typeface": "Noto Sans KR",
+        "color": "#004EA2",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "AI 전략 생성 (RAG SYSTEM)"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "AI 전략 생성 (RAG SYSTEM)",
+          "resolvedTextStyle": {
+            "fontSize": 19,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "AI 전략 생성 (RAG SYSTEM)",
+              "fontSize": 19,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6dsjap0f",
+      "id": "11",
+      "name": "rag-body",
+      "bbox": [
+        140,
+        597,
+        769,
+        60
+      ],
+      "geometry": "rect",
+      "text": "RAG(검색 증강 생성) 기반 LLM을 도입하여 지자체 맞춤형 정밀 보고서를 자동 생성하는 프로세\n스를 구현합니다.",
+      "textPreview": "RAG(검색 증강 생성) 기반 LLM을 도입하여 지자체 맞춤형 정밀 보고서를 자동 생성하는 프로세 | 스를 구현합니다.",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 17,
+        "typeface": "Noto Sans KR",
+        "color": "#6E747B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "RAG(검색 증강 생성) 기반 LLM을 도입하여 지자체 맞춤형 정밀 보고서를 자동 생성하는 프로세"
+          },
+          {
+            "index": 2,
+            "text": "스를 구현합니다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "RAG(검색 증강 생성) 기반 LLM을 도입하여 지자체 맞춤형 정밀 보고서를 자동 생성하는 프로세",
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "RAG(검색 증강 생성) 기반 LLM을 도입하여 지자체 맞춤형 정밀 보고서를 자동 생성하는 프로세",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "스를 구현합니다.",
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "스를 구현합니다.",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/tgjil4z6",
+      "id": "12",
+      "name": "tech-tag-0",
+      "bbox": [
+        106,
+        703,
+        103,
+        32
+      ],
+      "geometry": "rect",
+      "text": "시계열 분석",
+      "textPreview": "시계열 분석",
+      "resolvedFontSize": 13,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 13,
+        "typeface": "Noto Sans KR",
+        "color": "#004EA2",
+        "bold": true,
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 8,
+          "bottom": 0,
+          "left": 8
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "시계열 분석"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "시계열 분석",
+          "resolvedTextStyle": {
+            "fontSize": 13,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "시계열 분석",
+              "fontSize": 13,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineColor": "#004EA2",
+      "lineWidth": 1
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sfa1czil",
+      "id": "13",
+      "name": "tech-tag-1",
+      "bbox": [
+        229,
+        703,
+        94,
+        32
+      ],
+      "geometry": "rect",
+      "text": "RAG 모델",
+      "textPreview": "RAG 모델",
+      "resolvedFontSize": 13,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 13,
+        "typeface": "Noto Sans KR",
+        "color": "#004EA2",
+        "bold": true,
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 8,
+          "bottom": 0,
+          "left": 8
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "RAG 모델"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "RAG 모델",
+          "resolvedTextStyle": {
+            "fontSize": 13,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "RAG 모델",
+              "fontSize": 13,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineColor": "#004EA2",
+      "lineWidth": 1
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/jqh0fuh4",
+      "id": "14",
+      "name": "tech-tag-2",
+      "bbox": [
+        342,
+        703,
+        138,
+        32
+      ],
+      "geometry": "rect",
+      "text": "실시간 파이프라인",
+      "textPreview": "실시간 파이프라인",
+      "resolvedFontSize": 13,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 13,
+        "typeface": "Noto Sans KR",
+        "color": "#004EA2",
+        "bold": true,
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 8,
+          "bottom": 0,
+          "left": 8
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "실시간 파이프라인"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "실시간 파이프라인",
+          "resolvedTextStyle": {
+            "fontSize": 13,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "실시간 파이프라인",
+              "fontSize": 13,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineColor": "#004EA2",
+      "lineWidth": 1
+    }
+  ],
+  "composeRuns": []
+}

@@ -1,0 +1,1213 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/ofy9wn61",
+    "id": "ofy9wn61",
+    "slide": 3,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#F4F7FA",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1600,
+      "height": 900
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Calibri Light",
+        "eastAsianTypeface": "Calibri Light",
+        "complexScriptTypeface": "Calibri Light"
+      },
+      "minorFont": {
+        "latinTypeface": "Calibri",
+        "eastAsianTypeface": "Calibri",
+        "complexScriptTypeface": "Calibri"
+      }
+    },
+    "typefaces": [
+      "Calibri",
+      "Calibri Light",
+      "Noto Sans KR"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/n2tc3y1g",
+      "id": "22",
+      "name": "tourism-photo",
+      "bbox": [
+        1036,
+        3,
+        561,
+        894
+      ],
+      "contentType": "image/jpeg",
+      "imageCrop": {
+        "left": 0,
+        "top": 0.00188,
+        "right": 0,
+        "bottom": 0.00188
+      },
+      "asset": {
+        "assetId": "/ppt/media/image.jpeg",
+        "contentType": "image/jpeg",
+        "byteLength": 111771
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image.jpeg",
+        "contentType": "image/jpeg",
+        "byteLength": 111771
+      }
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/cza94vmx",
+      "id": "2",
+      "name": "section",
+      "bbox": [
+        105,
+        107,
+        259,
+        31
+      ],
+      "geometry": "rect",
+      "text": "S E C T I O N   0 1",
+      "textPreview": "S E C T I O N   0 1",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "S E C T I O N   0 1"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "S E C T I O N   0 1",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "S E C T I O N   0 1",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/d0jax03i",
+      "id": "3",
+      "name": "title",
+      "bbox": [
+        104,
+        148,
+        900,
+        74
+      ],
+      "geometry": "rect",
+      "text": "강한 방문·소비, 낮은 숙박 전환",
+      "textPreview": "강한 방문·소비, 낮은 숙박 전환",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "강한 방문·소비, 낮은 숙박 전환"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "강한 방문·소비, 낮은 숙박 전환",
+          "resolvedTextStyle": {
+            "fontSize": 52,
+            "typeface": "Noto Sans KR",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "강한 방문·소비, ",
+              "fontSize": 52,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true
+            },
+            {
+              "index": 2,
+              "text": "낮은 숙박 전환",
+              "fontSize": 52,
+              "typeface": "Noto Sans KR",
+              "color": "#00C1D4",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/298ryl4v",
+      "id": "4",
+      "name": "title-rule",
+      "bbox": [
+        104,
+        236,
+        835,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 2
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/3ah8rqlg",
+      "id": "5",
+      "name": "intro",
+      "bbox": [
+        105,
+        297,
+        844,
+        81
+      ],
+      "geometry": "rect",
+      "text": "강남구는 비교 가능한 166개 지역 중 방문 규모 100백분위, 방문자당 국내 관광소비 93.98백분위입니다.\n반면 평균 숙박방문 비율은 3.1167%로 3.61백분위에 머뭅니다.",
+      "textPreview": "강남구는 비교 가능한 166개 지역 중 방문 규모 100백분위, 방문자당 국내 관광소비 93.98백분위입니다. | 반면 평균 숙박방문 비율은 3.1167%로 3.61백분위에 머뭅니다.",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "강남구는 비교 가능한 166개 지역 중 방문 규모 100백분위, 방문자당 국내 관광소비 93.98백분위입니다."
+          },
+          {
+            "index": 2,
+            "text": "반면 평균 숙박방문 비율은 3.1167%로 3.61백분위에 머뭅니다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "강남구는 비교 가능한 166개 지역 중 방문 규모 100백분위, 방문자당 국내 관광소비 93.98백분위입니다.",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 19,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "강남구는 비교 가능한 166개 지역 중 방문 규모 100백분위, 방문자당 국내 관광소비 93.98백분위입니다.",
+              "fontSize": 19,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "반면 평균 숙박방문 비율은 3.1167%로 3.61백분위에 머뭅니다.",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 19,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "반면 평균 숙박방문 비율은 3.1167%로 3.61백분위에 머뭅니다.",
+              "fontSize": 19,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/obq90bml",
+      "id": "6",
+      "name": "decision-rail",
+      "bbox": [
+        105,
+        409,
+        0,
+        105
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 3
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/pcjqtg36",
+      "id": "7",
+      "name": "decision-title",
+      "bbox": [
+        132,
+        413,
+        338,
+        39
+      ],
+      "geometry": "rect",
+      "text": "이미 확보된 방문·소비 기반",
+      "textPreview": "이미 확보된 방문·소비 기반",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "이미 확보된 방문·소비 기반"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "이미 확보된 방문·소비 기반",
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "이미 확보된 방문·소비 기반",
+              "fontSize": 22,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/m5cra54z",
+      "id": "8",
+      "name": "decision-body",
+      "bbox": [
+        132,
+        461,
+        383,
+        69
+      ],
+      "geometry": "rect",
+      "text": "2026년 7월 순 방문자 1,796만 명,\n외지인 관광소비 4,820억 원을 기록했습니다.",
+      "textPreview": "2026년 7월 순 방문자 1,796만 명, | 외지인 관광소비 4,820억 원을 기록했습니다.",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "2026년 7월 순 방문자 1,796만 명,"
+          },
+          {
+            "index": 2,
+            "text": "외지인 관광소비 4,820억 원을 기록했습니다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "2026년 7월 순 방문자 1,796만 명,",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "2026년 7월 순 방문자 1,796만 명,",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "외지인 관광소비 4,820억 원을 기록했습니다.",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "외지인 관광소비 4,820억 원을 기록했습니다.",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/n6ls3alk",
+      "id": "9",
+      "name": "activation-rail",
+      "bbox": [
+        547,
+        409,
+        0,
+        105
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 3
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/n2l4fq98",
+      "id": "10",
+      "name": "activation-title",
+      "bbox": [
+        574,
+        413,
+        338,
+        39
+      ],
+      "geometry": "rect",
+      "text": "전환이 필요한 숙박 연결",
+      "textPreview": "전환이 필요한 숙박 연결",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "전환이 필요한 숙박 연결"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "전환이 필요한 숙박 연결",
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "전환이 필요한 숙박 연결",
+              "fontSize": 22,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/m1c3mlsn",
+      "id": "11",
+      "name": "activation-body",
+      "bbox": [
+        574,
+        461,
+        388,
+        69
+      ],
+      "geometry": "rect",
+      "text": "식음·쇼핑 소비는 강하지만 숙박업 비중 2.4%로,\n야간 체류와 숙박을 연결할 여지가 큽니다.",
+      "textPreview": "식음·쇼핑 소비는 강하지만 숙박업 비중 2.4%로, | 야간 체류와 숙박을 연결할 여지가 큽니다.",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "식음·쇼핑 소비는 강하지만 숙박업 비중 2.4%로,"
+          },
+          {
+            "index": 2,
+            "text": "야간 체류와 숙박을 연결할 여지가 큽니다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "식음·쇼핑 소비는 강하지만 숙박업 비중 2.4%로,",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "식음·쇼핑 소비는 강하지만 숙박업 비중 2.4%로,",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "야간 체류와 숙박을 연결할 여지가 큽니다.",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "야간 체류와 숙박을 연결할 여지가 큽니다.",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/943mhgre",
+      "id": "12",
+      "name": "release-card",
+      "bbox": [
+        105,
+        571,
+        405,
+        135
+      ],
+      "geometry": "rect",
+      "fillColor": "#FFFFFF",
+      "lineWidth": 0
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/83ulovat",
+      "id": "13",
+      "name": "release-card-rail",
+      "bbox": [
+        105,
+        571,
+        0,
+        135
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 5
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/v6l4jq94",
+      "id": "14",
+      "name": "release-label",
+      "bbox": [
+        133,
+        598,
+        225,
+        31
+      ],
+      "geometry": "rect",
+      "text": "식음·쇼핑 소비 비중",
+      "textPreview": "식음·쇼핑 소비 비중",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "식음·쇼핑 소비 비중"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "식음·쇼핑 소비 비중",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "식음·쇼핑 소비 비중",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/a5c3ql8z",
+      "id": "15",
+      "name": "release-value",
+      "bbox": [
+        133,
+        637,
+        170,
+        54
+      ],
+      "geometry": "rect",
+      "text": "84.2%",
+      "textPreview": "84.2%",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "84.2%"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "84.2%",
+          "resolvedTextStyle": {
+            "fontSize": 38,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "84.2%",
+              "fontSize": 38,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/x8nml0ra",
+      "id": "16",
+      "name": "release-suffix",
+      "bbox": [
+        300,
+        652,
+        155,
+        27
+      ],
+      "geometry": "rect",
+      "text": "2026.07 실제값",
+      "textPreview": "2026.07 실제값",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "2026.07 실제값"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "2026.07 실제값",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Noto Sans KR",
+            "color": "#00C1D4",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "2026.07 실제값",
+              "fontSize": 14,
+              "typeface": "Noto Sans KR",
+              "color": "#00C1D4",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/w7ulsvqp",
+      "id": "17",
+      "name": "strategy-card",
+      "bbox": [
+        535,
+        571,
+        405,
+        135
+      ],
+      "geometry": "rect",
+      "fillColor": "#FFFFFF",
+      "lineWidth": 0
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ja54na9g",
+      "id": "18",
+      "name": "strategy-card-rail",
+      "bbox": [
+        535,
+        571,
+        0,
+        135
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 5
+    },
+    {
+      "order": 19,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/i9w3u58v",
+      "id": "19",
+      "name": "strategy-label",
+      "bbox": [
+        564,
+        598,
+        225,
+        31
+      ],
+      "geometry": "rect",
+      "text": "평균 숙박방문 비율",
+      "textPreview": "평균 숙박방문 비율",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "평균 숙박방문 비율"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "평균 숙박방문 비율",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "평균 숙박방문 비율",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 20,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/e10f2twf",
+      "id": "20",
+      "name": "strategy-value",
+      "bbox": [
+        564,
+        637,
+        175,
+        54
+      ],
+      "geometry": "rect",
+      "text": "3.12%",
+      "textPreview": "3.12%",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "3.12%"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "3.12%",
+          "resolvedTextStyle": {
+            "fontSize": 38,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "3.12%",
+              "fontSize": 38,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 21,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/f29gbyx0",
+      "id": "21",
+      "name": "strategy-suffix",
+      "bbox": [
+        739,
+        652,
+        175,
+        27
+      ],
+      "geometry": "rect",
+      "text": "166개 중 3.61백분위",
+      "textPreview": "166개 중 3.61백분위",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "none",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "166개 중 3.61백분위"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "166개 중 3.61백분위",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Noto Sans KR",
+            "color": "#00C1D4",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "166개 중 3.61백분위",
+              "fontSize": 14,
+              "typeface": "Noto Sans KR",
+              "color": "#00C1D4",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

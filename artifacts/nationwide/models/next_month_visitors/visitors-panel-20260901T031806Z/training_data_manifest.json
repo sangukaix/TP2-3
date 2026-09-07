@@ -1,0 +1,25 @@
+{
+  "input_file": "tourism_monthly_staging.csv",
+  "input_sha256": "1da7c8ecb32da3653bb56c8b58b4b28a2ad88fc87f39f60333e45343c185e11c",
+  "input_rows": 3960,
+  "feature_rows": 2358,
+  "region_count": 131,
+  "time_split": {
+    "train": {
+      "start": "2025-01",
+      "end": "2025-06",
+      "rows": 786
+    },
+    "validation": {
+      "start": "2025-07",
+      "end": "2025-12",
+      "rows": 786
+    },
+    "test": {
+      "start": "2026-01",
+      "end": "2026-06",
+      "rows": 786
+    }
+  },
+  "random_seed": 42
+}

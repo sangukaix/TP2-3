@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import json
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from math import cos, pi, sin
+from pathlib import Path
 from typing import Any, Callable
 
 import joblib
@@ -39,6 +41,22 @@ TARGET_LABELS = {
     'lodging_searches': '월간 숙박 목적지 검색건수(건)',
 }
 COUNT_TARGETS = {'visitors', 'spending_krw', 'navigation_searches', 'lodging_searches'}
+
+
+@dataclass(frozen=True)
+class RegionForecastSettings:
+    """한 지역의 원자료 어댑터와 모델 산출물 경로를 묶는 재사용 설정입니다.
+
+    예측 알고리즘은 모든 지역이 공유하지만, 원자료를 읽는 함수와 Joblib 경로는 지역별로 분리합니다.
+    이 설정 덕분에 강남구 모델을 다른 시군구에 복사하지 않습니다.
+    """
+
+    region_code: str
+    region_name: str
+    load_monthly: Callable[[], pd.DataFrame]
+    write_processed: Callable[[], pd.DataFrame]
+    artifact_directory: Path
+    model_version: str = MODEL_VERSION
 
 
 def _univariate_feature_names(target_key: str) -> tuple[str, ...]:
@@ -253,9 +271,10 @@ def _recursive_test(monthly: pd.DataFrame, evaluation: dict[str, Any]) -> dict[s
     }
 
 
-def train_gangnam_models() -> dict[str, Any]:
-    """7개 Target을 시간순 검증하고 저장하는 오프라인 재학습 함수입니다."""
-    monthly = write_processed_dataset()
+def train_region_models(settings: RegionForecastSettings) -> dict[str, Any]:
+    """설정된 한 지역의 7개 Target을 시간순 검증하고 Joblib으로 저장합니다."""
+    # 웹 요청에서는 실행하지 않습니다. 지역별 원본 검증이 끝난 관리용 CLI에서만 호출합니다.
+    monthly = settings.write_processed()
     evaluation, models, target_months = {}, {}, None
     for key in TARGETS:
         features, targets, baseline, months = _training_frame(monthly, key)
@@ -265,16 +284,16 @@ def train_gangnam_models() -> dict[str, Any]:
 
     fingerprint = data_fingerprint(monthly)
     artifact = {
-        'version': MODEL_VERSION, 'region_code': REGION_CODE, 'data_fingerprint': fingerprint,
+        'version': settings.model_version, 'region_code': settings.region_code, 'data_fingerprint': fingerprint,
         'feature_names': FEATURE_NAMES, 'models': models,
         'latest_observed_month': str(monthly['year_month'].iloc[-1]),
     }
     test_start = len(target_months) - TEST_MONTHS
     val_start = test_start - VALIDATION_MONTHS
     metadata = {
-        'version': MODEL_VERSION,
-        'region_code': REGION_CODE,
-        'region_name': '서울특별시 강남구',
+        'version': settings.model_version,
+        'region_code': settings.region_code,
+        'region_name': settings.region_name,
         'trained_at': datetime.now(timezone.utc).isoformat(),
         'data_fingerprint': fingerprint,
         'target': TARGET_LABELS,
@@ -289,32 +308,36 @@ def train_gangnam_models() -> dict[str, Any]:
         'evaluation': evaluation,
         'recursive_evaluation': _recursive_test(monthly, evaluation),
         'limitations': [
-            f'{len(monthly)}개월·한 지역의 초기 모델이며 3개월 재귀 시험 origin은 2개입니다.',
+            f'{len(monthly)}개월·한 지역의 초기 모델이며 3개월 재귀 시험 origin은 제한적일 수 있습니다.',
             '모델 선택은 Validation에서만 하며 Test 결과를 보고 선택을 바꾸지 않습니다.',
             '예측은 기존 이력의 자연 추세이며 정책 미실행 반사실이나 사업 인과효과가 아닙니다.',
             '검색량은 관심 신호이며 실제 방문자·숙박 예약 건수와 같은 지표가 아닙니다.',
             '업종별 소비비중과 SNS 언급량은 이번 1차 추가 ML의 Target이 아닙니다.',
         ],
     }
-    ARTIFACT_DIRECTORY.mkdir(parents=True, exist_ok=True)
-    joblib.dump(artifact, MODEL_PATH)
-    METADATA_PATH.write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding='utf-8')
+    settings.artifact_directory.mkdir(parents=True, exist_ok=True)
+    joblib.dump(artifact, settings.artifact_directory / 'demand_model.joblib')
+    (settings.artifact_directory / 'demand_model.metadata.json').write_text(
+        json.dumps(metadata, ensure_ascii=False, indent=2), encoding='utf-8',
+    )
     return metadata
 
 
-def _load_artifact() -> tuple[dict[str, Any], dict[str, Any]]:
-    """온라인 요청은 저장 산출물만 읽고 자동 재학습하지 않습니다."""
-    if not MODEL_PATH.exists() or not METADATA_PATH.exists():
-        raise FileNotFoundError('예측 모델이 아직 없습니다. python -m ai_server.ml.train_gangnam 을 먼저 실행하세요.')
-    return joblib.load(MODEL_PATH), json.loads(METADATA_PATH.read_text(encoding='utf-8'))
+def _load_region_artifact(settings: RegionForecastSettings) -> tuple[dict[str, Any], dict[str, Any]]:
+    """온라인 요청은 해당 지역의 저장 산출물만 읽고 자동 재학습하지 않습니다."""
+    model_path = settings.artifact_directory / 'demand_model.joblib'
+    metadata_path = settings.artifact_directory / 'demand_model.metadata.json'
+    if not model_path.exists() or not metadata_path.exists():
+        raise FileNotFoundError(f'ML_MODEL_MISSING: {settings.region_name} 모델이 아직 없습니다. train_regions CLI를 실행하세요.')
+    return joblib.load(model_path), json.loads(metadata_path.read_text(encoding='utf-8'))
 
 
-def predict_future_months(horizon: int = 4) -> dict[str, Any]:
-    """최신 관측월 뒤 지정한 개월 수만큼 저장 모델로만 예측합니다."""
+def predict_region_future_months(settings: RegionForecastSettings, horizon: int = 4) -> dict[str, Any]:
+    """저장된 해당 지역 모델로 최신 관측월 뒤 지정한 개월만 예측합니다."""
     if horizon < 3 or horizon > 24:
         raise ValueError('예측 기간은 3개월 이상 24개월 이하여야 합니다.')
-    artifact, metadata = _load_artifact()
-    monthly = load_gangnam_monthly_demand()
+    artifact, metadata = _load_region_artifact(settings)
+    monthly = settings.load_monthly()
     if artifact.get('data_fingerprint') and artifact['data_fingerprint'] != data_fingerprint(monthly):
         raise ValueError('ML_MODEL_STALE: 원자료가 변경되었습니다. train_regions CLI로 재학습하세요.')
     if metadata.get('data_fingerprint') != artifact.get('data_fingerprint'):
@@ -337,6 +360,27 @@ def predict_future_months(horizon: int = 4) -> dict[str, Any]:
         'forecasts': forecasts,
         'model': metadata,
     }
+
+
+# 기존 강남구 호출부와 수업용 import는 유지하면서, 내부 알고리즘만 공통 지역 함수로 연결합니다.
+GANGNAM_FORECAST_SETTINGS = RegionForecastSettings(
+    region_code=REGION_CODE,
+    region_name='서울특별시 강남구',
+    load_monthly=load_gangnam_monthly_demand,
+    write_processed=write_processed_dataset,
+    artifact_directory=ARTIFACT_DIRECTORY,
+    model_version=MODEL_VERSION,
+)
+
+
+def train_gangnam_models() -> dict[str, Any]:
+    """기존 CLI 호환용 강남구 학습 함수입니다."""
+    return train_region_models(GANGNAM_FORECAST_SETTINGS)
+
+
+def predict_future_months(horizon: int = 4) -> dict[str, Any]:
+    """기존 API 호환용 강남구 예측 함수입니다."""
+    return predict_region_future_months(GANGNAM_FORECAST_SETTINGS, horizon)
 
 
 def predict_next_three_months() -> dict[str, Any]:

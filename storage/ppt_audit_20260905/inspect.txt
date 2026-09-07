@@ -1,0 +1,18 @@
+{"kind":"layout","layoutId":"/ppt/slideMasters/slideMaster1.xml","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"/ppt/slideLayouts/slideLayout1.xml","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/y90nupkv","slide":1,"title":"TOURISM AI","textShapes":9}
+{"kind":"slide","id":"sl/hwbqtkby","slide":2,"title":"서울특별시 강남구 관광 전략기획안","textShapes":25}
+{"kind":"slide","id":"sl/ofy9wn61","slide":3,"title":"반나절 관광코스 실행 기획안","textShapes":13}
+{"kind":"slide","id":"sl/jyx0ra1s","slide":4,"title":"CORE OPERATING MODEL · SAMPLE","textShapes":16}
+{"kind":"slide","id":"sl/i107q5of","slide":5,"title":"ML FORECAST · DEMO VALUES","textShapes":11}
+{"kind":"chart","id":"ch/mx4julsr","slide":5,"name":"Chart","chartType":"line","bbox":[106,654,790,160]}
+{"kind":"chart","id":"ch/pobitwre","slide":5,"name":"Chart","chartType":"bar","bbox":[996,410,470,245]}
+{"kind":"slide","id":"sl/x8f69ofe","slide":6,"title":"PEER COMPARISON · APPLY WITH EVIDENCE","textShapes":39}
+{"kind":"chart","id":"ch/ipcnq1sn","slide":6,"name":"peer-visitors-yoy-index","chartType":"bar","bbox":[430,377,300,60]}
+{"kind":"slide","id":"sl/gnmp4jqx","slide":7,"title":"IMPLEMENTATION ROADMAP · 3~6개월","textShapes":17}
+{"kind":"slide","id":"sl/fu1gfa1s","slide":8,"title":"시범 목표 · 자연추세와 운영 목표를 구분합니다","textShapes":20}
+{"kind":"slide","id":"sl/udsvah03","slide":9,"title":"BUDGET ESTIMATE · SAMPLE","textShapes":13}
+{"kind":"table","id":"tb/hgb69cbm","slide":9,"name":"표 42","rows":8,"cols":3,"preview":"세부 항목 | 비중 | 예산","bbox":[932,241,590,488]}
+{"kind":"slide","id":"sl/m90b6t0r","slide":10,"title":"시범 종료 후에도 데이터로 코스를 계속 개선합니다","textShapes":26}
+{"kind":"slide","id":"sl/jetc3ut0","slide":11,"title":"EVIDENCE & TRACEABILITY","textShapes":22}
+{"kind":"slide","id":"sl/8f2psfyx","slide":12,"title":"TOURISM AI","textShapes":9}

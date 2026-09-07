@@ -25,6 +25,8 @@ prompts.py              → 다섯 Agent의 프롬프트·페르소나를 한곳
 | 보고서 JSON 필드 | `../main.py`의 `REPORT_SCHEMA` | React·Word 출력도 함께 확인 |
 | Agent 실행 순서·재작성 횟수 | `report_orchestrator.py` | 현재 한 번만 자동 보완 |
 | 챗봇 말투·웹 조사·수정안 형식 | `chat_assistant_agent.py` | 자동 저장 금지, 허용 공식 도메인만 사용 |
+| Qwen·Gemma 기획 페르소나 | `../llm/local_prompts.py` | 관측·전망·가정 구분, 동일 JSON·독립 품질 검수 유지 |
+| 로컬 모델의 실제 근거 도구 | `../llm/evidence_tools.py`, `../llm/local_agent.py` | 요청 내 조회만 가능, 임의 SQL·파일·웹 실행 금지 |
 
 ## 공식 성공사례 RAG
 

@@ -1,0 +1,185 @@
+{
+  "split": {
+    "train": {
+      "start": "2025-02",
+      "end": "2025-06",
+      "rows": 655
+    },
+    "validation": {
+      "start": "2025-07",
+      "end": "2025-12",
+      "rows": 786
+    },
+    "test": {
+      "start": "2026-01",
+      "end": "2026-06",
+      "rows": 786
+    }
+  },
+  "models": {
+    "seasonal_naive": {
+      "validation": {
+        "mae": 223509.31933842239,
+        "rmse": 291520.0513275616,
+        "mape_pct": 8.959980574991357,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      },
+      "test": {
+        "mae": 144982.786259542,
+        "rmse": 209871.6810780621,
+        "mape_pct": 7.268151292950946,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      }
+    },
+    "recent_naive": {
+      "validation": {
+        "mae": 223761.606870229,
+        "rmse": 311754.33554920525,
+        "mape_pct": 13.18659589111827,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      },
+      "test": {
+        "mae": 279252.80916030536,
+        "rmse": 386240.8477320446,
+        "mape_pct": 11.897326476432047,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      }
+    },
+    "seasonal_recent_blend": {
+      "validation": {
+        "mae": 191754.987913486,
+        "rmse": 255324.89007081822,
+        "mape_pct": 8.439565763836395,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      },
+      "test": {
+        "mae": 137874.6106870229,
+        "rmse": 199544.06999564613,
+        "mape_pct": 6.910217053055521,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      }
+    },
+    "yoy_rate_naive": {
+      "validation": {
+        "mae": 186741.6923529248,
+        "rmse": 268170.87593874865,
+        "mape_pct": 9.457707712999744,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      },
+      "test": {
+        "mae": 192574.11554892524,
+        "rmse": 261598.92819740172,
+        "mape_pct": 10.889054114344205,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      }
+    },
+    "linear_regression": {
+      "validation": {
+        "mae": 346603.24970193085,
+        "rmse": 417754.53697342705,
+        "mape_pct": 22.011766914747724,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      },
+      "test": {
+        "mae": 249929.49630542984,
+        "rmse": 312227.9247079805,
+        "mape_pct": 16.26418235255694,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      }
+    },
+    "linear_seasonal_residual": {
+      "validation": {
+        "mae": 346609.3503503439,
+        "rmse": 417760.99564567895,
+        "mape_pct": 22.012153981286296,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      },
+      "test": {
+        "mae": 249930.00161617948,
+        "rmse": 312228.5115072241,
+        "mape_pct": 16.264217219933748,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      }
+    },
+    "linear_log_seasonal_ratio": {
+      "validation": {
+        "mae": 262455.67366156686,
+        "rmse": 365835.36772384326,
+        "mape_pct": 10.98234424716073,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      },
+      "test": {
+        "mae": 292278.3142261762,
+        "rmse": 390479.316744995,
+        "mape_pct": 12.585384267883857,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      }
+    },
+    "random_forest": {
+      "validation": {
+        "mae": 178009.62446710342,
+        "rmse": 243353.94949242636,
+        "mape_pct": 8.859760466582705,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      },
+      "test": {
+        "mae": 171392.90811829432,
+        "rmse": 235402.05247817517,
+        "mape_pct": 8.476712094095697,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      }
+    },
+    "random_forest_seasonal_residual": {
+      "validation": {
+        "mae": 207751.202780249,
+        "rmse": 279802.2601968869,
+        "mape_pct": 10.152903406941082,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      },
+      "test": {
+        "mae": 212466.60474767353,
+        "rmse": 305780.4606449282,
+        "mape_pct": 10.677739105562356,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      }
+    },
+    "random_forest_log_seasonal_ratio": {
+      "validation": {
+        "mae": 270856.3004241904,
+        "rmse": 368259.9044971405,
+        "mape_pct": 12.680759376657566,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      },
+      "test": {
+        "mae": 228908.694781936,
+        "rmse": 322595.32091891975,
+        "mape_pct": 10.49326709995699,
+        "mape_sample_count": 786,
+        "sample_count": 786
+      }
+    }
+  },
+  "selection_metric": "validation_mae",
+  "selected_model": "random_forest",
+  "beats_seasonal_naive_on_validation": true,
+  "beats_seasonal_naive_on_test": false
+}

@@ -565,8 +565,7 @@ function MonthlyActualTrendChart({ trend, height = 278, emptyMessage = '월간 �
 
   if (!trend?.length) return <div className="trend-empty-state">{emptyMessage}</div>
   // 관측선은 실제 마지막 월에서 끝내고, 예측선은 그 지점에서 이어서 다른 색으로 표시합니다.
-  const firstForecastIndex = trend.findIndex((point) => point.is_forecast)
-  const chartData = trend.map((point, index) => ({
+  const chartData = trend.map((point) => ({
     ...point,
     spending_actual_krw: point.is_forecast ? null : point.spending_krw,
     // 예측선은 첫 예측월(8월)부터만 그려 실제선(7월까지)과 색이 섞이지 않게 합니다.

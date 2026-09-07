@@ -1,0 +1,23 @@
+{
+  "target": "visitors",
+  "categorical_features": [
+    "region_code"
+  ],
+  "numeric_features": [
+    "target_month_sin",
+    "target_month_cos",
+    "visitors_lag1",
+    "visitors_lag2",
+    "visitors_lag3",
+    "visitors_lag12",
+    "visitors_lag13",
+    "visitors_yoy_ratio_lag1",
+    "visitors_rolling3",
+    "domestic_tourism_spend_lag1",
+    "nonlocal_tourism_spend_lag1",
+    "overnight_ratio_lag1",
+    "avg_stay_days_lag1",
+    "avg_stay_minutes_lag1"
+  ],
+  "prediction_contract": "target 월 직전까지 공개된 값만 사용"
+}

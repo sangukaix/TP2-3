@@ -1,0 +1,1549 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/73dd5u",
+    "id": "73dd5u",
+    "slide": 7,
+    "layoutId": "baae435f-1231-42ea-a17e-79d6b2040f4c",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "86fd9854-2576-42dc-ac87-eb76a11bc07a",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#F4F7FA",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1600,
+      "height": 900
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Noto Sans KR"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "baae435f-1231-42ea-a17e-79d6b2040f4c",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "86fd9854-2576-42dc-ac87-eb76a11bc07a",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "86fd9854-2576-42dc-ac87-eb76a11bc07a",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ah03i5gv",
+      "id": "1",
+      "name": "eyebrow",
+      "bbox": [
+        96,
+        78,
+        300,
+        28
+      ],
+      "geometry": "rect",
+      "text": "S E R V I C E   P L A N N I N G",
+      "textPreview": "S E R V I C E   P L A N N I N G",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 14,
+        "typeface": "Noto Sans KR",
+        "color": "#004EA2",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "S E R V I C E   P L A N N I N G"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "S E R V I C E   P L A N N I N G",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "S E R V I C E   P L A N N I N G",
+              "fontSize": 14,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/xkrmtkfm",
+      "id": "2",
+      "name": "title",
+      "bbox": [
+        96,
+        107,
+        850,
+        68
+      ],
+      "geometry": "rect",
+      "text": "서비스 이용 Flow 및 산출물",
+      "textPreview": "서비스 이용 Flow 및 산출물",
+      "resolvedFontSize": 52,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 52,
+        "typeface": "Noto Sans KR",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "서비스 이용 Flow 및 산출물"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "서비스 이용 Flow 및 산출물",
+          "resolvedTextStyle": {
+            "fontSize": 52,
+            "typeface": "Noto Sans KR",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "서비스 이용 ",
+              "fontSize": 52,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B",
+              "bold": true,
+              "alignment": "left"
+            },
+            {
+              "index": 2,
+              "text": "Flow 및 산출물",
+              "fontSize": 52,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/cji5kfy1",
+      "id": "3",
+      "name": "title-rule",
+      "bbox": [
+        96,
+        181,
+        1400,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#6E747B",
+      "lineWidth": 2
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/zmt4vuxs",
+      "id": "4",
+      "name": "step-0-rule",
+      "bbox": [
+        109,
+        261,
+        319,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 2
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/yl0nmpg7",
+      "id": "5",
+      "name": "step-0-label",
+      "bbox": [
+        109,
+        299,
+        180,
+        28
+      ],
+      "geometry": "rect",
+      "text": "STEP 01",
+      "textPreview": "STEP 01",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 15,
+        "typeface": "Noto Sans KR",
+        "color": "#004EA2",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "STEP 01"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "STEP 01",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "STEP 01",
+              "fontSize": 15,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/lobmx4fi",
+      "id": "6",
+      "name": "step-0-title",
+      "bbox": [
+        109,
+        341,
+        310,
+        38
+      ],
+      "geometry": "rect",
+      "text": "지역 선택 및 로딩",
+      "textPreview": "지역 선택 및 로딩",
+      "resolvedFontSize": 23,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 23,
+        "typeface": "Noto Sans KR",
+        "color": "#004EA2",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "지역 선택 및 로딩"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "지역 선택 및 로딩",
+          "resolvedTextStyle": {
+            "fontSize": 23,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "지역 선택 및 로딩",
+              "fontSize": 23,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kn25ozyd",
+      "id": "7",
+      "name": "step-0-body",
+      "bbox": [
+        109,
+        389,
+        320,
+        117
+      ],
+      "geometry": "rect",
+      "text": "사용자 정의 지역 설정 및 데이터랩 기반 맞춤형\n데이터셋 자동 큐레이션",
+      "textPreview": "사용자 정의 지역 설정 및 데이터랩 기반 맞춤형 | 데이터셋 자동 큐레이션",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Noto Sans KR",
+        "color": "#6E747B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "사용자 정의 지역 설정 및 데이터랩 기반 맞춤형"
+          },
+          {
+            "index": 2,
+            "text": "데이터셋 자동 큐레이션"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "사용자 정의 지역 설정 및 데이터랩 기반 맞춤형",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "사용자 정의 지역 설정 및 데이터랩 기반 맞춤형",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "데이터셋 자동 큐레이션",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "데이터셋 자동 큐레이션",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7at4zuxo",
+      "id": "8",
+      "name": "step-1-rule",
+      "bbox": [
+        465,
+        261,
+        319,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 2
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/m9knqpg3",
+      "id": "9",
+      "name": "step-1-label",
+      "bbox": [
+        465,
+        299,
+        180,
+        28
+      ],
+      "geometry": "rect",
+      "text": "STEP 02",
+      "textPreview": "STEP 02",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 15,
+        "typeface": "Noto Sans KR",
+        "color": "#004EA2",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "STEP 02"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "STEP 02",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "STEP 02",
+              "fontSize": 15,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/kv250vi1",
+      "id": "10",
+      "name": "step-1-title",
+      "bbox": [
+        465,
+        341,
+        310,
+        38
+      ],
+      "geometry": "rect",
+      "text": "대시보드 및 분석",
+      "textPreview": "대시보드 및 분석",
+      "resolvedFontSize": 23,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 23,
+        "typeface": "Noto Sans KR",
+        "color": "#004EA2",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "대시보드 및 분석"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "대시보드 및 분석",
+          "resolvedTextStyle": {
+            "fontSize": 23,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "대시보드 및 분석",
+              "fontSize": 23,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5gv690zm",
+      "id": "11",
+      "name": "step-1-body",
+      "bbox": [
+        465,
+        389,
+        320,
+        117
+      ],
+      "geometry": "rect",
+      "text": "방문객 및 소비 시각화 차트와 데이터 근거 기반\n지역별 SWOT 분석 결과 도출을 통한 전략적 통\n찰 제공.",
+      "textPreview": "방문객 및 소비 시각화 차트와 데이터 근거 기반 | 지역별 SWOT 분석 결과 도출을 통한 전략적 통 | 찰 제공.",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Noto Sans KR",
+        "color": "#6E747B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "방문객 및 소비 시각화 차트와 데이터 근거 기반"
+          },
+          {
+            "index": 2,
+            "text": "지역별 SWOT 분석 결과 도출을 통한 전략적 통"
+          },
+          {
+            "index": 3,
+            "text": "찰 제공."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "방문객 및 소비 시각화 차트와 데이터 근거 기반",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "방문객 및 소비 시각화 차트와 데이터 근거 기반",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "지역별 SWOT 분석 결과 도출을 통한 전략적 통",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "지역별 SWOT 분석 결과 도출을 통한 전략적 통",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "찰 제공.",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "찰 제공.",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/itknyl0v",
+      "id": "12",
+      "name": "step-2-rule",
+      "bbox": [
+        821,
+        261,
+        319,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 2
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/juto7qhg",
+      "id": "13",
+      "name": "step-2-label",
+      "bbox": [
+        821,
+        299,
+        180,
+        28
+      ],
+      "geometry": "rect",
+      "text": "STEP 03",
+      "textPreview": "STEP 03",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 15,
+        "typeface": "Noto Sans KR",
+        "color": "#004EA2",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "STEP 03"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "STEP 03",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "STEP 03",
+              "fontSize": 15,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sjmp4vid",
+      "id": "14",
+      "name": "step-2-title",
+      "bbox": [
+        821,
+        341,
+        310,
+        38
+      ],
+      "geometry": "rect",
+      "text": "수요 예측 및 리포트",
+      "textPreview": "수요 예측 및 리포트",
+      "resolvedFontSize": 23,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 23,
+        "typeface": "Noto Sans KR",
+        "color": "#004EA2",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "수요 예측 및 리포트"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "수요 예측 및 리포트",
+          "resolvedTextStyle": {
+            "fontSize": 23,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "수요 예측 및 리포트",
+              "fontSize": 23,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/tkv6d0zy",
+      "id": "15",
+      "name": "step-2-body",
+      "bbox": [
+        821,
+        389,
+        320,
+        117
+      ],
+      "geometry": "rect",
+      "text": "시계열 모델 기반 관광 수요 예측 및 AI 해석이\n포함된 PDF 전략 보고서 발행",
+      "textPreview": "시계열 모델 기반 관광 수요 예측 및 AI 해석이 | 포함된 PDF 전략 보고서 발행",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Noto Sans KR",
+        "color": "#6E747B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "시계열 모델 기반 관광 수요 예측 및 AI 해석이"
+          },
+          {
+            "index": 2,
+            "text": "포함된 PDF 전략 보고서 발행"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "시계열 모델 기반 관광 수요 예측 및 AI 해석이",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "시계열 모델 기반 관광 수요 예측 및 AI 해석이",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "포함된 PDF 전략 보고서 발행",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "포함된 PDF 전략 보고서 발행",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6h472l07",
+      "id": "16",
+      "name": "step-3-rule",
+      "bbox": [
+        1177,
+        261,
+        319,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 2
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7idobqhs",
+      "id": "17",
+      "name": "step-3-label",
+      "bbox": [
+        1177,
+        299,
+        180,
+        28
+      ],
+      "geometry": "rect",
+      "text": "STEP 04",
+      "textPreview": "STEP 04",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 15,
+        "typeface": "Noto Sans KR",
+        "color": "#004EA2",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "STEP 04"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "STEP 04",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "STEP 04",
+              "fontSize": 15,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/gn6p8fi9",
+      "id": "18",
+      "name": "step-3-title",
+      "bbox": [
+        1177,
+        341,
+        310,
+        38
+      ],
+      "geometry": "rect",
+      "text": "AI 챗봇 전략 활용",
+      "textPreview": "AI 챗봇 전략 활용",
+      "resolvedFontSize": 23,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 23,
+        "typeface": "Noto Sans KR",
+        "color": "#004EA2",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "AI 챗봇 전략 활용"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "AI 챗봇 전략 활용",
+          "resolvedTextStyle": {
+            "fontSize": 23,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "AI 챗봇 전략 활용",
+              "fontSize": 23,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 19,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/hof6hkzu",
+      "id": "19",
+      "name": "step-3-body",
+      "bbox": [
+        1177,
+        389,
+        320,
+        117
+      ],
+      "geometry": "rect",
+      "text": "RAG 기반 AI 챗봇과의 심층 질의응답을 통한 실\n무 정책 반영 및 최종 의사결정을 지원하는 고도\n화 프로세스.",
+      "textPreview": "RAG 기반 AI 챗봇과의 심층 질의응답을 통한 실 | 무 정책 반영 및 최종 의사결정을 지원하는 고도 | 화 프로세스.",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 16,
+        "typeface": "Noto Sans KR",
+        "color": "#6E747B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "RAG 기반 AI 챗봇과의 심층 질의응답을 통한 실"
+          },
+          {
+            "index": 2,
+            "text": "무 정책 반영 및 최종 의사결정을 지원하는 고도"
+          },
+          {
+            "index": 3,
+            "text": "화 프로세스."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "RAG 기반 AI 챗봇과의 심층 질의응답을 통한 실",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "RAG 기반 AI 챗봇과의 심층 질의응답을 통한 실",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "무 정책 반영 및 최종 의사결정을 지원하는 고도",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "무 정책 반영 및 최종 의사결정을 지원하는 고도",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "화 프로세스.",
+          "lineSpacingPercent": 125000,
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.25
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "화 프로세스.",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.25
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 20,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/p4b6l0ry",
+      "id": "20",
+      "name": "value-panel",
+      "bbox": [
+        107,
+        575,
+        1386,
+        247
+      ],
+      "geometry": "rect",
+      "fillColor": "#FFFFFF",
+      "lineWidth": 0
+    },
+    {
+      "order": 21,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/o325sfad",
+      "id": "21",
+      "name": "value-panel-rail",
+      "bbox": [
+        107,
+        575,
+        0,
+        247
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 5
+    },
+    {
+      "order": 22,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/32toja9s",
+      "id": "22",
+      "name": "value-title",
+      "bbox": [
+        162,
+        630,
+        506,
+        38
+      ],
+      "geometry": "rect",
+      "text": "AI 전략 지원 웹서비스 핵심 가치",
+      "textPreview": "AI 전략 지원 웹서비스 핵심 가치",
+      "resolvedFontSize": 22,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 22,
+        "typeface": "Noto Sans KR",
+        "color": "#004EA2",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "AI 전략 지원 웹서비스 핵심 가치"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "AI 전략 지원 웹서비스 핵심 가치",
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Noto Sans KR",
+            "color": "#004EA2",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "AI 전략 지원 웹서비스 핵심 가치",
+              "fontSize": 22,
+              "typeface": "Noto Sans KR",
+              "color": "#004EA2",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 23,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/210nq5s7",
+      "id": "23",
+      "name": "value-body",
+      "bbox": [
+        162,
+        678,
+        1281,
+        105
+      ],
+      "geometry": "rect",
+      "text": "본 웹서비스는 공공 관광 데이터를 인공지능 기술과 결합하여 실질적인 정책 수립을 지원합니다. 데이터 로딩부터 AI 리포트 생성, 챗봇을 통한 정책 질의까지 이어지는 통합 Flow를\n통해 지자체의 관광 경쟁력을 극대화합니다. 데이터 기반의 객관적인 분석과 AI의 미래 예측을 통해 의사결정의 정확성을 높이고 지역 경제 활성화를 위한 맞춤형 전략을 제시하는 것\n을 목표로 합니다.",
+      "textPreview": "본 웹서비스는 공공 관광 데이터를 인공지능 기술과 결합하여 실질적인 정책 수립을 지원합니다. 데이터 로딩부터 AI 리포트 생성, 챗봇을 통한 정책 질의까지 이어지는 통합 Flow를 | 통해 지자체의 관광 경쟁력을 극대화합니다. 데이터 기반의 객관...",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 17,
+        "typeface": "Noto Sans KR",
+        "color": "#6E747B",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "본 웹서비스는 공공 관광 데이터를 인공지능 기술과 결합하여 실질적인 정책 수립을 지원합니다. 데이터 로딩부터 AI 리포트 생성, 챗봇을 통한 정책 질의까지 이어지는 통합 Flow를"
+          },
+          {
+            "index": 2,
+            "text": "통해 지자체의 관광 경쟁력을 극대화합니다. 데이터 기반의 객관적인 분석과 AI의 미래 예측을 통해 의사결정의 정확성을 높이고 지역 경제 활성화를 위한 맞춤형 전략을 제시하는 것"
+          },
+          {
+            "index": 3,
+            "text": "을 목표로 합니다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "본 웹서비스는 공공 관광 데이터를 인공지능 기술과 결합하여 실질적인 정책 수립을 지원합니다. 데이터 로딩부터 AI 리포트 생성, 챗봇을 통한 정책 질의까지 이어지는 통합 Flow를",
+          "lineSpacingPercent": 135000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.35
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "본 웹서비스는 공공 관광 데이터를 인공지능 기술과 결합하여 실질적인 정책 수립을 지원합니다. 데이터 로딩부터 AI 리포트 생성, 챗봇을 통한 정책 질의까지 이어지는 통합 Flow를",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.35
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "통해 지자체의 관광 경쟁력을 극대화합니다. 데이터 기반의 객관적인 분석과 AI의 미래 예측을 통해 의사결정의 정확성을 높이고 지역 경제 활성화를 위한 맞춤형 전략을 제시하는 것",
+          "lineSpacingPercent": 135000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.35
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "통해 지자체의 관광 경쟁력을 극대화합니다. 데이터 기반의 객관적인 분석과 AI의 미래 예측을 통해 의사결정의 정확성을 높이고 지역 경제 활성화를 위한 맞춤형 전략을 제시하는 것",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.35
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "을 목표로 합니다.",
+          "lineSpacingPercent": 135000,
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left",
+            "lineSpacing": 1.35
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "을 목표로 합니다.",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B",
+              "alignment": "left",
+              "lineSpacing": 1.35
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}
