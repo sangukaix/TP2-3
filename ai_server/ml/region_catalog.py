@@ -9,6 +9,9 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 CATALOG_PATH = PROJECT_ROOT / 'data' / 'catalog' / 'region_data_registry.csv'
+RAW_ROOT = PROJECT_ROOT / 'data' / 'raw'
+# 팀 공유폴더에서 복제한 hash 고정 snapshot은 raw 원본 보관소를 수정하지 않는 별도 경로에 둡니다.
+SOURCE_SNAPSHOT_ROOT = PROJECT_ROOT / 'data' / 'source_snapshots'
 
 
 @dataclass(frozen=True)
@@ -28,10 +31,14 @@ class RegionDataCatalogEntry:
 
     @property
     def raw_path(self) -> Path:
-        """카탈로그의 상대 경로를 현재 프로젝트의 안전한 원본 경로로 바꿉니다."""
+        """카탈로그의 상대 경로를 허용된 읽기 전용 원본 경로로 바꿉니다.
+
+        ``data/raw``는 수동 보관 원본, ``data/source_snapshots``는 공유폴더에서
+        hash를 남겨 복제한 불변 snapshot이다. 둘 밖의 경로는 카탈로그에 적을 수 없다.
+        """
         path = (PROJECT_ROOT / self.raw_relative_path).resolve()
-        raw_root = (PROJECT_ROOT / 'data' / 'raw').resolve()
-        if raw_root not in path.parents and path != raw_root:
+        allowed_roots = (RAW_ROOT.resolve(), SOURCE_SNAPSHOT_ROOT.resolve())
+        if not any(root == path or root in path.parents for root in allowed_roots):
             raise ValueError(f'ML_RAW_PATH_OUTSIDE_ROOT: {self.raw_relative_path}')
         return path
 

@@ -5,9 +5,15 @@ storage/strategy_documents/
 data/raw/*
 !data/raw/SOURCE_REGISTRY.csv
 !data/raw/README.md
+data/source_snapshots/*
+!data/source_snapshots/README.md
 data/interim/*
 data/processed/*
 data/chroma/*
+data/rag/source_documents/*.pdf
+# 제공받은 PDF에서 재생성하는 페이지 청크입니다. 원문과 파생 본문은 저장소에 올리지 않고,
+# 팀원이 원본을 받은 뒤 build_official_pdf_rag.py로 같은 결과를 만듭니다.
+data/rag/official_reference_chunks.jsonl
 .venv/
 __pycache__/
 node_modules/

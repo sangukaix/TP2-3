@@ -1,0 +1,172 @@
+{
+  "sourcePptx": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\previews\\강남구_이브닝스테이패스_샘플기획서.pptx",
+  "workspace": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902",
+  "outDir": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect",
+  "generatedAt": "2026-09-02T01:22:56.875Z",
+  "slideCount": 12,
+  "slideArtifacts": [
+    {
+      "slide": 1,
+      "previewPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\source-slides\\source-slide-01.png",
+      "previewRelativePath": "final-inspect/source-slides/source-slide-01.png",
+      "layoutPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\layouts\\source-slide-01.layout.json",
+      "layoutRelativePath": "final-inspect/layouts/source-slide-01.layout.json"
+    },
+    {
+      "slide": 2,
+      "previewPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\source-slides\\source-slide-02.png",
+      "previewRelativePath": "final-inspect/source-slides/source-slide-02.png",
+      "layoutPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\layouts\\source-slide-02.layout.json",
+      "layoutRelativePath": "final-inspect/layouts/source-slide-02.layout.json"
+    },
+    {
+      "slide": 3,
+      "previewPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\source-slides\\source-slide-03.png",
+      "previewRelativePath": "final-inspect/source-slides/source-slide-03.png",
+      "layoutPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\layouts\\source-slide-03.layout.json",
+      "layoutRelativePath": "final-inspect/layouts/source-slide-03.layout.json"
+    },
+    {
+      "slide": 4,
+      "previewPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\source-slides\\source-slide-04.png",
+      "previewRelativePath": "final-inspect/source-slides/source-slide-04.png",
+      "layoutPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\layouts\\source-slide-04.layout.json",
+      "layoutRelativePath": "final-inspect/layouts/source-slide-04.layout.json"
+    },
+    {
+      "slide": 5,
+      "previewPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\source-slides\\source-slide-05.png",
+      "previewRelativePath": "final-inspect/source-slides/source-slide-05.png",
+      "layoutPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\layouts\\source-slide-05.layout.json",
+      "layoutRelativePath": "final-inspect/layouts/source-slide-05.layout.json"
+    },
+    {
+      "slide": 6,
+      "previewPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\source-slides\\source-slide-06.png",
+      "previewRelativePath": "final-inspect/source-slides/source-slide-06.png",
+      "layoutPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\layouts\\source-slide-06.layout.json",
+      "layoutRelativePath": "final-inspect/layouts/source-slide-06.layout.json"
+    },
+    {
+      "slide": 7,
+      "previewPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\source-slides\\source-slide-07.png",
+      "previewRelativePath": "final-inspect/source-slides/source-slide-07.png",
+      "layoutPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\layouts\\source-slide-07.layout.json",
+      "layoutRelativePath": "final-inspect/layouts/source-slide-07.layout.json"
+    },
+    {
+      "slide": 8,
+      "previewPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\source-slides\\source-slide-08.png",
+      "previewRelativePath": "final-inspect/source-slides/source-slide-08.png",
+      "layoutPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\layouts\\source-slide-08.layout.json",
+      "layoutRelativePath": "final-inspect/layouts/source-slide-08.layout.json"
+    },
+    {
+      "slide": 9,
+      "previewPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\source-slides\\source-slide-09.png",
+      "previewRelativePath": "final-inspect/source-slides/source-slide-09.png",
+      "layoutPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\layouts\\source-slide-09.layout.json",
+      "layoutRelativePath": "final-inspect/layouts/source-slide-09.layout.json"
+    },
+    {
+      "slide": 10,
+      "previewPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\source-slides\\source-slide-10.png",
+      "previewRelativePath": "final-inspect/source-slides/source-slide-10.png",
+      "layoutPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\layouts\\source-slide-10.layout.json",
+      "layoutRelativePath": "final-inspect/layouts/source-slide-10.layout.json"
+    },
+    {
+      "slide": 11,
+      "previewPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\source-slides\\source-slide-11.png",
+      "previewRelativePath": "final-inspect/source-slides/source-slide-11.png",
+      "layoutPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\layouts\\source-slide-11.layout.json",
+      "layoutRelativePath": "final-inspect/layouts/source-slide-11.layout.json"
+    },
+    {
+      "slide": 12,
+      "previewPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\source-slides\\source-slide-12.png",
+      "previewRelativePath": "final-inspect/source-slides/source-slide-12.png",
+      "layoutPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\layouts\\source-slide-12.layout.json",
+      "layoutRelativePath": "final-inspect/layouts/source-slide-12.layout.json"
+    }
+  ],
+  "inspectPath": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\template-inspect.ndjson",
+  "inspectRelativePath": "final-inspect/template-inspect.ndjson",
+  "inspectTruncated": true,
+  "inspectMetadata": {
+    "revision": "x0aaqv",
+    "target": {
+      "id": "pr/4uczew"
+    },
+    "kind": {
+      "requested": "slide,textbox,shape,image,table,chart",
+      "tokens": [
+        "slide",
+        "textbox",
+        "shape",
+        "image",
+        "table",
+        "chart"
+      ]
+    },
+    "include": {
+      "tokens": []
+    },
+    "exclude": {
+      "tokens": []
+    },
+    "notices": []
+  },
+  "extractedMedia": [
+    {
+      "entry": "ppt/media/image.jpeg",
+      "path": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\assets\\ppt\\media\\image.jpeg",
+      "relativePath": "final-inspect/assets/ppt/media/image.jpeg",
+      "bytes": 111771
+    },
+    {
+      "entry": "ppt/media/image2.jpeg",
+      "path": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\assets\\ppt\\media\\image2.jpeg",
+      "relativePath": "final-inspect/assets/ppt/media/image2.jpeg",
+      "bytes": 110372
+    },
+    {
+      "entry": "ppt/media/image3.jpeg",
+      "path": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\assets\\ppt\\media\\image3.jpeg",
+      "relativePath": "final-inspect/assets/ppt/media/image3.jpeg",
+      "bytes": 168197
+    },
+    {
+      "entry": "ppt/media/image4.jpeg",
+      "path": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\assets\\ppt\\media\\image4.jpeg",
+      "relativePath": "final-inspect/assets/ppt/media/image4.jpeg",
+      "bytes": 264171
+    },
+    {
+      "entry": "ppt/media/image5.jpeg",
+      "path": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\assets\\ppt\\media\\image5.jpeg",
+      "relativePath": "final-inspect/assets/ppt/media/image5.jpeg",
+      "bytes": 201543
+    },
+    {
+      "entry": "ppt/media/image6.jpeg",
+      "path": "C:\\Users\\Admin\\mbca\\TP2-3\\storage\\gangnam_sample_build_20260902\\final-inspect\\assets\\ppt\\media\\image6.jpeg",
+      "relativePath": "final-inspect/assets/ppt/media/image6.jpeg",
+      "bytes": 97967
+    }
+  ],
+  "fonts": [
+    "+mj-lt",
+    "+mn-lt",
+    "Calibri",
+    "Calibri Light",
+    "Noto Sans KR",
+    "Segoe UI Symbol"
+  ],
+  "packageParts": {
+    "mediaCount": 6,
+    "slideXmlCount": 12,
+    "chartCount": 0,
+    "tableSlideCount": 0
+  }
+}

@@ -1,0 +1,1180 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/jetc3ut0",
+    "id": "jetc3ut0",
+    "slide": 11,
+    "layoutId": "/ppt/slideLayouts/slideLayout1.xml",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#F4F7FA",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1600,
+      "height": 900
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "fontScheme": {
+      "name": "Office",
+      "majorFont": {
+        "latinTypeface": "Calibri Light",
+        "eastAsianTypeface": "Calibri Light",
+        "complexScriptTypeface": "Calibri Light"
+      },
+      "minorFont": {
+        "latinTypeface": "Calibri",
+        "eastAsianTypeface": "Calibri",
+        "complexScriptTypeface": "Calibri"
+      }
+    },
+    "typefaces": [
+      "Calibri",
+      "Calibri Light",
+      "Noto Sans KR"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "/ppt/slideLayouts/slideLayout1.xml",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "/ppt/slideMasters/slideMaster1.xml",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "/ppt/slideMasters/slideMaster1.xml",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/kf29ofmx",
+      "id": "22",
+      "name": "workspace-photo",
+      "bbox": [
+        1076,
+        0,
+        524,
+        900
+      ],
+      "contentType": "image/png",
+      "imageCrop": {
+        "left": 0.00122,
+        "top": 0,
+        "right": 0.00122,
+        "bottom": 0
+      },
+      "asset": {
+        "assetId": "/ppt/media/image6.png",
+        "contentType": "image/png",
+        "byteLength": 437640
+      },
+      "fillImage": {
+        "assetId": "/ppt/media/image6.png",
+        "contentType": "image/png",
+        "byteLength": 437640
+      }
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/xcryxg7y",
+      "id": "2",
+      "name": "eyebrow",
+      "bbox": [
+        106,
+        51,
+        534,
+        31
+      ],
+      "geometry": "rect",
+      "text": "T E C H   S T A C K   &   I N F R A S T R U C T U R E",
+      "textPreview": "T E C H   S T A C K   &   I N F R A S T R U C T U R E",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "T E C H   S T A C K   &   I N F R A S T R U C T U R E"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "T E C H   S T A C K   &   I N F R A S T R U C T U R E",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Noto Sans KR",
+            "color": "#4F555B",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "T E C H   S T A C K   &   I N F R A S T R U C T U R E",
+              "fontSize": 16,
+              "typeface": "Noto Sans KR",
+              "color": "#4F555B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/wbih4b6d",
+      "id": "3",
+      "name": "title",
+      "bbox": [
+        106,
+        99,
+        821,
+        170
+      ],
+      "geometry": "rect",
+      "text": "시스템 아키텍처 및\n기술 스택",
+      "textPreview": "시스템 아키텍처 및 | 기술 스택",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "시스템 아키텍처 및"
+          },
+          {
+            "index": 2,
+            "text": "기술 스택"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "시스템 아키텍처 및",
+          "lineSpacingPercent": 95000,
+          "resolvedTextStyle": {
+            "fontSize": 64,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "시스템 아키텍처 및",
+              "fontSize": 64,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "기술 스택",
+          "lineSpacingPercent": 95000,
+          "resolvedTextStyle": {
+            "fontSize": 64,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "기술 스택",
+              "fontSize": 64,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/n69grmpw",
+      "id": "4",
+      "name": "short-rule",
+      "bbox": [
+        106,
+        286,
+        81,
+        0
+      ],
+      "geometry": "line",
+      "lineColor": "#004EA2",
+      "lineWidth": 5
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/250zy18b",
+      "id": "5",
+      "name": "stack-card-0",
+      "bbox": [
+        106,
+        388,
+        426,
+        89
+      ],
+      "geometry": "rect",
+      "fillColor": "#FFFFFF",
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/98rytw72",
+      "id": "6",
+      "name": "stack-card-0-rail",
+      "bbox": [
+        106,
+        388,
+        0,
+        89
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 4
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/o7ih0r6h",
+      "id": "7",
+      "name": "stack-card-0-title",
+      "bbox": [
+        131,
+        410,
+        281,
+        29
+      ],
+      "geometry": "rect",
+      "text": "Frontend",
+      "textPreview": "Frontend",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Frontend"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Frontend",
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Frontend",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/72t03qp0",
+      "id": "8",
+      "name": "stack-card-0-body",
+      "bbox": [
+        131,
+        444,
+        360,
+        25
+      ],
+      "geometry": "rect",
+      "text": "React, Vite, Tailwind CSS",
+      "textPreview": "React, Vite, Tailwind CSS",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "React, Vite, Tailwind CSS"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "React, Vite, Tailwind CSS",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "React, Vite, Tailwind CSS",
+              "fontSize": 14,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/61kzalof",
+      "id": "9",
+      "name": "stack-card-1",
+      "bbox": [
+        551,
+        388,
+        426,
+        89
+      ],
+      "geometry": "rect",
+      "fillColor": "#FFFFFF",
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ofqtgnyt",
+      "id": "10",
+      "name": "stack-card-1-rail",
+      "bbox": [
+        551,
+        388,
+        0,
+        89
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 4
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/9gza9sze",
+      "id": "11",
+      "name": "stack-card-1-title",
+      "bbox": [
+        576,
+        410,
+        281,
+        29
+      ],
+      "geometry": "rect",
+      "text": "Backend",
+      "textPreview": "Backend",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Backend"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Backend",
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Backend",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/mdobedg3",
+      "id": "12",
+      "name": "stack-card-1-body",
+      "bbox": [
+        576,
+        444,
+        360,
+        25
+      ],
+      "geometry": "rect",
+      "text": "Python FastAPI 고성능 서버",
+      "textPreview": "Python FastAPI 고성능 서버",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Python FastAPI 고성능 서버"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Python FastAPI 고성능 서버",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Python FastAPI 고성능 서버",
+              "fontSize": 14,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/nehs7iho",
+      "id": "13",
+      "name": "stack-card-2",
+      "bbox": [
+        106,
+        497,
+        426,
+        89
+      ],
+      "geometry": "rect",
+      "fillColor": "#FFFFFF",
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/0b6tc3yx",
+      "id": "14",
+      "name": "stack-card-2-rail",
+      "bbox": [
+        106,
+        497,
+        0,
+        89
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 4
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1cfa58zi",
+      "id": "15",
+      "name": "stack-card-2-title",
+      "bbox": [
+        131,
+        519,
+        281,
+        29
+      ],
+      "geometry": "rect",
+      "text": "ML/AI",
+      "textPreview": "ML/AI",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "ML/AI"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "ML/AI",
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "ML/AI",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/epobatgr",
+      "id": "16",
+      "name": "stack-card-2-body",
+      "bbox": [
+        131,
+        553,
+        360,
+        25
+      ],
+      "geometry": "rect",
+      "text": "PyTorch & LangChain LLM",
+      "textPreview": "PyTorch & LangChain LLM",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "PyTorch & LangChain LLM"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "PyTorch & LangChain LLM",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "PyTorch & LangChain LLM",
+              "fontSize": 14,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/zaxs3yhc",
+      "id": "17",
+      "name": "stack-card-3",
+      "bbox": [
+        551,
+        497,
+        426,
+        89
+      ],
+      "geometry": "rect",
+      "fillColor": "#FFFFFF",
+      "lineWidth": 0
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/cn6t83y1",
+      "id": "18",
+      "name": "stack-card-3-rail",
+      "bbox": [
+        551,
+        497,
+        0,
+        89
+      ],
+      "geometry": "line",
+      "lineColor": "#00C1D4",
+      "lineWidth": 4
+    },
+    {
+      "order": 19,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/dofa18z6",
+      "id": "19",
+      "name": "stack-card-3-title",
+      "bbox": [
+        576,
+        519,
+        281,
+        29
+      ],
+      "geometry": "rect",
+      "text": "Infrastructure",
+      "textPreview": "Infrastructure",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Infrastructure"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Infrastructure",
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Infrastructure",
+              "fontSize": 17,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B",
+              "bold": true
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 20,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/tsnip0ny",
+      "id": "20",
+      "name": "stack-card-3-body",
+      "bbox": [
+        576,
+        553,
+        360,
+        25
+      ],
+      "geometry": "rect",
+      "text": "AWS EC2, S3, RDS 클라우드",
+      "textPreview": "AWS EC2, S3, RDS 클라우드",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "AWS EC2, S3, RDS 클라우드"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "AWS EC2, S3, RDS 클라우드",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Noto Sans KR",
+            "color": "#6E747B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "AWS EC2, S3, RDS 클라우드",
+              "fontSize": 14,
+              "typeface": "Noto Sans KR",
+              "color": "#6E747B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 21,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/87ehgv6d",
+      "id": "21",
+      "name": "body",
+      "bbox": [
+        136,
+        657,
+        854,
+        243
+      ],
+      "geometry": "rect",
+      "text": "본 서비스는 최신 웹 기술과 AI 프레임워크를 결합하여 안정적인 분석 환경을 제공합니다.\nFrontend는 React와 Vite, Tailwind CSS를 통해 고성능 반응형 UI를 구현하며, Backend\n는 Python FastAPI로 데이터 처리 효율을 극대화합니다. ML/AI 영역에서는 PyTorch 기반의\n수요 예측 모델과 LangChain 기반 LLM 오케스트레이션을 통해 지능형 에이전트 기능을 수\n행합니다. 전체 인프라는 AWS EC2, S3, RDS를 활용하여 최적화된 클라우드 아키텍처로 설\n계되었습니다.",
+      "textPreview": "본 서비스는 최신 웹 기술과 AI 프레임워크를 결합하여 안정적인 분석 환경을 제공합니다. | Frontend는 React와 Vite, Tailwind CSS를 통해 고성능 반응형 UI를 구현하며, Backend | 는 Python FastAPI로...",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 24,
+        "typeface": "Calibri",
+        "color": "tx1",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "wrap": "square",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 6,
+        "lines": [
+          {
+            "index": 1,
+            "text": "본 서비스는 최신 웹 기술과 AI 프레임워크를 결합하여 안정적인 분석 환경을 제공합니다."
+          },
+          {
+            "index": 2,
+            "text": "Frontend는 React와 Vite, Tailwind CSS를 통해 고성능 반응형 UI를 구현하며, Backend"
+          },
+          {
+            "index": 3,
+            "text": "는 Python FastAPI로 데이터 처리 효율을 극대화합니다. ML/AI 영역에서는 PyTorch 기반의"
+          },
+          {
+            "index": 4,
+            "text": "수요 예측 모델과 LangChain 기반 LLM 오케스트레이션을 통해 지능형 에이전트 기능을 수"
+          },
+          {
+            "index": 5,
+            "text": "행합니다. 전체 인프라는 AWS EC2, S3, RDS를 활용하여 최적화된 클라우드 아키텍처로 설"
+          },
+          {
+            "index": 6,
+            "text": "계되었습니다."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "본 서비스는 최신 웹 기술과 AI 프레임워크를 결합하여 안정적인 분석 환경을 제공합니다.",
+          "lineSpacingPercent": 130000,
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "본 서비스는 최신 웹 기술과 AI 프레임워크를 결합하여 안정적인 분석 환경을 제공합니다.",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "Frontend는 React와 Vite, Tailwind CSS를 통해 고성능 반응형 UI를 구현하며, Backend",
+          "lineSpacingPercent": 130000,
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Frontend는 React와 Vite, Tailwind CSS를 통해 고성능 반응형 UI를 구현하며, Backend",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "는 Python FastAPI로 데이터 처리 효율을 극대화합니다. ML/AI 영역에서는 PyTorch 기반의",
+          "lineSpacingPercent": 130000,
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "는 Python FastAPI로 데이터 처리 효율을 극대화합니다. ML/AI 영역에서는 PyTorch 기반의",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 4,
+          "text": "수요 예측 모델과 LangChain 기반 LLM 오케스트레이션을 통해 지능형 에이전트 기능을 수",
+          "lineSpacingPercent": 130000,
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "수요 예측 모델과 LangChain 기반 LLM 오케스트레이션을 통해 지능형 에이전트 기능을 수",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 5,
+          "text": "행합니다. 전체 인프라는 AWS EC2, S3, RDS를 활용하여 최적화된 클라우드 아키텍처로 설",
+          "lineSpacingPercent": 130000,
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "행합니다. 전체 인프라는 AWS EC2, S3, RDS를 활용하여 최적화된 클라우드 아키텍처로 설",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        },
+        {
+          "index": 6,
+          "text": "계되었습니다.",
+          "lineSpacingPercent": 130000,
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Noto Sans KR",
+            "color": "#18191B",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "계되었습니다.",
+              "fontSize": 18,
+              "typeface": "Noto Sans KR",
+              "color": "#18191B"
+            }
+          ],
+          "bulletCharacter": "",
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

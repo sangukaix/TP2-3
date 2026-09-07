@@ -1,3 +1,91 @@
-region_code,region_name,short_name,raw_relative_path,adapter_type,source_name,source_url,downloaded_at,provenance_status,enabled
-11680,서울특별시 강남구,강남구,data/raw/서울특별시/서울특별시_강남구-20260828T031131Z-1-001.zip,legacy_gangnam_zip,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-28,needs_exact_download_url,true
-28245,인천광역시 계양구,계양구,data/raw/인천광역시/계양구,standard_datalab_csv,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-24,needs_exact_download_url,true
+﻿region_code,region_name,short_name,raw_relative_path,adapter_type,source_name,source_url,downloaded_at,provenance_status,enabled
+11680,서울특별시 강남구,강남구,data/source_snapshots/서울특별시/서울특별시_강남구,snapshot_gangnam_overlay,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-28,needs_exact_download_url,true
+28245,인천광역시 계양구,계양구,data/source_snapshots/인천광역시/계양구,standard_datalab_csv,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-24,needs_exact_download_url,true
+11110,서울특별시 종로구,종로구,data/source_snapshots/서울특별시/서울특별시_종로구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11140,서울특별시 중구,중구,data/source_snapshots/서울특별시/서울특별시_중구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11170,서울특별시 용산구,용산구,data/source_snapshots/서울특별시/서울특별시_용산구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11200,서울특별시 성동구,성동구,data/source_snapshots/서울특별시/서울특별시_성동구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11215,서울특별시 광진구,광진구,data/source_snapshots/서울특별시/서울특별시_광진구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11230,서울특별시 동대문구,동대문구,data/source_snapshots/서울특별시/서울특별시_동대문구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11260,서울특별시 중랑구,중랑구,data/source_snapshots/서울특별시/서울특별시_중랑구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11290,서울특별시 성북구,성북구,data/source_snapshots/서울특별시/서울특별시_성북구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11305,서울특별시 강북구,강북구,data/source_snapshots/서울특별시/서울특별시_강북구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11320,서울특별시 도봉구,도봉구,data/source_snapshots/서울특별시/서울특별시_도봉구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11350,서울특별시 노원구,노원구,data/source_snapshots/서울특별시/서울특별시_노원구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11380,서울특별시 은평구,은평구,data/source_snapshots/서울특별시/서울특별시_은평구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11410,서울특별시 서대문구,서대문구,data/source_snapshots/서울특별시/서울특별시_서대문구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11440,서울특별시 마포구,마포구,data/source_snapshots/서울특별시/서울특별시_마포구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11470,서울특별시 양천구,양천구,data/source_snapshots/서울특별시/서울특별시_양천구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11500,서울특별시 강서구,강서구,data/source_snapshots/서울특별시/서울특별시_강서구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11530,서울특별시 구로구,구로구,data/source_snapshots/서울특별시/서울특별시_구로구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11545,서울특별시 금천구,금천구,data/source_snapshots/서울특별시/서울특별시_금천구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11560,서울특별시 영등포구,영등포구,data/source_snapshots/서울특별시/서울특별시_영등포구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11590,서울특별시 동작구,동작구,data/source_snapshots/서울특별시/서울특별시_동작구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11620,서울특별시 관악구,관악구,data/source_snapshots/서울특별시/서울특별시_관악구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11650,서울특별시 서초구,서초구,data/source_snapshots/서울특별시/서울특별시_서초구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11710,서울특별시 송파구,송파구,data/source_snapshots/서울특별시/서울특별시_송파구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+11740,서울특별시 강동구,강동구,data/source_snapshots/서울특별시/서울특별시_강동구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+51110,강원특별자치도 춘천시,춘천시,data/source_snapshots/강원특별자치도/강원특별자치도_춘천시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+51130,강원특별자치도 원주시,원주시,data/source_snapshots/강원특별자치도/강원특별자치도_원주시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+51150,강원특별자치도 강릉시,강릉시,data/source_snapshots/강원특별자치도/강원특별자치도_강릉시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+51170,강원특별자치도 동해시,동해시,data/source_snapshots/강원특별자치도/강원특별자치도_동해시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+51190,강원특별자치도 태백시,태백시,data/source_snapshots/강원특별자치도/강원특별자치도_태백시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+51210,강원특별자치도 속초시,속초시,data/source_snapshots/강원특별자치도/강원특별자치도_속초시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+51230,강원특별자치도 삼척시,삼척시,data/source_snapshots/강원특별자치도/강원특별자치도_삼척시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+51720,강원특별자치도 홍천군,홍천군,data/source_snapshots/강원특별자치도/강원특별자치도_홍천군,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+51730,강원특별자치도 횡성군,횡성군,data/source_snapshots/강원특별자치도/강원특별자치도_횡성군,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+51750,강원특별자치도 영월군,영월군,data/source_snapshots/강원특별자치도/강원특별자치도_영월군,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+51760,강원특별자치도 평창군,평창군,data/source_snapshots/강원특별자치도/강원특별자치도_평창군,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+51770,강원특별자치도 정선군,정선군,data/source_snapshots/강원특별자치도/강원특별자치도_정선군,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+51780,강원특별자치도 철원군,철원군,data/source_snapshots/강원특별자치도/강원특별자치도_철원군,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+51790,강원특별자치도 화천군,화천군,data/source_snapshots/강원특별자치도/강원특별자치도_화천군,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+51800,강원특별자치도 양구군,양구군,data/source_snapshots/강원특별자치도/강원특별자치도_양구군,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+51810,강원특별자치도 인제군,인제군,data/source_snapshots/강원특별자치도/강원특별자치도_인제군,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+51820,강원특별자치도 고성군,고성군,data/source_snapshots/강원특별자치도/강원특별자치도_고성군,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,true
+51830,강원특별자치도 양양군,양양군,data/source_snapshots/강원특별자치도/강원특별자치도_양양군,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-08-31,needs_exact_download_url,false
+41111,경기도 수원시 장안구,장안구,data/source_snapshots/경기도/경기도_수원시_장안구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41113,경기도 수원시 권선구,권선구,data/source_snapshots/경기도/경기도_수원시_권선구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41115,경기도 수원시 팔달구,팔달구,data/source_snapshots/경기도/경기도_수원시_팔달구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41117,경기도 수원시 영통구,영통구,data/source_snapshots/경기도/경기도_수원시_영통구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41131,경기도 성남시 수정구,수정구,data/source_snapshots/경기도/경기도_성남시_수정구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41133,경기도 성남시 중원구,중원구,data/source_snapshots/경기도/경기도_성남시_중원구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41135,경기도 성남시 분당구,분당구,data/source_snapshots/경기도/경기도_성남시_분당구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41150,경기도 의정부시,의정부시,data/source_snapshots/경기도/경기도_의정부시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41171,경기도 안양시 만안구,만안구,data/source_snapshots/경기도/경기도_안양시_만안구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41173,경기도 안양시 동안구,동안구,data/source_snapshots/경기도/경기도_안양시_동안구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41192,경기도 부천시 원미구,원미구,data/source_snapshots/경기도/경기도_부천시_원미구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41194,경기도 부천시 소사구,소사구,data/source_snapshots/경기도/경기도_부천시_소사구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41196,경기도 부천시 오정구,오정구,data/source_snapshots/경기도/경기도_부천시_오정구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41210,경기도 광명시,광명시,data/source_snapshots/경기도/경기도_광명시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41220,경기도 평택시,평택시,data/source_snapshots/경기도/경기도_평택시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41250,경기도 동두천시,동두천시,data/source_snapshots/경기도/경기도_동두천시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41271,경기도 안산시 상록구,상록구,data/source_snapshots/경기도/경기도_안산시_상록구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41273,경기도 안산시 단원구,단원구,data/source_snapshots/경기도/경기도_안산시_단원구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41281,경기도 고양시 덕양구,덕양구,data/source_snapshots/경기도/경기도_고양시_덕양구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41285,경기도 고양시 일산동구,일산동구,data/source_snapshots/경기도/경기도_고양시_일산동구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41287,경기도 고양시 일산서구,일산서구,data/source_snapshots/경기도/경기도_고양시_일산서구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41290,경기도 과천시,과천시,data/source_snapshots/경기도/경기도_과천시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41310,경기도 구리시,구리시,data/source_snapshots/경기도/경기도_구리시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41360,경기도 남양주시,남양주시,data/source_snapshots/경기도/경기도_남양주시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41370,경기도 오산시,오산시,data/source_snapshots/경기도/경기도_오산시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41390,경기도 시흥시,시흥시,data/source_snapshots/경기도/경기도_시흥시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41410,경기도 군포시,군포시,data/source_snapshots/경기도/경기도_군포시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41430,경기도 의왕시,의왕시,data/source_snapshots/경기도/경기도_의왕시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41450,경기도 하남시,하남시,data/source_snapshots/경기도/경기도_하남시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41461,경기도 용인시 처인구,처인구,data/source_snapshots/경기도/경기도_용인시_처인구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41463,경기도 용인시 기흥구,기흥구,data/source_snapshots/경기도/경기도_용인시_기흥구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41465,경기도 용인시 수지구,수지구,data/source_snapshots/경기도/경기도_용인시_수지구,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41480,경기도 파주시,파주시,data/source_snapshots/경기도/경기도_파주시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41500,경기도 이천시,이천시,data/source_snapshots/경기도/경기도_이천시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41550,경기도 안성시,안성시,data/source_snapshots/경기도/경기도_안성시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41570,경기도 김포시,김포시,data/source_snapshots/경기도/경기도_김포시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41610,경기도 광주시,광주시,data/source_snapshots/경기도/경기도_광주시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41630,경기도 양주시,양주시,data/source_snapshots/경기도/경기도_양주시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41650,경기도 포천시,포천시,data/source_snapshots/경기도/경기도_포천시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41670,경기도 여주시,여주시,data/source_snapshots/경기도/경기도_여주시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41800,경기도 연천군,연천군,data/source_snapshots/경기도/경기도_연천군,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41820,경기도 가평군,가평군,data/source_snapshots/경기도/경기도_가평군,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+41830,경기도 양평군,양평군,data/source_snapshots/경기도/경기도_양평군,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+48310,경상남도 거제시,거제시,data/source_snapshots/경상남도/경상남도_거제시,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+48820,경상남도 고성군,고성군,data/source_snapshots/경상남도/경상남도_고성군,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true
+48880,경상남도 거창군,거창군,data/source_snapshots/경상남도/경상남도_거창군,standard_datalab_archive,한국관광 데이터랩,https://datalab.visitkorea.or.kr/,2026-09-03,needs_exact_download_url,true

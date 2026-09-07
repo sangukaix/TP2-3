@@ -190,8 +190,9 @@ def create_strategy_proposal_presentation(report: dict[str, Any]) -> BytesIO:
     return output
 
 
-# 이전 함수 계약은 유지하면서 새 8장 템플릿 구현으로 교체합니다.
+# 이전 함수 계약은 유지하면서 사용자가 승인한 12장 편집형 템플릿 구현으로 교체합니다.
 # 엔드포인트와 저장소는 이 파일의 같은 함수명을 계속 import할 수 있습니다.
-from .proposal_presentation_v2 import (  # noqa: E402  (기존 구현 뒤에서 안전하게 재정의)
+from .proposal_presentation_v4 import (  # noqa: E402  (기존 구현 뒤에서 안전하게 재정의)
+    PRESENTATION_RENDER_VERSION as PRESENTATION_RENDER_VERSION,
     create_strategy_proposal_presentation as create_strategy_proposal_presentation,
 )

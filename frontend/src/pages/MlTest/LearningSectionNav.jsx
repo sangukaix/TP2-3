@@ -1,9 +1,10 @@
-import { Bot, BrainCircuit, CodeXml } from 'lucide-react'
+import { Bot, BrainCircuit, CodeXml, Route } from 'lucide-react'
 
 const sections = [
   { href: '/ml-test', label: '머신러닝 결과', icon: BrainCircuit },
   { href: '/openai-test', label: 'OpenAI', icon: Bot },
   { href: '/react-test', label: 'React', icon: CodeXml },
+  { href: '/llm-control', label: 'AI Router', icon: Route },
 ]
 
 /** 관리자 학습 페이지 세 개가 같은 위치와 모양의 탭을 공유합니다. */

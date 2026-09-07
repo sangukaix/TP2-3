@@ -11,6 +11,7 @@ import json
 import os
 import re
 from datetime import datetime
+from hashlib import sha256
 from pathlib import Path
 from typing import Any
 
@@ -211,7 +212,11 @@ def list_interrupted_strategy_jobs() -> list[dict[str, Any]]:
 
 
 def save_strategy_report(report_id: str, region_code: str, report: dict[str, Any]) -> None:
-    """완료된 AI 기획안 한 건을 저장하거나, 챗봇 수정본으로 갱신합니다."""
+    """완료된 AI 기획안 한 건을 저장하거나, 챗봇 수정본으로 갱신합니다.
+
+    기존 기획안을 수정하면 Word/PPT 경로를 함께 비워 다음 다운로드에서 최신
+    JSON으로 다시 만들게 합니다. 파생 문서가 원문보다 오래된 상태를 막기 위함입니다.
+    """
     strategy = (report.get('strategies') or [{}])[0]
     values = {
         'report_id': report_id,
@@ -226,7 +231,8 @@ def save_strategy_report(report_id: str, region_code: str, report: dict[str, Any
         VALUES (%(report_id)s, %(region_code)s, %(region_name)s, %(title)s, %(summary)s, %(report_json)s)
         ON DUPLICATE KEY UPDATE
             region_name=VALUES(region_name), title=VALUES(title), summary=VALUES(summary),
-            report_json=VALUES(report_json), updated_at=CURRENT_TIMESTAMP
+            report_json=VALUES(report_json), word_path=NULL, ppt_path=NULL,
+            updated_at=CURRENT_TIMESTAMP
     '''
     with _connect() as connection:
         with connection.cursor() as cursor:
@@ -391,31 +397,90 @@ def read_strategy_report(report_id: str) -> dict[str, Any] | None:
     return json.loads(value) if isinstance(value, str) else value
 
 
-def write_document(report_id: str, file_format: str, content: bytes) -> Path:
-    """생성된 Word/PPT 파일을 로컬 서버에 한 번 저장하고 DB에 경로를 기록합니다."""
+def _report_fingerprint(value: Any) -> str:
+    """DB의 JSON 표현 차이와 무관한 기획안 내용 지문을 만듭니다."""
+    if isinstance(value, str):
+        value = json.loads(value)
+    canonical = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(',', ':'), default=str)
+    return sha256(canonical.encode('utf-8')).hexdigest()
+
+
+def _document_metadata_path(path: Path) -> Path:
+    """출력 파일 옆에서 원문 지문과 템플릿 버전을 관리할 경로를 반환합니다."""
+    return path.with_name(f'{path.name}.meta.json')
+
+
+def write_document(
+    report_id: str,
+    file_format: str,
+    content: bytes,
+    *,
+    render_version: str = '',
+    report_payload: dict[str, Any] | None = None,
+) -> Path:
+    """Word/PPT와 원문 지문·출력 버전을 함께 저장하고 DB에 경로를 기록합니다."""
     if file_format not in {'docx', 'pptx'}:
         raise ValueError('지원하지 않는 문서 형식입니다.')
     DOCUMENT_DIRECTORY.mkdir(parents=True, exist_ok=True)
     path = DOCUMENT_DIRECTORY / f'{report_id}.{file_format}'
-    path.write_bytes(content)
     column = 'word_path' if file_format == 'docx' else 'ppt_path'
     with _connect() as connection:
         with connection.cursor() as cursor:
+            cursor.execute('SELECT report_json FROM strategy_reports WHERE report_id=%s', (report_id,))
+            row = cursor.fetchone()
+            if not row:
+                raise ValueError('문서를 연결할 저장 기획안을 찾지 못했습니다.')
+
+            # 렌더링 도중 챗봇/다른 사용자가 수정한 새 본문에 구형 파일을 연결하지 않습니다.
+            # 파일의 지문은 반드시 그 파일을 실제로 만든 입력의 지문이어야 합니다.
+            fingerprint = _report_fingerprint(row['report_json'] if report_payload is None else report_payload)
+            if fingerprint != _report_fingerprint(row['report_json']):
+                raise ValueError('기획안이 출력 중 변경되었습니다. 최신 내용으로 다시 다운로드해 주세요.')
+
+            # 파일과 메타데이터를 먼저 완성한 뒤 DB 경로를 공개해 중간 파일 다운로드를 막습니다.
+            path.write_bytes(content)
+            _document_metadata_path(path).write_text(
+                json.dumps({
+                    'report_fingerprint': fingerprint,
+                    'render_version': render_version,
+                    'content_sha256': sha256(content).hexdigest(),
+                    'created_at': datetime.now().isoformat(timespec='seconds'),
+                }, ensure_ascii=False, indent=2),
+                encoding='utf-8',
+            )
             cursor.execute(f'UPDATE strategy_reports SET {column}=%s WHERE report_id=%s', (str(path), report_id))
     return path
 
 
-def read_document(report_id: str, file_format: str) -> bytes | None:
-    """저장된 파일이 있으면 재생성하지 않고 그대로 내려보냅니다."""
+def read_document(report_id: str, file_format: str, *, render_version: str = '') -> bytes | None:
+    """원문 지문과 출력 버전이 모두 같은 저장 문서만 캐시로 반환합니다."""
     if file_format not in {'docx', 'pptx'}:
         return None
     column = 'word_path' if file_format == 'docx' else 'ppt_path'
     with _connect() as connection:
         with connection.cursor() as cursor:
-            cursor.execute(f'SELECT {column} FROM strategy_reports WHERE report_id=%s', (report_id,))
+            cursor.execute(f'SELECT {column}, report_json FROM strategy_reports WHERE report_id=%s', (report_id,))
             row = cursor.fetchone()
     path = Path(row[column]) if row and row[column] else None
-    return path.read_bytes() if path and path.is_file() else None
+    if not path or not path.is_file():
+        return None
+
+    # 출력 버전을 지정한 새 호출은 메타데이터가 없는 과거 문서를 자동 재생성합니다.
+    metadata_path = _document_metadata_path(path)
+    if not metadata_path.is_file():
+        return path.read_bytes() if not render_version else None
+    try:
+        metadata = json.loads(metadata_path.read_text(encoding='utf-8'))
+        content = path.read_bytes()
+    except (OSError, json.JSONDecodeError):
+        return None
+    if metadata.get('report_fingerprint') != _report_fingerprint(row['report_json']):
+        return None
+    if render_version and metadata.get('render_version') != render_version:
+        return None
+    if metadata.get('content_sha256') != sha256(content).hexdigest():
+        return None
+    return content
 
 
 def strategy_store_health() -> dict[str, str]:

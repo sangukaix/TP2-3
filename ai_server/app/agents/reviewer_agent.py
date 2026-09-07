@@ -5,6 +5,8 @@ from __future__ import annotations
 from typing import Any
 
 from ..openai_responses import create_structured_response
+from ..llm.models import LLMRequest
+from ..llm.router import LLMRouter
 from .prompts import REVIEW_INSTRUCTIONS
 
 
@@ -59,9 +61,10 @@ REVIEW_SCHEMA = {
 
 class ReviewerAgent:
     """완성 초안이 근거·사례·사용자 조건을 지켰는지 마지막으로 검사하는 Agent입니다."""
-    def __init__(self, *, api_key: str, model: str) -> None:
+    def __init__(self, *, api_key: str, model: str, llm_router: LLMRouter | None = None) -> None:
         self.api_key = api_key
         self.model = model
+        self.llm_router = llm_router
 
     async def review(
         self,
@@ -69,9 +72,23 @@ class ReviewerAgent:
         evidence_pack: dict[str, Any],
         draft_report: dict[str, Any],
         deterministic_precheck: dict[str, Any] | None = None,
+        final_pass: bool = False,
     ) -> dict[str, Any]:
         # evidence_pack 원본과 Planner 초안을 함께 보내야 ‘그럴듯하지만 근거 없는 문장’을 비교해 걸러낼 수 있습니다.
         # 점수가 낮으면 오케스트레이터가 이 응답의 issue만 Planner에게 전달해 한 번 재작성합니다.
+        request = LLMRequest(
+            task='final_reviewer' if final_pass else 'reviewer', agent='reviewer', model=None, instructions=REVIEW_INSTRUCTIONS,
+            input_payload={
+                'evidence_pack': evidence_pack, 'draft_report': draft_report,
+                'deterministic_precheck': deterministic_precheck or {'checked': False, 'issues': []},
+            }, schema_name='tourism_plan_quality_review', schema=REVIEW_SCHEMA,
+            # 검수 추론 강도는 낮추지 않고 완결된 판정을 반환할 출력 공간을 늘립니다.
+            reasoning_effort='high', max_output_tokens=12000,
+            retry_max_output_tokens=20000, openai_timeout_seconds=600, local_max_output_tokens=5500,
+            local_evidence_tools=bool(getattr(self.llm_router, 'local_first', False) and not final_pass),
+        )
+        if self.llm_router:
+            return await self.llm_router.generate(request)
         return await create_structured_response(
             api_key=self.api_key,
             model=self.model,
@@ -85,5 +102,5 @@ class ReviewerAgent:
             schema_name='tourism_plan_quality_review',
             schema=REVIEW_SCHEMA,
             reasoning_effort='high',
-            max_output_tokens=5500,
+            max_output_tokens=12000, retry_max_output_tokens=20000, timeout_seconds=600,
         )

@@ -1,0 +1,2448 @@
+{
+  "period": "2025-07 ~ 2026-06",
+  "summary": "원주시의 외지인 방문자 감소(-2.7%)와 높은 잠재 수요(내비게이션 검색량 303,921건)를 고려하여, 지역 내 지출을 유도하는 '원주 반값 여행 환급 사업'을 제안합니다. 강진군의 사례를 벤치마킹하여 지출액 일부를 지역상품권으로 환급함으로써 지역 내 재소비를 촉진합니다.",
+  "strategies": [
+    {
+      "kpi": "지역상품권 결제액 증가율 (분자: 사업 기간 내 상품권 결제액 / 분모: 전년 동기 상품권 결제액), 성공 기준: 전년 대비 20% 이상 증가 시 확대, 중단 기준: 전년 대비 20% 미만 증가 또는 재방문율 5% 미만 시",
+      "title": "원주 반값 여행 지역환급 모델 도입",
+      "budget": "지역상품권 발행 비용 + 환급 지원금 + 마케팅 비용 (공식 단가 및 참여 업체 규모에 따라 확정 필요)",
+      "evidence": "case:gangjin_half_price_2024",
+      "priority": 1,
+      "solution": "원주시를 방문한 외지인이 지정된 업종(식당, 카페, 체험시설 등)에서 일정 금액 이상 지출 시, 지출액의 일부를 원주사랑상품권으로 즉시 환급해 주는 방식",
+      "timeframe": "2026-09 ~ 2026-11, 3개월",
+      "expected_effect": "정량적 효과는 확정할 수 없으나, [참여 외지인 수 × 환급 참여율 × 추가 지역 소비액] 산식을 통해 지역 내 순증 소비액을 검증할 예정임",
+      "problem_to_solve": "외지인 방문자 감소 및 지역 내 관광 소비 유도 필요",
+      "comparison_analysis": "강진군 사례(case:gangjin_half_price_2024)에서 지역상품권 결제액이 전년 대비 46% 증가한 성과를 참고함. 원주시의 높은 내비게이션 검색량을 실제 지역 내 결제로 연결하는 전략을 채택함.",
+      "implementation_steps": [
+        {
+          "step": 1,
+          "task": "참여 업체 모집 및 상품권 운영 체계 구축",
+          "schedule": "2026-09",
+          "deliverable": "참여 업체 명단 및 환급 프로세스 매뉴얼"
+        },
+        {
+          "step": 2,
+          "task": "지출 증빙 및 환급 시스템(모바일/키오스크) 준비",
+          "schedule": "2026-09",
+          "deliverable": "환급 시스템 테스트 결과 보고서"
+        },
+        {
+          "step": 3,
+          "task": "시범 운영 및 홍보 캠페인 실시",
+          "schedule": "2026-10",
+          "deliverable": "홍보물 및 시범 운영 데이터"
+        },
+        {
+          "step": 4,
+          "task": "집중 운영 및 실시간 모니터링",
+          "schedule": "2026-11",
+          "deliverable": "주간 결제 데이터 요약"
+        },
+        {
+          "step": 5,
+          "task": "성과 분석 및 차기 사업 검토",
+          "schedule": "2026-11",
+          "deliverable": "최종 성과 분석 보고서"
+        }
+      ],
+      "visual_asset_source_ids": [
+        "case:gangjin_half_price_2024"
+      ]
+    }
+  ],
+  "agent_trace": [
+    {
+      "agent": "llm_router",
+      "stage": "routing_snapshot",
+      "status": "completed",
+      "routing": {
+        "mode": "student_budget",
+        "routes": {
+          "planner": {
+            "fallback": "openai",
+            "provider": "gemma",
+            "model_env": "OLLAMA_GEMMA_MODEL"
+          },
+          "evidence": {
+            "fallback": "none",
+            "provider": "openai",
+            "model_env": "OPENAI_RESEARCH_MODEL"
+          },
+          "reviewer": {
+            "fallback": "none",
+            "provider": "openai",
+            "model_env": "OPENAI_REVIEW_MODEL"
+          },
+          "case_study": {
+            "fallback": "none",
+            "provider": "openai",
+            "model_env": "OPENAI_CASE_RESEARCH_MODEL"
+          },
+          "chat_revise": {
+            "fallback": "openai",
+            "provider": "gemma",
+            "model_env": "OLLAMA_GEMMA_MODEL"
+          },
+          "chat_explain": {
+            "fallback": "openai",
+            "provider": "qwen",
+            "model_env": "OLLAMA_QWEN_MODEL"
+          },
+          "chat_research": {
+            "fallback": "none",
+            "provider": "openai",
+            "model_env": "OPENAI_CHAT_MODEL"
+          },
+          "final_reviewer": {
+            "fallback": "none",
+            "provider": "openai",
+            "model_env": "OPENAI_REVIEW_MODEL"
+          },
+          "transferability": {
+            "fallback": "openai",
+            "provider": "qwen",
+            "model_env": "OLLAMA_QWEN_MODEL"
+          },
+          "planner_revision": {
+            "fallback": "openai",
+            "provider": "gemma",
+            "model_env": "OLLAMA_GEMMA_MODEL"
+          },
+          "local_web_query_planner": {
+            "fallback": "none",
+            "provider": "qwen",
+            "model_env": "OLLAMA_QWEN_MODEL"
+          }
+        }
+      },
+      "effective_routes": {
+        "planner": {
+          "model": "gemma4:26b",
+          "fallback": "none",
+          "provider": "gemma",
+          "model_env": "OLLAMA_GEMMA_MODEL",
+          "locked_reason": "로컬 우선 비용 정책"
+        },
+        "evidence": {
+          "model": null,
+          "fallback": "none",
+          "provider": "local_sources",
+          "locked_reason": "학생 절약 모드: OpenAI 웹 조사는 실행하지 않음. 무료 검색 API 키가 있으면 Qwen 질문으로 공식 도메인 요약 후보만 추가"
+        },
+        "reviewer": {
+          "model": "qwen3:14b",
+          "fallback": "none",
+          "provider": "qwen",
+          "model_env": "OPENAI_REVIEW_MODEL",
+          "locked_reason": "로컬 우선 비용 정책"
+        },
+        "case_study": {
+          "model": null,
+          "fallback": "none",
+          "provider": "local_sources",
+          "locked_reason": "학생 절약 모드: OpenAI 웹 조사는 실행하지 않음. 무료 검색 API 키가 있으면 Qwen 질문으로 공식 도메인 요약 후보만 추가"
+        },
+        "chat_revise": {
+          "model": "gemma4:26b",
+          "fallback": "none",
+          "provider": "gemma",
+          "model_env": "OLLAMA_GEMMA_MODEL",
+          "locked_reason": "로컬 우선 비용 정책"
+        },
+        "chat_explain": {
+          "model": "qwen3:14b",
+          "fallback": "none",
+          "provider": "qwen",
+          "model_env": "OLLAMA_QWEN_MODEL",
+          "locked_reason": "로컬 우선 비용 정책"
+        },
+        "chat_research": {
+          "model": null,
+          "fallback": "none",
+          "provider": "local_sources",
+          "locked_reason": "학생 절약 모드: OpenAI 웹 조사는 실행하지 않음. 무료 검색 API 키가 있으면 Qwen 질문으로 공식 도메인 요약 후보만 추가"
+        },
+        "final_reviewer": {
+          "model": "gpt-5.6-sol",
+          "fallback": "none",
+          "provider": "openai",
+          "model_env": "OPENAI_REVIEW_MODEL",
+          "locked_reason": "로컬 우선 비용 정책"
+        },
+        "transferability": {
+          "model": "qwen3:14b",
+          "fallback": "none",
+          "provider": "qwen",
+          "model_env": "OLLAMA_QWEN_MODEL",
+          "locked_reason": "로컬 우선 비용 정책"
+        },
+        "planner_revision": {
+          "model": "gemma4:26b",
+          "fallback": "none",
+          "provider": "gemma",
+          "model_env": "OLLAMA_GEMMA_MODEL",
+          "locked_reason": "로컬 우선 비용 정책"
+        },
+        "local_web_query_planner": {
+          "model": "qwen3:14b",
+          "fallback": "none",
+          "provider": "qwen",
+          "model_env": "OLLAMA_QWEN_MODEL",
+          "locked_reason": "로컬 우선 비용 정책"
+        }
+      }
+    },
+    {
+      "agent": "ml",
+      "stage": "forecast_evidence",
+      "status": "available",
+      "reason_code": "",
+      "selection_basis": "unknown_compare_3_and_6_months",
+      "forecast_horizon_months": 8
+    },
+    {
+      "agent": "evidence",
+      "items": 7,
+      "stage": "dataset",
+      "status": "completed"
+    },
+    {
+      "agent": "evidence",
+      "items": 6,
+      "stage": "nationwide_comparison",
+      "status": "completed"
+    },
+    {
+      "agent": "evidence",
+      "items": 12,
+      "stage": "nationwide_bigdata_context",
+      "status": "completed"
+    },
+    {
+      "agent": "evidence",
+      "items": 3,
+      "stage": "regional_tourism_status",
+      "status": "completed"
+    },
+    {
+      "agent": "evidence",
+      "items": 20,
+      "stage": "open_api",
+      "status": "completed"
+    },
+    {
+      "agent": "evidence",
+      "items": 5,
+      "stage": "rag",
+      "status": "completed"
+    },
+    {
+      "agent": "evidence",
+      "items": 0,
+      "stage": "free_official_web",
+      "reason": "no_free_search_api_key_configured",
+      "status": "skipped"
+    },
+    {
+      "agent": "case_scout",
+      "items": 6,
+      "stage": "curated_registry",
+      "status": "completed"
+    },
+    {
+      "agent": "case_scout",
+      "items": 8,
+      "stage": "case_rag",
+      "status": "completed"
+    },
+    {
+      "agent": "case_scout",
+      "items": 0,
+      "stage": "official_case_web",
+      "reason": "student_budget_uses_curated_cases_only",
+      "status": "skipped"
+    },
+    {
+      "agent": "evidence",
+      "stage": "complete",
+      "status": "completed",
+      "duration_ms": 2668
+    },
+    {
+      "agent": "case_scout",
+      "stage": "complete",
+      "status": "completed",
+      "duration_ms": 2668
+    },
+    {
+      "agent": "transferability",
+      "model": "qwen3:14b",
+      "stage": "transferability",
+      "usage": {
+        "input_tokens": 94498,
+        "total_tokens": 96688,
+        "output_tokens": 2190
+      },
+      "status": "completed",
+      "attempts": [
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 18057,
+            "total_tokens": 18119,
+            "output_tokens": 62
+          },
+          "status": "completed",
+          "usage_reported": true
+        },
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 18185,
+            "total_tokens": 18203,
+            "output_tokens": 18
+          },
+          "status": "completed",
+          "usage_reported": true
+        },
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 19485,
+            "total_tokens": 19541,
+            "output_tokens": 56
+          },
+          "status": "completed",
+          "usage_reported": true
+        },
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 19612,
+            "total_tokens": 19649,
+            "output_tokens": 37
+          },
+          "status": "completed",
+          "usage_reported": true
+        },
+        {
+          "phase": "final_json",
+          "usage": {
+            "input_tokens": 19159,
+            "total_tokens": 21176,
+            "output_tokens": 2017
+          },
+          "status": "completed",
+          "usage_reported": true
+        }
+      ],
+      "fallback": false,
+      "provider": "qwen",
+      "tool_trace": [
+        {
+          "tool": "get_region_metrics",
+          "status": "completed"
+        },
+        {
+          "tool": "get_regional_tourism_status",
+          "status": "completed"
+        },
+        {
+          "tool": "compare_regions",
+          "status": "completed"
+        },
+        {
+          "tool": "get_nationwide_bigdata_context",
+          "status": "completed"
+        },
+        {
+          "tool": "get_ml_forecast",
+          "status": "completed"
+        },
+        {
+          "tool": "get_case_comparison_matrix",
+          "status": "completed"
+        },
+        {
+          "tool": "read_collected_source",
+          "status": "completed"
+        },
+        {
+          "tool": "read_collected_source",
+          "status": "completed"
+        },
+        {
+          "tool": "get_planning_decision",
+          "status": "invalid_arguments"
+        },
+        {
+          "tool": "get_case_comparison_matrix",
+          "status": "completed"
+        },
+        {
+          "tool": "get_region_metrics",
+          "status": "invalid_arguments"
+        },
+        {
+          "tool": "get_ml_forecast",
+          "status": "invalid_arguments"
+        }
+      ],
+      "duration_ms": 173523,
+      "paid_reason": "",
+      "retry_count": 0,
+      "fallback_reason": "",
+      "web_search_used": false,
+      "input_preparation": {
+        "mode": "request_scoped_evidence_tools",
+        "sources_read": 2,
+        "original_bytes": 96026,
+        "overview_bytes": 4560,
+        "sources_available": 56
+      },
+      "max_output_tokens": 5600,
+      "requested_provider": "qwen"
+    },
+    {
+      "agent": "transferability",
+      "stage": "assessment",
+      "status": "completed",
+      "duration_ms": 173523,
+      "recommended_cases": 2
+    },
+    {
+      "agent": "planner",
+      "stage": "draft",
+      "status": "completed",
+      "duration_ms": 65892
+    },
+    {
+      "agent": "planner",
+      "model": "gemma4:26b",
+      "stage": "planner",
+      "usage": {
+        "input_tokens": 34178,
+        "total_tokens": 35842,
+        "output_tokens": 1664
+      },
+      "status": "completed",
+      "attempts": [
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 17361,
+            "total_tokens": 17873,
+            "output_tokens": 512
+          },
+          "status": "continued_without_optional_tools",
+          "error_code": "OLLAMA_INCOMPLETE_RESPONSE",
+          "usage_reported": true
+        },
+        {
+          "phase": "final_json",
+          "usage": {
+            "input_tokens": 16817,
+            "total_tokens": 17969,
+            "output_tokens": 1152
+          },
+          "status": "completed",
+          "usage_reported": true
+        }
+      ],
+      "fallback": false,
+      "provider": "gemma",
+      "tool_trace": [
+        {
+          "tool": "get_region_metrics",
+          "status": "completed"
+        },
+        {
+          "tool": "get_regional_tourism_status",
+          "status": "completed"
+        },
+        {
+          "tool": "compare_regions",
+          "status": "completed"
+        },
+        {
+          "tool": "get_nationwide_bigdata_context",
+          "status": "completed"
+        },
+        {
+          "tool": "get_ml_forecast",
+          "status": "completed"
+        },
+        {
+          "tool": "get_planning_decision",
+          "status": "completed"
+        },
+        {
+          "tool": "read_collected_source",
+          "status": "completed"
+        }
+      ],
+      "duration_ms": 65892,
+      "paid_reason": "",
+      "retry_count": 0,
+      "fallback_reason": "",
+      "web_search_used": false,
+      "input_preparation": {
+        "mode": "request_scoped_evidence_tools",
+        "sources_read": 1,
+        "original_bytes": 102449,
+        "overview_bytes": 4833,
+        "sources_available": 56
+      },
+      "max_output_tokens": 16000,
+      "requested_provider": "gemma"
+    },
+    {
+      "agent": "reviewer",
+      "score": 81,
+      "stage": "first_review",
+      "status": "completed",
+      "duration_ms": 126518
+    },
+    {
+      "agent": "reviewer",
+      "model": "qwen3:14b",
+      "stage": "reviewer",
+      "usage": {
+        "input_tokens": 75090,
+        "total_tokens": 76460,
+        "output_tokens": 1370
+      },
+      "status": "completed",
+      "attempts": [
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 18043,
+            "total_tokens": 18105,
+            "output_tokens": 62
+          },
+          "status": "completed",
+          "usage_reported": true
+        },
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 18171,
+            "total_tokens": 18211,
+            "output_tokens": 40
+          },
+          "status": "completed",
+          "usage_reported": true
+        },
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 18338,
+            "total_tokens": 18377,
+            "output_tokens": 39
+          },
+          "status": "completed",
+          "usage_reported": true
+        },
+        {
+          "phase": "final_json",
+          "usage": {
+            "input_tokens": 20538,
+            "total_tokens": 21767,
+            "output_tokens": 1229
+          },
+          "status": "completed",
+          "usage_reported": true
+        }
+      ],
+      "fallback": false,
+      "provider": "qwen",
+      "tool_trace": [
+        {
+          "tool": "get_region_metrics",
+          "status": "completed"
+        },
+        {
+          "tool": "get_regional_tourism_status",
+          "status": "completed"
+        },
+        {
+          "tool": "compare_regions",
+          "status": "completed"
+        },
+        {
+          "tool": "get_nationwide_bigdata_context",
+          "status": "completed"
+        },
+        {
+          "tool": "get_ml_forecast",
+          "status": "completed"
+        },
+        {
+          "tool": "get_planning_decision",
+          "status": "completed"
+        },
+        {
+          "tool": "read_collected_source",
+          "status": "completed"
+        },
+        {
+          "tool": "read_task_section",
+          "status": "completed"
+        },
+        {
+          "tool": "get_planning_decision",
+          "status": "invalid_arguments"
+        },
+        {
+          "tool": "get_ml_forecast",
+          "status": "invalid_arguments"
+        },
+        {
+          "tool": "get_ml_forecast",
+          "status": "completed"
+        }
+      ],
+      "duration_ms": 126512,
+      "paid_reason": "",
+      "retry_count": 0,
+      "fallback_reason": "",
+      "web_search_used": false,
+      "input_preparation": {
+        "mode": "request_scoped_evidence_tools",
+        "sources_read": 1,
+        "original_bytes": 106453,
+        "overview_bytes": 5466,
+        "sources_available": 56
+      },
+      "max_output_tokens": 5500,
+      "requested_provider": "qwen"
+    },
+    {
+      "agent": "planner",
+      "stage": "revision",
+      "status": "completed",
+      "duration_ms": 59938
+    },
+    {
+      "agent": "planner",
+      "model": "gemma4:26b",
+      "stage": "planner_revision",
+      "usage": {
+        "input_tokens": 36256,
+        "total_tokens": 37944,
+        "output_tokens": 1688
+      },
+      "status": "completed",
+      "attempts": [
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 18400,
+            "total_tokens": 18912,
+            "output_tokens": 512
+          },
+          "status": "continued_without_optional_tools",
+          "error_code": "OLLAMA_INCOMPLETE_RESPONSE",
+          "usage_reported": true
+        },
+        {
+          "phase": "final_json",
+          "usage": {
+            "input_tokens": 17856,
+            "total_tokens": 19032,
+            "output_tokens": 1176
+          },
+          "status": "completed",
+          "usage_reported": true
+        }
+      ],
+      "fallback": false,
+      "provider": "gemma",
+      "tool_trace": [
+        {
+          "tool": "get_region_metrics",
+          "status": "completed"
+        },
+        {
+          "tool": "get_regional_tourism_status",
+          "status": "completed"
+        },
+        {
+          "tool": "compare_regions",
+          "status": "completed"
+        },
+        {
+          "tool": "get_nationwide_bigdata_context",
+          "status": "completed"
+        },
+        {
+          "tool": "get_ml_forecast",
+          "status": "completed"
+        },
+        {
+          "tool": "get_planning_decision",
+          "status": "completed"
+        },
+        {
+          "tool": "read_collected_source",
+          "status": "completed"
+        },
+        {
+          "tool": "read_task_section",
+          "status": "completed"
+        }
+      ],
+      "duration_ms": 59935,
+      "paid_reason": "",
+      "retry_count": 0,
+      "fallback_reason": "",
+      "web_search_used": false,
+      "input_preparation": {
+        "mode": "request_scoped_evidence_tools",
+        "sources_read": 1,
+        "original_bytes": 81774,
+        "overview_bytes": 5511,
+        "sources_available": 17
+      },
+      "max_output_tokens": 14000,
+      "requested_provider": "gemma"
+    },
+    {
+      "agent": "reviewer",
+      "score": 80,
+      "stage": "local_recheck",
+      "status": "completed",
+      "duration_ms": 91486
+    },
+    {
+      "agent": "reviewer",
+      "model": "qwen3:14b",
+      "stage": "reviewer",
+      "usage": {
+        "input_tokens": 75228,
+        "total_tokens": 76185,
+        "output_tokens": 957
+      },
+      "status": "completed",
+      "attempts": [
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 18084,
+            "total_tokens": 18111,
+            "output_tokens": 27
+          },
+          "status": "completed",
+          "usage_reported": true
+        },
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 18181,
+            "total_tokens": 18199,
+            "output_tokens": 18
+          },
+          "status": "completed",
+          "usage_reported": true
+        },
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 19481,
+            "total_tokens": 19514,
+            "output_tokens": 33
+          },
+          "status": "completed",
+          "usage_reported": true
+        },
+        {
+          "phase": "final_json",
+          "usage": {
+            "input_tokens": 19482,
+            "total_tokens": 20361,
+            "output_tokens": 879
+          },
+          "status": "completed",
+          "usage_reported": true
+        }
+      ],
+      "fallback": false,
+      "provider": "qwen",
+      "tool_trace": [
+        {
+          "tool": "get_region_metrics",
+          "status": "completed"
+        },
+        {
+          "tool": "get_regional_tourism_status",
+          "status": "completed"
+        },
+        {
+          "tool": "compare_regions",
+          "status": "completed"
+        },
+        {
+          "tool": "get_nationwide_bigdata_context",
+          "status": "completed"
+        },
+        {
+          "tool": "get_ml_forecast",
+          "status": "completed"
+        },
+        {
+          "tool": "get_planning_decision",
+          "status": "completed"
+        },
+        {
+          "tool": "read_collected_source",
+          "status": "completed"
+        },
+        {
+          "tool": "read_task_section",
+          "status": "completed"
+        },
+        {
+          "tool": "get_case_comparison_matrix",
+          "status": "invalid_arguments"
+        },
+        {
+          "tool": "get_case_comparison_matrix",
+          "status": "completed"
+        },
+        {
+          "tool": "read_collected_source",
+          "status": "completed"
+        }
+      ],
+      "duration_ms": 91486,
+      "paid_reason": "",
+      "retry_count": 0,
+      "fallback_reason": "",
+      "web_search_used": false,
+      "input_preparation": {
+        "mode": "request_scoped_evidence_tools",
+        "sources_read": 1,
+        "original_bytes": 106546,
+        "overview_bytes": 5466,
+        "sources_available": 56
+      },
+      "max_output_tokens": 5500,
+      "requested_provider": "qwen"
+    },
+    {
+      "agent": "reviewer",
+      "stage": "cloud_final_audit",
+      "reason": "local_quality_gate_not_passed",
+      "status": "skipped"
+    }
+  ],
+  "limitations": [],
+  "ml_analysis": {
+    "status": "available",
+    "signals": [
+      {
+        "kind": "forecast_signal",
+        "unit": "명",
+        "metric": "visitors",
+        "period": "202609~202611",
+        "source_id": "ml:51130:regional-demand-v3.1:202606",
+        "aggregation": "3_month_sum",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "3개월 실행 후보",
+        "window_months": 3,
+        "change_percent": 0.11,
+        "forecast_value": 7628641,
+        "interpretation": "3개월 실행 후보에서 방문자 수의 전년 동기간 대비 증가 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "below_baseline_on_test",
+        "previous_year_same_months_value": 7620338
+      },
+      {
+        "kind": "forecast_signal",
+        "unit": "원",
+        "metric": "spending_krw",
+        "period": "202609~202611",
+        "source_id": "ml:51130:regional-demand-v3.1:202606",
+        "aggregation": "3_month_sum",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "3개월 실행 후보",
+        "window_months": 3,
+        "change_percent": 28.41,
+        "forecast_value": 240925002798,
+        "interpretation": "3개월 실행 후보에서 관광소비액의 전년 동기간 대비 증가 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "below_baseline_on_test",
+        "previous_year_same_months_value": 187620717000
+      },
+      {
+        "kind": "forecast_signal",
+        "unit": "일",
+        "metric": "lodging_nights",
+        "period": "202609~202611",
+        "source_id": "ml:51130:regional-demand-v3.1:202606",
+        "aggregation": "3_month_average",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "3개월 실행 후보",
+        "window_months": 3,
+        "change_percent": 1.65,
+        "forecast_value": 2.8699999999999997,
+        "interpretation": "3개월 실행 후보에서 평균 숙박일수의 전년 동기간 대비 증가 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "below_baseline_on_test",
+        "previous_year_same_months_value": 2.8233333333333337
+      },
+      {
+        "kind": "forecast_signal",
+        "unit": "%",
+        "metric": "lodging_rate_pct",
+        "period": "202609~202611",
+        "source_id": "ml:51130:regional-demand-v3.1:202606",
+        "aggregation": "3_month_average",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "3개월 실행 후보",
+        "window_months": 3,
+        "change_percent": 0,
+        "forecast_value": 13.666666666666666,
+        "interpretation": "3개월 실행 후보에서 숙박방문자 비율의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "seasonal_baseline",
+        "previous_year_same_months_value": 13.666666666666666
+      },
+      {
+        "kind": "forecast_signal",
+        "unit": "분",
+        "metric": "stay_minutes",
+        "period": "202609~202611",
+        "source_id": "ml:51130:regional-demand-v3.1:202606",
+        "aggregation": "3_month_average",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "3개월 실행 후보",
+        "window_months": 3,
+        "change_percent": 0,
+        "forecast_value": 1896.3333333333333,
+        "interpretation": "3개월 실행 후보에서 평균 체류시간의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "seasonal_baseline",
+        "previous_year_same_months_value": 1896.3333333333333
+      },
+      {
+        "kind": "forecast_signal",
+        "unit": "건",
+        "metric": "navigation_searches",
+        "period": "202609~202611",
+        "source_id": "ml:51130:regional-demand-v3.1:202606",
+        "aggregation": "3_month_sum",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "3개월 실행 후보",
+        "window_months": 3,
+        "change_percent": 0,
+        "forecast_value": 1131493,
+        "interpretation": "3개월 실행 후보에서 내비게이션 검색량의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "seasonal_baseline",
+        "previous_year_same_months_value": 1131493
+      },
+      {
+        "kind": "forecast_signal",
+        "unit": "건",
+        "metric": "lodging_searches",
+        "period": "202609~202611",
+        "source_id": "ml:51130:regional-demand-v3.1:202606",
+        "aggregation": "3_month_sum",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "3개월 실행 후보",
+        "window_months": 3,
+        "change_percent": -1.73,
+        "forecast_value": 132826,
+        "interpretation": "3개월 실행 후보에서 숙박 목적지 검색량의 전년 동기간 대비 감소 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "below_baseline_on_test",
+        "previous_year_same_months_value": 135164
+      },
+      {
+        "kind": "forecast_signal",
+        "unit": "명",
+        "metric": "visitors",
+        "period": "202609~202702",
+        "source_id": "ml:51130:regional-demand-v3.1:202606",
+        "aggregation": "6_month_sum",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "6개월 실행 후보",
+        "window_months": 6,
+        "change_percent": 0.21,
+        "forecast_value": 13996366,
+        "interpretation": "6개월 실행 후보에서 방문자 수의 전년 동기간 대비 증가 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "below_baseline_on_test",
+        "previous_year_same_months_value": 13966702
+      },
+      {
+        "kind": "forecast_signal",
+        "unit": "원",
+        "metric": "spending_krw",
+        "period": "202609~202702",
+        "source_id": "ml:51130:regional-demand-v3.1:202606",
+        "aggregation": "6_month_sum",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "6개월 실행 후보",
+        "window_months": 6,
+        "change_percent": 51.54,
+        "forecast_value": 519936246662,
+        "interpretation": "6개월 실행 후보에서 관광소비액의 전년 동기간 대비 증가 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "below_baseline_on_test",
+        "previous_year_same_months_value": 343112308000
+      },
+      {
+        "kind": "forecast_signal",
+        "unit": "일",
+        "metric": "lodging_nights",
+        "period": "202609~202702",
+        "source_id": "ml:51130:regional-demand-v3.1:202606",
+        "aggregation": "6_month_average",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "6개월 실행 후보",
+        "window_months": 6,
+        "change_percent": 1.42,
+        "forecast_value": 2.858333333333333,
+        "interpretation": "6개월 실행 후보에서 평균 숙박일수의 전년 동기간 대비 증가 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "below_baseline_on_test",
+        "previous_year_same_months_value": 2.818333333333334
+      },
+      {
+        "kind": "forecast_signal",
+        "unit": "%",
+        "metric": "lodging_rate_pct",
+        "period": "202609~202702",
+        "source_id": "ml:51130:regional-demand-v3.1:202606",
+        "aggregation": "6_month_average",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "6개월 실행 후보",
+        "window_months": 6,
+        "change_percent": 0,
+        "forecast_value": 14.083333333333334,
+        "interpretation": "6개월 실행 후보에서 숙박방문자 비율의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "seasonal_baseline",
+        "previous_year_same_months_value": 14.083333333333334
+      },
+      {
+        "kind": "forecast_signal",
+        "unit": "분",
+        "metric": "stay_minutes",
+        "period": "202609~202702",
+        "source_id": "ml:51130:regional-demand-v3.1:202606",
+        "aggregation": "6_month_average",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "6개월 실행 후보",
+        "window_months": 6,
+        "change_percent": 0,
+        "forecast_value": 1867.5,
+        "interpretation": "6개월 실행 후보에서 평균 체류시간의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "seasonal_baseline",
+        "previous_year_same_months_value": 1867.5
+      },
+      {
+        "kind": "forecast_signal",
+        "unit": "건",
+        "metric": "navigation_searches",
+        "period": "202609~202702",
+        "source_id": "ml:51130:regional-demand-v3.1:202606",
+        "aggregation": "6_month_sum",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "6개월 실행 후보",
+        "window_months": 6,
+        "change_percent": 0,
+        "forecast_value": 1769070,
+        "interpretation": "6개월 실행 후보에서 내비게이션 검색량의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "seasonal_baseline",
+        "previous_year_same_months_value": 1769070
+      },
+      {
+        "kind": "forecast_signal",
+        "unit": "건",
+        "metric": "lodging_searches",
+        "period": "202609~202702",
+        "source_id": "ml:51130:regional-demand-v3.1:202606",
+        "aggregation": "6_month_sum",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "6개월 실행 후보",
+        "window_months": 6,
+        "change_percent": -0.93,
+        "forecast_value": 212955,
+        "interpretation": "6개월 실행 후보에서 숙박 목적지 검색량의 전년 동기간 대비 감소 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "below_baseline_on_test",
+        "previous_year_same_months_value": 214952
+      }
+    ],
+    "cautions": [
+      "관측 사실·ML 전망·사업 목표를 분리합니다. 전망은 정책 미실행 결과나 인과효과가 아닙니다.",
+      "시험 표본이 적습니다. 지표·horizon별 기준선 대비 오차를 확인하고 우수성을 일반화하지 않습니다.",
+      "below_baseline_on_test 또는 mixed_recursive_performance 전망은 단독 선정 근거·성과 목표로 쓰지 않습니다. seasonal_baseline은 전년 동월 반복이며 고도화 모델의 개선 성과가 아닙니다.",
+      "관광소비액은 지역 사업자의 순이익이 아닙니다. 방문자와 소비 표본이 같다는 확인 없이 1인당 소비를 계산하지 않습니다.",
+      "업종별 비중 변화·SNS 언급량·쿠폰 지급 효과·사업의 추가 매출은 이 모델이 학습한 대상이 아닙니다.",
+      "내비게이션·숙박 검색량은 관심 신호이며 실제 방문·예약 건수로 해석하지 않습니다.",
+      "일정 미정은 현재 월 이후의 3개월·6개월 실행 후보를 비교합니다. 준비기간도 후보 기간에 포함합니다.",
+      "신뢰도는 실행기간 길이가 아니라 마지막 관측월로부터의 예측 거리로 판단합니다.",
+      "관측 공백 월도 내부 예측에는 포함하지만 이미 지난 달은 실행 후보의 합계에서 제외합니다."
+    ],
+    "forecasts": [
+      {
+        "month": "202607",
+        "visitors": 2366862,
+        "is_forecast": true,
+        "spending_krw": 67735223997,
+        "stay_minutes": 1944.0,
+        "lodging_nights": 2.83,
+        "lodging_rate_pct": 13.8,
+        "lodging_searches": 46511,
+        "navigation_searches": 297924,
+        "visitor_yoy_percent": -1.04,
+        "spending_yoy_percent": 14.97,
+        "metric_changes_percent": {
+          "stay_minutes": 0.0,
+          "lodging_nights": 0.35,
+          "lodging_rate_pct": 0.0,
+          "lodging_searches": 17.21,
+          "navigation_searches": 0.0
+        },
+        "previous_year_visitors": 2391642,
+        "previous_year_spending_krw": 58914875000,
+        "previous_year_stay_minutes": 1944.0,
+        "previous_year_lodging_nights": 2.82,
+        "previous_year_lodging_rate_pct": 13.8,
+        "previous_year_lodging_searches": 39682,
+        "previous_year_navigation_searches": 297924
+      },
+      {
+        "month": "202608",
+        "visitors": 2642874,
+        "is_forecast": true,
+        "spending_krw": 76161639833,
+        "stay_minutes": 1672.0,
+        "lodging_nights": 2.76,
+        "lodging_rate_pct": 14.7,
+        "lodging_searches": 49759,
+        "navigation_searches": 346177,
+        "visitor_yoy_percent": 0.13,
+        "spending_yoy_percent": 18.85,
+        "metric_changes_percent": {
+          "stay_minutes": 0.0,
+          "lodging_nights": 1.1,
+          "lodging_rate_pct": 0.0,
+          "lodging_searches": -0.93,
+          "navigation_searches": 0.0
+        },
+        "previous_year_visitors": 2639487,
+        "previous_year_spending_krw": 64083943000,
+        "previous_year_stay_minutes": 1672.0,
+        "previous_year_lodging_nights": 2.73,
+        "previous_year_lodging_rate_pct": 14.7,
+        "previous_year_lodging_searches": 50224,
+        "previous_year_navigation_searches": 346177
+      },
+      {
+        "month": "202609",
+        "visitors": 2363056,
+        "is_forecast": true,
+        "spending_krw": 67047345591,
+        "stay_minutes": 2518.0,
+        "lodging_nights": 2.98,
+        "lodging_rate_pct": 13.1,
+        "lodging_searches": 34529,
+        "navigation_searches": 259153,
+        "visitor_yoy_percent": 3.0,
+        "spending_yoy_percent": 22.29,
+        "metric_changes_percent": {
+          "stay_minutes": 0.0,
+          "lodging_nights": 1.02,
+          "lodging_rate_pct": 0.0,
+          "lodging_searches": 8.97,
+          "navigation_searches": 0.0
+        },
+        "previous_year_visitors": 2294130,
+        "previous_year_spending_krw": 54826341000,
+        "previous_year_stay_minutes": 2518.0,
+        "previous_year_lodging_nights": 2.95,
+        "previous_year_lodging_rate_pct": 13.1,
+        "previous_year_lodging_searches": 31686,
+        "previous_year_navigation_searches": 259153
+      },
+      {
+        "month": "202610",
+        "visitors": 2633270,
+        "is_forecast": true,
+        "spending_krw": 83929975649,
+        "stay_minutes": 1683.0,
+        "lodging_nights": 2.87,
+        "lodging_rate_pct": 15.5,
+        "lodging_searches": 50011,
+        "navigation_searches": 519488,
+        "visitor_yoy_percent": -5.94,
+        "spending_yoy_percent": 21.43,
+        "metric_changes_percent": {
+          "stay_minutes": 0.0,
+          "lodging_nights": 1.77,
+          "lodging_rate_pct": 0.0,
+          "lodging_searches": -21.42,
+          "navigation_searches": 0.0
+        },
+        "previous_year_visitors": 2799509,
+        "previous_year_spending_krw": 69118387000,
+        "previous_year_stay_minutes": 1683.0,
+        "previous_year_lodging_nights": 2.82,
+        "previous_year_lodging_rate_pct": 15.5,
+        "previous_year_lodging_searches": 63645,
+        "previous_year_navigation_searches": 519488
+      },
+      {
+        "month": "202611",
+        "visitors": 2632315,
+        "is_forecast": true,
+        "spending_krw": 89947681558,
+        "stay_minutes": 1488.0,
+        "lodging_nights": 2.76,
+        "lodging_rate_pct": 12.4,
+        "lodging_searches": 48286,
+        "navigation_searches": 352852,
+        "visitor_yoy_percent": 4.18,
+        "spending_yoy_percent": 41.26,
+        "metric_changes_percent": {
+          "stay_minutes": 0.0,
+          "lodging_nights": 2.22,
+          "lodging_rate_pct": 0.0,
+          "lodging_searches": 21.22,
+          "navigation_searches": 0.0
+        },
+        "previous_year_visitors": 2526699,
+        "previous_year_spending_krw": 63675989000,
+        "previous_year_stay_minutes": 1488.0,
+        "previous_year_lodging_nights": 2.7,
+        "previous_year_lodging_rate_pct": 12.4,
+        "previous_year_lodging_searches": 39833,
+        "previous_year_navigation_searches": 352852
+      },
+      {
+        "month": "202612",
+        "visitors": 2098615,
+        "is_forecast": true,
+        "spending_krw": 82896802464,
+        "stay_minutes": 1866.0,
+        "lodging_nights": 2.85,
+        "lodging_rate_pct": 14.1,
+        "lodging_searches": 28484,
+        "navigation_searches": 221560,
+        "visitor_yoy_percent": -0.06,
+        "spending_yoy_percent": 54.2,
+        "metric_changes_percent": {
+          "stay_minutes": 0.0,
+          "lodging_nights": 2.15,
+          "lodging_rate_pct": 0.0,
+          "lodging_searches": -1.09,
+          "navigation_searches": 0.0
+        },
+        "previous_year_visitors": 2099852,
+        "previous_year_spending_krw": 53760591000,
+        "previous_year_stay_minutes": 1866.0,
+        "previous_year_lodging_nights": 2.79,
+        "previous_year_lodging_rate_pct": 14.1,
+        "previous_year_lodging_searches": 28798,
+        "previous_year_navigation_searches": 221560
+      },
+      {
+        "month": "202701",
+        "visitors": 2042060,
+        "is_forecast": true,
+        "spending_krw": 92579612143,
+        "stay_minutes": 1936.0,
+        "lodging_nights": 2.87,
+        "lodging_rate_pct": 13.7,
+        "lodging_searches": 26563,
+        "navigation_searches": 205632,
+        "visitor_yoy_percent": -2.23,
+        "spending_yoy_percent": 80.91,
+        "metric_changes_percent": {
+          "stay_minutes": 0.0,
+          "lodging_nights": 1.06,
+          "lodging_rate_pct": 0.0,
+          "lodging_searches": -0.09,
+          "navigation_searches": 0.0
+        },
+        "previous_year_visitors": 2088569,
+        "previous_year_spending_krw": 51173582000,
+        "previous_year_stay_minutes": 1936.0,
+        "previous_year_lodging_nights": 2.84,
+        "previous_year_lodging_rate_pct": 13.7,
+        "previous_year_lodging_searches": 26588,
+        "previous_year_navigation_searches": 205632
+      },
+      {
+        "month": "202702",
+        "visitors": 2227050,
+        "is_forecast": true,
+        "spending_krw": 103534829257,
+        "stay_minutes": 1714.0,
+        "lodging_nights": 2.82,
+        "lodging_rate_pct": 15.7,
+        "lodging_searches": 25082,
+        "navigation_searches": 210385,
+        "visitor_yoy_percent": 3.2,
+        "spending_yoy_percent": 104.79,
+        "metric_changes_percent": {
+          "stay_minutes": 0.0,
+          "lodging_nights": 0.36,
+          "lodging_rate_pct": 0.0,
+          "lodging_searches": 2.79,
+          "navigation_searches": 0.0
+        },
+        "previous_year_visitors": 2157943,
+        "previous_year_spending_krw": 50557418000,
+        "previous_year_stay_minutes": 1714.0,
+        "previous_year_lodging_nights": 2.81,
+        "previous_year_lodging_rate_pct": 15.7,
+        "previous_year_lodging_searches": 24402,
+        "previous_year_navigation_searches": 210385
+      }
+    ],
+    "source_id": "ml:51130:regional-demand-v3.1:202606",
+    "evaluation": {
+      "metrics": {
+        "visitors": {
+          "test_mae": 103646.64,
+          "recursive_mae": {
+            "1": {
+              "baseline": 123311.5,
+              "selected": 95222,
+              "sample_count": 2
+            },
+            "2": {
+              "baseline": 90511,
+              "selected": 105947.5,
+              "sample_count": 2
+            },
+            "3": {
+              "baseline": 61165,
+              "selected": 93227,
+              "sample_count": 2
+            }
+          },
+          "selected_model": "RandomForestRegressor",
+          "baseline_test_mae": 92238.25,
+          "model_reliability": "below_baseline_on_test",
+          "beats_baseline_on_test": false,
+          "recursive_horizons_worse_than_baseline": [
+            "2",
+            "3"
+          ]
+        },
+        "spending_krw": {
+          "test_mae": 8003403761.33,
+          "recursive_mae": {
+            "1": {
+              "baseline": 5076101500,
+              "selected": 7122970056,
+              "sample_count": 2
+            },
+            "2": {
+              "baseline": 6206652500,
+              "selected": 11322988654,
+              "sample_count": 2
+            },
+            "3": {
+              "baseline": 4379312000,
+              "selected": 12415950624,
+              "sample_count": 2
+            }
+          },
+          "selected_model": "LinearRegression",
+          "baseline_test_mae": 4727706750,
+          "model_reliability": "below_baseline_on_test",
+          "beats_baseline_on_test": false,
+          "recursive_horizons_worse_than_baseline": [
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        "stay_minutes": {
+          "test_mae": 208.5,
+          "recursive_mae": {
+            "1": {
+              "baseline": 107.5,
+              "selected": 107.5,
+              "sample_count": 2
+            },
+            "2": {
+              "baseline": 360,
+              "selected": 360,
+              "sample_count": 2
+            },
+            "3": {
+              "baseline": 309.5,
+              "selected": 309.5,
+              "sample_count": 2
+            }
+          },
+          "selected_model": "seasonal_naive_previous_year_same_month",
+          "baseline_test_mae": 208.5,
+          "model_reliability": "seasonal_baseline",
+          "beats_baseline_on_test": false,
+          "recursive_horizons_worse_than_baseline": []
+        },
+        "lodging_nights": {
+          "test_mae": 0.1,
+          "recursive_mae": {
+            "1": {
+              "baseline": 0.06,
+              "selected": 0.09,
+              "sample_count": 2
+            },
+            "2": {
+              "baseline": 0.08,
+              "selected": 0.11,
+              "sample_count": 2
+            },
+            "3": {
+              "baseline": 0.07,
+              "selected": 0.11,
+              "sample_count": 2
+            }
+          },
+          "selected_model": "LinearRegression",
+          "baseline_test_mae": 0.07,
+          "model_reliability": "below_baseline_on_test",
+          "beats_baseline_on_test": false,
+          "recursive_horizons_worse_than_baseline": [
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        "lodging_rate_pct": {
+          "test_mae": 0.57,
+          "recursive_mae": {
+            "1": {
+              "baseline": 0.8,
+              "selected": 0.8,
+              "sample_count": 2
+            },
+            "2": {
+              "baseline": 0.3,
+              "selected": 0.3,
+              "sample_count": 2
+            },
+            "3": {
+              "baseline": 0.35,
+              "selected": 0.35,
+              "sample_count": 2
+            }
+          },
+          "selected_model": "seasonal_naive_previous_year_same_month",
+          "baseline_test_mae": 0.57,
+          "model_reliability": "seasonal_baseline",
+          "beats_baseline_on_test": false,
+          "recursive_horizons_worse_than_baseline": []
+        },
+        "lodging_searches": {
+          "test_mae": 3695.69,
+          "recursive_mae": {
+            "1": {
+              "baseline": 2404,
+              "selected": 3550,
+              "sample_count": 2
+            },
+            "2": {
+              "baseline": 2584.5,
+              "selected": 3318,
+              "sample_count": 2
+            },
+            "3": {
+              "baseline": 2765.5,
+              "selected": 3897.5,
+              "sample_count": 2
+            }
+          },
+          "selected_model": "RandomForestRegressor",
+          "baseline_test_mae": 2584.75,
+          "model_reliability": "below_baseline_on_test",
+          "beats_baseline_on_test": false,
+          "recursive_horizons_worse_than_baseline": [
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        "navigation_searches": {
+          "test_mae": 26562,
+          "recursive_mae": {
+            "1": {
+              "baseline": 30053.5,
+              "selected": 30053.5,
+              "sample_count": 2
+            },
+            "2": {
+              "baseline": 40942.5,
+              "selected": 40942.5,
+              "sample_count": 2
+            },
+            "3": {
+              "baseline": 23070.5,
+              "selected": 23070.5,
+              "sample_count": 2
+            }
+          },
+          "selected_model": "seasonal_naive_previous_year_same_month",
+          "baseline_test_mae": 26562,
+          "model_reliability": "seasonal_baseline",
+          "beats_baseline_on_test": false,
+          "recursive_horizons_worse_than_baseline": []
+        }
+      },
+      "test_period": "202603~202606",
+      "selection_basis": "validation_mae_only",
+      "validation_period": "202512~202602",
+      "longer_horizon_status": "exploratory_not_recursively_backtested",
+      "forecast_horizon_months": 8,
+      "recursive_backtest_horizon_months": [
+        1,
+        2,
+        3
+      ]
+    },
+    "reason_code": "",
+    "region_code": "51130",
+    "region_name": "강원특별자치도 원주시",
+    "forecast_type": "historical_trend_not_policy_counterfactual",
+    "model_version": "regional-demand-v3.1",
+    "source_period": "202401~202606",
+    "horizon_policy": {
+      "notes": [
+        "일정 미정은 현재 월 이후의 3개월·6개월 실행 후보를 비교합니다. 준비기간도 후보 기간에 포함합니다.",
+        "신뢰도는 실행기간 길이가 아니라 마지막 관측월로부터의 예측 거리로 판단합니다.",
+        "관측 공백 월도 내부 예측에는 포함하지만 이미 지난 달은 실행 후보의 합계에서 제외합니다."
+      ],
+      "as_of_date": "2026-09-05",
+      "schedule_status": "unknown",
+      "selection_basis": "unknown_compare_3_and_6_months",
+      "decision_windows": [
+        {
+          "label": "3개월 실행 후보",
+          "months": 3,
+          "end_month": "202611",
+          "reliability": "exploratory_longer_horizon",
+          "start_month": "202609",
+          "forecast_end_index": 4,
+          "forecast_start_index": 2
+        },
+        {
+          "label": "6개월 실행 후보",
+          "months": 6,
+          "end_month": "202702",
+          "reliability": "exploratory_longer_horizon",
+          "start_month": "202609",
+          "forecast_end_index": 7,
+          "forecast_start_index": 2
+        }
+      ],
+      "coverage_complete": true,
+      "forecast_end_month": "202702",
+      "requested_end_month": "",
+      "forecast_start_month": "202607",
+      "requested_start_month": "",
+      "forecast_horizon_months": 8,
+      "strategy_duration_max_months": 6,
+      "strategy_duration_min_months": 3,
+      "validated_recursive_horizon_months": 3
+    },
+    "data_fingerprint": "1f7caf31818b53f22347c7318503ea14cbef8a3765f5b75b8191fe8ca2193349",
+    "research_questions": [
+      "강원특별자치도 원주시의 3개월 실행 후보(202609~202611), 6개월 실행 후보(202609~202702) 방문자 수와 내비게이션 검색량 전망을 비교해 관심을 실제 방문으로 연결한 공식 사업의 운영방법·예산·성과·실패조건을 조사하세요.",
+      "강원특별자치도 원주시의 3개월 실행 후보(202609~202611), 6개월 실행 후보(202609~202702) 숙박검색·숙박방문 비율·평균 숙박일·체류시간 전망을 함께 보고 숙박 전환과 장시간 체류를 높인 공식 사업을 조사하세요.",
+      "강원특별자치도 원주시의 3개월 실행 후보(202609~202611), 6개월 실행 후보(202609~202702) 관광소비액 전망과 계절 조건이 비슷한 지역의 쿠폰·환급·숙박 연계 사업을 공식 성과자료 중심으로 조사하세요."
+    ],
+    "latest_observed_month": "202606"
+  },
+  "region_name": "강원특별자치도 원주시",
+  "metrics_count": 7,
+  "monthly_trend": [
+    {
+      "month": "2025.07",
+      "visitors": 2391642,
+      "is_forecast": false,
+      "spending_krw": 58914875000,
+      "visitor_index": 100.0,
+      "spending_index": 100.0,
+      "is_current_month": false
+    },
+    {
+      "month": "2025.08",
+      "visitors": 2639487,
+      "is_forecast": false,
+      "spending_krw": 64083943000,
+      "visitor_index": 110.4,
+      "spending_index": 108.8,
+      "is_current_month": false
+    },
+    {
+      "month": "2025.09",
+      "visitors": 2294130,
+      "is_forecast": false,
+      "spending_krw": 54826341000,
+      "visitor_index": 95.9,
+      "spending_index": 93.1,
+      "is_current_month": false
+    },
+    {
+      "month": "2025.10",
+      "visitors": 2799509,
+      "is_forecast": false,
+      "spending_krw": 69118387000,
+      "visitor_index": 117.1,
+      "spending_index": 117.3,
+      "is_current_month": false
+    },
+    {
+      "month": "2025.11",
+      "visitors": 2526699,
+      "is_forecast": false,
+      "spending_krw": 63675989000,
+      "visitor_index": 105.6,
+      "spending_index": 108.1,
+      "is_current_month": false
+    },
+    {
+      "month": "2025.12",
+      "visitors": 2099852,
+      "is_forecast": false,
+      "spending_krw": 53760591000,
+      "visitor_index": 87.8,
+      "spending_index": 91.3,
+      "is_current_month": false
+    },
+    {
+      "month": "2026.01",
+      "visitors": 2088569,
+      "is_forecast": false,
+      "spending_krw": 51173582000,
+      "visitor_index": 87.3,
+      "spending_index": 86.9,
+      "is_current_month": false
+    },
+    {
+      "month": "2026.02",
+      "visitors": 2157943,
+      "is_forecast": false,
+      "spending_krw": 50557418000,
+      "visitor_index": 90.2,
+      "spending_index": 85.8,
+      "is_current_month": false
+    },
+    {
+      "month": "2026.03",
+      "visitors": 2381871,
+      "is_forecast": false,
+      "spending_krw": 56421705000,
+      "visitor_index": 99.6,
+      "spending_index": 95.8,
+      "is_current_month": false
+    },
+    {
+      "month": "2026.04",
+      "visitors": 2126962,
+      "is_forecast": false,
+      "spending_krw": 58409825000,
+      "visitor_index": 88.9,
+      "spending_index": 99.1,
+      "is_current_month": false
+    },
+    {
+      "month": "2026.05",
+      "visitors": 2640559,
+      "is_forecast": false,
+      "spending_krw": 70600596000,
+      "visitor_index": 110.4,
+      "spending_index": 119.8,
+      "is_current_month": false
+    },
+    {
+      "month": "2026.06",
+      "visitors": 2285734,
+      "is_forecast": false,
+      "spending_krw": 60562672000,
+      "visitor_index": 95.6,
+      "spending_index": 102.8,
+      "is_current_month": false
+    }
+  ],
+  "research_gaps": [
+    "무료 공식 웹 검색 API 키가 설정되지 않았습니다. 저장된 공식 문서와 Open API만 사용합니다.",
+    "학생 절약 모드: 선택 지역 또는 검증 peer에 맞닿는 공식 사례가 충분하지 않습니다. OpenAI 웹 조사를 자동 실행하지 않았으므로 집행 전 지역 맞춤 사례를 추가 검증하세요."
+  ],
+  "planning_brief": {
+    "version": 1,
+    "end_date": null,
+    "references": [],
+    "start_date": null,
+    "preferences": "",
+    "region_code": "51130",
+    "budget_status": "unknown",
+    "field_context": "",
+    "budget_max_krw": null,
+    "budget_min_krw": null,
+    "schedule_status": "unknown",
+    "hard_constraints": "",
+    "resources_status": "unknown",
+    "budget_hard_limit": false,
+    "constraints_status": "unknown",
+    "resources_possible": "",
+    "resources_confirmed": ""
+  },
+  "quality_review": {
+    "issues": [
+      {
+        "field": "planning_decision",
+        "problem": "비교 가능한 사업 후보와 선정 근거가 충분하지 않음",
+        "severity": "major",
+        "revision_instruction": "강진 반값여행 지역환급 모델 외에도 다른 유사 사례(예: 디지털 관광주민증, 야간관광 특화도시 등)를 비교하여 선정 근거를 명확히 해야 함"
+      },
+      {
+        "field": "strategies[1].kpi",
+        "problem": "성과 확인의 기준·주기·데이터 출처가 부족함",
+        "severity": "major",
+        "revision_instruction": "지역상품권 결제액 증가율의 기준월, 확인 주기, 원자료, 성공 여부를 판단할 비교 방식을 함께 명시해야 함"
+      },
+      {
+        "field": "strategies[1].budget",
+        "problem": "예산 산식이 구체적이지 않음",
+        "severity": "major",
+        "revision_instruction": "지역상품권 발행 비용, 환급 지원금, 마케팅 비용에 대한 공식 단가 및 참여 업체 규모를 명시해야 함"
+      },
+      {
+        "field": "strategies[1].expected_effect",
+        "problem": "정량적 효과가 확정되지 않음",
+        "severity": "major",
+        "revision_instruction": "참여 외지인 수, 환급 참여율, 추가 지역 소비액에 대한 구체적인 산식을 제시해야 함"
+      },
+      {
+        "field": "strategies[1].implementation_steps",
+        "problem": "구체적인 실행 계획이 부족함",
+        "severity": "major",
+        "revision_instruction": "참여 업체 모집, 환급 시스템 준비, 시범 운영, 집중 운영, 성과 분석 등 각 단계의 세부 실행 계획을 명시해야 함"
+      },
+      {
+        "field": "strategies[1].evidence",
+        "problem": "사례의 전환 가능성에 대한 검증이 부족함",
+        "severity": "major",
+        "revision_instruction": "강진 반값여행 지역환급 모델의 성과가 원주시에 직접적으로 적용 가능한지에 대한 추가 검증이 필요함"
+      },
+      {
+        "field": "planning_decision",
+        "problem": "비교 가능한 사업 후보와 선정 근거가 충분하지 않습니다.",
+        "severity": "major",
+        "revision_instruction": "근거 부족을 명시하고 검증 가능한 후보·선정 이유를 확인한 뒤 집행 여부를 판단하세요."
+      },
+      {
+        "field": "strategies[1].kpi",
+        "problem": "성과 확인의 기준·주기·데이터 출처가 부족합니다.",
+        "severity": "major",
+        "revision_instruction": "기준월, 확인 주기, 원자료, 성공 여부를 판단할 비교 방식을 함께 쓰세요."
+      }
+    ],
+    "summary": "강진 반값여행 지역환급 모델을 벤치마킹하여 원주시의 관광 활성화를 위한 전략을 제안했으나, 비교 가능한 사업 후보와 선정 근거, 성과 확인 기준, 예산 산식, 실행 계획, 전환 가능성 검증 등이 부족하여 승인되지 않았음 · 코드 점검에서 실행·근거 보완 항목이 확인되었습니다.",
+    "approved": false,
+    "strengths": [
+      "강진 반값여행 지역환급 모델의 성과(강진상품권 결제액 46% 증가)를 기반으로 원주시의 지출 유도 전략을 제안함",
+      "외지인 방문자 감소(-2.7%)와 높은 내비게이션 검색량(303,921건)을 고려한 전략적 접근",
+      "지역상품권 환급 모델을 통해 지역 내 재소비를 촉진하는 구조 설계"
+    ],
+    "revised_once": true,
+    "overall_score": 80,
+    "dimension_scores": {
+      "evidence_validity": 85,
+      "comparison_quality": 75,
+      "clarity_and_brevity": 80,
+      "implementation_detail": 70,
+      "visual_material_readiness": 70,
+      "public_official_usefulness": 75
+    },
+    "final_audit_completed": false
+  },
+  "generation_mode": "openai",
+  "evidence_sources": [
+    {
+      "title": "한국관광 데이터랩 · 강원특별자치도 원주시 순 방문자 수 및 숙박 비율 (이동통신 기반 외지인)",
+      "summary": "월간 순 방문자 수: 2,285,734명 (관측 기준월: 2026-06)",
+      "source_id": "dataset:51130:1",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "dataset",
+      "observation_period": "2026-06",
+      "published_or_updated_at": "2026-06"
+    },
+    {
+      "title": "한국관광 데이터랩 · 강원특별자치도 원주시 월간 순 방문자 수 (이동통신 기반 외지인)",
+      "summary": "전년동월 외지인 방문자 증감률: -2.7% (관측 기준월: 2026-06)",
+      "source_id": "dataset:51130:2",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "dataset",
+      "observation_period": "2026-06",
+      "published_or_updated_at": "2026-06"
+    },
+    {
+      "title": "한국관광 데이터랩 · 강원특별자치도 원주시 관광소비 추이_외지인",
+      "summary": "월간 외지인 관광소비 총액: 60,562,672,000원 (관측 기준월: 2026-06)",
+      "source_id": "dataset:51130:3",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "dataset",
+      "observation_period": "2026-06",
+      "published_or_updated_at": "2026-06"
+    },
+    {
+      "title": "한국관광 데이터랩 · 강원특별자치도 원주시 숙박방문자 비율 추이 (이동통신 기반 외지인)",
+      "summary": "외지인 숙박 방문 비율: 12.5% (관측 기준월: 2026-06)",
+      "source_id": "dataset:51130:4",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "dataset",
+      "observation_period": "2026-06",
+      "published_or_updated_at": "2026-06"
+    },
+    {
+      "title": "한국관광 데이터랩 · 강원특별자치도 원주시 평균 숙박일 (이동통신 기반 외지인)",
+      "summary": "외지인 평균 숙박일수: 2.76일 (관측 기준월: 2026-06)",
+      "source_id": "dataset:51130:5",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "dataset",
+      "observation_period": "2026-06",
+      "published_or_updated_at": "2026-06"
+    },
+    {
+      "title": "한국관광 데이터랩 · 강원특별자치도 원주시 내비게이션 목적지 유형별 검색량",
+      "summary": "내비게이션 목적지 검색량: 303,921건 (관측 기준월: 2026-06)",
+      "source_id": "dataset:51130:6",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "dataset",
+      "observation_period": "2026-06",
+      "published_or_updated_at": "2026-06"
+    },
+    {
+      "title": "한국관광 데이터랩 · 강원특별자치도 원주시 SNS 언급량",
+      "summary": "SNS 언급량: 41,121건 (관측 기준월: 2026-06)",
+      "source_id": "dataset:51130:7",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "dataset",
+      "observation_period": "2026-06",
+      "published_or_updated_at": "2026-06"
+    },
+    {
+      "title": "한국관광 데이터랩 공식 다운로드",
+      "summary": "전국 비교 기준 기간: 2025-07 ~ 2026-06",
+      "source_id": "datalab:16d84bd9b1d0:620b2639a268",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_dataset",
+      "observation_period": "2025-07 ~ 2026-06",
+      "published_or_updated_at": "2024-07 ~ 2025-06"
+    },
+    {
+      "title": "한국관광 데이터랩 공식 다운로드",
+      "summary": "전국 비교 기준 기간: 2025-07 ~ 2026-06",
+      "source_id": "datalab:242a2c1249d4:f84e1a5f3914",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_dataset",
+      "observation_period": "2025-07 ~ 2026-06",
+      "published_or_updated_at": "2024-07 ~ 2025-06"
+    },
+    {
+      "title": "한국관광 데이터랩 공식 다운로드",
+      "summary": "전국 비교 기준 기간: 2025-07 ~ 2026-06",
+      "source_id": "datalab:a050e5a84ef4:3906c6ac70a7",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_dataset",
+      "observation_period": "2025-07 ~ 2026-06",
+      "published_or_updated_at": "2024-07 ~ 2025-06"
+    },
+    {
+      "title": "한국관광 데이터랩 공식 다운로드",
+      "summary": "전국 비교 기준 기간: 2025-07 ~ 2026-06",
+      "source_id": "datalab:bd9d3d26da19:991f2264ad4a",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_dataset",
+      "observation_period": "2025-07 ~ 2026-06",
+      "published_or_updated_at": "2024-07 ~ 2025-06"
+    },
+    {
+      "title": "한국관광 데이터랩 공식 다운로드",
+      "summary": "전국 비교 기준 기간: 2025-07 ~ 2026-06",
+      "source_id": "datalab:d54a3fb44037:ee4640b6178b",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_dataset",
+      "observation_period": "2025-07 ~ 2026-06",
+      "published_or_updated_at": "2024-07 ~ 2025-06"
+    },
+    {
+      "title": "한국관광 데이터랩 공식 다운로드",
+      "summary": "전국 비교 기준 기간: 2025-07 ~ 2026-06",
+      "source_id": "datalab:ebce91b8bf02:1770c2d94cc6",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_dataset",
+      "observation_period": "2025-07 ~ 2026-06",
+      "published_or_updated_at": "2024-07 ~ 2025-06"
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:23ea68053684:6bfbcf8aabf6",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:98d4ae590d9a:3be52dd54323",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:367cd0294ec4:873930d645e5",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:553a0dad4bb4:5a31355dffe8",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:a53dbe1c21df:77a052de41d5",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:823a38d1d61c:5385261d02e5",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:2723bdb0d589:1666a34058ed",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:83177a234971:c02cb7972e0f",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:58ded7732251:589c76395cbc",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:e28c947cb52f:bb4cb344a6ba",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:8815bbb11a39:1a5988f5f8ec",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:19fd67fbb73d:afa4f0f54a2f",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 지역별 관광 현황 · 강원특별자치도 원주시 · 유입유출",
+      "summary": "관측 기간: 2025-07 ~ 2026-06. 유입·유출·인기장소 또는 30일 집중 운영 신호.",
+      "source_id": "regional-status:90f2be7a0f7d:b989a6c2e7bf",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "regional_tourism_status",
+      "observation_period": "2025-07 ~ 2026-06",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 지역별 관광 현황 · 강원특별자치도 원주시 · 지역집중률",
+      "summary": "관측 기간: 2025-07 ~ 2026-06. 유입·유출·인기장소 또는 30일 집중 운영 신호.",
+      "source_id": "regional-status:c39767bd23e8:e3b081f6e6aa",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "regional_tourism_status",
+      "observation_period": "2025-07 ~ 2026-06",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 지역별 관광 현황 · 강원특별자치도 원주시 · 인기관광지",
+      "summary": "관측 기간: 2025-07 ~ 2026-06. 유입·유출·인기장소 또는 30일 집중 운영 신호.",
+      "source_id": "regional-status:edaf76986d99:c00fa7ffc0a7",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "regional_tourism_status",
+      "observation_period": "2025-07 ~ 2026-06",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "지역 관광수요 ML 전망 · 공식 관측값 아님",
+      "summary": "학습 202401~202606 · 모델 regional-demand-v3.1 · 자연 추세 예측",
+      "source_id": "ml:51130:regional-demand-v3.1:202606",
+      "source_url": "",
+      "source_type": "model_forecast",
+      "model_version": "regional-demand-v3.1",
+      "data_fingerprint": "1f7caf31818b53f22347c7318503ea14cbef8a3765f5b75b8191fe8ca2193349"
+    },
+    {
+      "title": "감악산캠핑숲",
+      "address": "강원특별자치도 원주시 신림면 신림황둔로 714",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/64/2732964_image2_1.JPG",
+      "source_id": "tour-api:2732999",
+      "content_id": "2732999",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "28"
+    },
+    {
+      "title": "강원감영관찰사·무릉고서화미술박물관",
+      "address": "강원특별자치도 원주시 흥업면 사제로 399-10",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/64/3437164_image2_1.jpg",
+      "source_id": "tour-api:2555010",
+      "content_id": "2555010",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "14"
+    },
+    {
+      "title": "강원도힐링캠핑장",
+      "address": "강원특별자치도 원주시 신림면 재사동길 10-38",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/98/2733998_image2_1.JPG",
+      "source_id": "tour-api:2734136",
+      "content_id": "2734136",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "28"
+    },
+    {
+      "title": "경천묘",
+      "address": "강원특별자치도 원주시 귀래면 미륵산길 200",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/56/3379256_image2_1.JPG",
+      "source_id": "tour-api:2702477",
+      "content_id": "2702477",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "12"
+    },
+    {
+      "title": "고판화박물관",
+      "address": "강원특별자치도 원주시 신림면 물안길 62",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/36/3375236_image2_1.JPG",
+      "source_id": "tour-api:130539",
+      "content_id": "130539",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "14"
+    },
+    {
+      "title": "관음사·국형사계곡",
+      "address": "강원특별자치도 원주시 고문골길 169 (행구동)",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/29/3045629_image2_1.jpg",
+      "source_id": "tour-api:125645",
+      "content_id": "125645",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "12"
+    },
+    {
+      "title": "광화문갈비 원주점",
+      "address": "강원특별자치도 원주시 능라동길 48 (무실동)",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/86/3421686_image2_1.jpg",
+      "source_id": "tour-api:3356037",
+      "content_id": "3356037",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "39"
+    },
+    {
+      "title": "구 조선식산은행 원주지점",
+      "address": "강원특별자치도 원주시 중앙로 88 (중앙동)",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/78/3379278_image2_1.JPG",
+      "source_id": "tour-api:2762710",
+      "content_id": "2762710",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "12"
+    },
+    {
+      "title": "국형사",
+      "address": "강원특별자치도 원주시 고문골길 155 (행구동)",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/87/3559187_image2_1.jpeg",
+      "source_id": "tour-api:125757",
+      "content_id": "125757",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "12"
+    },
+    {
+      "title": "금대 에코힐링 캠핑장",
+      "address": "강원특별자치도 원주시 판부면 영원산성길 372",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/95/2011295_image2_1.jpg",
+      "source_id": "tour-api:2033279",
+      "content_id": "2033279",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "28"
+    },
+    {
+      "title": "금대계곡",
+      "address": "강원특별자치도 원주시 판부면 치악로 546-22",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/85/3045285_image2_1.jpg",
+      "source_id": "tour-api:129676",
+      "content_id": "129676",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "12"
+    },
+    {
+      "title": "금대자동차야영장",
+      "address": "강원특별자치도 원주시 판부면 영원산성길 372",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/97/2734897_image2_1.JPG",
+      "source_id": "tour-api:2734906",
+      "content_id": "2734906",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "28"
+    },
+    {
+      "title": "기후변화홍보관",
+      "address": "강원특별자치도 원주시 행구로 362",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/40/3533840_image2_1.JPG",
+      "source_id": "tour-api:2714800",
+      "content_id": "2714800",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "14"
+    },
+    {
+      "title": "김가네원주추어탕",
+      "address": "강원특별자치도 원주시 단관공원길 90-3",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/25/2892325_image2_1.jpg",
+      "source_id": "tour-api:2892327",
+      "content_id": "2892327",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "39"
+    },
+    {
+      "title": "김제남 신도비",
+      "address": "강원특별자치도 원주시 지정면 흥법사지길 18",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/28/3376528_image2_1.JPG",
+      "source_id": "tour-api:129284",
+      "content_id": "129284",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "12"
+    },
+    {
+      "title": "넌스키 난보드",
+      "address": "강원특별자치도 원주시 지정면 구재로 132",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/73/3562173_image2_1.jpg",
+      "source_id": "tour-api:512084",
+      "content_id": "512084",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "28"
+    },
+    {
+      "title": "농가",
+      "address": "강원특별자치도 원주시 양지뜰3길 11 (반곡동)",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/42/3566442_image2_1.jpg",
+      "source_id": "tour-api:1822667",
+      "content_id": "1822667",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "39"
+    },
+    {
+      "title": "단관공원",
+      "address": "강원특별자치도 원주시 단관공원길 63",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/43/3334543_image2_1.jpg",
+      "source_id": "tour-api:2778036",
+      "content_id": "2778036",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "12"
+    },
+    {
+      "title": "동승루",
+      "address": "강원특별자치도 원주시 이화4길 30",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/15/2892315_image2_1.jpg",
+      "source_id": "tour-api:2892320",
+      "content_id": "2892320",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "39"
+    },
+    {
+      "title": "들꽃가든",
+      "address": "강원특별자치도 원주시 월송석화로 488",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/04/2892304_image2_1.jpg",
+      "source_id": "tour-api:2892312",
+      "content_id": "2892312",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "39"
+    },
+    {
+      "title": "요즘, 한국관광 2호 - 지방공항 연계 지역관광 활성화 방안",
+      "summary": "41제 2장 지방공항 연계 지역관광 활성화 방안 요즘, 한국관광 관광상품을 만들어도 공항에서 관광지까지 이동하기 어렵다면 실제 지역 방문으로 연결되기 어렵다. 이에 공사는 지자체· 공항공사·교통기관 등 대외 협업체계와 함께 지방공항으로 유입된 방한객이 지역 관광지까지 불편 없이 이동할 수 있도록 교통 연계와 이용 편의 인프라를 개선하는 방향으로 사업을 추진하고 있다. 공사는 충청남도, 충청북도(광역지자체) 및 충 남문화재단, 충북문화재단(RTO)과 협업하여 청주공항과 오 송역, 공주터미널, 부여터미널 등 충청권 주요 관광지를 연결하는 광역 순환버스와 DRT(수요 응답형 버스) 운영을 지원하고 있다. 2026년 상반기 순환버스와 DRT 이용객은 총 7 ,470명으로, 공항에서 충청권 주요 관광지까지 직접 이동할 수 있는 선택지가 확대되고 있다. 대구공항에서는 외국인이 별도의 교통카드 없이 해외 신용카드 등으로 대중교통을 이용할 수 있는 개방형 교통결제 시스템 도입을 지원하고 있으며, 간편결제·관광안내·환전 및 면세 등 이용 편의도 단계적으로 보완하고 있다. 지방공항의 역할을 항공기에서 내리는 지점에 그치지 않고 지역 여행을 실제로 시작할 수 있는 관문으로 넓히는 과정이다. 추진사업 3. 교통 편의 인프라 - 공항 도착 이후 지역으로 이어지는 이동·편의 기반 구축 성과 | 전방위 유치·마케팅 성과 가시화…청주공항 방한객 6만 명 돌파, 부정기 항공편도 대폭 확대 한국관광공사, 공항활성화 협의체 및 관계기관의 협업체계가 잘 작동하고, 전방위적 역량을 집중한 결과, 지방공항 유치· 마케팅의 성과가 방한객 유입과 항공 공급 지표에서 가시화되고 있다. 특히 청주공항은 2026년 상반기 방한객이 6만 2,971 명으로 6만 명을 돌파하며 전년 동기 대비 109.1% 급증했다.",
+      "chunk_id": "reference:kto:2026:local-airport:page:041:chunk:01",
+      "source_id": "reference:kto:2026:local-airport",
+      "source_url": "https://datalab.visitkorea.or.kr/site/portal/ex/bbs/View.do?bcIdx=311068&cbIdx=1135&pageIndex=1",
+      "case_region": "",
+      "source_note": "지방공항·연계 지역에 관한 자료입니다. 다른 시군구의 사업 효과·예산을 보장하는 근거로 사용하지 않습니다.",
+      "source_type": "rag",
+      "intervention": "",
+      "document_type": "policy",
+      "matched_terms": [
+        "관광",
+        "방문으로",
+        "사업을",
+        "성과",
+        "소비",
+        "실제",
+        "연계",
+        "체류",
+        "함께"
+      ],
+      "page_references": "PDF 41쪽",
+      "parent_source_id": "reference:kto:2026:local-airport",
+      "retrieval_method": "local_curated_chunk",
+      "evidence_strength": "medium",
+      "published_or_updated_at": "2026-08"
+    },
+    {
+      "title": "강진 반값여행 지역경제 효과 소개",
+      "summary": "전라남도 강진군 · 반값여행 지역환급 · 운영기관 자료는 반값여행 이후 강진상품권 결제액이 전년보다 46% 증가했다고 설명함",
+      "source_id": "case:gangjin_half_price_2024",
+      "source_url": "https://jnfarm.jeonnam.go.kr/board/FARM_BOARD_008/boardView.do?bdId=BD_00000000000011721&menuCd=farm004002",
+      "source_type": "benchmark_case",
+      "evidence_strength": "medium",
+      "published_or_updated_at": "2024"
+    },
+    {
+      "title": "2024년 6월 여행가는 달 추진 보도자료",
+      "summary": "전국 인구감소지역 34곳 · 디지털 관광주민증과 교통·숙박·상점 할인 결합 · 2024년 34개 지역 약 800개 관광업체에 혜택 구조를 적용",
+      "source_id": "case:digital_tourism_resident_2024",
+      "source_url": "https://mcst.go.kr/servlets/eduport/front/upload/UplDownloadFile?pFileName=%280514%29%EB%AC%B8%EC%B2%B4%EB%B6%80%EB%B3%B4%EB%8F%84%EC%9E%90%EB%A3%8C-6%EC%9B%94_%EC%97%AC%ED%96%89%EA%B0%80%EB%8A%94_%EB%8B%AC_%EC%B6%94%EC%A7%84.pdf&pPath=0302000000&pRealName=20240514083202149235802932_PRESS20240514083202456506.pdf",
+      "source_type": "benchmark_case",
+      "evidence_strength": "medium",
+      "published_or_updated_at": "2024-05-14"
+    },
+    {
+      "title": "2024년도 정부업무평가 관광분야 성과자료",
+      "summary": "야간관광 특화도시 10곳 · 상설 야간 콘텐츠와 경관·교통·안전 운영 · 정부업무평가 자료는 특화도시 10곳 방문객이 2023년 같은 기간보다 3% 증가했다고 기록",
+      "source_id": "case:night_tourism_cities_2024",
+      "source_url": "https://www.evaluation.go.kr/upload2/atch/eval/20250429095846463.pdf",
+      "source_type": "benchmark_case",
+      "evidence_strength": "medium",
+      "published_or_updated_at": "2025-04-29"
+    },
+    {
+      "title": "전주시 2026년도 관광산업과 세출예산 사업명세서",
+      "summary": "전북특별자치도 전주시 · 야간관광 특화도시 예산 편성 · 예산서이므로 방문·소비 성과는 확인되지 않음",
+      "source_id": "case:jeonju_night_budget_2026",
+      "source_url": "https://jeonju.go.kr/resource/www/images/download/budget/2026/2026_31_2.pdf",
+      "source_type": "benchmark_case",
+      "evidence_strength": "high",
+      "published_or_updated_at": "2026"
+    },
+    {
+      "title": "2022 대한민국 숙박대전 경제파급효과 공개자료",
+      "summary": "전국 숙박할인쿠폰 지원사업 · 온라인 예약 채널 숙박할인쿠폰 · 한국관광공사 자료는 약 104만 명이 할인혜택을 이용했고 서울·제주를 제외한 지역 사용 비율이 76%였다고 소개함",
+      "source_id": "case:kto_stay_discount_2022",
+      "source_url": "https://kto.visitkorea.or.kr/upload/flexer/upload/ktobiz/20220928/b623b5f9-3ec0-11ed-9832-ddf31964842e.hwp.files/Sections1.html",
+      "source_type": "benchmark_case",
+      "evidence_strength": "medium",
+      "published_or_updated_at": "2022-09-28"
+    },
+    {
+      "title": "2025 대한민국 밤밤페스타 개최 도시 및 일정",
+      "summary": "야간관광 특화도시 10곳 · 도시별 야간 콘텐츠를 순회형 축제로 묶는 운영 · 공식 여행기사는 개최 도시·장소·운영 시간과 콘텐츠만 제시하며 방문·소비 성과 수치는 제시하지 않음",
+      "source_id": "case:night_festival_2025",
+      "source_url": "https://korean.visitkorea.or.kr/detail/rem_detail.do?cotid=f9c636b2-dd7c-4f09-af3d-6af43b33d371",
+      "source_type": "benchmark_case",
+      "evidence_strength": "medium",
+      "published_or_updated_at": "2025"
+    }
+  ],
+  "observed_findings": [
+    {
+      "value": "-2.7%",
+      "metric": "외지인 방문자 증감률",
+      "source": "한국관광 데이터랩 · 강원특별자치도 원주시 월간 순 방문자 수 (이동통신 기반 외지인)",
+      "interpretation": "2026년 6월 기준 전년 동월 대비 외지인 방문객이 감소하는 추세임"
+    },
+    {
+      "value": "12.5%",
+      "metric": "외지인 숙박 방문 비율",
+      "source": "한국관광 데이터랩 · 강원특별자치도 원주시 숙박방문자 비율 추이 (이동통신 기반 외지인)",
+      "interpretation": "방문객 중 숙박객 비중이 낮아 체류형 관광으로의 전환이 필요함"
+    },
+    {
+      "value": "303,921건",
+      "metric": "내비게이션 목적지 검색량",
+      "source": "한국관광 데이터랩 · 강원특별자치도 원주시 내비게이션 목적지 유형별 검색량",
+      "interpretation": "방문자 수는 감소 중이나 목적지 검색량은 유지되어 잠재적 방문 수요는 존재함"
+    }
+  ],
+  "planning_decision": {
+    "strategy_brief": {
+      "mechanism": "방문객이 지역 내에서 지출한 금액의 일부를 지역상품권으로 돌려받는 방식으로, 혜택이 다시 지역 내 상점에서 사용되도록 설계",
+      "pilot_scope": "강원특별자치도 원주시 내 특정 지역",
+      "target_users": "강원특별자치도 원주시를 방문하는 외지인",
+      "working_title": "강진 반값여행 지역환급 모델 도입",
+      "budget_formula": "지역상품권 발행 비용 + 환급 비용 + 마케팅 비용",
+      "target_problem": "외지인 방문자 증감률 -2.7% 감소 및 지역 내 지출 증가 필요",
+      "success_metrics": "지역상품권 결제액 증가율, 재방문율, 지역 내 지출 증가율",
+      "stop_or_scale_rule": "지역상품권 결제액이 전년 대비 20% 이상 증가하지 않거나, 재방문율이 5% 미만일 경우 중단 또는 축소",
+      "supporting_case_ids": [
+        "case:gangjin_half_price_2024"
+      ]
+    },
+    "selection_reason": "강진 반값여행 지역환급 모델은 지역 내 지출을 유도하고, 재방문을 촉진하는 데 효과적이며, 원주시의 관광 활성화에 적합하다. 또한, 디지털 관광주민증과 교통·숙박·상점 할인 결합 모델은 지역 내 체류 시간을 늘리는 데 효과적이지만, 원주시의 현재 상황에서는 지출 유도가 더 중요한 목표로 보인다.",
+    "selection_status": "needs_evidence",
+    "design_candidates": [
+      {
+        "title": "강진 반값여행 지역환급 모델 도입",
+        "local_fit": "강진 반값여행 지역환급 모델은 지역 내 지출을 유도하고, 재방문을 촉진하는 데 효과적이었다는 점에서 원주시의 관광 활성화에 적합하다.",
+        "mechanism": "방문객이 지역 내에서 지출한 금액의 일부를 지역상품권으로 돌려받는 방식으로, 혜택이 다시 지역 내 상점에서 사용되도록 설계",
+        "candidate_id": "candidate:spend_conversion_1",
+        "prerequisites": "지역 내 상품권 사용처 확보, 방문객의 지출 증빙 절차 마련, 중복 수혜 방지 방안 수립",
+        "budget_formula": "지역상품권 발행 비용 + 환급 비용 + 마케팅 비용",
+        "candidate_type": "spend_conversion",
+        "case_source_ids": [
+          "case:gangjin_half_price_2024"
+        ],
+        "differentiation": "기존의 일반적인 할인 쿠폰과 달리, 지역 내 지출을 반복적으로 유도하는 구조로, 지역 경제에 지속적인 효과를 기대할 수 있다.",
+        "measurement_plan": "지역상품권 결제액 증가율, 재방문율, 지역 내 지출 증가율을 기준으로 성과를 측정",
+        "stop_or_scale_rule": "지역상품권 결제액이 전년 대비 20% 이상 증가하지 않거나, 재방문율이 5% 미만일 경우 중단 또는 축소",
+        "evidence_source_ids": [
+          "case:gangjin_half_price_2024"
+        ]
+      },
+      {
+        "title": "디지털 관광주민증과 교통·숙박·상점 할인 결합",
+        "local_fit": "인구 감소 지역을 대상으로 한 디지털 관광주민증 모델은 한 번의 방문을 다양한 관광 활동으로 연결하여 지역 내 체류 시간을 늘리는 데 효과적이었다.",
+        "mechanism": "디지털 관광주민증을 활용하여 숙박·식음·체험·지역상점 이용을 연결하고, 특정 시간대 KTX 할인과 방문 후 교통 할인권을 결합",
+        "candidate_id": "candidate:stay_conversion_1",
+        "prerequisites": "지역 내 참여업체 확보, 디지털 관광주민증 발급 및 사용 시스템 구축, 교통 할인 제공기관과의 협약",
+        "budget_formula": "디지털 관광주민증 발급 비용 + 할인 쿠폰 제공 비용 + 마케팅 비용",
+        "candidate_type": "stay_conversion",
+        "case_source_ids": [
+          "case:digital_tourism_resident_2024"
+        ],
+        "differentiation": "기존의 단일 할인 쿠폰과 달리, 다양한 관광 활동과 결합하여 방문객의 체류 시간을 늘리고, 지역 내 소비를 유도하는 방식이다.",
+        "measurement_plan": "숙박·식음·체험 이용률, 교통 할인 사용률, 지역 내 체류 시간 증가율을 기준으로 성과를 측정",
+        "stop_or_scale_rule": "숙박·식음·체험 이용률이 10% 미만이거나, 교통 할인 사용률이 5% 미만일 경우 중단 또는 축소",
+        "evidence_source_ids": [
+          "case:digital_tourism_resident_2024"
+        ]
+      }
+    ],
+    "diagnosis_summary": "강원특별자치도 원주시의 2025년 7월부터 2026년 6월까지의 관광 현황을 분석한 결과, 월간 순 방문자 수는 2,285,734명으로 전년 동월 대비 -2.7% 감소했으며, 외지인 숙박 방문 비율은 12.5%로 유지되고 있다. 그러나 내비게이션 목적지 검색량은 303,921건으로 상대적으로 높은 수준을 보이고 있다. 이에 따라, 지역의 관광 활성화를 위한 전략적 접근이 필요하다.",
+    "recommended_case_ids": [
+      "case:gangjin_half_price_2024",
+      "case:digital_tourism_resident_2024"
+    ],
+    "candidate_assessments": [
+      {
+        "fit_score": 8,
+        "adaptation": "지역 내 상품권 사용처 확보, 방문객의 지출 증빙 절차 마련, 중복 수혜 방지 방안 수립이 필요하다.",
+        "case_source_id": "case:gangjin_half_price_2024",
+        "evidence_score": 7,
+        "rejection_risks": [
+          "사업 참여자 증가와 지역 전체 소비 증가를 같은 인과효과로 단정할 수 없음",
+          "환급이 기존 방문객에게만 지급되면 순증 효과가 작을 수 있음"
+        ],
+        "validation_plan": "지역상품권 결제액 증가율, 재방문율, 지역 내 지출 증가율을 기준으로 성과를 측정",
+        "similarity_reason": "강진 반값여행 지역환급 모델은 지역 내 지출을 유도하고, 재방문을 촉진하는 데 효과적이며, 원주시의 관광 활성화에 적합하다."
+      },
+      {
+        "fit_score": 7,
+        "adaptation": "지역 내 참여업체 확보, 디지털 관광주민증 발급 및 사용 시스템 구축, 교통 할인 제공기관과의 협약이 필요하다.",
+        "case_source_id": "case:digital_tourism_resident_2024",
+        "evidence_score": 6,
+        "rejection_risks": [
+          "발급 건수와 실제 지역소비를 혼동할 수 있음",
+          "혜택 사용률이 낮으면 홍보비만 증가할 수 있음"
+        ],
+        "validation_plan": "숙박·식음·체험 이용률, 교통 할인 사용률, 지역 내 체류 시간 증가율을 기준으로 성과를 측정",
+        "similarity_reason": "디지털 관광주민증과 교통·숙박·상점 할인 결합 모델은 한 번의 방문을 다양한 관광 활동으로 연결하여 지역 내 체류 시간을 늘리는 데 효과적이었다."
+      }
+    ],
+    "selected_candidate_id": "candidate:spend_conversion_1"
+  },
+  "execution_scenario": null,
+  "planning_brief_fingerprint": "0a0dbbcd74bc696242d4da66e482402652b5df9f0eb1670df772e65ca8996716"
+}

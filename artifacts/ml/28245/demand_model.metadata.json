@@ -2,7 +2,7 @@
   "version": "regional-demand-v3.1",
   "region_code": "28245",
   "region_name": "인천광역시 계양구",
-  "trained_at": "2026-08-31T07:48:56.124279+00:00",
+  "trained_at": "2026-09-04T10:43:38.424022+00:00",
   "data_fingerprint": "a30590abcd8a3096be54258be29475e7299e18c2375b114307c90dc8a103968f",
   "target": {
     "visitors": "월간 외지인 순 방문자 수",

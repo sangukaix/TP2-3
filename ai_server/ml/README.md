@@ -3,7 +3,7 @@
 이 폴더는 **오프라인 학습 코드**입니다. 웹 요청이 들어올 때 모델을 다시 학습하지 않습니다.
 
 ```text
-data/raw 공식 ZIP·CSV (읽기 전용)
+data/source_snapshots 공식 ZIP·CSV (hash 검증·읽기 전용)
   → data/catalog/region_data_registry.csv: 지역 코드·원본 위치·출처 상태 확인
   → regional_datalab_data.py 또는 예외 어댑터: 방문·소비·체류·내비/숙박검색 7개 월별 지표 추출
   → data/processed/ml/<region_code>/monthly_demand.csv
@@ -19,13 +19,13 @@ data/raw 공식 ZIP·CSV (읽기 전용)
 
 ## 폴더별 역할
 
-- `region_catalog.py`: `data/catalog/region_data_registry.csv`를 안전하게 읽고, 원본 경로가 `data/raw/` 밖을 가리키지 않는지 확인한다.
+- `region_catalog.py`: `data/catalog/region_data_registry.csv`를 안전하게 읽고, 원본 경로가 `data/raw/` 또는 `data/source_snapshots/` 밖을 가리키지 않는지 확인한다. 활성 ML은 snapshot 경로를 사용한다.
 - `standard_region_pipeline.py`: 표준 관광데이터랩 CSV 지역의 학습·예측 함수를 카탈로그 한 줄에서 만든다.
 - `region_registry.py`: 강남구처럼 구조가 다른 예외 어댑터와 카탈로그의 표준 지역을 같은 계약으로 등록한다. 한 지역 모델을 다른 지역에 잘못 쓰지 않게 막는다.
 - `region_service.py`: FastAPI와 CLI가 지역 코드만으로 같은 ML 파이프라인을 호출하게 하는 공통 진입점이다.
 - `scripts/train_regions.py`: `--region-code` 또는 `--all`로 여러 지역을 순서대로 재학습하는 관리 CLI다.
 - `scripts/check_regions.py`: 학습 전 원본 위치·7개 Target·기간·출처 메타데이터를 읽기 전용으로 점검하는 CLI다.
-- `gangnam_data.py`: 강남구 중첩 ZIP을 풀지 않고 읽어 월별 표를 만든다.
+- `gangnam_data.py`: 강남구 category ZIP과 명시적 최신월 보완 ZIP을 snapshot에서 풀지 않고 읽어 월별 표를 만든다.
 - `regional_datalab_data.py`: 직접 내려받은 관광데이터랩 CSV의 공통 열 정의를 검증하고 월별 표로 만든다.
 - `gangnam_forecast.py`: `RegionForecastSettings`와 `1·3·12개월 전 값`, 월 계절성(`sin`, `cos`)으로 어느 등록 지역이든 7개 Target을 예측한다.
 - `horizon_policy.py`: 일정 미정은 3·6개월 후보를 만들고, 희망 기간은 종료월까지 필요한 전망 범위를 계산한다.
@@ -100,7 +100,7 @@ Test에서 기준선보다 나쁜 지표는 결과에 그대로 `beats_baseline_
 ```
 
 `ready_with_provenance_warnings`는 표 구조는 학습 가능하지만 공식 다운로드 상세 URL·이용 조건 등 출처 기록을
-팀이 보완해야 한다는 뜻입니다. 이 도구와 학습 코드는 `data/raw/` 원본을 수정하지 않습니다.
+팀이 보완해야 한다는 뜻입니다. 이 도구와 학습 코드는 `data/raw/`·`data/source_snapshots/` 원본을 수정하지 않습니다.
 
 원본 ZIP을 추가·교체했을 때만 재학습하세요. 결과는 `data/processed/`와 `artifacts/ml/`에 새로 생성됩니다.
 저장된 데이터 hash와 현재 원자료가 다르면 온라인 예측은 `ML_MODEL_STALE`로 중단하고 재학습을 요구합니다.

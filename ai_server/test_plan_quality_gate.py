@@ -34,7 +34,10 @@ class PlanQualityGateTest(unittest.TestCase):
         }
 
     def test_complete_report_has_no_deterministic_issue(self) -> None:
-        result = build_plan_quality_precheck(self._evidence_pack(), self._valid_report())
+        report = self._valid_report()
+        for number, step in enumerate(report['strategies'][0]['implementation_steps'], 1):
+            step['step'] = number
+        result = build_plan_quality_precheck(self._evidence_pack(), report)
         self.assertTrue(result['checked'])
         self.assertEqual(result['issues'], [])
 
@@ -73,6 +76,63 @@ class PlanQualityGateTest(unittest.TestCase):
         }, {'checked': True, 'issues': []})
 
         self.assertFalse(review['approved'])
+
+    def test_same_candidate_type_is_flagged_before_planner_can_copy_one_idea(self) -> None:
+        """이름만 다른 숙박/야간 패스 후보가 선정 근거처럼 통과하지 않게 합니다."""
+        evidence_pack = self._evidence_pack()
+        evidence_pack['benchmark_cases'] = [{'source_id': 'case:official'}]
+        evidence_pack['transfer_assessment'] = {
+            'selection_status': 'ready',
+            'selected_candidate_id': 'C1',
+            'selection_reason': '비교',
+            'recommended_case_ids': ['case:official'],
+            'candidate_assessments': [],
+            'strategy_brief': {'supporting_case_ids': ['case:official']},
+            'design_candidates': [
+                {'candidate_id': 'C1', 'candidate_type': 'stay_conversion', 'evidence_source_ids': ['dataset:28245'],
+                 'case_source_ids': ['case:official']},
+                {'candidate_id': 'C2', 'candidate_type': 'stay_conversion', 'evidence_source_ids': ['dataset:28245'],
+                 'case_source_ids': ['case:official']},
+            ],
+        }
+        report = self._valid_report()
+        for number, step in enumerate(report['strategies'][0]['implementation_steps'], 1):
+            step['step'] = number
+        result = build_plan_quality_precheck(evidence_pack, report)
+        self.assertTrue(any(issue['field'] == 'planning_decision.candidate_type' for issue in result['issues']))
+
+    def test_budget_only_title_and_out_of_range_steps_are_blocked(self) -> None:
+        report = self._valid_report()
+        strategy = report['strategies'][0]
+        strategy.update({
+            'title': '야간관광 특화도시 예산 편성',
+            'timeframe': '2026-09 ~ 2026-11, 3개월',
+            'budget': '총 1,000,000,000원 (사무관리·행사운영 등)',
+        })
+        strategy['implementation_steps'][3]['schedule'] = '2026-12'
+        for number, step in enumerate(strategy['implementation_steps'], 1):
+            step['step'] = number
+        evidence_pack = self._evidence_pack()
+        evidence_pack['quality_contract_version'] = 'execution-evidence-v1'
+        result = build_plan_quality_precheck(evidence_pack, report, limit=None)
+        fields = {issue['field'] for issue in result['issues']}
+        self.assertIn('strategies[1].title', fields)
+        self.assertIn('strategies[1].budget.fixed_total', fields)
+        self.assertIn('strategies[1].implementation_steps[4].schedule', fields)
+
+    def test_weak_ml_percentage_cannot_be_used_as_effect_claim_without_caution(self) -> None:
+        report = self._valid_report()
+        strategy = report['strategies'][0]
+        strategy['expected_effect'] = 'ML 자연추세에 따라 2026년 11월 소비액이 41.26% 증가 전망이므로 사업 효과를 기대한다.'
+        for number, step in enumerate(strategy['implementation_steps'], 1):
+            step['step'] = number
+        evidence_pack = self._evidence_pack()
+        evidence_pack['quality_contract_version'] = 'execution-evidence-v1'
+        evidence_pack['snapshot']['ml_analysis']['evaluation'] = {
+            'metrics': {'spending_krw': {'model_reliability': 'below_baseline_on_test'}},
+        }
+        result = build_plan_quality_precheck(evidence_pack, report, limit=None)
+        self.assertTrue(any(issue['field'].endswith('expected_effect.ml_reliability') for issue in result['issues']))
 
 
 if __name__ == '__main__':

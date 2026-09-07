@@ -1,8 +1,79 @@
 # 프론트엔드 연동 API 초안
 
+## 2026-09-07 실행 근거 계약과 자료 요청
+
+기존 endpoint·요청 schema는 유지합니다. 새 보고서 `quality_review`에 다음 선택 필드를 저장합니다.
+
+- `quality_contract_version`: `execution-evidence-v1`. 작성/검수에 같은 실행 근거 규칙을 적용한 버전입니다.
+- `validation_findings`: 상위 항목으로 줄이지 않은 결정적 코드 점검 전체. 각 행은 `severity`, `field`, `problem`, `revision_instruction`입니다.
+- `completion_checklist`: `id`, `title`, `action`, `required_materials`(문자열 배열), `owner`, `status`를 가진 보완 안내 배열입니다. '없음'이 확정된 데이터 목록이 아니라, 생성 결과에 따라 재조회/확인이 필요한 자료입니다.
+
+React는 `issues`와 `validation_findings`를 중복 제거해 전부 표시합니다. 이전 저장 보고서에 새 필드가 없어도 표시·다운로드는 유지합니다.
+수동 본문 편집 후에는 이전 검수와 자료 안내도 재확인이 필요합니다. HTTP 성공·저장 성공이 집행 승인이라는 뜻은 아닙니다.
+Qwen 후보 보완은 로컬 우선 경로에서 최대 1회이며 `agent_trace`에 남습니다. 학생 절약 모드의 유료 최종 검수 1회 상한·82점/major 차단 정책은 유지합니다.
+[정비 원인과 자료 요구사항](WONJU_PROPOSAL_QUALITY_AUDIT_20260907.md).
+
+## 2026-09-05 PPT 예측·KPI·견적·전체 출처 보완
+
+- `GET /ai/v1/strategy-reports/{report_id}/documents/pptx`의 경로·요청 계약은 그대로입니다.
+- 렌더 버전 `pptx-user35-v6-exact-ml-kpi-full-sources-r2`와 `tourism_strategy_12_slide_template_v6.pptx`로 이전 PPT 캐시를 갱신합니다.
+- 월별 방문자·소비액은 `select_report_forecast`가 선택한 사업 기간의 저장 예측입니다. 관측월을 예측 차트에 섞거나 반올림 값을 재계산 입력으로 쓰지 않습니다.
+- 입력된 `execution_scenario`가 있으면 최종 월 목표를 표시합니다. 없으면 지역 전체 증가율을 만들지 않고, 명시적 견적 가정에 따른 별도의 참여·환급 목표를 표시합니다. 이 값은 보고서 JSON·ML·검수 상태를 변경하지 않습니다.
+- 참고 견적은 수량×가정 단가이며 확정 견적이 아닙니다. 고정비보다 작은 입력 예산은 실행 가능하다고 표시하지 않습니다.
+- MySQL `data_source`에서 기존 source ID의 파일명만 읽어 출력 사본을 보완합니다. DB 조회 실패 시 저장 출처를 삭제하지 않습니다. 11장부터 전체 출처를 이어 싣고, 마지막에 감사 페이지를 둡니다. 모든 원자료명·URL·원수치·검증값은 발표자 노트에도 보존합니다.
+- 파일 다운로드에서는 OpenAI·Ollama·재학습을 호출하지 않습니다. 기존 지역 사진 캐시/공식 사진 다운로드는 사용할 수 있습니다.
+
+## 2026-09-02 출력 안전성 보완
+
+- `execution_scenario` 생략/null 가능. 객체에는 `visitor_target_pct`, `spending_target_pct` 둘 다 필수이며 기본 증가율은 없다.
+- `ml_analysis.evaluation.metrics.*`, `signals.*`의 `model_reliability`로 연결과 성능을 구분한다.
+- 공통 기획 월·목표 산식, Word 캐시 버전 `strategy-docx-v3-period` 적용. PPT의 최신 버전은 위 2026-09-05 항목을 따른다.
+- 문서 준비 동안 작업은 running, 형식별 경고를 포함한 completed 가능. production 결제 오류는 샘플로 반환하지 않는다.
+
+## 2026-09-02 생성 전 검토 계약 추가
+
+- 토큰 부족(`status=incomplete`, `reason=max_output_tokens`)에는 같은 Agent 요청만 더 큰 출력 상한으로 1회 재시도한다. 전체 기획 파이프라인을 다시 실행하지 않는다. 단계별 값은 `GENERATION_TOKEN_BUDGETS.md` 참조.
+- `/ai/v1/llm/trace`의 이벤트에 `attempts`, `retry_count`, `max_output_tokens`를 추가한다. 실패 이벤트의 `error_code`와 API가 보고한 `usage`도 보존하며, OpenAI 폴백 실패도 별도 이벤트로 남긴다.
+- 각 `attempts` 항목은 시도 번호·상한·상태·이유·소요 시간·보고된 사용량·`usage_reported`를 제공한다. 프롬프트·답변 원문·인증값은 포함하지 않는다. 이벤트 `usage`는 모든 시도의 합계이며 내부 추론 토큰은 출력 토큰에 이미 포함된다.
+- 사용량 요약의 `usage_unknown_attempts`는 토큰 수를 확인하지 못한 시도 수다. 0토큰/무료로 해석하지 않는다. 기존 요청 본문·응답 기획안 계약·품질 승인 기준은 유지한다.
+
+- 생성·저장 `ReportResponse`에 `planning_decision` 추가(기존 보고서는 `{}`). 후보별 작동 원리·지역 적합성·차별성·확보 조건·비용/측정/중단 기준 및 선정 이유를 보존한다.
+- `quality_review.approved`는 82점 이상이며 critical/major가 모두 없을 때만 참이다. 미승인 초안도 복구·수정을 위해 반환할 수 있으므로 HTTP 성공을 품질 통과로 해석하지 않는다.
+- React에서 챗봇 수정을 반영하면 `quality_review.review_stale=true`, `approved=false`로 이전 승인 상태를 무효화한다.
+- ML `horizon_policy.as_of_date`는 기획 기준일이다. 일정 미정의 `decision_windows`는 현재 월 이후 3·6개월이며 관측 공백 월은 실행 합계에서 제외한다. 12개월 한도를 넘으면 `coverage_complete=false`다.
+- Ollama 문맥 예산 초과/미완료 출력은 `OLLAMA_CONTEXT_BUDGET_EXCEEDED` / `OLLAMA_INCOMPLETE_RESPONSE`로 추적한다. Hybrid는 한 번 OpenAI 폴백 가능, local_only는 불가하다.
+- 공식 웹 필수 호출의 실제 실행/URL 확인 실패는 `OPENAI_WEB_SEARCH_NOT_EXECUTED` / `OPENAI_UNVERIFIED_WEB_SOURCE`로 남긴다. 실패한 조사를 성공한 것으로 캐시하지 않는다.
+
 > 상태: UI 골격용 초안. 실제 데이터 파일의 컬럼·지역 코드·기간을 검증한 뒤 Pydantic schema로 확정한다.
 
 ## 기본 원칙
+
+### 로컬 우선 비용 정책 (D-063)
+
+- `PUT /ai/v1/llm/config`: `mode=student_budget`은 Qwen·Gemma 중심의 학생용 기본 모드다. 자동 OpenAI Web Search를 막으며, 로컬 통과본의 독립 최종 검수 1회만 허용한다. 무료 검색 API 키가 있을 때만 Qwen 검색 질문→서버 제한 도구→공식 도메인 요약 후보 경로를 추가한다. `local_first`는 최신 공식 웹 조사·사례 보강까지 포함한 최대 3회 모드다.
+- `GET /ai/v1/llm/status`: `effective_routes`는 비용/능력 잠금을 적용한 실제 경로다. `student_budget`의 `evidence`·`case_study` provider는 `local_sources`로 표시되며 OpenAI Web Search가 아니라 MySQL·공식 Open API·검수 RAG와 선택적 무료 공식 검색 도구 경로임을 뜻한다. `cost_policy.free_official_web_search`는 키 존재 여부·공급자 이름·보고서당 질문 상한만 제공하며 비밀값은 반환하지 않는다.
+- trace의 `paid_reason`은 유료 요청 목적, `status=blocked`와 `provider_called=false`는 실제 호출하지 않은 차단이다. 차단을 성공/0토큰 추론으로 표시하지 않는다.
+- 오류 `LOCAL_FIRST_MODELS_UNAVAILABLE`: 유료 조사 전 개인 모델 연결 실패. `STUDENT_BUDGET_WEB_SEARCH_DISABLED`: 학생 절약 모드에서 자동 웹 조사를 요청함. `CLOUD_CALL_BUDGET_EXCEEDED`: 허용되지 않은 유료 단계 또는 해당 모드의 요청 상한 초과.
+- 보고서 `quality_review.final_audit_completed`는 최종 독립 검수 완료 여부다. `approved=false`를 우회하지 않으며, 미완료 시 초안을 보존한다. `review_error_code`는 1차 검수 연결 실패다.
+- 3회는 생성당 Provider 요청 상한이지 웹검색 내부 호출/원화 상한이 아니다. [전체 범위](LOCAL_FIRST_QUALITY_PLAN.md).
+
+### 로컬 기획 Agent 실행 기록 (D-062)
+
+기존 `GET /ai/v1/llm/trace`의 각 이벤트와 보고서 `agent_trace`에 다음 선택 필드를 추가한다. 기존 소비자는 추가 필드를 무시할 수 있다.
+
+- `provider`: 실제 시도 역할 `qwen` / `gemma` / `openai`. `status`는 `completed` 또는 `failed`다.
+- `tool_trace`: `{tool, status}` 목록. 인자·본문·첨부 원문·비밀정보는 포함하지 않는다.
+- `input_preparation`: 성공 시 `mode=request_scoped_evidence_tools`, 원본/개요 바이트 수, 가용/조회 출처 수. 토큰 수와 바이트 수를 혼동하지 않는다.
+- `attempts[].phase`: 로컬의 `tool_selection` / `final_json` / `json_repair` / `citation_repair`. `citation_repair`는 최종안이 등록된 미조회 사례를 인용했을 때 서버가 그 원문을 읽고 같은 로컬 모델에 한 번만 재작성을 요청한 기록이다. 도구 선택은 오류 재시도 횟수에 합산하지 않는다.
+- 실패 코드: `LOCAL_TOOL_NOT_ALLOWED`, `LOCAL_TOOL_ARGUMENTS_INVALID`, `LOCAL_TOOL_LIMIT`, `LOCAL_REQUIRED_EVIDENCE_MISSING`, `LOCAL_EVIDENCE_NOT_READ`, 기존 `OLLAMA_CONTEXT_BUDGET_EXCEEDED` 등. 설정된 Hybrid 폴백은 원래 요청 전체를 보존해 별도 이벤트로 기록한다.
+
+`LOCAL_EVIDENCE_NOT_READ`는 첫 미조회 사례 인용 즉시 발생하지 않는다. 요청에 등록된 공식 사례라면 서버가 원문을 읽고 로컬 교정을 한 번 시도한 뒤에도 새 미조회 사례를 인용하거나 원문 전달이 불가능할 때 반환한다. 이 복구는 OpenAI 호출 예산을 소비하지 않는다.
+
+도구 선택 단계의 `OLLAMA_INCOMPLETE_RESPONSE`는 필수 사전조회가 모두 완료됐을 때만 `attempts[].status=continued_without_optional_tools`로 기록하고 최종 JSON 단계로 진행할 수 있다. 필수 근거가 남아 있으면 기존처럼 작업을 실패시킨다. 이는 잘린 기획 본문을 채택하는 정책이 아니며 최종 JSON의 완료·Schema·출처 검증은 그대로 적용한다.
+
+최종 JSON 단계에서 같은 오류가 발생하면 `attempts[].status=retrying_after_output_limit`, 다음 phase는 `incomplete_retry`로 기록한다. 부분 응답은 폐기하고 동일 근거·Schema·출력 상한으로 처음부터 한 번만 재생성한다. 두 번째 미완료는 `OLLAMA_INCOMPLETE_RESPONSE`로 실패한다.
+
+이 도구들은 내부 함수이며 외부 HTTP 실행 엔드포인트를 새로 열지 않는다. `search_collected_sources`는 기존 수집 자료 검색이지 실시간 웹검색이 아니다. 도구 사용이 가능한 코드와 실제 모델 실행 성공 여부는 구분한다.
 
 ### 사업 여건 계약 (2026-08-28 구현)
 
@@ -88,6 +159,15 @@
 ```
 
 현재 지원 지역의 원본 연결을 검증하는 경로다. 정식 서비스에서는 검증·전처리한 월간 지표를 MySQL과 일반 Backend의 `GET /api/v1/regions/{region_code}/dashboard`로 이전한다.
+
+### `GET /ai/v1/demo/{region_code}/tourism-status`
+
+지역별 관광 현황 ZIP에서 전수 검증·정규화한 선택 지역의 유입·유출 권역, 인기 관광지·음식점,
+향후 30일 집중 운영 신호와 출처를 반환한다. OpenAI와 로컬 LLM을 호출하지 않는다.
+
+- 성공: `200` — `available`, 기준 기간, 상위 유입·유출 권역, 인기장소 묶음, 집중 신호 및 source record.
+- 미지원: `404 REGIONAL_TOURISM_STATUS_UNAVAILABLE` — 공식 코드에 매핑·검증된 사실표가 없는 지역.
+- 해석: 유입·유출 비율과 인기 순위는 관측 분포이고, 집중률은 운영 참고 신호다. 월별 ML 예측값·확정 수요·정책 효과로 사용하면 안 된다.
 
 ### `GET /ai/v1/demo/{region_code}/region-info?region_name={region_name}`
 

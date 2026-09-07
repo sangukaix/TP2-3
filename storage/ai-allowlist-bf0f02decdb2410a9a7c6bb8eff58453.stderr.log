@@ -1,0 +1,501 @@
+INFO:     Will watch for changes in these directories: ['C:\\Users\\Admin\\mbca\\TP2-3']
+INFO:     Uvicorn running on http://0.0.0.0:8111 (Press CTRL+C to quit)
+INFO:     Started reloader process [21316] using WatchFiles
+INFO:     Started server process [8792]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+Strategy Agent stage failed: transferability code=OPENAI_INCOMPLETE_RESPONSE duration_ms=140113
+Multi-agent report failed: code=TRANSFERABILITY_OPENAI_INCOMPLETE_RESPONSE message=지역 적용 가능성 검토 단계에서 처리하지 못했습니다: AI 에이전트가 응답을 완료하지 못했습니다. (max_output_tokens)
+WARNING:  WatchFiles detected changes in 'ai_server\app\llm\models.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [8792]
+WARNING:  WatchFiles detected changes in 'ai_server\app\llm\openai_provider.py', 'ai_server\app\openai_responses.py', 'ai_server\app\llm\errors.py'. Reloading...
+Process SpawnProcess-2:
+Traceback (most recent call last):
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\uvicorn\_subprocess.py", line 73, in subprocess_started
+    sys.stdin = os.fdopen(stdin_fileno)  # pragma: full coverage
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen os>", line 1066, in fdopen
+  File "<frozen codecs>", line 309, in __init__
+KeyboardInterrupt
+INFO:     Started server process [12512]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\app\agents\evidence_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [12512]
+WARNING:  WatchFiles detected changes in 'ai_server\app\llm\router.py', 'ai_server\app\agents\reviewer_agent.py', 'ai_server\app\agents\case_study_agent.py', 'ai_server\app\agents\transferability_agent.py', 'ai_server\app\llm\trace_store.py', 'ai_server\app\agents\planner_agent.py'. Reloading...
+Process SpawnProcess-4:
+Traceback (most recent call last):
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\uvicorn\_subprocess.py", line 73, in subprocess_started
+    sys.stdin = os.fdopen(stdin_fileno)  # pragma: full coverage
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen os>", line 1066, in fdopen
+  File "<frozen codecs>", line 309, in __init__
+KeyboardInterrupt
+INFO:     Started server process [16700]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\test_openai_token_recovery.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [16700]
+INFO:     Started server process [22832]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\test_openai_token_recovery.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [22832]
+INFO:     Started server process [7000]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\app\openai_responses.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [7000]
+WARNING:  WatchFiles detected changes in 'ai_server\test_openai_token_recovery.py'. Reloading...
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\spawn.py", line 132, in _main
+    self = reduction.pickle.load(from_parent)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\uvicorn\__init__.py", line 2, in <module>
+    from uvicorn.main import Server, main, run
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\uvicorn\main.py", line 33, in <module>
+    from uvicorn.supervisors import ChangeReload, Multiprocess
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\uvicorn\supervisors\__init__.py", line 12, in <module>
+    from uvicorn.supervisors.watchfilesreload import WatchFilesReload as ChangeReload
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\uvicorn\supervisors\watchfilesreload.py", line 7, in <module>
+    from watchfiles import watch
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\watchfiles\__init__.py", line 2, in <module>
+    from .main import Change, awatch, watch
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\watchfiles\main.py", line 10, in <module>
+    import anyio
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\anyio\__init__.py", line 33, in <module>
+    from ._core._resources import aclose_forcefully as aclose_forcefully
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1091, in get_code
+  File "<frozen importlib._bootstrap_external>", line 1190, in get_data
+KeyboardInterrupt
+INFO:     Started server process [22260]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+OpenAI token retry: schema=regional_tourism_plan model=gpt-5.6-sol limit=24000 next_limit=32000
+WARNING:  WatchFiles detected changes in 'ai_server\app\llm\local_prompts.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [22260]
+WARNING:  WatchFiles detected changes in 'ai_server\app\llm\local_agent.py', 'ai_server\app\llm\models.py', 'ai_server\app\llm\ollama_provider.py', 'ai_server\app\llm\router.py', 'ai_server\app\llm\evidence_tools.py', 'ai_server\app\llm\trace_store.py', 'ai_server\app\agents\transferability_agent.py', 'ai_server\app\agents\planner_agent.py', 'ai_server\test_local_agent_tools.py'. Reloading...
+INFO:     Started server process [23820]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [23820]
+INFO:     Started server process [23908]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\app\llm\router.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [23908]
+WARNING:  WatchFiles detected changes in 'ai_server\app\llm\evidence_tools.py', 'ai_server\app\agents\reviewer_agent.py', 'ai_server\app\llm\local_prompts.py', 'ai_server\app\main.py', 'ai_server\app\rag_store.py'. Reloading...
+Process SpawnProcess-12:
+Traceback (most recent call last):
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\uvicorn\_subprocess.py", line 73, in subprocess_started
+    sys.stdin = os.fdopen(stdin_fileno)  # pragma: full coverage
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen os>", line 1066, in fdopen
+  File "<frozen codecs>", line 309, in __init__
+KeyboardInterrupt
+WARNING:  WatchFiles detected changes in 'ai_server\app\agents\evidence_agent.py'. Reloading...
+INFO:     Started server process [21916]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [21916]
+WARNING:  WatchFiles detected changes in 'ai_server\app\agents\case_study_agent.py'. Reloading...
+INFO:     Started server process [23720]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [23720]
+INFO:     Started server process [12192]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\app\agents\case_study_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [12192]
+WARNING:  WatchFiles detected changes in 'ai_server\app\agents\plan_quality_gate.py', 'ai_server\app\agents\decision_facts.py', 'ai_server\app\llm\evidence_tools.py', 'ai_server\app\agents\reviewer_agent.py', 'ai_server\app\llm\local_prompts.py', 'ai_server\app\agents\report_orchestrator.py'. Reloading...
+Process SpawnProcess-16:
+Traceback (most recent call last):
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\uvicorn\_subprocess.py", line 73, in subprocess_started
+    sys.stdin = os.fdopen(stdin_fileno)  # pragma: full coverage
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen os>", line 1066, in fdopen
+KeyboardInterrupt
+INFO:     Started server process [24044]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\app\llm\evidence_tools.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [24044]
+WARNING:  WatchFiles detected changes in 'ai_server\app\agents\case_study_agent.py'. Reloading...
+INFO:     Started server process [21840]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [21840]
+INFO:     Started server process [3864]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\app\llm\router.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3864]
+WARNING:  WatchFiles detected changes in 'ai_server\app\agents\report_orchestrator.py', 'ai_server\app\agents\case_study_agent.py', 'ai_server\app\agents\evidence_agent.py'. Reloading...
+INFO:     Started server process [2236]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2236]
+INFO:     Started server process [19888]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\test_local_first_policy.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [19888]
+INFO:     Started server process [24060]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\app\agents\decision_facts.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [24060]
+WARNING:  WatchFiles detected changes in 'ai_server\app\llm\local_agent.py', 'ai_server\test_local_first_policy.py', 'ai_server\app\llm\evidence_tools.py'. Reloading...
+INFO:     Started server process [21216]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [21216]
+INFO:     Started server process [8332]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\test_report_orchestrator.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [8332]
+WARNING:  WatchFiles detected changes in 'ai_server\test_planning_brief.py'. Reloading...
+Process SpawnProcess-25:
+Traceback (most recent call last):
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\uvicorn\_subprocess.py", line 73, in subprocess_started
+    sys.stdin = os.fdopen(stdin_fileno)  # pragma: full coverage
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen os>", line 1066, in fdopen
+  File "<frozen codecs>", line 309, in __init__
+KeyboardInterrupt
+INFO:     Started server process [17588]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\app\scripts\check_local_agent_smoke.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for connections to close. (CTRL+C to force quit)
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [17588]
+WARNING:  WatchFiles detected changes in 'ai_server\test_local_agent_tools.py', 'ai_server\app\llm\router.py', 'ai_server\app\llm\local_agent.py', 'ai_server\app\llm\local_prompts.py', 'ai_server\app\main.py', 'ai_server\app\scripts\check_local_agent_smoke.py', 'ai_server\app\scripts\check_generation_readiness.py'. Reloading...
+Process SpawnProcess-27:
+Traceback (most recent call last):
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\uvicorn\_subprocess.py", line 73, in subprocess_started
+    sys.stdin = os.fdopen(stdin_fileno)  # pragma: full coverage
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen os>", line 1066, in fdopen
+  File "<frozen codecs>", line 309, in __init__
+KeyboardInterrupt
+INFO:     Started server process [2804]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\app\llm\local_prompts.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2804]
+WARNING:  WatchFiles detected changes in 'ai_server\app\agents\plan_quality_gate.py', 'ai_server\test_local_first_policy.py', 'ai_server\app\agents\decision_facts.py'. Reloading...
+INFO:     Started server process [21924]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [21924]
+WARNING:  WatchFiles detected changes in 'ai_server\app\scripts\check_local_agent_smoke.py'. Reloading...
+Process SpawnProcess-30:
+Traceback (most recent call last):
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\uvicorn\_subprocess.py", line 73, in subprocess_started
+    sys.stdin = os.fdopen(stdin_fileno)  # pragma: full coverage
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen os>", line 1066, in fdopen
+  File "<frozen codecs>", line 309, in __init__
+KeyboardInterrupt
+INFO:     Started server process [23312]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\app\report_projection.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [23312]
+INFO:     Started server process [24320]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\app\proposal_presentation_v3.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [24320]
+WARNING:  WatchFiles detected changes in 'ai_server\app\proposal_document.py', 'ai_server\test_proposal_presentation_v3_contract.py', 'ai_server\app\main.py'. Reloading...
+Process SpawnProcess-33:
+Traceback (most recent call last):
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\uvicorn\_subprocess.py", line 73, in subprocess_started
+    sys.stdin = os.fdopen(stdin_fileno)  # pragma: full coverage
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen os>", line 1066, in fdopen
+  File "<frozen codecs>", line 309, in __init__
+KeyboardInterrupt
+INFO:     Started server process [23268]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\ml\planning_evidence.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for connections to close. (CTRL+C to force quit)
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [23268]
+WARNING:  WatchFiles detected changes in 'ai_server\app\agents\decision_facts.py', 'ai_server\test_ml_planning.py', 'ai_server\app\llm\local_prompts.py', 'ai_server\test_generation_safety.py', 'ai_server\app\main.py', 'ai_server\app\scripts\check_generation_readiness.py', 'ai_server\test_report_projection.py'. Reloading...
+INFO:     Started server process [24500]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [24500]
+INFO:     Started server process [22716]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\app\report_review_status.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [22716]
+WARNING:  WatchFiles detected changes in 'ai_server\app\agents\prompts.py', 'ai_server\app\proposal_document.py', 'ai_server\app\llm\local_prompts.py', 'ai_server\app\proposal_presentation_v3.py', 'ai_server\test_generation_safety.py', 'ai_server\test_strategy_document_cache.py', 'ai_server\app\main.py', 'ai_server\app\strategy_store.py'. Reloading...
+INFO:     Started server process [2840]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2840]
+INFO:     Started server process [21888]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\app\nationwide_context_store.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [21888]
+WARNING:  WatchFiles detected changes in 'ai_server\app\llm\local_prompts.py', 'ai_server\app\agents\prompts.py', 'ai_server\app\agents\decision_facts.py'. Reloading...
+INFO:     Started server process [22464]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [22464]
+INFO:     Started server process [22644]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\app\rag_store.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for connections to close. (CTRL+C to force quit)
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [22644]
+WARNING:  WatchFiles detected changes in 'ai_server\app\llm\local_agent.py', 'ai_server\app\agents\case_study_agent.py', 'ai_server\test_local_first_policy.py', 'ai_server\app\agents\report_orchestrator.py', 'ai_server\app\llm\local_prompts.py', 'ai_server\app\llm\ollama_provider.py', 'ai_server\app\llm\router.py', 'ai_server\app\rag_store.py', 'ai_server\app\llm\evidence_tools.py', 'ai_server\app\agents\prompts.py', 'ai_server\test_plan_quality_gate.py', 'ai_server\app\agents\transferability_agent.py', 'ai_server\app\agents\plan_quality_gate.py', 'ai_server\app\agents\evidence_agent.py', 'ai_server\test_local_agent_tools.py'. Reloading...
+INFO:     Started server process [26168]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [26168]
+INFO:     Started server process [21160]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\app\rag_store.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [21160]
+WARNING:  WatchFiles detected changes in 'ai_server\app\scripts\build_official_pdf_rag.py', 'ai_server\test_local_first_policy.py', 'ai_server\index_rag_documents.py'. Reloading...
+Process SpawnProcess-43:
+Traceback (most recent call last):
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\uvicorn\_subprocess.py", line 76, in subprocess_started
+    config.configure_logging()
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\uvicorn\config.py", line 385, in configure_logging
+    if isinstance(self.log_config, os.PathLike):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen abc>", line 119, in __instancecheck__
+  File "<frozen abc>", line 121, in __subclasscheck__
+KeyboardInterrupt
+INFO:     Started server process [27616]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\app\agents\report_orchestrator.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [27616]
+WARNING:  WatchFiles detected changes in 'ai_server\app\agents\evidence_agent.py'. Reloading...
+Process SpawnProcess-45:
+Traceback (most recent call last):
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\uvicorn\_subprocess.py", line 73, in subprocess_started
+    sys.stdin = os.fdopen(stdin_fileno)  # pragma: full coverage
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen os>", line 1066, in fdopen
+  File "<frozen codecs>", line 309, in __init__
+KeyboardInterrupt
+INFO:     Started server process [29112]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'ai_server\app\scripts\build_official_pdf_rag.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [29112]
+INFO:     Started server process [12400]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+Strategy Agent stage failed: transferability code=LOCAL_REQUIRED_EVIDENCE_MISSING duration_ms=21939
+Multi-agent report failed: code=TRANSFERABILITY_LOCAL_REQUIRED_EVIDENCE_MISSING message=지역 적용 가능성 검토 단계에서 처리하지 못했습니다: 로컬 모델이 필수 비교·ML·사례·기존 초안 조회를 완료하지 않아 결과를 채택하지 않습니다.
+WARNING:  WatchFiles detected changes in 'ai_server\app\llm\local_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [12400]
+WARNING:  WatchFiles detected changes in 'ai_server\test_local_agent_tools.py'. Reloading...
+Process SpawnProcess-48:
+Traceback (most recent call last):
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\uvicorn\_subprocess.py", line 73, in subprocess_started
+    sys.stdin = os.fdopen(stdin_fileno)  # pragma: full coverage
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen os>", line 1066, in fdopen
+  File "<frozen codecs>", line 309, in __init__
+KeyboardInterrupt
+INFO:     Started server process [14592]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+Strategy Agent stage failed: transferability code=OLLAMA_CONTEXT_BUDGET_EXCEEDED duration_ms=47
+Multi-agent report failed: code=TRANSFERABILITY_OLLAMA_CONTEXT_BUDGET_EXCEEDED message=지역 적용 가능성 검토 단계에서 처리하지 못했습니다: 근거 전체와 출력의 안전한 문맥 예산이 로컬 한도를 넘습니다. 근거를 자르지 않습니다.
+WARNING:  WatchFiles detected changes in 'ai_server\app\llm\router.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [14592]
+WARNING:  WatchFiles detected changes in 'ai_server\test_generation_readiness.py', 'ai_server\app\llm\ollama_provider.py'. Reloading...
+Process SpawnProcess-50:
+Traceback (most recent call last):
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+  File "C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\uvicorn\_subprocess.py", line 73, in subprocess_started
+    sys.stdin = os.fdopen(stdin_fileno)  # pragma: full coverage
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen os>", line 1066, in fdopen
+  File "<frozen codecs>", line 309, in __init__
+KeyboardInterrupt
+INFO:     Started server process [22744]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+Strategy Agent stage failed: local_preflight code=LOCAL_FIRST_MODELS_UNAVAILABLE duration_ms=6485
+Multi-agent report failed: code=LOCAL_PREFLIGHT_LOCAL_FIRST_MODELS_UNAVAILABLE message=로컬 모델 연결 확인 단계에서 처리하지 못했습니다: 개인 노트북의 Qwen·Gemma 연결을 먼저 확인해주세요. OpenAI 유료 조사는 시작하지 않았습니다.

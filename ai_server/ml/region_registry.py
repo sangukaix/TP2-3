@@ -12,7 +12,7 @@ from typing import Callable, Any
 from .gangnam_data import load_gangnam_monthly_demand
 from .gangnam_forecast import predict_future_months, train_gangnam_models
 from .region_catalog import list_region_data_catalog
-from .standard_region_pipeline import build_standard_pipeline_functions
+from .standard_region_pipeline import STANDARD_DATALAB_ADAPTER_TYPES, build_standard_pipeline_functions
 
 
 @dataclass(frozen=True)
@@ -30,8 +30,8 @@ class RegionMlPipeline:
 def _build_region_pipelines() -> dict[str, RegionMlPipeline]:
     """카탈로그를 읽어 표준 CSV 지역을 같은 ML 계약으로 자동 등록합니다.
 
-    강남구는 중첩 ZIP이라는 별도 원본 구조 때문에 예외 어댑터를 유지합니다.
-    나머지 표준 관광데이터랩 CSV 지역은 카탈로그 한 줄만 추가하면 됩니다.
+    강남구는 최신월 보완 snapshot을 명시적으로 병합하는 별도 어댑터를 유지합니다.
+    나머지 표준 관광데이터랩 CSV·category ZIP 지역은 카탈로그 한 줄만 추가하면 됩니다.
     """
     pipelines = {
         '11680': RegionMlPipeline(
@@ -43,7 +43,7 @@ def _build_region_pipelines() -> dict[str, RegionMlPipeline]:
         ),
     }
     for entry in list_region_data_catalog():
-        if entry.region_code == '11680' or entry.adapter_type != 'standard_datalab_csv':
+        if entry.region_code == '11680' or entry.adapter_type not in STANDARD_DATALAB_ADAPTER_TYPES:
             continue
         functions = build_standard_pipeline_functions(entry)
         pipelines[entry.region_code] = RegionMlPipeline(

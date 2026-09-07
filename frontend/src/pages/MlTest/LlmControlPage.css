@@ -1,0 +1,12 @@
+/* 실패한 호출을 완료된 기획으로 오해하지 않도록 글자와 배경을 함께 구분합니다. */
+.llm-trace-panel article.llm-trace-failed {
+  border-left: 3px solid #d86666;
+  background: #fff6f6;
+}
+.llm-trace-panel article.llm-trace-failed > b {
+  color: #9a4141;
+}
+.llm-trace-panel article > small {
+  overflow-wrap: anywhere;
+  line-height: 1.6;
+}

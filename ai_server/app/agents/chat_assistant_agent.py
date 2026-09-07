@@ -5,6 +5,8 @@ from __future__ import annotations
 from typing import Any
 
 from ..openai_responses import create_structured_response
+from ..llm.models import LLMRequest
+from ..llm.router import LLMRouter
 from .evidence_agent import _url_is_allowed, allowed_domains
 from .prompts import PLANNING_CONTEXT_RULES
 
@@ -92,7 +94,7 @@ implementation_steps는 실제 행동·기간·확인 가능한 결과물을 포
 class TourismChatAssistantAgent:
     """원자료 조회와 공식 웹 조사 결과를 구조화된 대화 응답으로 반환합니다."""
 
-    def __init__(self, *, env_values: dict[str, Any]) -> None:
+    def __init__(self, *, env_values: dict[str, Any], llm_router: LLMRouter | None = None) -> None:
         self.api_key = str(env_values.get('OPENAI_API_KEY') or '').strip()
         self.model = str(
             env_values.get('OPENAI_CHAT_MODEL')
@@ -101,6 +103,7 @@ class TourismChatAssistantAgent:
             or 'gpt-5.5'
         ).strip()
         self.domains = allowed_domains(env_values)
+        self.llm_router = llm_router
 
     async def answer(
         self,
@@ -122,7 +125,22 @@ class TourismChatAssistantAgent:
             }]
             include = ['web_search_call.action.sources']
 
-        result = await create_structured_response(
+        lowered_question = question.lower()
+        task = 'chat_research' if enable_web_search else (
+            'chat_revise' if any(word in lowered_question for word in ('수정', '고쳐', '바꿔', '추가')) else 'chat_explain'
+        )
+        request = LLMRequest(
+            task=task, agent='tourism_chat', model=None,
+            instructions=ASSISTANT_INSTRUCTIONS + PLANNING_CONTEXT_RULES,
+            input_payload={
+                'selected_region': snapshot['region_name'], 'analysis_period': snapshot['period'],
+                'snapshot': snapshot, 'planning_brief': planning_brief, 'current_report': current_report,
+                'recent_conversation': history[-8:], 'user_request': question, 'web_search_allowed': enable_web_search,
+            }, schema_name='tourism_analysis_assistant', schema=ASSISTANT_CHAT_SCHEMA,
+            reasoning_effort='medium', max_output_tokens=6000, tools=tools, include=include,
+            requires_web_search=enable_web_search,
+        )
+        result = await self.llm_router.generate(request) if self.llm_router else await create_structured_response(
             api_key=self.api_key,
             model=self.model,
             instructions=ASSISTANT_INSTRUCTIONS + PLANNING_CONTEXT_RULES,

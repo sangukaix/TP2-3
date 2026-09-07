@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from typing import Any
 
 from ..gangnam_data import load_gangnam_monthly_demand
@@ -33,9 +34,9 @@ def check_region(entry: RegionDataCatalogEntry) -> dict[str, Any]:
         'source_warnings': _source_warnings(entry),
     }
     try:
-        if entry.adapter_type == 'legacy_gangnam_zip':
+        if entry.adapter_type == 'snapshot_gangnam_overlay':
             frame = load_gangnam_monthly_demand()
-        elif entry.adapter_type == 'standard_datalab_csv':
+        elif entry.adapter_type in {'standard_datalab_csv', 'standard_datalab_archive'}:
             spec = StandardDatalabRegion(
                 region_code=entry.region_code,
                 region_name=entry.region_name,
@@ -60,11 +61,19 @@ def check_region(entry: RegionDataCatalogEntry) -> dict[str, Any]:
 
 def main() -> None:
     """선택한 카탈로그 지역 또는 전체 활성 지역의 준비 상태를 반환합니다."""
+    # Windows PowerShell 기본 CP949에서도 지역명과 검증 메시지가 깨지지 않게 한다.
+    # 원자료·모델·카탈로그의 인코딩이나 내용은 변경하지 않는다.
+    try:
+        sys.stdout.reconfigure(encoding='utf-8', errors='backslashreplace')
+    except (AttributeError, OSError):
+        pass
     parser = argparse.ArgumentParser(description='관광 원자료의 지역별 ML 등록 가능 여부를 점검합니다.')
     parser.add_argument('--region-code', action='append', default=[], help='점검할 시군구 코드. 여러 번 입력 가능')
     parser.add_argument('--all', action='store_true', help='카탈로그에서 enabled=true인 모든 지역 점검')
     args = parser.parse_args()
-    entries = list_region_data_catalog(enabled_only=True)
+    # 특정 코드 점검은 아직 화면에 공개하지 않은 enabled=false 후보도 검사할 수 있어야 합니다.
+    # --all만 현재 공개 대상으로 제한해 미검증 후보가 학습·대시보드에 섞이지 않게 합니다.
+    entries = list_region_data_catalog(enabled_only=not bool(args.region_code))
     codes = set(args.region_code)
     if not args.all and not codes:
         parser.error('--region-code 또는 --all 중 하나가 필요합니다.')
