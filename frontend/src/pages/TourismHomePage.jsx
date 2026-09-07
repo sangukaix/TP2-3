@@ -78,8 +78,8 @@ export default function TourismHomePage() {
           <span className="hero-river-flow hero-river-flow--two" />
           <span className="hero-river-flow hero-river-flow--three" />
         </div>
-        <h1>지역 관광의 문제를 찾고<br /><em>실행 가능한 전략</em>으로 바꿉니다</h1>
-        <div className="home-hero-subtitle"><i /><p>관광데이터랩의 데이터를 분석하여 AI가 기획서 초안을 작성해줍니다</p><i /></div>
+        <h1>지역 관광의 문제를 찾고<br /><em>실행 가능한 전략</em>으로<br className="home-mobile-break" /> 바꿉니다!</h1>
+        <div className="home-hero-subtitle"><i /><p>관광데이터랩의 데이터를 분석하여<br className="home-mobile-break" /> AI가 기획서 초안을 작성해줍니다!</p><i /></div>
         <div className="home-hero-actions">
           <a href="/dashboard">시작하기 <ArrowRight size={16} /></a>
         </div>

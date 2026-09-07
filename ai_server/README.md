@@ -4,7 +4,7 @@
 
 ```powershell
 cd C:\Users\Admin\mbca\TP2-3
-.\backend\.venv\Scripts\python.exe -m uvicorn ai_server.app.main:app --reload --host 127.0.0.1 --port 8101
+.\backend\.venv\Scripts\python.exe -m uvicorn ai_server.app.main:app --reload --host 127.0.0.1 --port 8111
 ```
 
 - OpenAI 키는 루트 `.env`에서만 읽고 React에는 전달하지 않습니다.

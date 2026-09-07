@@ -132,7 +132,7 @@ function RegionMap({
     const isSelected = feature.properties.region_code === selectedSidoCode
     return {
       color: isSelected ? '#0e96a6' : '#9aa8b7',
-      fillColor: isSelected ? '#16b7c7' : '#f8fafc',
+      fillColor: isSelected ? '#16b7c7' : '#f2f3d1',
       fillOpacity: isSelected ? 0.8 : 0.92,
       weight: isSelected ? 2.2 : 0.75,
     }
