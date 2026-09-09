@@ -605,13 +605,13 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 
 /*--------------------------------------------------------------------------
    bid3 디자인 시스템을 옮긴 관광 업무공간
-   - 224px 고정 사이드바 / 64px 상단바 / 최대 1920px 서비스 캔버스
+   - 270px 고정 사이드바 / 64px 상단바 / 최대 1920px 서비스 캔버스
    - 흰색 surface, 얇은 slate border, 최소한의 shadow를 동일하게 사용합니다.
 ----------------------------------------------------------------------------*/
 
 .workspace-shell{min-height:100vh; color:#0f172a; background:#f5f7fa;}
 .workspace-sidebar{position:fixed; z-index:100; top:64px; right:auto; bottom:0; left:0; display:flex;
-  width:224px; box-sizing:border-box; flex-direction:column; padding:16px;
+  width:270px; box-sizing:border-box; flex-direction:column; padding:16px;
   border-right:1px solid #e2e8f0; background:#fff;}
 
 .home-brand-wrap{position:relative;}
@@ -626,13 +626,13 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 
 .workspace-nav{display:flex; min-height:0; flex:1; flex-direction:column; gap:4px; overflow-y:auto;
   padding:18px 0;}
-.workspace-nav p{margin:14px 10px 5px; color:#94a3b8; font-size:10px; font-weight:700;
+.workspace-nav p{margin:14px 10px 5px; color:#94a3b8; font-size:12px; font-weight:700;
   letter-spacing:.08em;}
 .workspace-nav p:first-child{margin-top:0;}
 .workspace-nav a,
 .workspace-nav>button{position:relative; display:flex; width:100%; height:40px; box-sizing:border-box;
   align-items:center; gap:10px; padding:0 12px; border:0; border-radius:6px; color:#64748b;
-  background:transparent; font:inherit; font-size:13px; text-align:left; text-decoration:none;
+  background:transparent; font:inherit; font-size:15.6px; text-align:left; text-decoration:none;
   cursor:pointer; transition:.16s ease;}
 .workspace-nav a:hover,
 .workspace-nav>button:hover{color:#0f172a; background:#f8fafc;}
@@ -640,7 +640,7 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
   box-shadow:inset 3px 0 0 #2563eb;}
 .workspace-nav a svg,
 .workspace-nav>button svg{flex:0 0 auto;}
-.workspace-main{min-width:0; margin-left:224px;}
+.workspace-main{min-width:0; margin-left:270px;}
 .workspace-topbar{position:sticky; z-index:90; top:64px; display:flex; height:64px;
   box-sizing:border-box; align-items:center; justify-content:space-between; padding:0 36px;
   border-bottom:1px solid #e2e8f0; background:#fff;}
@@ -650,7 +650,7 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
   border:1px solid #dbe2ea; border-radius:6px; color:#475569; background:#fff; font-size:12px;
   font-weight:600; cursor:pointer;}
 .workspace-topbar button:hover{color:#1d4ed8; background:#f8fafc;}
-.workspace-content{min-width:0; padding:0 36px 36px;}
+.workspace-content{min-width:0; padding:64px 36px 36px;}
 .workspace-mobile-nav{display:none;}
 
 /*기존 관광 화면은 데이터·지도 코드를 유지하고 bid3 셸 안에 균형 있게 재배치합니다.*/
@@ -1940,7 +1940,8 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 .home-hero-actions a svg{width:25px; height:25px; margin-left:2px; padding:6px; border-radius:50%;
   color:#fff; background:rgb(255 255 255 / 16%); transition:transform .22s ease,background .22s ease;}
 .home-hero-actions a:hover{filter:saturate(1.05) brightness(1.04); transform:translateY(-2px);
-  box-shadow:0 16px 34px rgb(37 24 85 / 34%),inset 0 1px 0 rgb(255 255 255 / 28%);}
+  box-shadow:0 16px 34px rgb(37 24 85 / 34%),inset 0 1px 0 rgb(255 255 255 / 28%);
+  background:linear-gradient(112deg,#6d5bc7 0%,#8b62c5 45%,#e99a67 100%); font-size: 28px;}
 .home-hero-actions a:hover::before{transform:translateX(115%);}
 .home-hero-actions a:hover svg{background:rgb(255 255 255 / 24%); transform:translateX(2px);}
 .home-hero-actions a:active{transform:translateY(0); box-shadow:0 8px 18px rgb(37 24 85 / 26%);}
@@ -2414,13 +2415,13 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
   .workspace-shell{width:1920px; min-width:1920px; margin:0;}
   .tourism-home{overflow-x:visible;}
   .workspace-shell{position:relative;}
-  .workspace-main{width:1696px; margin-left:224px;}
+  .workspace-main{width:1650px; margin-left:270px;}
   .workspace-sidebar{position:absolute; left:0; right:auto; transform:none;}
 }
 /*1920px 이상에서는 전체 서비스 캔버스를 가운데 1920px로 고정합니다.*/
 @media(min-width:1920px){
   .tourism-home,  .workspace-shell{width:1920px; margin-right:auto; margin-left:auto;}
-  .workspace-main{width:1696px;}
+  .workspace-main{width:1650px;}
   .workspace-sidebar{left:50%; transform:translateX(-960px);}
 }
 /*메인 CTA는 기존 124×47px을 기준으로 폭 2배, 높이 1.5배로 키웁니다.*/
@@ -2589,7 +2590,7 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 .tourism-home>.home-header{
   position:fixed; top:0; right:auto; left:0; width:min(1920px,100%); z-index:2000;}
 /*업무 페이지도 같은 공통 로고 바를 브라우저 화면에 직접 고정합니다.*/
-.workspace-shell{padding-top:64px;}
+.workspace-shell{padding-top:0;}
 .workspace-shell>.workspace-global-header{position:fixed; top:0; right:auto; left:0;
   width:min(1920px,100%); z-index:2000;}
 
@@ -2682,3 +2683,23 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 .strategy-page .workspace-chat-message details,
 .strategy-page .workspace-chat footer label{font-size:14px;}
 .strategy-page .workspace-chat textarea{font-size:15.6px;}
+
+/*회원가입 화면과 동일한 서울 배경 및 navy/blue overlay를 주요 페이지에서 공유합니다.*/
+.oligo-seoul-page{position:relative; isolation:isolate; min-height:100vh; overflow-x:hidden;}
+.workspace-shell.oligo-seoul-page,
+.tourism-home.oligo-seoul-page{background-image:url('./assets/Seoul.png'); background-position:center;
+  background-repeat:no-repeat; background-size:cover; background-attachment:fixed;}
+.workspace-shell.oligo-seoul-page{overflow-x:clip;}
+.oligo-seoul-page::before{position:fixed; z-index:-1; inset:0; pointer-events:none; content:'';
+  background:linear-gradient(135deg,rgb(3 24 43 / 92%),rgb(8 48 76 / 86%) 48%,
+  rgb(19 39 83 / 91%));}
+
+/* 재근 - 회원가입/로그인 버튼 작업 */
+.home-brand-wrap {position: relative; width: 100%; display: flex; align-items: center;}
+.home-auth-actions {position: absolute; right: 40px; top: 50%; transform: translateY(-50%);
+  display: flex; align-items: center; gap: 16px;}
+.go_login,
+.go_signup {
+  min-width: 90px; height: 38px; padding: 0 18px; border-radius: 10px; cursor: pointer;
+  font-weight: 700; border: 2px solid red;
+}
