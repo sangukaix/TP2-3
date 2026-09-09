@@ -12,13 +12,17 @@ const menuItems = [
   { href: '/strategy', label: '기획안 수정 · 출력', icon: Sparkles },
 ]
 const savedPlansMenuItem = { href: '/saved-plans', label: '저장된 기획서', icon: FileBarChart }
+const seoulBackgroundPaths = new Set(['/dashboard', '/planning', '/strategy', '/saved-plans'])
 
 /**
- * bid3의 224px 사이드바·64px 상단바 비율을 React + Vite에 맞춰 옮긴 공통 화면 틀입니다.
+ * 270px 사이드바와 64px 상단바를 사용하는 공통 관광 업무 화면 틀입니다.
  * 입찰·결제 메뉴는 제거하고 관광 분석 업무 흐름만 남겼습니다.
  */
 export default function WorkspaceShell({ children }) {
   const currentPath = window.location.pathname
+  const pageClassName = seoulBackgroundPaths.has(currentPath)
+    ? 'workspace-shell oligo-seoul-page'
+    : 'workspace-shell'
   const topbarLabel = currentPath === '/dashboard'
     ? '1. 희망 지역을 선택해주세요'
     : currentPath === '/planning'
@@ -38,7 +42,7 @@ export default function WorkspaceShell({ children }) {
           : '지역관광 전략 업무공간'
 
   return (
-    <div className="workspace-shell">
+    <div className={pageClassName}>
       <header className="home-header workspace-global-header">
         <div>
           <div className="home-brand-wrap">
