@@ -51,7 +51,7 @@ function ReactSystemArchitecture({ architecture }) {
           const Icon = serviceIcons[service.id] || Server
           return <article className={`system-service is-${service.id}`} key={service.id}><div><Icon size={19} /><span>{service.path}</span></div><h3>{service.title}</h3><b>{service.tech}</b><code>localhost:{service.port}</code><p>{service.role}</p></article>
         })}</div>
-        <div className="system-proxy-label"><GitBranch size={15} /><span>Vite Proxy</span><code>/api/* → 8100</code><code>/ai/* → 8111</code></div>
+        <div className="system-proxy-label"><GitBranch size={15} /><span>Vite Proxy</span><code>/api/* → 8100</code><code>/ai/* → 8112</code></div>
         <div className="system-resource-grid">{current.resources.map((resource) => {
           const Icon = resourceIcons[resource.id] || Box
           return <article className={`system-resource owner-${resource.owner}`} key={resource.id}><Icon size={18} /><div><h3>{resource.title}</h3><b>{resource.tech}</b><p>{resource.role}</p></div><small>{resource.owner === 'backend' ? 'Backend 연결' : 'AI Server 연결'}</small></article>
@@ -74,13 +74,29 @@ function OpenAiAgentArchitecture({ agents }) {
   const detected = new Set(agents.map((agent) => agent.name))
   const coreAgents = Object.entries(CORE_AGENT_LABELS).filter(([name]) => detected.has(name))
   const laterAgents = coreAgents.slice(2)
-  return <section className="learning-block openai-agent-map"><header><Workflow size={18} /><div><h2>5-Agent 기획안 생성 구조</h2><p>OpenAI는 조사·판단·작성·검수 단계마다 정해진 JSON을 반환합니다.</p></div></header>
+  return <section className="learning-block openai-agent-map"><header><Workflow size={18} /><div><h2>5개 업무 역할, 하나의 기획안</h2><p>Agent는 역할·입력·도구·출력 규칙을 묶은 서버 코드입니다. 로컬 우선 모드의 실행 흐름을 보여 줍니다.</p></div></header>
+    <div className="agent-boundary"><b>OpenAI API ≠ 5개 Agent 전체</b><p>OpenAI는 허용된 공식 웹 조사와 독립 최종 검수를 담당합니다. Qwen은 후보 비교·로컬 검수, Gemma는 본문 작성·개정을 맡습니다. 실제 모델과 호출 여부는 AI Router 설정·캐시·agent_trace에 따라 달라집니다.</p></div>
     <div className="agent-input-row"><span><Database size={15} />공식 관측값</span><span><BrainCircuit size={15} />ML 전망</span><span><Box size={15} />RAG·공식 웹</span><span><Braces size={15} />사용자 조건</span></div>
     <ArrowDown className="agent-down" size={18} />
     <div className="agent-parallel"><p>병렬 조사</p>{coreAgents.slice(0, 2).map(([name, [number, title, role]]) => <article key={name}><i>{number}</i><div><h3>{title}</h3><b>{name}</b><p>{role}</p></div></article>)}</div>
     <ArrowDown className="agent-down" size={18} />
     <div className="agent-sequence">{laterAgents.map(([name, [number, title, role]], index) => <div key={name}><article><i>{number}</i><div><h3>{title}</h3><b>{name}</b><p>{role}</p></div></article>{index < laterAgents.length - 1 && <ArrowRight size={17} />}</div>)}</div>
+    <div className="agent-boundary"><b>검수 뒤의 분기</b><p>코드 검사 + Qwen 검수 → 지적이 있으면 Gemma 개정·재검수 → 로컬 통과본은 OpenAI 독립 최종 검수. 검수 미달을 통과로 바꾸지 않으며, 표시 가능한 제안과 내부 승인 상태는 구분합니다.</p></div>
     <div className="agent-output"><PackageCheck size={18} /><div><b>구조화 기획안 JSON</b><span>화면 미리보기 → MySQL 저장 → Word/PPT 출력</span></div></div>
+    <div className="agent-contracts">{coreAgents.map(([name, [number, title]]) => {
+      const agent = agents.find((item) => item.name === name)
+      const contract = agent?.contract
+      if (!contract) return null
+      return <details key={name} className="agent-contract" open={name === 'EvidenceAgent'}>
+        <summary><span>{number}</span><div><b>{title} · {name}</b><small>{contract.provider}</small></div></summary>
+        <div className="agent-contract-body"><p className="agent-persona">{contract.persona}</p>
+          <dl>{[['받는 데이터', contract.input], ['실행 함수', `${agent.file} → ${contract.method}()`], ['허용 도구·자료', contract.tools], ['내보내는 결과', contract.output], ['작동 설정', contract.config]].map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
+          <details><summary>실제 역할 지시문 발췌</summary><code>{contract.prompt_file} · {contract.prompt_key}</code><pre>{contract.prompt_excerpt}</pre></details>
+        </div>
+      </details>
+    })}</div>
+    <div className="agent-boundary"><b>명령과 도구가 실제 모델까지 가는 과정</b><p>Agent 메서드가 LLMRequest에 task·instructions·input_payload·JSON Schema를 담습니다. llm/router.py의 LLMRouter.generate가 공급자를 고릅니다. 로컬은 local_prompts.local_instructions와 역할 규칙을 결합하고 local_agent가 필수 도구 결과를 메시지에 넣습니다. OpenAI 경로는 openai_responses.py가 Responses API에 지시문·입력·출력 규격을 전달합니다.</p><p>도구는 모델이 임의 SQL·파일을 실행하는 권한이 아닙니다. evidence_tools.py의 허용 함수가 이번 요청에 준비된 자료만 읽습니다. ‘이 역할을 맡아라’라는 문장은 페르소나이고, 호출 순서·도구 제한·Schema 검사는 Python 코드가 집행합니다.</p></div>
+    <div className="agent-boundary"><b>모드와 설정을 읽는 법</b><p>local_first는 필요할 때만 유료 조사·최종 검수를 허용하고, student_budget은 유료 자동 조사·대체를 제한합니다. LOCAL_LLM_TIMEOUT_SECONDS는 로컬 응답 대기 시간, OLLAMA_QWEN_MODEL·OLLAMA_GEMMA_MODEL은 로컬 모델 선택입니다. 서버 환경변수와 storage/llm_runtime_config.json 설정을 Router가 읽습니다. 실제 적용값은 AI Router 탭에서 확인하세요.</p></div>
   </section>
 }
 
@@ -141,7 +157,7 @@ export default function LearningArchitecturePage({ topic }) {
   const [catalog, setCatalog] = useState(null)
   const [error, setError] = useState('')
   useEffect(() => { let active = true; getProjectLearningCatalog(topic).then((data) => { if (active) setCatalog(data) }).catch((reason) => { if (active) setError(reason.message) }); return () => { active = false } }, [topic])
-  return <WorkspaceShell><main className="ml-test-page learning-architecture-page"><LearningSectionNav />
+  return <WorkspaceShell><main className={`ml-test-page learning-architecture-page ${topic === 'openai' ? 'is-openai-study' : ''}`}><LearningSectionNav />
     {!catalog && !error && <div className="ml-test-state"><LoaderCircle className="learning-spin" size={18} />현재 프로젝트 구조를 읽고 있습니다.</div>}
     {error && <div className="ml-test-state is-error"><AlertCircle size={18} />{error}</div>}
     {catalog && <div className="learning-architecture-layout"><div className="learning-architecture-content">

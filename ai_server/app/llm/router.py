@@ -63,7 +63,7 @@ class LLMRouter:
                 default_model=str(env_values.get('OLLAMA_QWEN_MODEL') or ''),
                 # 26B 모델의 첫 로드와 구조화 초안 생성은 3분을 넘길 수 있습니다. 환경변수로
                 # 더 짧게 정한 팀 설정은 존중하되, 미설정 기본값은 실제 완료를 기다립니다.
-                timeout_seconds=float(env_values.get('LOCAL_LLM_TIMEOUT_SECONDS') or 420),
+                timeout_seconds=float(env_values.get('LOCAL_LLM_TIMEOUT_SECONDS') or 1800),
                 # 현재 팀의 Qwen3:14b가 제공하는 40,960 토큰 문맥을 기본으로 씁니다.
                 # 이전 32,768 기본값은 여러 공식 사례·ML·비교표를 함께 검토하는
                 # 적용성 단계에서 실제 모델 한도보다 먼저 안전 차단되는 문제가 있었습니다.
@@ -72,7 +72,7 @@ class LLMRouter:
             'gemma': OllamaProvider(
                 base_url=str(env_values.get('LOCAL_LLM_BASE_URL') or ''),
                 default_model=str(env_values.get('OLLAMA_GEMMA_MODEL') or ''),
-                timeout_seconds=float(env_values.get('LOCAL_LLM_TIMEOUT_SECONDS') or 420),
+                timeout_seconds=float(env_values.get('LOCAL_LLM_TIMEOUT_SECONDS') or 1800),
                 # Qwen과 같은 공통 문맥 예산을 적용해 Agent 단계별 동작을 예측 가능하게
                 # 유지합니다. Gemma는 더 긴 문맥을 지원하지만 요청마다 임의로 달라지지 않습니다.
                 context_length=int(env_values.get('LOCAL_LLM_CONTEXT_LENGTH') or 40960),
@@ -104,13 +104,19 @@ class LLMRouter:
             return
         import asyncio
         states = await asyncio.gather(*(self.providers[name].health() for name in ('qwen', 'gemma')))
+        if any(state.status != 'active' for state in states):
+            # Retry only a read-only connection check; never run paid generation here.
+            states = await asyncio.gather(*(self.providers[name].health() for name in ('qwen', 'gemma')))
         available = dict(zip(('qwen', 'gemma'), states))
         routes = self.effective_routes()
         model_missing = any(routes[task]['model'] not in available[routes[task]['provider']].models
                             for task in ('transferability', 'planner', 'reviewer'))
         if any(state.status != 'active' for state in states) or model_missing:
             raise LLMProviderError('LOCAL_FIRST_MODELS_UNAVAILABLE',
-                                   '개인 노트북의 Qwen·Gemma 연결을 먼저 확인해주세요. OpenAI 유료 조사는 시작하지 않았습니다.', status_code=503)
+                                   '지역 자료와 별개로 로컬 모델 연결 또는 설치 모델 확인에 실패했습니다. '
+                                   + ' / '.join(f'{name}: {state.message}' for name, state in available.items())
+                                   + (' 선택된 모델 태그가 설치 목록과 다릅니다.' if model_missing else '')
+                                   + ' 노트북의 Ollama 실행·네트워크를 확인한 뒤 다시 시도해 주세요. OpenAI 유료 조사는 시작하지 않았습니다.', status_code=503)
 
     def _default_config(self) -> dict[str, Any]:
         mode = str(self.env_values.get('LLM_MODE') or 'hybrid').lower()
@@ -343,6 +349,10 @@ class LLMRouter:
                 'local_first': self.local_first,
                 'student_budget': self.student_budget,
                 'max_cloud_calls_per_generation': self.max_cloud_calls_per_generation,
+                'local_llm_timeout_seconds': int(getattr(
+                    self.providers['qwen'], 'timeout_seconds',
+                    float(self.env_values.get('LOCAL_LLM_TIMEOUT_SECONDS') or 1800),
+                )),
                 'automatic_paid_fallback': not self.local_first and self.config['mode'] != 'local_only',
                 'automatic_web_research': not self.student_budget and self.config['mode'] != 'local_only',
                 'free_official_web_search': local_web_search,

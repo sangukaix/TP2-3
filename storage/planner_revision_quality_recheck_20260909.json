@@ -1,0 +1,48 @@
+{
+  "checked": true,
+  "issues": [
+    {
+      "severity": "critical",
+      "field": "planning_decision.case_source_ids",
+      "problem": "후보에 미등록 사례가 연결됐습니다.",
+      "revision_instruction": "benchmark_cases에 없는 사례 인용을 제거하고 근거를 재확인하세요."
+    },
+    {
+      "severity": "critical",
+      "field": "planning_decision.case_source_ids",
+      "problem": "등록되지 않은 공식 사례 ID가 연결됐습니다.",
+      "revision_instruction": "benchmark_cases의 source_id를 그대로 사용하고 supporting_case_ids까지 함께 수정하세요."
+    },
+    {
+      "severity": "major",
+      "field": "planning_decision.selection_status",
+      "problem": "선택 후보의 지역 적용 조건이 미확인 상태입니다.",
+      "revision_instruction": "후보 수 부족과 구분하세요. prerequisites/selection_reason의 미확인 조건과 필요한 공식 문서를 명시하고, 확인 전 집행 승인이나 ready 변경을 하지 마세요."
+    },
+    {
+      "severity": "major",
+      "field": "planning_decision.design_candidates[1].case_source_ids",
+      "problem": "후보의 운영 방식을 뒷받침하는 공식 사례가 연결되지 않았습니다.",
+      "revision_instruction": "유사 사례에서 가져올 운영 장치와 선택 지역에서 바꿀 점을 쓰고 실제 case source_id를 연결하세요."
+    },
+    {
+      "severity": "major",
+      "field": "planning_decision.design_candidates[2].mechanism",
+      "problem": "후보의 작동 방식이 방문객 행동 없이 예산 편성만 설명합니다.",
+      "revision_instruction": "누가 무엇을 이용·예약·결제·체험하고 운영자가 무엇을 확인하는지 작성하세요."
+    },
+    {
+      "severity": "major",
+      "field": "strategies[1].comparison_analysis.unapproved_case_result",
+      "problem": "정량 성과 인용이 보류된 타지역 사례의 실적·증가율을 본문에 사용했습니다.",
+      "revision_instruction": "해당 수치는 삭제하고 사례에서는 이용 절차·운영 장치만 비교하세요. 발전 가능성은 선택 지역 시범의 대상 수×완료율×건별 측정값과 미운영 비교로 제시하세요."
+    },
+    {
+      "severity": "major",
+      "field": "strategies[1].expected_effect.ml_reliability",
+      "problem": "기준선보다 약한 ML 전망의 증가율이 사업 선택 또는 성과 기대처럼 제시됐습니다.",
+      "revision_instruction": "해당 전망은 탐색적 참고값이며 성과 목표·사업 효과가 아님을 명시하거나, 검증된 관측 지표와 사후 측정 가설로 바꾸세요."
+    }
+  ],
+  "issue_count": 7
+}

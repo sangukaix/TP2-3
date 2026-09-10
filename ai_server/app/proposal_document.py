@@ -209,7 +209,7 @@ def _create_execution_comparison_chart(report: dict[str, Any]) -> BytesIO:
         natural_label = 'ML 자연추세' if is_ml_forecast else '최근 관측값'
         axis.plot(labels, natural, color=color, linewidth=2.4, marker='o', markersize=3, label=natural_label)
         if target_line:
-            axis.plot(labels, target_line, color='#E86973', linewidth=1.8, linestyle='--', label='사용자 설정 목표')
+            axis.plot(labels, target_line, color='#E86973', linewidth=1.8, linestyle='--', label='계획 목표')
         axis.set_ylabel(ylabel, color='#536B88', fontsize=7.5)
         axis.grid(axis='y', color='#DCE5EB', linewidth=0.6)
         axis.tick_params(axis='both', labelsize=6.8, colors='#536B88')
@@ -330,6 +330,8 @@ def _validate_document_structure(content: bytes) -> None:
 
 def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
     """최대 5쪽 안에서 빠르게 검토할 수 있는 도표 중심 Word 기획서를 생성합니다."""
+    from .idea_proposal import prepare_idea_report
+    report = prepare_idea_report(report)
     document = Document()
     section = document.sections[0]
     section.top_margin = Inches(0.72)
@@ -357,7 +359,7 @@ def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
     _set_run_font(run, size=22, bold=True, color=INK)
     subtitle = document.add_paragraph()
     subtitle.paragraph_format.space_after = Pt(12)
-    _set_run_font(subtitle.add_run(f"{review_label(report)}\n분석 기간 {report['period']} | 관광데이터랩 원자료와 공식 관광자료 기반"), size=9.5, color=MUTED)
+    _set_run_font(subtitle.add_run(f"{('교육용 더미 · 오프라인 샘플' if report.get('generation_mode') == 'offline_sample' else '관광사업 아이디어 제안 · 목표와 견적은 조정 가능')}\n분석 기간 {report['period']} | 관광데이터랩 원자료와 공식 관광자료 기반"), size=9.5, color=MUTED)
     _add_heading(document, '1. 핵심 제안')
     if report.get('planning_brief'):
         from .planning_brief import brief_summary
@@ -391,6 +393,7 @@ def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
     _add_selected_official_image(document, report, strategy)
 
     _add_heading(document, '3. 문제 / 제안과 판단 근거')
+    document.paragraphs[-1].paragraph_format.page_break_before = True
     diagnosis_table = document.add_table(rows=2, cols=2)
     _set_table_geometry(diagnosis_table, [1760, 7600])
     diagnosis_rows = [
@@ -405,7 +408,7 @@ def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
     _add_heading(document, '4. 해결 방법')
     solution_table = document.add_table(rows=2, cols=2)
     _set_table_geometry(solution_table, [1760, 7600])
-    solution_rows = [('실행 방향', _compact_text(strategy['solution'], 240)), ('예산 준비', _compact_text(strategy['budget'], 180))]
+    solution_rows = [('실행 방향', _compact_text(strategy['solution'], 240)), ('예상 견적', f"총 {report['reference_estimate']['total_krw']:,}원. 항목별 임시 견적은 뒤의 견적표를 참조하세요. 실제 금액과 다를 수 있습니다.")]
     for row, (label, value) in zip(solution_table.rows, solution_rows):
         _shade(row.cells[0], PALE_AQUA)
         _add_text(row.cells[0], label, bold=True, size=9)
@@ -430,6 +433,7 @@ def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
     _set_run_font(timeline_caption.add_run('그림 2. 5단계 실행 일정과 단계별 결과물'), size=8.3, color=MUTED)
 
     _add_heading(document, '6. ML 자연추세와 사업 목표')
+    document.paragraphs[-1].paragraph_format.page_break_before = True
     forecasts = _ml_forecast_rows(report)
     target = _execution_target(report)
     if forecasts:
@@ -440,7 +444,7 @@ def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
             target_spending = round(last_forecast['spending_krw'] * (1 + spending_pct / 100))
             comparison_table = document.add_table(rows=2, cols=3)
             _set_table_geometry(comparison_table, [3120, 3120, 3120])
-            headers = ['ML 자연추세', '사용자 설정 목표', '추가로 필요한 수준']
+            headers = ['ML 자연추세', '계획 목표', '추가로 필요한 수준']
             for cell, header in zip(comparison_table.rows[0].cells, headers):
                 _shade(cell, PALE_AQUA)
                 _add_text(cell, header, bold=True, size=8.5)
@@ -461,7 +465,7 @@ def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
         comparison_note.alignment = WD_ALIGN_PARAGRAPH.CENTER
         note = '그림 3. 저장 ML 모델의 월별 자연추세'
         if target:
-            note += '와 사용자 설정 목표'
+            note += '와 계획 목표'
         _set_run_font(comparison_note.add_run(note), size=8.3, color=MUTED)
         forecast_caution = document.add_paragraph()
         forecast_caution.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -480,6 +484,22 @@ def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
     _shade(effect_callout.cell(0, 0), PALE_AQUA)
     _add_text(effect_callout.cell(0, 0), f"기대할 수 있는 변화 · {_compact_text(strategy['expected_effect'], 180)}", size=9.2, color=INK)
 
+    _add_heading(document, '목표 KPI의 사례 근거와 설정 기준')
+    document.add_paragraph(report['target_proposal_basis']['explanation'])
+    if report['target_proposal_basis']['source_url']:
+        document.add_paragraph(report['target_proposal_basis']['source_url'])
+    _add_heading(document, '예상 견적')
+    document.paragraphs[-1].paragraph_format.page_break_before = True
+    estimate = report['reference_estimate']
+    estimate_table = document.add_table(rows=1, cols=3)
+    _set_table_geometry(estimate_table, [2300, 4660, 2400])
+    for cell, label in zip(estimate_table.rows[0].cells, ['항목', '수량·단가 가정', '예상 금액']):
+        _shade(cell, PALE_BLUE)
+        _add_text(cell, label, bold=True)
+    for item in estimate['items']:
+        for cell, value in zip(estimate_table.add_row().cells, [item['name'], item['basis'], f"{item['amount']:,}원"]):
+            _add_text(cell, value, size=9)
+    document.add_paragraph(f"예상 총액 {estimate['total_krw']:,}원. 수량·단가를 가정한 참고 견적으로 실제 금액과 다를 수 있습니다.")
     _add_heading(document, '7. 참고한 공식 사례·데이터')
     all_sources = report.get('evidence_sources') or []
     benchmark_sources = [source for source in all_sources if source.get('source_type') == 'benchmark_case'][:3]

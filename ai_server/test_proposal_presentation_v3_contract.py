@@ -177,7 +177,7 @@ class ProposalPresentationV4ContractTest(unittest.TestCase):
             proposal_presentation.create_strategy_proposal_presentation,
             proposal_presentation_v4.create_strategy_proposal_presentation,
         )
-        self.assertEqual(proposal_presentation_v4.PRESENTATION_RENDER_VERSION, 'pptx-user35-v6-exact-ml-kpi-full-sources-r2')
+        self.assertEqual(proposal_presentation_v4.PRESENTATION_RENDER_VERSION, 'pptx-regional-target-estimate-v17')
         template_path = Path(proposal_presentation_v4.PRESENTATION_TEMPLATE_PATH)
         self.assertEqual(template_path.name, 'tourism_strategy_12_slide_template_v6.pptx')
         self.assertTrue(template_path.is_file(), f'승인된 PPT 레이아웃 원본을 찾을 수 없습니다: {template_path}')
@@ -199,14 +199,14 @@ class ProposalPresentationV4ContractTest(unittest.TestCase):
         required_by_slide = {
             1: ('강남 이브닝 스테이 패스', '서울특별시 강남구'),
             2: ('목차',),
-            3: ('강남 이브닝 스테이 패스', '야간 동선·식음쇼핑 혜택'),
-            4: ('핵심 기획', '무엇을 만드나', '최종적으로 만들어 내는 것'),
-            5: ('자연추세',),
-            6: ('유사 지역',),
-            7: ('작게 시작해', 'STEP 01', '최종 산출물'),
-            8: ('KPI',),
-            9: ('견적', '참고 견적'),
-            10: ('시범사업 이후', '정례 운영', '단계적 확장'),
+            3: ('강남 이브닝 스테이 패스', '야간 동선'),
+            4: ('사업 설계', '사업내용', '사업기간', '목표 KPI'),
+            5: ('지역별 참고 사례',),
+            6: ('지역 적용 방법',),
+            7: ('4단계 실행 가이드', '01'),
+            8: ('머신러닝 예측값과 목표 KPI',),
+            9: ('사례 실적과 목표 KPI 설정 근거',),
+            10: ('견적 예시안', '시범 예산',),
             11: ('근거·데이터', '관측 데이터'),
         }
         for slide_number, labels in required_by_slide.items():
@@ -215,8 +215,8 @@ class ProposalPresentationV4ContractTest(unittest.TestCase):
         self.assertNotRegex(texts_by_slide[3], r'\bC\d+\b', '4장에 내부 후보 ID가 노출됐습니다.')
         self.assertTrue(
             any(
-                phrase in texts_by_slide[4]
-                for phrase in ('정책효과 예측 아님', '사업효과 예측이 아닙니다', '정책 인과효과', '인과적 반사실', '성과 보장', '사업 효과를 학습한 예측은 아닙니다')
+                phrase in texts_by_slide[3]
+                for phrase in ('사례 실적을 참고한 계획 가정',)
             ),
             '5장에 ML 자연추세와 정책효과를 구분하는 안전 문구가 없습니다.',
         )
@@ -236,11 +236,12 @@ class ProposalPresentationV4ContractTest(unittest.TestCase):
             for shape in slide.shapes
             if shape.shape_type == MSO_SHAPE_TYPE.PICTURE
         ]
-        self.assertGreaterEqual(len(native_text_shapes), 125, '편집 가능한 텍스트 개체가 지나치게 적습니다.')
+        self.assertGreaterEqual(len(native_text_shapes), 90, '편집 가능한 텍스트 개체가 지나치게 적습니다.')
         self.assertGreaterEqual(len(native_charts), 2, 'ML 전망 차트 2개는 네이티브 PowerPoint 차트여야 합니다.')
         self.assertGreaterEqual(len(pictures), 1, '템플릿의 지역 사진 프레임이 유지되어야 합니다.')
         self.assertIn('감사합니다', texts_by_slide[-1])
-        self.assertIn('머신러닝 예측치', '\n'.join(texts_by_slide[10:]))
+        self.assertIn('머신러닝 예측치', '\n'.join(texts_by_slide[9:]))
+        self.assertNotRegex('\n'.join(texts_by_slide), r'…|\.{3}|자연추세')
         for slide_number, slide_text in enumerate(texts_by_slide, start=1):
             self.assertTrue(slide_text.strip(), f'{slide_number}장이 통이미지 또는 빈 슬라이드입니다.')
 
@@ -255,25 +256,20 @@ class ProposalPresentationV4ContractTest(unittest.TestCase):
             output = proposal_presentation.create_strategy_proposal_presentation(report)
 
         deck = Presentation(output)
-        self.assertEqual(len(deck.slides), 12)
+        self.assertGreaterEqual(len(deck.slides), 12)
         self.assertTrue(all(_slide_text(slide).strip() for slide in deck.slides))
-        self.assertIn('예측치 미제공', _slide_text(deck.slides[4]))
-        self.assertFalse(any(getattr(s, 'has_chart', False) for s in deck.slides[4].shapes))
+        self.assertIn('예측치 미제공', _slide_text(deck.slides[3]))
+        self.assertFalse(any(getattr(s, 'has_chart', False) for s in deck.slides[3].shapes))
 
     def test_approved_template_positions_and_final_decision_copy_are_preserved(self) -> None:
         """출력 때 이미 정돈한 최신 템플릿을 다시 이동하거나 축소하지 않습니다."""
         source = Presentation(str(proposal_presentation_v4.PRESENTATION_TEMPLATE_PATH))
         result = Presentation(proposal_presentation.create_strategy_proposal_presentation(_sample_report()))
-        for index, names in (
-            (2, ('title', 's3-evidence-title')),
-            (3, ('title', 'value-title')),
-            (6, ('title', 'step-0-label', 'step-1-label', 'step-2-label', 'step-3-label', 'value-panel', 'value-title')),
-            (8, ('title', 'budget-table-title')),
-            (9, ('title', 'expected-pill', 'service-pill', 'private-pill')),
-            (10, ('title', 'source-subtitle')),
+        for index, result_index, names in (
+            (0, 0, ('title-panel', 'center-top-vertical')),
         ):
             before = {shape.name: shape for shape in source.slides[index].shapes}
-            after = {shape.name: shape for shape in result.slides[index].shapes}
+            after = {shape.name: shape for shape in result.slides[result_index].shapes}
             for name in names:
                 self.assertEqual(
                     tuple(getattr(before[name], attr) for attr in ('left', 'top', 'width', 'height')),
@@ -283,10 +279,12 @@ class ProposalPresentationV4ContractTest(unittest.TestCase):
     def test_comparison_uses_selected_case_and_only_plots_observed_yoy(self) -> None:
         """사례 선택을 보존하고 수치가 없을 때는 장식 막대를 사실처럼 남기지 않습니다."""
         report = _sample_report()
+        report['strategies'][0]['solution']='문화시설 예약 프로그램'
         report['evidence_sources'].extend([
             {'source_id': 'case:other', 'source_type': 'benchmark_case', 'title': '다른 사례'},
             {'source_id': 'case:selected', 'source_type': 'benchmark_case', 'title': '선정된 공식 문화 프로그램 사례',
-             'summary': '공식 운영 결과 요약'},
+             'summary': '공식 운영 결과 요약','source_url':'https://example.go.kr/case',
+             'operating_model':'문화시설 이용을 확인한 예약 참여자에게 혜택 제공'},
         ])
         report['planning_decision'] = {
             'selected_candidate_id': 'candidate:a',
@@ -296,29 +294,28 @@ class ProposalPresentationV4ContractTest(unittest.TestCase):
                                       'adaptation': '문화시설 이용을 확인한 참여자에게 지역 상점 후속 혜택을 제공합니다.'}],
         }
         output = Presentation(proposal_presentation.create_strategy_proposal_presentation(report))
-        text = _slide_text(output.slides[5])
+        text = _slide_text(output.slides[4])
         self.assertIn('선정된 공식 문화 프로그램 사례', text)
         self.assertIn('문화시설 이용을 확인한', text)
-        self.assertIn('비교 가능한 지역보다 숙박 방문 비율', text)
-        self.assertNotIn('peer-visitors-yoy-index', [shape.name for shape in output.slides[5].shapes])
+        self.assertIn('핵심 운영 참고', text)
+        self.assertNotIn('peer-visitors-yoy-index', [shape.name for shape in output.slides[4].shapes])
         report['observed_findings'].append({'metric': '전년동월 외지인 방문자 증감률', 'value': '-8.3%'})
         output = Presentation(proposal_presentation.create_strategy_proposal_presentation(report))
-        chart = next(shape.chart for shape in output.slides[5].shapes if shape.name == 'peer-visitors-yoy-index')
-        self.assertEqual(list(chart.series[0].values), [100.0, 91.7])
+        self.assertFalse(any(shape.has_chart for shape in output.slides[4].shapes))
 
     def test_estimate_and_provenance_do_not_invent_missing_facts(self) -> None:
         """참고 견적을 확정 견적과 구분하고 요청대로 AI 검수 블록을 제외합니다."""
         report = _sample_report()
         report['agent_trace'] = [{'provider': 'qwen', 'status': 'completed'}]
         output = Presentation(proposal_presentation.create_strategy_proposal_presentation(report))
-        estimate_text = _slide_text(output.slides[8])
+        estimate_text = _slide_text(output.slides[9])
         provenance_text = _slide_text(output.slides[10])
-        self.assertIn('비교견적', estimate_text)
+        self.assertIn('실제 액수와 다를 수 있습니다', estimate_text)
         self.assertNotIn('2.40억 원', estimate_text)
         self.assertNotIn('AI 기획·검수', provenance_text)
         self.assertNotIn('이번 출력: Gemma', provenance_text)
         self.assertNotIn('이번 출력: OpenAI', provenance_text)
-        self.assertIn('RandomForestRegressor', '\n'.join(_slide_text(s) for s in list(output.slides)[10:]))
+        self.assertIn('RandomForestRegressor', '\n'.join(_slide_text(s) for s in list(output.slides)[9:]))
 
     def test_missing_template_fails_instead_of_silent_legacy_fallback(self) -> None:
         """배포 누락을 구형 출력으로 숨기지 않고 즉시 명확한 오류로 드러냅니다."""

@@ -1,5 +1,73 @@
 # 프론트엔드 연동 API 초안
 
+D-115: 공개 API 변경 없음. 로컬 후보 재생 CLI는 모델 원문 계약과 서버 보정 후 계약을 구분해 `stabilized_candidate_contract_passed`, `stabilized_issues`, `automatic_corrections`, `stabilized_decision`을 추가 기록한다. 이 진단은 유료 호출·보고서 저장·승인을 수행하지 않으며 보정 통과도 의미 품질 승인으로 취급하지 않는다.
+
+D-114: React 화면 경로는 `frontend/src/routes.js`의 명시적 공개 경로와 `/diagnosis`·`/proposal` 별칭을 사용한다. 알 수 없는 주소는 클라이언트 404로 표시하며 `/api`·`/ai` 요청 계약은 바뀌지 않는다.
+
+D-108: 공개 API 변경 없음. `compare_candidate_flow`는 후보 이용 흐름만 보는 로컬 CLI 실험이며 결과를 보고서에 저장하지 않는다. 예시 검토 상태와 보고서 승인은 별개이며 모든 실험의 report_approved는 false다.
+
+D-107: 공개 API 변경 없음. 진단 CLI의 `--compare-thinking`은 동일한 첫 최종 요청을 Qwen `think=false/true`로 각각 한 번 호출하고 자동 교정 없이 종료한다. `comparison_arm`은 원문 응답·Schema/출처/작성 검사·사용량을 구분하며 `report_approved=false`를 유지한다. 운영 라우팅·호출 횟수·출력 한도는 변경하지 않는다.
+
+D-105: 공개 API는 유지한다. 로컬 CLI의 `--fresh`는 기존 후보 없는 설계 비교 진단으로 보고서를 저장하지 않는다. 진단 결과에 candidate_contract_passed와 report_approved=false를 구분한다. KPI 주기 검사에서 분기별/매 분기도 명시적 주기로 인식한다.
+
+내부 후보 출력의 candidate_type은 기존 작성 지시의 spend_conversion/stay_conversion/reservation_conversion/return_visit/access_and_mobility/experience_product만 허용한다. 사례 비교용 night_time_experience를 사업 유형으로 자동 변환하지 않는다. 코드 검사에서 후보 `.candidate_type`, `.title`, `.stop_or_scale_rule` 지적이 추가될 수 있다. 저장된 보고서는 자동 변환하지 않는다.
+
+## 내부 근거 전달 보강 (2026-09-08, D-104)
+
+공개 요청/응답 계약은 유지한다. 내부 get_region_metrics에 dataset_sources와 source_link_rule을 추가하며 관측에 source_id를 추측해 삽입하지 않는다. 오류 피드백이 있는 로컬 후보 재비교의 get_planning_decision에는 review_context.status=rejected_candidate_draft를 포함한다. 저장 보고서 승인 상태와 다른 내부 입력 표시다.
+
+비용 검사에서 `수량×단가 산식:`이라는 표제만으로 통과하지 않는다. 표제를 제외한 본문에 곱셈식이 없는 금액 나열은 기존 budget_formula 작성 오류로 반환한다.
+
+## 후보 작성 지시 보강 (2026-09-08, D-103)
+
+후보 생성 Schema에 필드별 예산·측정·지역 적합성·출처 설명을 추가하고 로컬 시스템 메시지에 전달한다. 공개 요청/응답 필드는 유지한다. 전체 후보 보완 뒤 기계적으로 안전하게 고칠 수 있는 출처 ID·타지역 범위·미확정 예산 산식·측정 원장 문제는 서버 계약으로 보정하고 `needs_evidence` 검토용 본문을 작성한다. 필드 설명 추가나 JSON 성공, 서버 보정을 승인으로 간주하지 않는다.
+
+후보와 strategy_brief의 budget_formula에도 가정 표시 없는 확정 총액 검사를 적용한다(D-103). 오류 field는 `planning_decision.design_candidates[N].budget_formula.fixed_total` 또는 `planning_decision.strategy_brief.budget_formula.fixed_total`이며 severity는 critical이다. N은 기존 검사와 같이 1부터 센다. needs_evidence도 이 검사에서 제외하지 않는다.
+
+## PPT 견적 표시 (2026-09-08)
+
+실제 보고서 다운로드는 저장 strategies[0].budget을 표시합니다. 저장 응답이나 DB를 수정하지 않습니다. 총액 미기재/복수 총액은 미확정으로 나타내며 오프라인 샘플 이외에는 별도 예시 견적을 생성하지 않습니다. 렌더 캐시 버전은 pptx-user35-v9-saved-budget-r3입니다.
+
+## 목표 KPI 입력 (2026-09-08)
+
+planning_brief에 선택 필드 visitor_target_pct(0~20), spending_target_pct(0~30)를 받는다. 둘 다 null 또는 둘 다 유한 숫자여야 한다. 생성 응답 execution_scenario에 명시적 사용자 목표만 전달한다. 미입력은 null이며, 마지막 사업 월 예측값 대비 계획 증가율이다. 효과 예측이 아니다.
+
+## 전체 검수 결과 적용 (2026-09-07)
+
+자동 보완 입력과 최종 quality_review는 코드 검사의 전체 지적을 사용한다. issues가 8개를 초과할 수 있다. 기존 validation_findings도 유지한다. approved 값만으로 화면 통과를 판단하지 않으며 점수 82 이상, 중대 오류 없음, 미검수 상태 아님을 함께 확인한다. 명시적인 final_audit_completed=false는 통과가 아니다.
+
+## 후보 검증 실패 처리 (2026-09-09 변경)
+
+기획안 생성 중 후보 보완 후에도 문제가 남으면 먼저 서버 안전 계약을 적용합니다. 미등록 ID는 제거하고, 타지역 범위는 선택 지역의 조건부 시범 범위로, 출처 없는 총액은 수량×미확정 비교견적 산식으로, 불완전한 측정은 분자·분모·원장·비교 기준이 있는 계약으로 바꿉니다. 이 경우 보고서는 `needs_evidence` 검토용 초안으로 반환되며 자동 승인하지 않습니다. 서버가 안전하게 복구할 수 없는 critical 근거 오류만 HTTP 422 `TRANSFERABILITY_CANDIDATE_VALIDATION_FAILED`로 종료합니다.
+
+완료 작업을 다시 조회할 때 저장 본문이 없거나 현재 응답 Schema로 검증되지 않으면 `completed` 상태를 그대로 반환하지 않습니다. `failed`와 재생성 안내를 반환해 화면의 무한 폴링을 막습니다. 작업 조회 404는 브라우저가 오래된 작업 ID를 제거할 수 있도록 HTTP 상태를 유지합니다.
+
+## 지역 챗봇 실행 정보 (2026-09-07)
+
+`POST /ai/v1/demo/{region_code}/assistant-chat`: 응답 `generation_mode`는 `openai | local | offline_sample`, `execution`은 실제 `provider/model/usage/web_search_used/fallback`을 반환합니다. 대화는 `role/content` 형태로 최근 8개, 각 3,000자까지 받습니다.
+
+웹 검색 허용은 모든 질문에 검색을 실행하라는 의미가 아닙니다. 수정·설명은 해당 라우트를 사용하고 명시적인 검색 요청만 검색 작업으로 보냅니다. 학생 절약 모드의 유료 검색 차단은 유지합니다. 수정안은 사용자 적용·저장 전에는 영구 반영하지 않으며 기존 검수 상태를 무효화합니다. 긴 기존 본문 수정의 근거 범위와 제약은 [점검 기록](QUALITY_INTEGRATION_AUDIT_20260907.md)을 참조합니다.
+
+## 지역 검증 상태
+
+`GET /ai/v1/regions/readiness-audit`는 최근 24시간 점검 결과의 지역코드·이름·data_ready·verified·issues만 노출한다. 서버 경로·개인 노트북 주소는 노출하지 않는다. 만료/파일 없음/조회 실패는 미검증이며 초록색으로 보이지 않는다.
+`python -m ai_server.app.scripts.audit_all_regions`는 89개 활성 카탈로그의 실제 원자료·ML·SQL 비교·사례 및 최신 저장 기획안 목표·승인·출력을 점검한다. 로컬 AI 서버 8112가 필요하며 LLM 호출·SQL 변경·재학습은 하지 않는다. 초록색은 검사 시점의 통과이며 향후 생성 성공률이나 자료 100% 확보 보장이 아니다.
+
+## 2026-09-07 PPT v9 실행 상세 추가
+
+- endpoint/JSON schema 유지. 렌더 버전 `pptx-user35-v9-execution-detail-r1`.
+- 6장 단계·기간 별도 열 및 중앙 정렬 헤더, 7장 세부 실행내역 추가. 이후 KPI 8장, 견적 9장, 출처 10장부터, 전체 11~12장.
+- 상세 페이지는 저장된 사업 내용에 맞춘 실행 방법 제안이며, 미확정 협약·지원율·현장 조건을 새 사실처럼 만들지 않는다. 원문 업무와 발표자 노트를 보존한다.
+
+## 2026-09-07 PPT v8 출력 계약
+
+- endpoint·저장 JSON schema 변경 없음. 렌더 버전은 `pptx-user35-v8-readable-monthly-target-r1`.
+- 3장 사업 설명, 4장 사업 설계와 방문자·소비액 비교 차트, 5장 서로 다른 운영방식 우선 사례, 6장 4단계 업무표(산출물은 노트 보존), 7장 방문·소비 별도 월별 예측·목표·증가율 표, 8장 견적, 9장부터 출처 1~2장과 감사 장.
+- 비교 차트는 사업 기간의 처음 3개 저장 예측 월을 사용한다. 목표는 기존 `execution_scenario`의 명시적 목표율만 사용하며 미입력 시 비교선을 만들지 않는다. 예측 검증 범위 경고도 표시한다.
+- 5개 실행 단계가 있으면 마지막 2개를 네 번째 표시 단계에 합쳐 원문 업무·산출물을 모두 보존한다. 역할·추가 확인 항목은 제안으로 구분한다.
+- 출처명 생략 부호를 사용하지 않는다. 전체 명칭은 1~2장에, 원문 URL은 하이퍼링크와 발표자 노트에 보존한다. 텍스트가 최소 가독 크기에도 들어가지 않으면 누락 대신 명확한 배치 오류를 반환한다.
+- 사진 캡션은 API 응답의 장소명·주소를 사용하며 확인하지 않은 위치를 만들지 않는다. AI/ML/SQL 원본을 변경하지 않고 출력 사본만 편집한다.
+
 ## 2026-09-07 실행 근거 계약과 자료 요청
 
 기존 endpoint·요청 schema는 유지합니다. 새 보고서 `quality_review`에 다음 선택 필드를 저장합니다.
@@ -116,7 +184,7 @@ Qwen 후보 보완은 로컬 우선 경로에서 최대 1회이며 `agent_trace`
 - 유료 AI·웹 호출 없이 메모리에서 읽는다. 원본 디스크 저장·공용 RAG 등록 없음.
 
 - React는 `/api`와 `/ai` 경로만 호출한다.
-- 로컬 개발에서는 일반 데이터 Backend FastAPI(`8100`), 원자료·근거 기반 전략 AI FastAPI(`8111`)가 담당한다. 배포 포트는 Nginx 뒤에서 별도로 설정한다.
+- 로컬 개발에서는 일반 데이터 Backend FastAPI(`8100`), 원자료·근거 기반 전략 AI FastAPI(`8112`)가 담당한다. 배포 포트는 Nginx 뒤에서 별도로 설정한다.
 - OpenAI API 키는 어떤 응답이나 React 코드에도 포함하지 않고 AI 서버의 `.env`에서만 읽는다.
 - 모든 실제 수치에는 `region_code`, `year_month`, `source_name`, `source_url`을 함께 보존한다.
 
@@ -245,7 +313,7 @@ VWorld WFS의 전국 시군구 경계를 Backend에서 불러와, 키가 없는 
 
 - `frontend/src/api/dashboardApi.js`: 위 두 엔드포인트 호출 자리
 - `frontend/src/pages/TourismDashboardPage.jsx`: 실제 응답을 카드·차트·진단에 표시하며 미지원 지역은 빈 상태로 처리
-- `frontend/vite.config.js`: 개발 중 `/api → 8100`, `/ai → 8111` 프록시 설정
+- `frontend/vite.config.js`: 개발 중 `/api → 8100`, `/ai → 8112` 프록시 설정
 - `backend/app/services/vworld.py`: VWorld 키를 서버에서만 사용하고 시군구 GeoJSON을 캐시·중계
 # ML 기획 근거 확인
 
@@ -273,6 +341,10 @@ VWorld WFS의 전국 시군구 경계를 Backend에서 불러와, 키가 없는 
 - 답변: `answer`, `key_points`, `related_modules`, `caution`의 구조화 JSON이다.
 - 현재 ML 챗봇은 RAG·웹 검색을 사용하지 않는다. OpenAI 키가 없으면 `503 OPENAI_KEY_MISSING`, 미지원 지역은 `404 ML_LEARNING_REGION_UNAVAILABLE`을 반환한다.
 
+### 독립 후보 진단 CLI (D-109)
+
+`evaluate_candidate_feasibility`, `evaluate_pilot_planner`, `evaluate_pilot_reviewer`는 동결 입력/산출물을 읽는 개발 진단이며 신규 HTTP API가 아닙니다. `--run`일 때만 지정 Ollama에 단회 요청하고, 보고서 저장·OpenAI·운영 Router를 호출하지 않습니다. 서버 소유 임시 예산/측정 계약을 LLM 서술과 분리합니다. 실행과 결과는 [검증 기록](CANDIDATE_FEASIBILITY_20260908.md)을 참조하세요. 기존 생성 API 계약은 변경하지 않습니다.
+
 ### `GET /ai/v1/learning/{topic}`
 
 - `topic`은 `openai` 또는 `react`다.
@@ -284,3 +356,42 @@ VWorld WFS의 전국 시군구 경계를 Backend에서 불러와, 키가 없는 
 - 자동 생성한 해당 주제 카탈로그와 최근 대화 최대 6개를 OpenAI에 전달한다.
 - 답변은 `answer`, `key_points`, `related_files`, `caution` 구조다.
 - RAG·웹 검색을 사용하지 않으며, 현재 프로젝트에 없는 기능을 사용 중이라고 설명하지 않도록 제한한다.
+
+
+### 사례 기반 아이디어와 목표 조정 (2026-09-09)
+
+PPT 공통 출력 버전은 `pptx-idea-case-basis-v11`입니다. 기존 다운로드 API에서 사례 선정 근거 페이지와 수정된 차트 레이아웃을 반환하며, 추가 LLM 호출 없이 저장된 후보·공식 출처로 구성합니다.
+기획안은 사례 기반 아이디어와 편집 가능 항목을 먼저 보여줍니다. `execution_scenario`가 없으면 최종월 방문·소비 +5%를 계획 가정으로 제안합니다. `target_proposal_basis`에 근거/가정 구분, `reference_estimate`에 항목별 임시 견적을 전달하며 Word/PPT에 동일 반영합니다. 관측·ML·검수 승인 값은 유지합니다. 챗봇에서 “방문 목표 4%, 소비 목표 5%로 바꿔줘”, “견적 총액 1억원으로 변경”처럼 요청할 수 있습니다. 현재 근거 연결 후보 밖의 건물·공원 신축은 지원 범위 밖으로 안내합니다. 상세 정책은 DECISIONS D-124 참조.
+
+`POST /ai/v1/strategy-idea-preview`: ReportResponse를 받아 목표·견적을 보완한 미리보기 반환. LLM 호출/DB 쓰기 없음. 과거 브라우저 보고서에도 같은 기본값을 표시한다.
+# PPT 목표 소비 계산 표시
+
+프로젝트 학습 카탈로그의 OpenAI `agents[].contract`는 페르소나·입력·출력·도구·설정 이름과 공개 지시문 발췌를 제공합니다. 실제 API 키·환경변수 값은 포함하지 않습니다.
+
+`GET /ai/v1/ml/learning/catalog`의 `regions[].modules[].strategy_usage`는 관리자용 활용 설명을 추가 제공합니다. `role`, `aggregation`, `research_group`, `steps`, `tree`, `display`, `interpretation`, `example`, `limit`을 포함하며 기존 모델·예측·평가 필드는 유지합니다. 미정의 Target은 빈 설명 객체를 반환합니다.
+
+현재 출력 버전은 `pptx-case-wrap-v13`이며 사례 카드의 줄바꿈·여백 수정도 포함합니다. API 계약은 동일합니다.
+
+PPT 출력 버전 `pptx-visitor-spending-formula-v12`는 동일 방문·소비 목표율에 대해 월별 소비/방문 비율과 추가 방문 기반 소비 산식을 표시합니다. 기존 목표값과 동치이며 API 입력·저장 ML은 변경하지 않습니다. 서로 다른 명시 목표율은 각각 적용하며 방문 0인 월의 비율은 추정하지 않습니다.
+# 기획서 사례 연결 메타데이터 (2026-09-10)
+
+최신 PPT 렌더 버전: `pptx-similar-case-images-v16`. 사진 메타데이터의 `match_kind`는 `exact_case` / `similar_operation` / `general_tourism_reference`이며 발표자 노트에 출처와 함께 기록합니다.
+
+이미지 변경 후 최신 PPT 렌더 버전은 `pptx-official-case-images-v15`입니다. 사례 ID에 연결된 공식 웹 이미지를 사용하며 요청 스키마는 동일합니다.
+
+`planning_decision.case_linkage` 및 후보별 `case_linkage`는 `operation-document-v1` 규칙, 원래 사례 ID, 함수 연결 ID, 환경 유사성 검증 여부를 제공합니다. 원래 LLM 평가 목록은 `original_candidate_assessments`에 보존합니다. 출처에는 수집 경로 `retrieval_method`와 문서 유형·측정기간을 전달합니다. PPT 렌더 버전은 `pptx-evidence-cases-v14`이며 URL과 요청 스키마는 유지합니다. 원본 보고서를 DB에서 일괄 수정하지 않습니다.
+
+
+### 기획 입력 간소화 (`guided_v1`, 2026-09-10)
+
+기획 생성 페이지는 사업 방향, 참고 예산 총액, 시작 월(3개월 시범), 활용 자원 300자, 제외 운영 방식, 메모 500자를 받습니다. KPI 입력·예산 범위/확정 상한·종료일·첨부자료는 기본 생성 화면에서 제거했습니다. 예산은 견적 배분 예시이며 ML 전망이나 실행 가능성을 보장하지 않습니다.
+
+`planning_brief.input_profile="guided_v1"`에서 `business_direction`은 `auto|spend_conversion|stay_conversion|night_time_experience|return_visit`, `excluded_operations`는 `night_time_experience|spend_conversion` 배열입니다. 예산은 `unknown` 또는 `indicative`와 `budget_max_krw` 하나를 사용합니다. 시작 월 미입력은 현재 월부터 3개월로 정규화합니다. 숨겨진 구형 입력 및 충돌은 Pydantic 검증에서 거절합니다. 공식 근거/선정 조건 불일치는 `PLANNING_CONDITIONS_UNSUPPORTED`, 전망 기간 부족은 `PLANNING_PERIOD_UNSUPPORTED`로 안내합니다. 기존 API의 profile 미입력은 `legacy`로 처리하며 저장 보고서를 변경하지 않습니다. 상세 결정: D-136.
+
+
+지역 준비 표시(D-137): `GET /ai/v1/regions/readiness-audit`는 `local_models_ready`, `local_model_message`, 지역별 `generation_ready`를 반환합니다. 초록색은 최근 24시간 이내 `data_ready`와 현재 설치된 Qwen/Gemma 연결을 모두 확인한 경우입니다. 기존 `verified`(저장 기획안 승인)와 구분하며 새로운 생성 성공을 보장하지 않습니다. 미점검/만료는 초록색으로 표시하지 않습니다. 자료 감사 갱신: `backend/.venv/Scripts/python.exe -m ai_server.app.scripts.audit_all_regions` (LLM 생성·재학습·SQL 쓰기 없음). 모델 목록 연결 확인은 15초 제한, 생성 전 일시 실패에만 1회 재확인합니다.
+
+
+### D-138 생성 진행 단계 표시 (2026-09-10)
+
+생성 대기 화면 제목은 ‘기획서 초안을 생성중입니다’. 작업 조회 응답에 `progress_step`을 추가한다: 0 데이터 분석(연결 확인 포함), 1 공식사례 확인(지역 근거 병행), 2 기획안 생성(후보 비교·초안), 3 품질검토(보완·재검수 포함), 4 검토 절차 종료 후 본문·문서 준비. null은 단계 미확인이다. 실제 실행 지점에서 요청별 ContextVar 콜백으로 메모리 작업 상태를 갱신하며 기존 3초 상태 조회로 표시한다. 경과 시간으로 단계를 추측하지 않는다. 진행 단계는 파란 음영 애니메이션, 완료 단계는 파란 채움, 대기 단계는 기존 외곽선으로 구분한다. 재접속 시 서버 상태를 다시 읽고 연결 오류에는 확인 지연을 표시한다. 단계 완료는 품질 승인과 다르며 모델/유료 호출 수는 변경하지 않는다.

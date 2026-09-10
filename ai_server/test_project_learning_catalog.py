@@ -22,7 +22,10 @@ class ProjectLearningCatalogTest(unittest.TestCase):
     def test_react_catalog_discovers_routes_and_source_files(self) -> None:
         catalog = build_project_learning_catalog('react')
         route_paths = {route['path'] for route in catalog.routes if route['method'] == 'PAGE'}
+        fetch_paths = {route['path'] for route in catalog.routes if route['method'] == 'FETCH'}
         self.assertTrue({'/dashboard', '/ml-test', '/openai-test', '/react-test'} <= route_paths)
+        self.assertTrue(fetch_paths)
+        self.assertTrue(all(path.startswith('/') for path in fetch_paths))
         self.assertTrue(any(file.path == 'frontend/src/App.jsx' for file in catalog.files))
         self.assertTrue(any(item['name'] == 'react' for item in catalog.dependencies))
         self.assertEqual(catalog.architecture['current']['services'][0]['port'], '5176')

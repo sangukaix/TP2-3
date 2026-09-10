@@ -1,16 +1,13 @@
-# React + Vite
+# OLIGO React + Vite frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+`src/main.jsx`가 React 19 앱을 시작하고 `src/App.jsx`가 페이지를 지연 로딩합니다. 공개 경로와 과거 주소 별칭은 `src/routes.js`에서 관리합니다. 현재 화면 수가 적어 별도 Router 패키지를 설치하지 않으며, 알 수 없는 주소는 404 안내를 표시합니다.
 
-Currently, two official plugins are available:
+개발 서버는 `/api`를 Backend `8100`, `/ai`를 AI Server `8112`로 프록시합니다. 배포에서는 같은 경로를 Nginx가 전달하고 모든 화면 경로는 `index.html`로 fallback해야 합니다.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+검증 명령:
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+```powershell
+npm test
+npm run lint
+npm run build
+```

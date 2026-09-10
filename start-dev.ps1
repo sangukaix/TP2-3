@@ -3,8 +3,9 @@ $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $pythonPath = Join-Path $projectRoot 'backend\.venv\Scripts\python.exe'
 $backendPort = 8100
-$aiPort = 8111
+$aiPort = 8112
 $frontendPort = 5176
+$projectTreePort = 8501
 
 # Load .env into this PowerShell process so child server windows use the same settings.
 function Import-ProjectEnv([string]$envPath) {
@@ -67,13 +68,46 @@ function Start-DevTerminal([string]$title, [string]$workingDirectory, [string]$c
   )
 }
 
-# Bind every development server to the LAN interface for team testing.
-Start-DevTerminal "TOUR Backend $backendPort" (Join-Path $projectRoot 'backend') "& '$pythonPath' -m uvicorn app.main:app --reload --host 0.0.0.0 --port $backendPort"
-Start-DevTerminal "TOUR AI $aiPort" $projectRoot "& '$pythonPath' -m uvicorn ai_server.app.main:app --reload --host 0.0.0.0 --port $aiPort"
-$frontendCommand = "`$env:VITE_BACKEND_PROXY_TARGET='http://127.0.0.1:$backendPort'; `$env:VITE_AI_PROXY_TARGET='http://127.0.0.1:$aiPort'; npm run dev -- --host 0.0.0.0 --port $frontendPort --strictPort"
-Start-DevTerminal "TOUR Frontend $frontendPort" (Join-Path $projectRoot 'frontend') $frontendCommand
+function Test-DevPortListening([int]$port) {
+  $client = [System.Net.Sockets.TcpClient]::new()
+  try {
+    $connect = $client.ConnectAsync('127.0.0.1', $port)
+    if (-not $connect.Wait(500)) { return $false }
+    return $client.Connected
+  } catch {
+    return $false
+  } finally {
+    $client.Dispose()
+  }
+}
 
-Write-Host "TP2-3 Backend $backendPort, AI Server $aiPort, and Frontend $frontendPort started in separate windows."
+function Start-DevTerminalIfAvailable([string]$title, [string]$workingDirectory, [string]$command, [int]$port) {
+  if (Test-DevPortListening $port) {
+    Write-Host "$title is already listening on port $port; duplicate start skipped."
+    return $false
+  }
+  Start-DevTerminal $title $workingDirectory $command
+  return $true
+}
+
+# Bind every development server to the LAN interface for team testing.
+$backendStarted = Start-DevTerminalIfAvailable "TOUR Backend $backendPort" (Join-Path $projectRoot 'backend') "& '$pythonPath' -m uvicorn app.main:app --reload --host 0.0.0.0 --port $backendPort" $backendPort
+$aiStarted = Start-DevTerminalIfAvailable "TOUR AI $aiPort" $projectRoot "& '$pythonPath' -m uvicorn ai_server.app.main:app --reload --host 0.0.0.0 --port $aiPort" $aiPort
+$frontendCommand = "`$env:VITE_BACKEND_PROXY_TARGET='http://127.0.0.1:$backendPort'; `$env:VITE_AI_PROXY_TARGET='http://127.0.0.1:$aiPort'; npm run dev -- --host 0.0.0.0 --port $frontendPort --strictPort"
+$frontendStarted = Start-DevTerminalIfAvailable "TOUR Frontend $frontendPort" (Join-Path $projectRoot 'frontend') $frontendCommand $frontendPort
+
+# /project-tree는 별도 Streamlit 앱을 iframe으로 표시하므로 개발 서버와 함께 시작한다.
+# Streamlit이 아직 없는 PC에서는 나머지 세 서버를 막지 않고 설치 명령을 안내한다.
+$projectTreeStarted = $false
+& $pythonPath -c 'import streamlit' 2>$null
+if ($LASTEXITCODE -eq 0) {
+  $projectTreeCommand = "& '$pythonPath' -m streamlit run project_tree_explorer/app.py --server.address 0.0.0.0 --server.port $projectTreePort --server.headless true --browser.gatherUsageStats false"
+  $projectTreeStarted = Start-DevTerminalIfAvailable "TOUR Project Tree $projectTreePort" $projectRoot $projectTreeCommand $projectTreePort
+} else {
+  Write-Warning "Project Tree was not started because Streamlit is missing. Install project_tree_explorer/requirements.txt, then run start-dev.ps1 again."
+}
+
+Write-Host "TP2-3 development services checked. New windows were opened only for ports that were not already listening."
 Write-Host "Local URL: http://localhost:$frontendPort"
 # Print a private LAN address for teammates. Keep this block ASCII-only because
 # Windows PowerShell can misread UTF-8-without-BOM Korean text inside string literals.

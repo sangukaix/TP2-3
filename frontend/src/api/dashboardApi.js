@@ -67,7 +67,9 @@ export async function getAiStrategyReportJob(regionCode, jobId) {
   const response = await fetch(`/ai/v1/demo/${regionCode}/strategy-report/jobs/${encodeURIComponent(jobId)}`)
   if (!response.ok) {
     const error = await response.json().catch(() => null)
-    throw new Error(error?.detail?.message || 'AI 전략기획 작업 상태를 불러오지 못했습니다.')
+    const requestError = new Error(error?.detail?.message || 'AI 전략기획 작업 상태를 불러오지 못했습니다.')
+    requestError.status = response.status
+    throw requestError
   }
   return response.json()
 }
@@ -160,6 +162,12 @@ export async function getStrategyGenerationReadiness(regionCode, regionName) {
 export async function getAiRegionCatalog() {
   const response = await fetch('/ai/v1/regions/catalog')
   if (!response.ok) throw new Error('분석 가능한 지역 목록을 불러오지 못했습니다.')
+  return response.json()
+}
+
+export async function getRegionReadinessAudit() {
+  const response = await fetch('/ai/v1/regions/readiness-audit')
+  if (!response.ok) throw new Error('지역 점검 결과를 불러오지 못했습니다.')
   return response.json()
 }
 

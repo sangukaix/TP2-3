@@ -41,7 +41,7 @@ def _number(value: Any) -> float | None:
 
 def execution_target(report: dict[str, Any]) -> tuple[float, float] | None:
     """목표는 두 비율이 명시적으로 입력된 경우만 사용하며 기본 증가율을 만들지 않습니다."""
-    scenario = report.get('execution_scenario') or {}
+    scenario = report.get('execution_scenario') or report.get('planning_brief') or {}
     visitors = _number(scenario.get('visitor_target_pct'))
     spending = _number(scenario.get('spending_target_pct'))
     if visitors is None or spending is None or visitors > 20 or spending > 30:
@@ -54,6 +54,22 @@ def target_series(natural: list[float], target_pct: float) -> list[float]:
     count = len(natural)
     return [value * (1 + target_pct / 100 * (index + 1) / count)
             for index, value in enumerate(natural)]
+
+
+def visitor_linked_spending(visitors: list[float], spending: list[float],
+                            target_visitors: list[float]) -> dict[str, Any]:
+    """같은 월 소비/방문 비율을 추가 방문에 적용한 기획 가정. 실제 객단가가 아닙니다.
+
+    방문이 0이면 비율을 추정하지 않고 None을 반환합니다. 입력값은 변경하지 않습니다.
+    """
+    if len(visitors) != len(spending) or len(visitors) != len(target_visitors):
+        raise ValueError('방문·소비·목표의 월 수가 같아야 합니다.')
+    if any(_number(v) is None for series in (visitors, spending, target_visitors) for v in series):
+        raise ValueError('방문·소비·목표는 유한한 0 이상의 수여야 합니다.')
+    ratios = [s / v if v > 0 else None for v, s in zip(visitors, spending)]
+    targets = [s + (t - v) * ratio if ratio is not None else None
+               for v, s, t, ratio in zip(visitors, spending, target_visitors, ratios)]
+    return {'ratios': ratios, 'targets': targets}
 
 
 def select_report_forecast(report: dict[str, Any]) -> dict[str, Any]:

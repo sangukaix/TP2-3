@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 from copy import deepcopy
+from dataclasses import replace
 import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -69,6 +70,18 @@ class EvidenceToolTests(unittest.TestCase):
         overview = self.tools.overview()
         self.assertEqual(overview['observations'][0]['value'], 17963441)
         self.assertEqual(overview['planning_brief']['budget_status'], 'unknown')
+
+    def test_metrics_exposes_registered_dataset_ids_without_guessing_observation_links(self):
+        row = {'source_id': 'dataset:11680:7', 'source_type': 'dataset',
+               'title': '원자료', 'summary': '2026-07 방문값', 'observation_period': '2026-07'}
+        self.tools.pack['sources'].append(row)
+        before = deepcopy(self.tools.pack)
+        result = self.tools.execute('get_region_metrics', {})
+        self.assertEqual(result['dataset_sources'], [row])
+        self.assertEqual(result['observations'], before['snapshot']['observations'])
+        self.assertNotIn('source_id', result['observations'][0])
+        result['dataset_sources'][0]['summary'] = 'changed'
+        self.assertEqual(self.tools.pack, before)
 
     def test_region_metrics_includes_observed_consumption_composition(self):
         value = self.tools.execute('get_region_metrics', {})
@@ -254,6 +267,62 @@ class LocalAgentRunnerTests(unittest.TestCase):
             return response, {'input_tokens': 10, 'output_tokens': 5, 'total_tokens': 15}
         provider._chat = chat
         return provider
+
+    def test_full_revision_feedback_reaches_final_json_after_tools(self):
+        from ai_server.app.llm.context_tables import decode_tables
+
+        original = request()
+        original.input_payload['quality_review_feedback'] = {'issues': [
+            {'severity': 'major', 'field': f'candidate:{i}.measurement_plan',
+             'problem': f'누락:{i}', 'revision_instruction': '확보 담당과 기준기간 확인 ' * 80}
+            for i in range(12)
+        ]}
+        before = deepcopy(original.input_payload)
+        provider = self.provider([
+            required_calls(), {'role': 'assistant', 'content': '조회 완료'},
+            {'role': 'assistant', 'content': '{"answer":"검토 필요"}'},
+        ])
+        asyncio.run(provider.generate(original))
+        messages = provider.seen[-1]['messages']
+        position, feedback = next((i, row['content']) for i, row in enumerate(messages)
+                                  if row.get('content', '').startswith('이번 요청은 기존 결과의 보완이다.'))
+        self.assertGreater(position, max(i for i, row in enumerate(messages) if row['role'] == 'tool'))
+        self.assertEqual(decode_tables(json.loads(feedback.split('\n', 1)[1])),
+                         before['quality_review_feedback'])
+        self.assertEqual(original.input_payload, before)
+
+    def test_targeted_revision_skips_optional_tool_round_and_sends_feedback_once(self):
+        original = replace(request(), task='planner_revision')
+        original.input_payload['previous_draft'] = {'summary': '기존 초안'}
+        original.input_payload['quality_review_feedback'] = {
+            'issues': [{'severity': 'major', 'field': 'strategies[0].kpi',
+                        'problem': '분모 누락', 'revision_instruction': '분자·분모 명시'}]
+        }
+        provider = self.provider([{'role': 'assistant', 'content': '{"answer":"수정 완료"}'}])
+        result = asyncio.run(provider.generate(original))
+        self.assertEqual(result.payload['answer'], '수정 완료')
+        self.assertEqual(len(provider.seen), 1)
+        messages = provider.seen[0]['messages']
+        serialized = json.dumps(messages, ensure_ascii=False)
+        self.assertEqual(serialized.count('분모 누락'), 1)
+        self.assertFalse(any(row['role'] == 'tool' for row in messages))
+
+    def test_transferability_field_guidance_reaches_model(self):
+        from ai_server.app.agents.transferability_agent import TRANSFERABILITY_SCHEMA
+
+        original = request()
+        original.schema['properties']['proposal'] = TRANSFERABILITY_SCHEMA
+        provider = self.provider([
+            {'role': 'assistant', 'content': '조회 완료'},
+            {'role': 'assistant', 'content': '{"answer":"확인"}'},
+        ])
+        asyncio.run(provider.generate(original))
+        system = provider.seen[-1]['messages'][0]['content']
+        self.assertIn('$.proposal.design_candidates[].budget_formula', system)
+        self.assertIn('$.proposal.design_candidates[].measurement_plan', system)
+        self.assertIn('$.proposal.strategy_brief.pilot_scope', system)
+        self.assertIn('견적 확보 담당', system)
+        self.assertIn('동일 범위 비교집단', system)
 
     def test_native_tool_result_is_returned_to_model_before_final_json(self):
         provider = self.provider([

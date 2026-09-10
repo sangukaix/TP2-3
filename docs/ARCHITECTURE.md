@@ -128,7 +128,7 @@ fetch endpoint와 package.json 의존성을 읽는다. `project_learning_catalog
 소스 전문·절대경로·`.env` 값은 반환하지 않는다.
 
 `/react-test`는 강사 제공 시스템 구조 설계 자료를 기준으로 현재 로컬 구조와 AWS 예정 구조를
-분리한다. 로컬 구조의 `5176 / 8100 / 8111` 포트는 `start-dev.ps1`에서 읽고, React·Backend·AI
+분리한다. 로컬 구조의 `5176 / 8100 / 8112` 포트는 `start-dev.ps1`에서 읽고, React·Backend·AI
 Server와 MySQL·Joblib·ChromaDB·OpenAI 연결을 그림으로 표시한다. AWS EC2·Nginx는 아직 연결된
 것처럼 표시하지 않고 `planned` 상태로 보여 준다. React 폴더 트리는 `frontend/src` 자동 스캔
 결과를 Page·Component·API·Feature·Asset·Core로 묶고 대표 파일만 펼쳐 보게 한다.
@@ -168,7 +168,7 @@ OpenAI 모델명은 코드에 고정하지 말고 `.env`의 `OPENAI_MODEL`로 �
     |                                  |
     |                                  └--> [MySQL :3306]
     |
-    └-- 127.0.0.1:8111/ai/* ---> [AI FastAPI]
+    └-- 127.0.0.1:8112/ai/* ---> [AI FastAPI]
                                        ├--> [model.joblib]
                                        ├--> [ChromaDB]
                                        └--> [OpenAI API]

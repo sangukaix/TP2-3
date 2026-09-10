@@ -1,0 +1,156 @@
+{
+  "result": {
+    "summary": "외지인 방문자 감소와 낮은 숙박 비율을 해결하기 위해, 원주시 내 소비 증빙 시 여행비의 50%를 지역화폐로 환급하는 사업을 제안합니다. 강진군의 사례를 참고하여 지역 내 소비 유도와 재사용을 목표로 합니다.",
+    "observed_findings": [
+      {
+        "metric": "월간 순 방문자 수",
+        "value": "2,285,734명",
+        "interpretation": "2026년 6월 기준, 전년 동월 대비 -2.7% 감소 추세임 (dataset:51130:2)",
+        "source": "dataset:51130:2"
+      },
+      {
+        "metric": "외지인 숙박 방문 비율",
+        "value": "12.5%",
+        "interpretation": "외지인 방문객 중 숙박객 비중이 낮아 체류형 관광 유도가 필요함 (dataset:51130:4)",
+        "source": "dataset:51130:4"
+      },
+      {
+        "metric": "관광소비 구성",
+        "value": "식음료업 29.8%, 쇼핑업 26.0%",
+        "interpretation": "식음료와 쇼핑이 주요 소비 항목이며, 환급을 통한 소비 촉진 효과가 기대됨 (consumption_by_category)",
+        "source": "consumption_by_category"
+      }
+    ],
+    "strategies": [
+      {
+        "priority": 1,
+        "timeframe": "2026-09 ~ 2026-11, 3개월",
+        "title": "원주시 지역화폐 반값여행 지원 사업",
+        "problem_to_solve": "외지인 방문자 수 감소 및 낮은 숙박 방문 비율로 인한 지역 내 소비 저하",
+        "comparison_analysis": "강진군의 반값여행 사례(2025년 관련 소비 118.7억 원, 전년 대비 1.7배 증가)를 벤치마킹하되, 원주시는 관광권역 1곳과 소수 참여업체를 대상으로 총 환급한도와 1인 상한을 설정한 실증 모델로 차별화함.",
+        "solution": "외지인 방문객이 원주시 내 관광지, 숙박, 식음, 체험, 소매점에서 지출한 증빙을 제출하면 여행비의 50%를 상한 범위 내에서 지역화폐로 환급하여 지역 내 재소비를 유도함.",
+        "implementation_steps": [
+          {
+            "step": 1,
+            "schedule": "2026-09",
+            "task": "참여 업체 및 환급 인프라 확보",
+            "deliverable": "가맹점 명단 및 지역화폐 지급 협약서(안) 확인"
+          },
+          {
+            "step": 2,
+            "schedule": "2026-09",
+            "task": "사업 운영 지침 및 신청 시스템 마련",
+            "deliverable": "외지인 판별 및 영수증 검증 절차 매뉴얼"
+          },
+          {
+            "step": 3,
+            "schedule": "2026-10",
+            "task": "시범 사업 모집 및 운영",
+            "deliverable": "참여 신청 접수 및 증빙 검토 원장"
+          },
+          {
+            "step": 4,
+            "schedule": "2026-10 ~ 2026-11",
+            "task": "지역화폐 환급 실행",
+            "deliverable": "환급 완료 ID 및 지급 내역"
+          },
+          {
+            "step": 5,
+            "schedule": "2026-11",
+            "task": "성과 데이터 집계 및 분석",
+            "deliverable": "최초 결제액, 환급액, 재사용액 포함 결과 보고서"
+          }
+        ],
+        "expected_effect": "ML 자연추세상 2026년 11월 소비액은 전년 대비 41.26% 증가 전망이나, 본 사업은 외지인 방문객의 실제 결제 전환 및 환급액의 지역 내 재사용을 통한 순증 소비를 목표로 함.",
+        "budget": "환급 지원액 = Σ min(증빙 인정 지출액 × 50%, 10만 원). 총 환급 한도는 1억 원으로 가정함.",
+        "kpi": "유효 참여완료율(분자: 취소·중복 제외 완료 ID / 분모: 승인 참여 ID), 기준기간: 운영 전 4주 및 운영 기간, 측정: 사업 담당자 집계, 비교: 미운영일/비참여자 집단, 성공기준: 착수 전 확정 예정",
+        "evidence": "dataset:51130:1, dataset:51130:2, dataset:51130:3, dataset:51130:4, dataset:51130:5, dataset:51130:6",
+        "visual_asset_source_ids": [
+          "case:6cc2085423e582"
+        ]
+      }
+    ]
+  },
+  "trace": [
+    {
+      "agent": "planner",
+      "stage": "planner",
+      "status": "completed",
+      "provider": "gemma",
+      "requested_provider": "gemma",
+      "model": "gemma4:26b",
+      "duration_ms": 64164,
+      "usage": {
+        "input_tokens": 34476,
+        "output_tokens": 1764,
+        "total_tokens": 36240
+      },
+      "fallback": false,
+      "fallback_reason": "",
+      "web_search_used": false,
+      "attempts": [
+        {
+          "phase": "tool_selection",
+          "status": "continued_without_optional_tools",
+          "error_code": "OLLAMA_INCOMPLETE_RESPONSE",
+          "usage_reported": true,
+          "usage": {
+            "input_tokens": 17525,
+            "output_tokens": 512,
+            "total_tokens": 18037
+          }
+        },
+        {
+          "phase": "final_json",
+          "status": "completed",
+          "usage_reported": true,
+          "usage": {
+            "input_tokens": 16951,
+            "output_tokens": 1252,
+            "total_tokens": 18203
+          }
+        }
+      ],
+      "tool_trace": [
+        {
+          "tool": "get_region_metrics",
+          "status": "completed"
+        },
+        {
+          "tool": "get_regional_tourism_status",
+          "status": "completed"
+        },
+        {
+          "tool": "compare_regions",
+          "status": "completed"
+        },
+        {
+          "tool": "get_ml_forecast",
+          "status": "completed"
+        },
+        {
+          "tool": "get_planning_decision",
+          "status": "completed"
+        },
+        {
+          "tool": "read_collected_source",
+          "status": "completed"
+        },
+        {
+          "tool": "read_task_section",
+          "status": "completed"
+        }
+      ],
+      "input_preparation": {
+        "mode": "request_scoped_evidence_tools",
+        "original_bytes": 121883,
+        "overview_bytes": 4666,
+        "sources_available": 58,
+        "sources_read": 1
+      },
+      "max_output_tokens": 10000,
+      "paid_reason": "",
+      "retry_count": 0
+    }
+  ]
+}

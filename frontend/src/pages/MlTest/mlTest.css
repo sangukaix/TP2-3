@@ -106,3 +106,68 @@
 .ml-test-page .ml-chat-message em,
 .ml-test-page .ml-chat>footer{font-size:10.8px}
 .ml-test-page .ml-chat-composer textarea{font-size:13.2px}
+.ml-strategy-usage { margin: 22px 0 0; padding: 24px; border-top: 1px solid #dce5ef; background: #f8fafc; color: #334155; }
+.ml-strategy-usage > header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.ml-strategy-usage > header p { color: #2563eb; font-size: 12px; margin: 0 0 5px; }
+.ml-strategy-usage h3 { font-size: 18px; margin: 0; }
+.ml-strategy-usage > header > span { font-size: 12px; color: #1d4ed8; background: #e8efff; padding: 6px 10px; border-radius: 6px; flex-shrink: 0; }
+.ml-strategy-usage p { font-size: 14px; line-height: 1.8; overflow-wrap: anywhere; }
+.ml-usage-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 0; list-style: none; }
+.ml-usage-flow li { display: flex; align-items: center; gap: 8px; padding: 12px; background: #eaf0f8; font-size: 13px; }
+.ml-usage-flow b { color: #2563eb; }
+.ml-usage-destination, .ml-usage-example { border-left: 3px solid #3b82f6; padding: 10px 16px; margin: 18px 0; background: #fff; }
+.ml-usage-destination strong, .ml-usage-example strong { font-size: 14px; }
+.ml-usage-destination p, .ml-usage-example p { margin: 5px 0 0; }
+.ml-usage-details { margin-top: 14px; border: 1px solid #dce5ef; border-radius: 8px; background: #fff; }
+.ml-usage-details summary { cursor: pointer; padding: 15px; font-size: 14px; font-weight: 650; color: #1e3a5f; }
+.ml-usage-steps { list-style: none; padding: 0 18px; margin: 0; }
+.ml-usage-steps > li { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 12px; padding: 20px 0; border-top: 1px solid #e7edf4; }
+.ml-usage-step-number { color: #2563eb; font-weight: 700; font-size: 14px; }
+.ml-usage-steps h4 { font-size: 15px; margin: 0 0 8px; }
+.ml-usage-steps code { display: block; overflow-wrap: anywhere; white-space: normal; font-size: 12px; line-height: 1.8; color: #475569; }
+.ml-usage-output { padding: 10px 12px; background: #f1f5f9; border-radius: 5px; }
+.ml-usage-output b { font-size: 12px; color: #1d4ed8; }
+.ml-usage-details pre { margin: 0; padding: 0 18px 18px; overflow-x: auto; font-size: 12px; line-height: 1.9; color: #334155; }
+.ml-usage-limit { color: #64748b; margin-bottom: 0; }
+/* 설명 본문이 고정 폭 챗봇 뒤로 넘치지 않도록 좁은 화면에서는 세로 배치합니다. */
+@media (max-width: 1650px) {
+  .ml-test-page .ml-test-layout { grid-template-columns: minmax(0, 1fr); }
+  .ml-test-page .ml-chat { position: relative; top: auto; width: 100%; max-width: 100%; box-sizing: border-box; }
+}
+@media (max-width: 1100px) {
+  .ml-test-page .ml-module-card { min-width: 0; }
+  .ml-test-page .ml-module-main, .ml-test-page .ml-module-detail-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 700px) {
+  .ml-strategy-usage { padding: 16px 10px; }
+  .ml-strategy-usage > header { align-items: flex-start; flex-direction: column; }
+  .ml-usage-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ml-usage-steps { padding: 0 12px; }
+}
+.is-openai-study .learning-architecture-layout { grid-template-columns: minmax(0, 1fr) 432px; }
+.is-openai-study .learning-architecture-content { min-width: 0; }
+.is-openai-study .openai-agent-map > header h2 { font-size: 19px; }
+.is-openai-study .openai-agent-map > header p { font-size: 13px; line-height: 1.7; }
+.agent-boundary { padding: 16px 18px; margin: 16px 0; background: #f0f6fa; border-left: 3px solid #438dad; border-radius: 6px; }
+.agent-boundary b { color: #24516c; font-size: 14px; }
+.agent-boundary p { margin: 7px 0 0; color: #52697c; font-size: 13px; line-height: 1.85; overflow-wrap: anywhere; }
+.agent-contracts { display: grid; gap: 12px; margin: 20px 0; }
+.agent-contract { border: 1px solid #d6e3ec; border-radius: 9px; background: white; min-width: 0; }
+.agent-contract > summary { display: flex; gap: 12px; align-items: center; padding: 16px; cursor: pointer; }
+.agent-contract > summary > span { color: #168eac; font-size: 20px; font-weight: 700; }
+.agent-contract summary b { font-size: 14px; color: #254d68; }
+.agent-contract summary small { display: block; margin-top: 5px; font-size: 12px; color: #697c8b; }
+.agent-contract-body { padding: 0 18px 18px; }
+.agent-persona { font-size: 14px; line-height: 1.7; color: #2f6786; }
+.agent-contract dl { margin: 0 0 15px; }
+.agent-contract dl > div { padding: 12px 0; border-bottom: 1px solid #e7eef3; }
+.agent-contract dt { font-size: 12px; color: #347693; font-weight: 700; }
+.agent-contract dd { margin: 5px 0 0; font-size: 13px; line-height: 1.85; color: #52697c; overflow-wrap: anywhere; }
+.agent-contract-body details summary { font-size: 13px; cursor: pointer; color: #285f7e; }
+.agent-contract-body pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; line-height: 1.8; padding: 12px; background: #f5f8fa; }
+.agent-contract-body code { display: block; overflow-wrap: anywhere; margin-top: 10px; font-size: 11px; }
+.is-openai-study .agent-sequence { flex-wrap: wrap; }
+@media(max-width: 1400px) {
+ .is-openai-study .learning-architecture-layout { grid-template-columns: minmax(0, 1fr); }
+ .is-openai-study .learning-tutor { position: relative; width: min(100%, 432px); justify-self: end; }
+}

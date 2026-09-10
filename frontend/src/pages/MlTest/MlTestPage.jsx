@@ -26,6 +26,7 @@ const FUNCTION_DESCRIPTIONS = {
   'select_and_evaluate()': 'Validation MAE로 후보 모델과 전년 동월 기준모델 중 하나를 선택합니다.',
   'error_metrics()': 'MAE·RMSE·MAPE를 계산해 예측 오차를 수치로 확인합니다.',
   'predict_future_months()': '직전 예측값을 다음 달 입력에 넣는 방식으로 향후 3개월을 예측합니다.',
+  'predict_region_future_months()': '지역별 저장 모델을 읽어 재귀 예측합니다. 기준선이 선택된 지표는 전년 동월 값을 사용합니다.',
 }
 
 const FEATURE_LABELS = {
@@ -108,6 +109,29 @@ function MetricTooltip({ active, payload, label, unit }) {
   )
 }
 
+function ModuleStrategyUsage({ module }) {
+  const usage = module.strategy_usage
+  if (!usage?.steps?.length) return null
+  return <section className="ml-strategy-usage" aria-label={`${module.target_name} 전략 연결 설명`}>
+    <header><div><p>예측에서 전략까지 · 구현 경로</p><h3>이 결과를 누가, 어떻게 사용하는가</h3></div><span>{usage.role}</span></header>
+    <p>{usage.interpretation}</p>
+    <ol className="ml-usage-flow" aria-label="처리 단계 요약">
+      {['공식 월별 표', '저장 모델 추론', '기간 비교·조사 질문', '공식 사례 확보', 'Qwen 비교·Gemma 작성', '검수·화면·문서'].map((label, i) => <li key={label}><b>{i + 1}</b>{label}</li>)}
+    </ol>
+    <div className="ml-usage-destination"><strong>이 수치가 표시되는 곳</strong><p>{usage.display}</p></div>
+    <details className="ml-usage-details" open>
+      <summary>파일·함수·전달 필드를 단계별로 보기</summary>
+      <ol className="ml-usage-steps">{usage.steps.map((step, index) => <li key={step.title}>
+        <span className="ml-usage-step-number">{String(index + 1).padStart(2, '0')}</span>
+        <div><h4>{step.title}</h4><code>{step.file}</code><code>{step.function}</code><p>{step.detail}</p><div className="ml-usage-output"><b>전달 결과</b><code>{step.output}</code></div></div>
+      </li>)}</ol>
+    </details>
+    <details className="ml-usage-details"><summary>발표용 호출 트리 보기</summary><pre>{usage.tree}</pre></details>
+    <div className="ml-usage-example"><strong>해석 예시 · 실제 지역 사실과 구분</strong><p>{usage.example}</p></div>
+    <p className="ml-usage-limit">{usage.limit}</p>
+  </section>
+}
+
 /** 모델 메타데이터 한 항목을 데이터·함수·기법·평가·결과 순서로 설명합니다. */
 function LearningModuleCard({ module, index }) {
   const chartData = module.forecast.map((point) => ({
@@ -187,6 +211,7 @@ function LearningModuleCard({ module, index }) {
         </section>
       </div>
       <footer><CheckCircle2 size={17} /><div><b>그래서 얻은 답</b><p>{module.conclusion}</p></div></footer>
+      <ModuleStrategyUsage module={module} />
     </article>
   )
 }

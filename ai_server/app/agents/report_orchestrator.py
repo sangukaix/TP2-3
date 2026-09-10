@@ -16,6 +16,7 @@ from .evidence_agent import EvidenceAgent
 from .plan_quality_gate import build_plan_quality_precheck, merge_quality_precheck
 from .planning_requirements import (
     QUALITY_CONTRACT_VERSION, build_completion_checklist, candidate_delivery_issues,
+    stabilize_candidate_decision,
 )
 from ..openai_responses import OpenAIResponseError
 from ..evidence_sources import merge_evidence_sources
@@ -213,14 +214,19 @@ async def orchestrate_strategy_report(
     llm_router = LLMRouter(project_root=project_root, env_values=env_values)
     trace.append({'agent': 'llm_router', 'stage': 'routing_snapshot', 'status': 'completed',
                   'routing': llm_router.public_config(), 'effective_routes': llm_router.effective_routes()})
+    from ..generation_progress import notify_progress
+    notify_progress(0, '생성 준비: Qwen·Gemma 연결을 확인하고 있습니다.')
     await _run_openai_stage('local_preflight', '로컬 모델 연결 확인', llm_router.preflight_local_models())
 
     # OpenAI가 개입하기 전에 저장 모델로 숫자를 계산합니다. 원본 snapshot·사용자 조건은 변경하지 않습니다.
     snapshot = deepcopy(snapshot)
+    notify_progress(0, '지역 원자료와 저장된 머신러닝 모델의 관광지표 전망을 확인하고 있습니다.')
     ml_evidence = await asyncio.to_thread(
         build_planning_ml_evidence, region_code, snapshot['region_name'], planning_brief,
     )
     snapshot['ml_analysis'] = ml_evidence.model_dump(mode='json')
+    if (planning_brief or {}).get('input_profile') == 'guided_v1' and not snapshot['ml_analysis'].get('horizon_policy', {}).get('coverage_complete'):
+        raise OpenAIResponseError('PLANNING_PERIOD_UNSUPPORTED', '선택한 3개월 전체의 ML 전망을 제공할 수 없습니다. 시작 월을 앞당기거나 최신 데이터를 반영해 주세요.', status_code=422)
     snapshot['decision_facts'] = build_decision_facts(snapshot)
     trace.append({'agent': 'ml', 'stage': 'forecast_evidence', 'status': ml_evidence.status,
                   'reason_code': ml_evidence.reason_code,
@@ -230,6 +236,7 @@ async def orchestrate_strategy_report(
     evidence_agent = EvidenceAgent(project_root=project_root, env_values=env_values, llm_router=llm_router)
     case_study_agent = CaseStudyAgent(project_root=project_root, env_values=env_values, llm_router=llm_router)
     started = perf_counter()
+    notify_progress(1, '지역의 공식 근거와 타지역 관광사업 사례를 확인하고 있습니다.')
     evidence_result, case_result = await asyncio.gather(
         _run_openai_stage('evidence', '지역 근거 조사', _collect_evidence(
             agent=evidence_agent,
@@ -287,6 +294,7 @@ async def orchestrate_strategy_report(
     ).strip()
     evidence_pack['quality_contract_version'] = QUALITY_CONTRACT_VERSION
     started = perf_counter()
+    notify_progress(2, 'Qwen이 공식 사례를 비교하고 지역에 적용할 사업 후보를 설계하고 있습니다.')
     transfer_assessment = await _run_openai_stage(
         'transferability',
         '지역 적용 가능성 검토',
@@ -340,11 +348,50 @@ async def orchestrate_strategy_report(
     })
     trace.extend(llm_router.consume_trace())
 
+    remaining = candidate_delivery_issues(evidence_pack, transfer_assessment)
+    if 'selection_status' in transfer_assessment:
+        # 출처 ID, 타지역 범위, 확정처럼 보이는 예산과 측정 분모처럼 규칙으로 안전하게
+        # 고칠 수 있는 값은 서버 계약으로 한 번 보정한다. 원래 LLM 판단은 correction
+        # 기록에 남기며, 보정됐다는 이유로 ready/승인으로 바꾸지 않는다.
+        transfer_assessment, corrections = stabilize_candidate_decision(evidence_pack, transfer_assessment)
+        if (planning_brief or {}).get('input_profile') == 'guided_v1':
+            from ..case_recommendation import constrain_decision
+            transfer_assessment = constrain_decision(transfer_assessment, evidence_pack.get('benchmark_cases') or [], planning_brief)
+        evidence_pack['transfer_assessment'] = transfer_assessment
+        trace.append({
+            'agent': 'transferability', 'stage': 'candidate_stabilization',
+            'status': 'completed' if corrections else 'skipped',
+            'corrections': len(corrections),
+        })
+        remaining = candidate_delivery_issues(evidence_pack, transfer_assessment)
+
+    critical_remaining = [row for row in remaining if row.get('severity') == 'critical']
+    if critical_remaining:
+        # 근거 조작처럼 기계적으로 안전하게 복구하지 못한 항목만 본문 작성을 막는다.
+        raise OpenAIResponseError(
+            'TRANSFERABILITY_CANDIDATE_VALIDATION_FAILED',
+            '지역 적용 가능성 검토에서 안전하게 복구할 수 없는 후보 오류가 남았습니다. '
+            '본문 작성과 후속 유료 검수는 시작하지 않았습니다. '
+            + ' / '.join(dict.fromkeys(row['problem'] for row in critical_remaining)),
+            status_code=422, attempts=trace,
+        )
+    if remaining:
+        # 지역 적합성·후보 차별성처럼 의미 판단이 필요한 보완은 Planner에게 명시하고
+        # 검토용 본문을 보존한다. 최종 quality gate의 major 판정과 승인 기준은 유지한다.
+        evidence_pack['candidate_validation_findings'] = remaining
+        transfer_assessment['selection_status'] = 'needs_evidence'
+        trace.append({
+            'agent': 'transferability', 'stage': 'candidate_quality_handoff',
+            'status': 'needs_review', 'remaining_issues': len(remaining),
+        })
+
     planner = PlannerAgent(api_key=api_key, model=report_model, report_schema=report_schema, llm_router=llm_router)
     reviewer = ReviewerAgent(api_key=api_key, model=review_model, llm_router=llm_router)
 
     started = perf_counter()
+    notify_progress(2, 'Gemma가 선정한 사업과 근거를 바탕으로 기획서 초안을 작성하고 있습니다.')
     draft = await _run_openai_stage('planner_draft', '기획안 초안 작성', planner.write(evidence_pack))
+    notify_progress(3, '초안의 수치·출처·실행 계획을 코드와 검수 모델로 확인하고 있습니다.')
     trace.append({'agent': 'planner', 'stage': 'draft', 'status': 'completed', 'duration_ms': round((perf_counter() - started) * 1000)})
     trace.extend(llm_router.consume_trace())
 
@@ -369,10 +416,13 @@ async def orchestrate_strategy_report(
         revised = True
         original_draft = draft
         started = perf_counter()
+        notify_progress(3, '품질검토에서 찾은 보완 사항을 Gemma가 초안에 반영하고 있습니다.')
+        revision_checks = build_plan_quality_precheck(evidence_pack, original_draft, limit=None)
+        revision_feedback = merge_quality_precheck(review, revision_checks, limit=None)
         try:
             draft = await planner.write(
                 evidence_pack,
-                revision_feedback=review,
+                revision_feedback=revision_feedback,
                 previous_draft=original_draft,
             )
         except (OpenAIResponseError, LLMProviderError) as exc:
@@ -395,6 +445,7 @@ async def orchestrate_strategy_report(
             started = perf_counter()
             try:
                 precheck = build_plan_quality_precheck(evidence_pack, draft)
+                notify_progress(3, '수정된 기획안의 근거와 내용을 다시 검토하고 있습니다.')
                 review = await reviewer.review(
                     evidence_pack=evidence_pack, draft_report=draft, deterministic_precheck=precheck,
                     final_pass=not llm_router.local_first,
@@ -418,6 +469,7 @@ async def orchestrate_strategy_report(
         review['final_audit_completed'] = False
         if review.get('approved'):
             started = perf_counter()
+            notify_progress(3, '로컬 검토를 마친 기획안을 최종 검수하고 있습니다.')
             local_review = deepcopy(review)
             try:
                 precheck = build_plan_quality_precheck(evidence_pack, draft)
@@ -439,6 +491,7 @@ async def orchestrate_strategy_report(
     review['revised_once'] = revised
     # LLM에는 상위 8개만 보내지만 화면에는 코드 점검 전체와 구체적인 보완 목록을 남긴다.
     all_checks = build_plan_quality_precheck(evidence_pack, draft, limit=None)
+    review = merge_quality_precheck(review, all_checks, limit=None)
     review['validation_findings'] = all_checks['issues']
     review['quality_contract_version'] = QUALITY_CONTRACT_VERSION
     review['completion_checklist'] = build_completion_checklist(

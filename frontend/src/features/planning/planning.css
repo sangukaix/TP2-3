@@ -92,6 +92,7 @@
 /* 임시저장은 조건 입력 카드와 분리해, 지역명 헤더의 오른쪽 끝에서 언제든 저장할 수 있게 합니다. */
 .planning-header-save{display:inline-flex;align-items:center;gap:7px;margin-left:auto;padding:10px 13px;border:1px solid #a9c8d9;border-radius:8px;color:#1d6986;background:#f7fcfe;box-shadow:0 3px 9px rgb(34 108 145 / 8%);font-size:11px;font-weight:700;cursor:pointer}.planning-header-save:hover:not(:disabled){border-color:#6daec9;background:#edf9fc}.planning-header-save:disabled{cursor:default;opacity:.55}
 .planning-inline-status{margin-top:14px;padding:0 4px;color:#71889a;font-size:11px}.planning-inline-status p{margin:0;line-height:1.6}.planning-inline-status .planning-error{color:#b45959}
+.planning-context-count{margin:12px 4px 0;color:#6c8496;font-size:11px;line-height:1.6}.planning-context-count.is-over{color:#b45959;font-weight:650}
 .planning-freshness{margin:12px 3px 0;padding:12px;border:1px solid #cce4d6;border-radius:9px;background:#f3fbf7;color:#346353;font-size:11px;line-height:1.65}.planning-freshness.is-blocked{border-color:#edc7a4;background:#fff8f0;color:#87512c}.planning-freshness strong{display:block;color:inherit;font-size:12px}.planning-freshness p{margin:6px 0 0}.planning-freshness ol{margin:8px 0 0;padding-left:18px}.planning-freshness li+li{margin-top:2px}
 /* 생성 결과의 승인 여부와 후보 비교를 본문 디자인과 분리해 빠르게 확인합니다. */
 .strategy-quality-notice { padding: 16px 18px; margin-bottom: 20px; border: 1px solid #e4c58f; border-radius: 12px; background: #fffaf0; color: #624a26; font-size: 14px; line-height: 1.65; }
@@ -111,3 +112,15 @@
 .strategy-evidence-checklist-grid p, .strategy-evidence-checklist-grid li { font-size: 14px; line-height: 1.7; }
 .strategy-evidence-checklist-grid ul { padding-left: 20px; }
 .strategy-evidence-owner { border-top: 1px solid #e7edf3; padding-top: 10px; color: #526779; }
+
+/* 실제 서버 단계에만 활성 상태를 표시합니다. */
+.strategy-job-flow .strategy-job-stage{display:flex;align-items:center;gap:7px}
+.strategy-job-flow span{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.strategy-job-flow span.is-complete{background:#1769c2;border-color:#1769c2;color:#fff;box-shadow:none}
+.strategy-job-flow span.is-current{color:#075cba;border-color:#78b9f1;font-weight:700;animation:strategy-stage-pulse 1.8s ease-in-out infinite}
+.strategy-start--loading .strategy-job-flow i{animation:none;opacity:.3;background:#9fb6cf}
+.strategy-job-flow i.is-complete{opacity:1;background:#1769c2}
+.strategy-job-flow .strategy-job-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@keyframes strategy-stage-pulse{0%,100%{background:#eef6ff;box-shadow:0 0 0 0 #328ce300}50%{background:#d6eaff;box-shadow:0 0 0 5px #328ce318}}
+@media(max-width:520px){.strategy-job-flow{flex-wrap:wrap;row-gap:12px}.strategy-job-flow .strategy-job-stage{gap:4px}}
+@media(prefers-reduced-motion:reduce){.strategy-job-flow span.is-current{animation:none;background:#d6eaff;outline:2px solid #78b9f1}}

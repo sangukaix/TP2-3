@@ -52,6 +52,16 @@ class LocalFirstRouterTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(error.exception.code, 'LOCAL_FIRST_MODELS_UNAVAILABLE')
         self.assertEqual(self.router.providers['openai'].requests, [])
 
+    async def test_preflight_recovers_after_one_temporary_connection_failure(self):
+        model = self.router.effective_routes()['transferability']['model']
+        self.router.providers['qwen'].health = AsyncMock(side_effect=[
+            ProviderHealth('ollama', 'inactive', 'temporary'),
+            ProviderHealth('ollama', 'active', 'connected', [model]),
+        ])
+        await self.router.preflight_local_models()
+        self.assertEqual(self.router.providers['qwen'].health.await_count, 2)
+        self.assertEqual(self.router.providers['openai'].requests, [])
+
     async def test_parallel_requests_cannot_exceed_three_or_retry_automatically(self):
         requests = [replace(sample_request('evidence', web=True), retry_max_output_tokens=24000) for _ in range(4)]
         results = await asyncio.gather(*(self.router.generate(request) for request in requests), return_exceptions=True)

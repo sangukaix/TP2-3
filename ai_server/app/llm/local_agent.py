@@ -33,7 +33,14 @@ def _prefetch_required_evidence(workspace: EvidenceTools, task: str) -> list[dic
         calls.append(('get_regional_tourism_status', {}))
     if workspace.snapshot.get('nationwide_comparison'):
         calls.append(('compare_regions', {}))
-    if workspace.snapshot.get('nationwide_bigdata_context'):
+    feedback_issues = (workspace.payload.get('quality_review_feedback') or {}).get('issues') or []
+    is_targeted_revision = bool(feedback_issues) and task in {'transferability', 'planner_revision'}
+    is_report_composition = task in {'planner', 'planner_revision'}
+    # 후보 보완과 본문 개정은 최초 조사 결과를 다시 만드는 단계가 아니다. 전국 거시
+    # 참고표는 기존 판단의 오류 필드 수정에 필수인 지역 비교·ML·사례 원문과 겹치지
+    # 않으며 실제 원주 재생에서 문맥만 크게 차지했다. 필요하면 허용 도구로 조회할 수 있다.
+    if (workspace.snapshot.get('nationwide_bigdata_context') and not is_targeted_revision
+            and not is_report_composition):
         calls.append(('get_nationwide_bigdata_context', {}))
     if workspace.snapshot.get('ml_analysis'):
         calls.append(('get_ml_forecast', {}))
@@ -50,12 +57,19 @@ def _prefetch_required_evidence(workspace: EvidenceTools, task: str) -> list[dic
         decision = workspace.pack.get('transfer_assessment') or {}
         preferred = list((decision.get('strategy_brief') or {}).get('supporting_case_ids') or [])
         preferred += list(decision.get('recommended_case_ids') or [])
+        # 재비교는 이전 선정안을 실행하는 단계가 아니다. 잘못 고른 사례가
+        # 계속 우선 조회되어 후보를 고정하지 않게 등록 사례의 순서로 비교한다.
+        if task == 'transferability' and (workspace.payload.get('quality_review_feedback') or {}).get('issues'):
+            preferred = []
+            registry_order = {row.get('source_id'): index for index, row in
+                              enumerate(workspace.pack.get('benchmark_cases') or [])}
+            case_items.sort(key=lambda item: registry_order.get(item[0], len(registry_order)))
         # 긴 본문에 인용이 더 있으면 기존 원문 추가 조회/교정 절차에서 읽는다.
         priority = {key: index for index, key in enumerate(list(dict.fromkeys(preferred))[:3])}
         case_items.sort(key=lambda item: priority.get(item[0], len(priority)))
         # 후보 비교 전에는 운영 원리를 한눈에 보고, Qwen의 적용성 판단은 서로 다른
         # 원리의 사례 두 건까지 원문으로 확인합니다. 작성/검수는 실제 선정 사례를 우선합니다.
-        if task == 'transferability':
+        if task == 'transferability' and not feedback_issues:
             calls.append(('get_case_comparison_matrix', {}))
         required_family_count = min(2, len({_case_mechanism_family(case) for _, case in case_items})) if task == 'transferability' else 1
         selected_case_ids: list[str] = []
@@ -130,11 +144,18 @@ async def run_local_agent(provider: Any, request: LLMRequest, model: str) -> LLM
             if row['result'].get('observations') == overview.get('observations'):
                 overview.pop('observations', None)
                 overview['observations_reference'] = 'prefetched_evidence/get_region_metrics/observations'
+    feedback_issues = (workspace.payload.get('quality_review_feedback') or {}).get('issues') or []
+    is_targeted_revision = bool(feedback_issues) and request.task in {'transferability', 'planner_revision'}
     # 긴 초안은 읽기 페이지 수에 맞춰 로컬 조회 횟수만 늘리고, 문맥·최종 출력 상한은 유지합니다.
     page_count = sum(len(workspace.draft_segments(path)) for path in ('/previous_draft', '/draft_report'))
     # 후보를 만드는 Qwen은 숫자·ML·서로 다른 사례를 모두 읽어야 합니다. 그 단계에만
     # 한 번의 짧은 도구 선택 기회를 더 주고, 작성/검수의 일반 흐름은 기존 2회로 유지합니다.
-    base_rounds = min(8, (3 if request.task == 'transferability' else 2) + page_count)
+    # 서버가 필수 원문을 모두 사전 조회한 보완 호출은 선택 도구 왕복을 생략한다.
+    # 이 왕복은 같은 메시지 묶음을 한 번 더 처리하고 선택 결과까지 누적해, 긴 후보와
+    # 초안을 고치는 단계가 최종 JSON 전에 문맥 한도를 넘게 만들었다.
+    base_rounds = 0 if is_targeted_revision and not workspace.missing_required_reads() else min(
+        8, (3 if request.task == 'transferability' else 2) + page_count
+    )
     max_rounds = min(8, base_rounds + 1)
     argument_error_seen = False
     messages = [
@@ -235,6 +256,14 @@ async def run_local_agent(provider: Any, request: LLMRequest, model: str) -> LLM
                                    '필수 비교·ML·사례·기존 초안 조회가 완료되지 않아 결과를 채택하지 않습니다: '
                                    + ', '.join(missing_required[:6]))
         read_case_ids = workspace.read_case_source_ids()
+        feedback = request.input_payload.get('quality_review_feedback') or {}
+        if feedback.get('issues'):
+            messages.append({'role': 'user', 'content':
+                             '이번 요청은 기존 결과의 보완이다. 아래 오류 목록의 필드를 실제로 수정하라. '
+                             '이전 선택안은 승인된 정답이 아니다. 수정할 근거가 없으면 한계를 명시하고, '
+                             '잘못된 원문을 그대로 복사하여 ready로 제출하지 마라. '
+                             '연관된 strategy_brief와 후보를 일치시켜라.\n'
+                             + evidence_json(feedback)})
         messages.append({'role': 'user', 'content':
                          '도구 단계가 끝났다. 확보한 근거만 사용해 지정 Schema의 최종 JSON을 작성하라. '
                          '추가 검색을 했다고 주장하지 말고, 읽지 못한 근거로 확정 판단하지 마라. '

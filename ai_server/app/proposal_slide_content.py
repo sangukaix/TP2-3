@@ -196,7 +196,7 @@ def _source_groups(report):
                 formatted=f'{value:,.0f}{unit}' if key in ('stay_minutes','lodging_searches','navigation_searches') else f'{value:,.2f}{unit}'
         model.append((f'{METRIC_LABELS.get(key,key)}\n{display}\n최종 월 {formatted}', ''))
     if not model:model=[('예측 모델 메타데이터 없음\n검증되지 않은 수치는 표시하지 않습니다.','')]
-    for s in build_reference_estimate(report)['sources']:
+    for s in (build_reference_estimate(report)['sources'] if report.get('generation_mode') == 'offline_sample' else []):
         web.append((f"참고 견적 추가 조사  {s['title']}\n{urlparse(s['source_url']).netloc} · 2026-09-05",s['source_url']))
     # Retain actual forecast values for all metrics in speaker notes, alongside model IDs.
     return [('관측 데이터 · 전체 원자료 목록',data),('머신러닝 예측치 · 모든 모델',model),
@@ -277,8 +277,9 @@ def populate_provenance(prs, report):
 
 def apply_notes(prs,report,photo_sources):
     from .proposal_presentation_v4 import _selected_case
+    from .proposal_evidence import saved_budget_view
     inventory=complete_source_records(report)
-    estimate=build_reference_estimate(report)
+    estimate=build_reference_estimate(report) if report.get('generation_mode') == 'offline_sample' else saved_budget_view(report)
     sources=inventory+photo_sources+estimate['sources']
     source_lines=[]
     for s in sources:

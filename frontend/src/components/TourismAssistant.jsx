@@ -15,7 +15,7 @@ const QUICK_QUESTIONS = [
 export default function TourismAssistant({ open, onClose, region, report, onApplyPatch }) {
   const [messages, setMessages] = useState([])
   const [question, setQuestion] = useState('')
-  const [useWebSearch, setUseWebSearch] = useState(true)
+  const [useWebSearch, setUseWebSearch] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const latestPatch = useMemo(

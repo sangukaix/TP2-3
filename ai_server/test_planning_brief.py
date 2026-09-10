@@ -14,7 +14,7 @@ from pydantic import ValidationError
 
 from ai_server.app import main
 from ai_server.ml.data_freshness import assess_data_freshness
-from ai_server.app.planning_brief import PlanningBrief, brief_fingerprint, extract_brief_reference
+from ai_server.app.planning_brief import PlanningBrief, brief_fingerprint, extract_brief_reference, planning_context_char_count
 from ai_server.app.agents.evidence_agent import EvidenceAgent
 from ai_server.app.agents.case_study_agent import CaseStudyAgent
 from ai_server.app.agents.transferability_agent import TransferabilityAgent
@@ -66,6 +66,12 @@ class BriefContractTest(unittest.TestCase):
         b = brief(hard_constraints='야간 운영 제외').model_dump(mode='json')
         self.assertNotEqual(brief_fingerprint(a), brief_fingerprint(b))
         self.assertEqual(brief_fingerprint(a), brief_fingerprint(dict(reversed(list(a.items())))))
+
+    def test_total_user_context_is_bounded_before_llm_work(self):
+        valid = brief(field_context='가' * 2500, references=[{'name': 'memo.txt', 'text': '나' * 3500}])
+        self.assertEqual(planning_context_char_count(valid), 6000)
+        with self.assertRaisesRegex(ValidationError, '합계 6,000자'):
+            brief(field_context='가' * 2500, preferences='추가', references=[{'name': 'memo.txt', 'text': '나' * 3500}])
 
     def test_text_docx_pdf_and_xlsx_extraction(self):
         self.assertEqual(extract_brief_reference('memo.txt', '현장 정보'.encode())['text'], '현장 정보')

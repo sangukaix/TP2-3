@@ -7,6 +7,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, Field
 
 from .region_registry import list_region_pipelines
+from .module_usage import build_module_usage
 
 
 METRIC_GUIDES = {
@@ -28,7 +29,7 @@ METRIC_GUIDES = {
         'title': '향후 3개월 평균 숙박일수 예측',
         'unit': '일',
         'dataset': '평균 숙박일',
-        'feature_function': 'make_lodging_supervised_frame()',
+        'feature_function': 'make_univariate_supervised_frame()',
         'purpose': '과거 평균 숙박일수와 계절성을 이용해 다음 3개월의 평균 숙박일수를 추정합니다.',
     },
     'lodging_rate_pct': {
@@ -92,6 +93,7 @@ class MlLearningModule(BaseModel):
     forecast: list[MlLearningPoint]
     evaluation: dict[str, Any]
     conclusion: str
+    strategy_usage: dict[str, Any] = Field(default_factory=dict)
 
 
 class MlLearningRegion(BaseModel):
@@ -167,7 +169,7 @@ def _build_module(
     baseline = evaluation.get('baseline_metrics') or {}
     functions = [
         f'{load_function_name}()', 'validate_monthly_data()', guide['feature_function'],
-        'select_and_evaluate()', 'error_metrics()', 'predict_future_months()',
+        'select_and_evaluate()', 'error_metrics()', 'predict_region_future_months()',
     ]
     return MlLearningModule(
         id=target_key,
@@ -188,6 +190,7 @@ def _build_module(
             or []
         ),
         functions=functions,
+        strategy_usage=build_module_usage(target_key),
         techniques=[
             '지도학습 회귀', '시차 변수(Lag 1·3·12개월)', '월 계절성 sin·cos 변환',
             '시간순 Train·Validation·Test 분리', '전년 동월 기준모델 비교', '1~3개월 재귀 예측',

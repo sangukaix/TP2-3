@@ -15,6 +15,20 @@ from pypdf import PdfReader
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
+PLANNING_CONTEXT_MAX_CHARS = 6000
+PLANNING_TEXT_FIELDS = ('resources_confirmed', 'resources_possible', 'hard_constraints', 'preferences', 'field_context')
+
+
+def planning_context_char_count(brief: 'PlanningBrief | dict | None') -> int:
+    """LLM에 전달되는 사용자 자유 입력과 첨부 본문의 전체 문자 수입니다."""
+    if brief is None:
+        return 0
+    value = brief if isinstance(brief, dict) else brief.model_dump()
+    field_chars = sum(len(str(value.get(field) or '')) for field in PLANNING_TEXT_FIELDS)
+    reference_chars = sum(len(str(row.get('text') or '')) for row in value.get('references') or [])
+    return field_chars + reference_chars
+
+
 class BriefReference(BaseModel):
     model_config = ConfigDict(extra='forbid', str_strip_whitespace=True)
     name: str = Field(min_length=1, max_length=150)
@@ -25,11 +39,16 @@ class PlanningBrief(BaseModel):
     """정해지지 않은 값은 null/unknown으로 유지합니다. 0원이나 확정으로 바꾸지 않습니다."""
     model_config = ConfigDict(extra='forbid', str_strip_whitespace=True)
     version: Literal[1] = 1
+    input_profile: Literal['legacy', 'guided_v1'] = 'legacy'
+    business_direction: Literal['auto', 'spend_conversion', 'stay_conversion', 'night_time_experience', 'return_visit'] = 'auto'
+    excluded_operations: list[Literal['night_time_experience', 'spend_conversion']] = Field(default_factory=list, max_length=2)
     region_code: str = Field(pattern=r'^\d{2,5}$')
     budget_status: Literal['unknown', 'indicative', 'confirmed'] = 'unknown'
     budget_min_krw: int | None = Field(default=None, ge=1, le=1_000_000_000_000, strict=True)
     budget_max_krw: int | None = Field(default=None, ge=1, le=1_000_000_000_000, strict=True)
     budget_hard_limit: bool = False
+    visitor_target_pct: float | None = Field(default=None, ge=0, le=20, allow_inf_nan=False)
+    spending_target_pct: float | None = Field(default=None, ge=0, le=30, allow_inf_nan=False)
     schedule_status: Literal['unknown', 'flexible', 'fixed'] = 'unknown'
     start_date: date | None = None
     end_date: date | None = None
@@ -58,6 +77,33 @@ class PlanningBrief(BaseModel):
 
     @model_validator(mode='after')
     def check_conditions(self):
+        if self.input_profile == 'guided_v1':
+            import calendar
+            if self.schedule_status == 'unknown':
+                today = date.today()
+                self.start_date = today.replace(day=1)
+                end_index = today.year * 12 + today.month - 1 + 2
+                end_year, end_month = divmod(end_index, 12)
+                self.end_date = date(end_year, end_month + 1, calendar.monthrange(end_year, end_month + 1)[1])
+                self.schedule_status = 'fixed'
+            if self.business_direction in self.excluded_operations:
+                raise ValueError('사업 방향과 제외 조건이 충돌합니다.')
+            if self.budget_hard_limit or self.budget_min_krw is not None or self.budget_status == 'confirmed':
+                raise ValueError('간편 기획은 참고 예산 총액만 지원합니다.')
+            if self.visitor_target_pct is not None or self.spending_target_pct is not None or self.references:
+                raise ValueError('간편 기획의 목표는 생성 후 조정하며 첨부자료는 지원하지 않습니다.')
+            if self.preferences or self.resources_possible or self.hard_constraints:
+                raise ValueError('간편 기획은 선택형 제외 조건과 현장 메모만 지원합니다.')
+            if len(self.resources_confirmed) > 300 or len(self.field_context) > 500:
+                raise ValueError('활용 자원은 300자, 현장 메모는 500자 이하로 입력하세요.')
+            if self.start_date and self.end_date:
+                index = self.start_date.year * 12 + self.start_date.month - 1 + 2
+                year, month = divmod(index, 12)
+                expected = date(year, month + 1, calendar.monthrange(year, month + 1)[1])
+                if self.start_date.day != 1 or self.end_date != expected or self.start_date.strftime('%Y%m') < date.today().strftime('%Y%m'):
+                    raise ValueError('이번 달 이후 시작 월부터 3개월만 지원합니다.')
+        if (self.visitor_target_pct is None) != (self.spending_target_pct is None):
+            raise ValueError('방문자와 관광소비 목표율은 둘 다 입력하거나 모두 미정으로 두세요.')
         if self.budget_status == 'unknown':
             if self.budget_min_krw is not None or self.budget_max_krw is not None or self.budget_hard_limit:
                 raise ValueError('예산 미정 상태에서는 금액과 상한을 지정할 수 없습니다.')
@@ -75,6 +121,10 @@ class PlanningBrief(BaseModel):
             raise ValueError('시설·인력 미정 상태에서는 내용을 입력할 수 없습니다.')
         if self.constraints_status == 'unknown' and self.hard_constraints:
             raise ValueError('필수 조건 미정 상태에서는 내용을 입력할 수 없습니다.')
+        if planning_context_char_count(self) > PLANNING_CONTEXT_MAX_CHARS:
+            raise ValueError(
+                f'현장 정보·조건·선호·참고문서 본문은 합계 {PLANNING_CONTEXT_MAX_CHARS:,}자 이하로 줄여 주세요.'
+            )
         return self
 
 

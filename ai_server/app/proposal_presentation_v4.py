@@ -1,4 +1,4 @@
-"""확정한 12장 기획서 양식에 검증된 보고서 JSON을 채우는 PPT 생성기.
+"""확정 원본 위에 10~11장 출력 레이아웃과 검증된 보고서 JSON을 적용한다.
 
 사용자가 직접 지정한 최신 편집형 템플릿의 레이아웃과 네이티브 차트를 유지한다.
 관측값은 MySQL/원자료, 자연추세는 저장 ML, 사업 목표는 사용자가 입력한 검토값으로
@@ -29,7 +29,7 @@ from .report_review_status import review_label
 PRESENTATION_TEMPLATE_PATH = (
     Path(__file__).resolve().parent / "templates" / "tourism_strategy_12_slide_template_v6.pptx"
 )
-PRESENTATION_RENDER_VERSION = "pptx-user35-v6-exact-ml-kpi-full-sources-r2"
+PRESENTATION_RENDER_VERSION = "pptx-regional-target-estimate-v17"
 FINAL_SLIDE_COUNT = 12
 
 BLUE = RGBColor(0x00, 0x4E, 0xA2)
@@ -299,14 +299,15 @@ def _trim_to_final_slides(prs: Presentation) -> None:
 
 
 def _populate_cover(prs: Presentation, report: dict[str, Any]) -> None:
+    from .proposal_layout_v7 import short_title, copy_text
     strategy = base._first_strategy(report)
     region = str(report.get("region_name") or "선택 지역")
     short_region = _short_region(region)
-    title = base._compact(strategy.get("title") or f"{short_region} 관광 실행 전략", limit=36)
-    timeframe = base._compact(strategy.get("timeframe") or "3~6개월", limit=14)
+    title = short_title(report)
+    timeframe = copy_text(strategy.get("timeframe") or "3~6개월")
     title_line1, _, title_line2 = base._cover_title_parts(title, timeframe)
     slide = prs.slides[0]
-    base._set_text(slide, "security-label", review_label(report))
+    base._set_text(slide, "security-label", "교육용 더미 · 오프라인 샘플" if _is_offline_sample(report) else "관광사업 아이디어 제안")
     base._set_text(slide, "cover-title-line1", title_line1)
     base._set_text(slide, "cover-title-line2", title_line2)
     selected = select_report_forecast(report).get('rows') or []
@@ -789,6 +790,7 @@ def _populate_provenance(prs: Presentation, report: dict[str, Any]) -> None:
 
 
 def _populate_thanks(prs: Presentation, report: dict[str, Any]) -> None:
+    from .proposal_layout_v7 import short_title
     strategy = base._first_strategy(report)
     region = str(report.get("region_name") or "선택 지역")
     slide = prs.slides[11]
@@ -799,7 +801,7 @@ def _populate_thanks(prs: Presentation, report: dict[str, Any]) -> None:
     base._set_text(slide, "org-title", region)
     base._set_text(slide, "org-owner", "검토·협업용")
     base._set_text(slide, "report-number", "TOUR INSIGHT")
-    base._set_text(slide, "report-topic", base._compact(strategy.get("title") or f"{_short_region(region)} 관광 실행안", limit=34))
+    base._set_text(slide, "report-topic", short_title(report))
 
 
 def _apply_notes(prs: Presentation, report: dict[str, Any], photo_sources: list[dict[str, Any]]) -> None:
@@ -825,10 +827,10 @@ def _apply_notes(prs: Presentation, report: dict[str, Any], photo_sources: list[
 
 
 def _validate_presentation(prs: Presentation, report: dict[str, Any]) -> None:
-    if len(prs.slides) < FINAL_SLIDE_COUNT:
-        raise ValueError(f"PowerPoint 필수 12장 구조가 누락되었습니다: {len(prs.slides)}장")
+    if len(prs.slides) < 11:
+        raise ValueError(f"PowerPoint 11~12장 구조를 확인해주세요: {len(prs.slides)}장")
     all_text = "\n".join(shape.text for slide in prs.slides for shape in slide.shapes if getattr(shape, "has_text_frame", False))
-    required = ("실행 기획안", "핵심 기획", "ML", "견적", "근거·데이터", "감사합니다")
+    required = ("사업 설계", "지역별 참고 사례", "머신러닝 예측값", "견적", "근거·데이터", "감사합니다")
     missing = [label for label in required if label not in all_text]
     if missing:
         raise ValueError(f"PowerPoint 필수 섹션 누락: {', '.join(missing)}")
@@ -836,7 +838,7 @@ def _validate_presentation(prs: Presentation, report: dict[str, Any]) -> None:
     if "감사합니다" not in final_text:
         raise ValueError("마지막 슬라이드의 인사말이 유지되지 않았습니다.")
     scenario, _ = _scenario_for_display(report)
-    if scenario and len([shape for shape in prs.slides[4].shapes if getattr(shape, "has_chart", False)]) != 2:
+    if scenario and len([shape for shape in prs.slides[3].shapes if getattr(shape, "has_chart", False)]) != 2:
         raise ValueError("ML 슬라이드의 네이티브 차트 2개가 유지되지 않았습니다.")
     if len([shape for shape in prs.slides[8].shapes if getattr(shape, "has_table", False)]) != 1:
         raise ValueError("견적 슬라이드의 편집 가능한 표가 유지되지 않았습니다.")
@@ -847,24 +849,32 @@ def _validate_presentation(prs: Presentation, report: dict[str, Any]) -> None:
 
 def create_strategy_proposal_presentation(report: dict[str, Any]) -> BytesIO:
     """승인된 본문+전체 출처 부록을 반환한다. 원 보고서/ML은 변경하지 않는다."""
+    from .idea_proposal import prepare_idea_report
+    report = prepare_idea_report(report)
     from . import proposal_slide_content as content
+    from . import proposal_layout_v9 as layout
     if not PRESENTATION_TEMPLATE_PATH.is_file():
         raise ValueError(f"PowerPoint 레이아웃 원본 파일이 없습니다: {PRESENTATION_TEMPLATE_PATH.name}")
     prs = Presentation(str(PRESENTATION_TEMPLATE_PATH))
     _populate_cover(prs, report)
     photo_sources = _populate_project(prs, report)
-    _populate_plan_detail(prs, report)
-    content.populate_ml(prs, report)
-    _populate_comparison(prs, report)
-    _populate_roadmap(prs, report)
-    content.populate_kpi(prs, report)
-    content.populate_budget(prs, report)
+    layout.project(prs, report, photo_sources)
+    layout.detail(prs, report)
+    layout.cases(prs, report)
+    layout.roadmap(prs, report)
+    layout.kpi(prs, report)
+    layout.budget(prs, report)
     _populate_continuation(prs, report)
     _populate_thanks(prs, report)
     _trim_to_final_slides(prs)
-    content.populate_provenance(prs, report)
+    layout.provenance(prs, report)
     content.apply_notes(prs, report, photo_sources)
+    layout.finish(prs, report)
     _validate_presentation(prs, report)
+    layout.target_evidence_page(prs, report)
+    layout.case_selection_page(prs, report)
+    from .proposal_layout_v10 import polish
+    polish(prs, report)
     output = BytesIO()
     prs.save(output)
     output.seek(0)
