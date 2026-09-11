@@ -21,12 +21,10 @@ const seoulBackgroundPaths = new Set(['/dashboard', '/planning', '/strategy', '/
  */
 export default function WorkspaceShell({ children }) {
 
-  const currentPath = window.location.pathname
+  const currentPath = resolveAppRoute(window.location.pathname).canonicalPath
   const pageClassName = seoulBackgroundPaths.has(currentPath)
     ? 'workspace-shell oligo-seoul-page'
     : 'workspace-shell'
-
-  const currentPath = resolveAppRoute(window.location.pathname).canonicalPath
 
   const topbarLabel = currentPath === '/dashboard'
     ? '1. 희망 지역을 선택해주세요'

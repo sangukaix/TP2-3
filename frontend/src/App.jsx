@@ -1,8 +1,6 @@
 
 import { lazy, Suspense, useEffect, useState } from 'react'
 
-import { lazy, Suspense } from 'react'
-import { resolveAppRoute } from './routes'
 
 
 // 첫 화면에서 Leaflet·Recharts·보고서 코드를 모두 내려받지 않도록 페이지 단위로 분리합니다.
@@ -76,21 +74,7 @@ export default function App() {
   if (path === '/openai-test') Page = OpenAiLearningPage
   if (path === '/react-test') Page = ReactLearningPage
   if (path === '/llm-control') Page = LlmControlPage
-
-  const route = resolveAppRoute(window.location.pathname)
-  const pages = {
-    home: TourismHomePage,
-    dashboard: TourismDashboardPage,
-    planning: TourismPlanningPage,
-    strategy: TourismStrategyPage,
-    savedPlans: SavedStrategyPlansPage,
-    mlTest: MlTestPage,
-    openAiLearning: OpenAiLearningPage,
-    reactLearning: ReactLearningPage,
-    llmControl: LlmControlPage,
-    projectTree: ProjectTreePage,
-  }
-  const Page = pages[route.pageId] || NotFoundPage
+  if (path === '/project-tree') Page = ProjectTreePage
 
 
   return <Suspense fallback={<PageLoading />}><Page /></Suspense>
