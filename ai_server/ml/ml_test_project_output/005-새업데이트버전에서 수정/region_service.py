@@ -7,15 +7,12 @@ import joblib
 
 from .gangnam_data import load_gangnam_monthly_demand
 from .gangnam_forecast import ARTIFACT_DIRECTORY, _model_inputs, _next_month, _round_prediction
-from .evaluation import BASELINE
 from .model_switch_002 import get_active_model_family
 from .validation import TARGETS
 
 SWITCH_MODEL_PATH = ARTIFACT_DIRECTORY / "demand_model_switch_002.joblib"
 SWITCH_METADATA_PATH = ARTIFACT_DIRECTORY / "demand_model_switch_002.metadata.json"
-# 최신 통합 학습 결과를 우선 사용합니다. 구형 switch artifact는 호환용 fallback입니다.
-REGULAR_MODEL_PATH = ARTIFACT_DIRECTORY / "demand_model.joblib"
-MODEL_PATH = REGULAR_MODEL_PATH if REGULAR_MODEL_PATH.exists() else SWITCH_MODEL_PATH
+MODEL_PATH = SWITCH_MODEL_PATH if SWITCH_MODEL_PATH.exists() else ARTIFACT_DIRECTORY / "demand_model.joblib"
 # 일반 메타데이터가 최신 학습 결과(MAE/MSE/RMSE/R²)를 담으므로 우선 사용합니다.
 METADATA_PATH = ARTIFACT_DIRECTORY / "demand_model.metadata.json"
 if not METADATA_PATH.exists():
@@ -50,13 +47,7 @@ def predict_region_demand(region_code: str, horizon: int = 3) -> dict:
         month = _next_month(months[-1])
         row = {'month': month, 'is_forecast': True}
         for target in TARGETS:
-            target_evaluation = active_evaluation.get(target, {})
-            # 검증 구간에서 기준선이 최종 선택된 경우에는 후보 ML 모델을
-            # 사용하지 않고 전년 동월 값을 그대로 예측값으로 사용합니다.
-            if target_evaluation.get('selected_model') == BASELINE and len(histories[target]) >= 12:
-                value = float(histories[target][-12])
-            else:
-                value = float(models[target].predict(_model_inputs(histories, target, month))[0])
+            value = float(models[target].predict(_model_inputs(histories, target, month))[0])
             row[target] = _round_prediction(target, max(0.0, value))
         for target in TARGETS:
             histories[target].append(float(row[target]))

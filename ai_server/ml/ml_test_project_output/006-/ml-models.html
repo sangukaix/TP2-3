@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ML 모델·성능평가</title>
+  <style>
+    :root{font-family:Inter,"Noto Sans KR",system-ui,sans-serif;color:#172033;background:#f4f7fb}
+    *{box-sizing:border-box}body{margin:0}.shell{max-width:1180px;margin:0 auto;padding:30px 22px 60px}
+    header{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:24px}
+    h1{margin:0;font-size:30px;letter-spacing:-.04em}header p{margin:8px 0 0;color:#6b7890;font-size:14px}
+    .status{display:flex;align-items:center;gap:8px;padding:10px 14px;border:1px solid #d9e2ef;border-radius:999px;background:#fff;color:#4b5a70;font-size:13px}
+    .dot{width:9px;height:9px;border-radius:50%;background:#f09a42}.dot.ok{background:#2ab673}
+    .toolbar{display:flex;align-items:center;gap:12px;margin-bottom:18px}.toolbar select,.toolbar button{height:40px;padding:0 13px;border:1px solid #d5dfeb;border-radius:8px;background:#fff;color:#27344a;font-size:14px}.toolbar button{cursor:pointer;background:#152c4d;color:#fff;border-color:#152c4d}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:18px}.card{padding:18px;border:1px solid #e0e7f0;border-radius:14px;background:#fff;box-shadow:0 5px 18px #263c5c0a}.label{color:#718096;font-size:12px}.big{margin-top:8px;font-size:23px;font-weight:750;letter-spacing:-.03em}.sub{margin-top:6px;color:#718096;font-size:12px}.family{color:#2767b1}
+    section{margin-top:18px;padding:20px;border:1px solid #e0e7f0;border-radius:14px;background:#fff;box-shadow:0 5px 18px #263c5c0a}section h2{margin:0 0 15px;font-size:18px;letter-spacing:-.03em}.table-wrap{max-width:100%;max-height:68vh;overflow:auto;border:1px solid #edf1f6;border-radius:9px}table{width:100%;border-collapse:separate;border-spacing:0;min-width:980px}th,td{padding:12px 10px;border-bottom:1px solid #edf1f6;text-align:left;font-size:13px;white-space:nowrap;vertical-align:middle}th{position:sticky;top:0;z-index:1;color:#718096;background:#fafbfd;font-weight:650}td strong{font-weight:700}tbody tr.target-group-start td{border-top:2px solid #d9e6f2}tbody tr:last-child td{border-bottom:0}.pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#edf5ff;color:#2364a7;font-size:12px}.good{color:#168a5c}.muted{color:#8390a3}.error{padding:14px;border-radius:9px;color:#a33c3c;background:#fff1f1;font-size:13px;line-height:1.6}.foot{margin-top:18px;color:#8995a6;font-size:12px}
+    @media(max-width:760px){header{align-items:flex-start;flex-direction:column}.grid{grid-template-columns:1fr}.shell{padding:22px 14px}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div><h1>머신러닝 모델·성능평가</h1><p>React 화면과 독립적으로 동작하는 ML 운영 확인 페이지</p></div>
+      <div class="status"><span id="dot" class="dot"></span><span id="serverStatus">서버 확인 중...</span></div>
+    </header>
+    <div class="toolbar"><label for="region">지역</label><select id="region"><option value="11680">서울특별시 강남구 (11680)</option></select><button id="refresh">새로고침</button></div>
+    <div id="content"><div class="card">데이터를 불러오는 중입니다...</div></div>
+    <div class="foot">데이터 출처: AI 서버 ML Learning Catalog · 조회 시각 <span id="updated">-</span></div>
+  </main>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const esc = (v) => String(v ?? '-').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+    const num = (v) => v == null ? '-' : Number(v).toLocaleString('ko-KR', {maximumFractionDigits:2});
+    async function load() {
+      $('serverStatus').textContent = '서버 확인 중...'; $('dot').className = 'dot';
+      try {
+        const code = $('region').value;
+        const statusRes = await fetch(`/ai/v1/ml/${code}/model-status`);
+        if (!statusRes.ok) throw new Error(`모델 상태 오류 (${statusRes.status})`);
+        const status = await statusRes.json();
+        let catalog = {regions: []};
+        try {
+          const controller = new AbortController();
+          const timer = setTimeout(() => controller.abort(), 3000);
+          const catalogRes = await fetch('/ai/v1/ml/learning/catalog', {signal: controller.signal});
+          clearTimeout(timer);
+          if (catalogRes.ok) catalog = await catalogRes.json();
+        } catch (_) { /* 카탈로그가 느려도 저장된 평가 메타데이터를 먼저 표시합니다. */ }
+        const region = (catalog.regions || []).find(x => String(x.region_code) === code);
+        const evaluation = status.evaluation_by_family?.[status.active_model_family] || status.evaluation || {};
+        const fallbackModules = Object.entries(evaluation).map(([id, e]) => ({id, target_name: id, model_name: e.selected_model || '-', evaluation: {test_mae: e.selected_model_metrics?.mae, test_mse: e.selected_model_metrics?.mse, test_rmse: e.selected_model_metrics?.rmse, test_r2: e.selected_model_metrics?.r2, test_mape_percent: e.selected_model_metrics?.mape_percent, beats_baseline_on_test: e.beats_baseline_on_test}}));
+        const modules = (region?.modules?.length ? region.modules : fallbackModules);
+        $('serverStatus').textContent = 'AI 서버 연결됨'; $('dot').className = 'dot ok';
+        const cards = `<div class="grid">
+          <div class="card"><div class="label">현재 사용 모델</div><div class="big family">${esc(status.active_model_family || '확인 불가')}</div><div class="sub">버전 ${esc(status.model_version || region?.model_version || '-')}</div></div>
+          <div class="card"><div class="label">학습 데이터 기간</div><div class="big">${esc(status.source_period || region?.source_period || '-')}</div><div class="sub">테스트 ${esc(status.test_period || region?.test_period || '-')}</div></div>
+          <div class="card"><div class="label">저장된 모델 계열</div><div class="big">${(status.trained_model_families || []).map(x => `<span class="pill">${esc(x)}</span>`).join(' ') || '-'}</div><div class="sub">학습·예측 artifact 기준</div></div>
+        </div>`;
+        const targetNames = Object.fromEntries(modules.map(m => [m.id, m.target_name]));
+        const familyEvaluations = status.evaluation_by_family || {};
+        const targetIds = [...new Set(Object.values(familyEvaluations).flatMap(targets => Object.keys(targets)))];
+        const familyRows = targetIds.flatMap(id => {
+          const entries = Object.entries(familyEvaluations).filter(([, targets]) => targets[id]).map(([family, targets]) => [family, targets[id]]);
+          return entries.map(([family, e], index) => {
+            const m=e.selected_model_metrics||{};
+            const active = family === status.active_model_family ? ' <span class="pill">현재 사용</span>' : '';
+            const targetCell = index === 0 ? `<td rowspan="${entries.length}"><strong>${esc(targetNames[id] || id)}</strong><br><span class="muted">${esc(id)}</span></td>` : '';
+            return `<tr class="${index === 0 ? 'target-group-start' : ''}">${targetCell}<td><span class="pill">${esc(family)}</span>${active}</td><td>${esc(e.selected_model || '-')}</td><td>${num(m.mae)}</td><td>${num(m.mse)}</td><td>${num(m.rmse)}</td><td>${num(m.r2)}</td><td>${m.mape_percent == null ? '-' : num(m.mape_percent)+'%'}</td><td class="${e.beats_baseline_on_test ? 'good' : 'muted'}">${e.beats_baseline_on_test == null ? '-' : e.beats_baseline_on_test ? '기준선보다 좋음' : '기준선 미만'}</td></tr>`;
+          });
+        });
+        const rows = (familyRows.length ? familyRows : modules.map(m => { const e=m.evaluation||{}; return `<tr><td><strong>${esc(m.target_name)}</strong><br><span class="muted">${esc(m.id)}</span></td><td>-</td><td>${esc(m.model_name)}</td><td>${num(e.test_mae)}</td><td>${num(e.test_mse)}</td><td>${num(e.test_rmse)}</td><td>${num(e.test_r2)}</td><td>${e.test_mape_percent == null ? '-' : num(e.test_mape_percent)+'%'}</td><td class="${e.beats_baseline_on_test ? 'good' : 'muted'}">${e.beats_baseline_on_test == null ? '-' : e.beats_baseline_on_test ? '기준선보다 좋음' : '기준선 미만'}</td></tr>`; }));
+        $('content').innerHTML = cards + `<section><h2>모델 계열별 테스트 성능</h2><div class="table-wrap"><table><thead><tr><th>예측 대상</th><th>모델 계열</th><th>평가 모델</th><th>MAE</th><th>MSE</th><th>RMSE</th><th>R²</th><th>MAPE</th><th>기준선 비교</th></tr></thead><tbody>${rows.join('') || '<tr><td colspan="9">평가 정보가 없습니다.</td></tr>'}</tbody></table></div></section>`;
+        $('updated').textContent = new Date().toLocaleString('ko-KR');
+      } catch (err) { $('dot').className='dot'; $('serverStatus').textContent='서버 연결 실패'; $('content').innerHTML=`<div class="error">${esc(err.message)}<br><span class="muted">AI 서버(8111)가 실행 중인지 확인해 주세요.</span></div>`; }
+    }
+    $('refresh').addEventListener('click', load); load();
+  </script>
+</body>
+</html>

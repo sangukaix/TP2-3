@@ -12,22 +12,6 @@ VALIDATION_MONTHS = 3
 TEST_MONTHS = 4
 
 
-def _metric_priority(metrics: dict[str, Any]) -> tuple[float, float, float, float]:
-    """R²가 1에 가까운 순서, 이후 RMSE·MSE·MAE가 작은 순서로 정렬합니다."""
-    r2 = metrics.get('r2')
-    return (
-        abs(float(r2) - 1.0) if r2 is not None else float('inf'),
-        float(metrics.get('rmse', float('inf'))),
-        float(metrics.get('mse', float('inf'))),
-        float(metrics.get('mae', float('inf'))),
-    )
-
-
-def is_better_by_priority(candidate: dict[str, Any], baseline: dict[str, Any]) -> bool:
-    """우선순위 지표가 모두 같으면 기준선을 선택하도록 엄격 비교합니다."""
-    return _metric_priority(candidate) < _metric_priority(baseline)
-
-
 def error_metrics(actual: np.ndarray, predicted: np.ndarray) -> dict[str, Any]:
     """MAE는 평균 절대오차, RMSE는 큰 오차에 민감한 값입니다. 0인 실제값은 MAPE에서 제외합니다."""
     actual, predicted = np.asarray(actual), np.asarray(predicted)
@@ -55,15 +39,15 @@ def select_and_evaluate(
     validation_model = factory().fit(features[:validation_start], targets[:validation_start])
     candidate_validation = error_metrics(targets[validation_start:test_start], np.maximum(0, validation_model.predict(features[validation_start:test_start])))
     baseline_validation = error_metrics(targets[validation_start:test_start], baseline[validation_start:test_start])
-    # 검증 지표 우선순위로만 선택합니다. Test 결과로 선택을 바꾸지 않습니다.
-    use_model = is_better_by_priority(candidate_validation, baseline_validation)
+    # 동률이면 더 단순한 전년 동월 기준선을 사용합니다. Test를 보고 선택을 바꾸지 않습니다.
+    use_model = candidate_validation['mae'] < baseline_validation['mae']
     test_model = factory().fit(features[:test_start], targets[:test_start])
     candidate_test = error_metrics(targets[test_start:], np.maximum(0, test_model.predict(features[test_start:])))
     baseline_test = error_metrics(targets[test_start:], baseline[test_start:])
     selected_test = candidate_test if use_model else baseline_test
     evaluation = {
         'selected_model': type(test_model).__name__ if use_model else BASELINE,
-        'selection_basis': 'validation_r2_then_rmse_mse_mae',
+        'selection_basis': 'validation_mae_only',
         'validation': {'candidate': candidate_validation, 'baseline': baseline_validation},
         'candidate_test_metrics': candidate_test,
         'selected_model_metrics': selected_test,

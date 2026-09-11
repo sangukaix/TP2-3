@@ -2017,9 +2017,7 @@ async def read_model_status(region_code: str) -> dict:
         raise HTTPException(status_code=404, detail='현재 강남구(11680)만 지원합니다.')
     switch_model_path = ARTIFACT_DIRECTORY / 'demand_model_switch_002.joblib'
     switch_metadata_path = ARTIFACT_DIRECTORY / 'demand_model_switch_002.metadata.json'
-    regular_model_path = ARTIFACT_DIRECTORY / 'demand_model.joblib'
-    # 최신 통합 학습 결과를 우선 사용하고, 없을 때만 구형 switch artifact를 사용합니다.
-    model_path = regular_model_path if regular_model_path.exists() else switch_model_path
+    model_path = switch_model_path if switch_model_path.exists() else ARTIFACT_DIRECTORY / 'demand_model.joblib'
     metadata_path = ARTIFACT_DIRECTORY / 'demand_model.metadata.json'
     if not metadata_path.exists():
         metadata_path = switch_metadata_path

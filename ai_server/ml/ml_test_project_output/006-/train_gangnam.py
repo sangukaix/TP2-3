@@ -14,7 +14,7 @@ from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 from xgboost import XGBRegressor
 
-from .evaluation import BASELINE, TEST_MONTHS, VALIDATION_MONTHS, error_metrics, is_better_by_priority
+from .evaluation import BASELINE, TEST_MONTHS, VALIDATION_MONTHS, error_metrics
 from .gangnam_data import load_gangnam_monthly_demand
 from .gangnam_forecast import ARTIFACT_DIRECTORY, _training_frame
 from .validation import TARGETS, data_fingerprint
@@ -51,18 +51,13 @@ def _train_one(frame, target: str, family: str):
     candidate_test = error_metrics(targets[test_start:], np.maximum(0, test_model.predict(features[test_start:])))
     baseline_test = error_metrics(targets[test_start:], baseline[test_start:])
     final_model = factory().fit(features, targets)
-    # 최종 선택 기준: 검증 R²(1에 가까운 순서) → RMSE → MSE → MAE입니다.
-    selected = type(test_model).__name__ if is_better_by_priority(candidate_validation, baseline_validation) else BASELINE
+    selected = type(test_model).__name__ if candidate_validation['mae'] < baseline_validation['mae'] else BASELINE
     return final_model, {
         'selected_model': selected,
-        'selection_basis': 'validation_r2_then_rmse_mse_mae',
         'validation': {'candidate': candidate_validation, 'baseline': baseline_validation},
         'candidate_test_metrics': candidate_test,
         'selected_model_metrics': candidate_test if selected != BASELINE else baseline_test,
         'baseline_metrics': baseline_test,
-        # 테스트 구간에서 후보 알고리즘과 기준선을 비교한 결과입니다.
-        'candidate_beats_baseline_on_test': candidate_test['mae'] < baseline_test['mae'],
-        'selected_is_baseline': selected == BASELINE,
         'beats_baseline_on_test': candidate_test['mae'] < baseline_test['mae'],
         'train_target_count': validation_start,
     }

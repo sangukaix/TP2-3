@@ -7,40 +7,21 @@ import joblib
 
 from .gangnam_data import load_gangnam_monthly_demand
 from .gangnam_forecast import ARTIFACT_DIRECTORY, _model_inputs, _next_month, _round_prediction
-from .evaluation import BASELINE
 from .model_switch_002 import get_active_model_family
 from .validation import TARGETS
 
-SWITCH_MODEL_PATH = ARTIFACT_DIRECTORY / "demand_model_switch_002.joblib"
-SWITCH_METADATA_PATH = ARTIFACT_DIRECTORY / "demand_model_switch_002.metadata.json"
-# 최신 통합 학습 결과를 우선 사용합니다. 구형 switch artifact는 호환용 fallback입니다.
-REGULAR_MODEL_PATH = ARTIFACT_DIRECTORY / "demand_model.joblib"
-MODEL_PATH = REGULAR_MODEL_PATH if REGULAR_MODEL_PATH.exists() else SWITCH_MODEL_PATH
-# 일반 메타데이터가 최신 학습 결과(MAE/MSE/RMSE/R²)를 담으므로 우선 사용합니다.
+MODEL_PATH = ARTIFACT_DIRECTORY / "demand_model.joblib"
 METADATA_PATH = ARTIFACT_DIRECTORY / "demand_model.metadata.json"
-if not METADATA_PATH.exists():
-    METADATA_PATH = SWITCH_METADATA_PATH
 
 
 def predict_region_demand(region_code: str, horizon: int = 3) -> dict:
     if str(region_code) != '11680':
-        # 강남구만 통합 모델 스위치를 사용하고, 나머지 지역은 기존
-        # 등록 파이프라인으로 예측하여 전국 지역 API 계약을 유지합니다.
-        from .region_registry import get_region_pipeline
-        return get_region_pipeline(region_code).predict(horizon)
+        raise ValueError('현재 switch 로더는 강남구(11680)만 지원합니다.')
     if horizon < 1 or horizon > 24:
         raise ValueError('horizon은 1~24 범위여야 합니다.')
     artifact = joblib.load(MODEL_PATH)
     metadata = json.loads(METADATA_PATH.read_text(encoding="utf-8"))
     family = get_active_model_family()
-    active_evaluation = (metadata.get('evaluation_by_family') or {}).get(family) or metadata.get('evaluation') or {}
-    metadata = {
-        **metadata,
-        'evaluation': active_evaluation,
-        'target': {target: target for target in TARGETS},
-        'test_period': metadata.get('test_period') or '마지막 4개월 테스트 구간',
-        'limitations': metadata.get('limitations') or ['통합 모델 비교용 초기 모델입니다.'],
-    }
     models = artifact['models_by_family'][family]
     monthly = load_gangnam_monthly_demand()
     histories = {target: monthly[target].astype(float).tolist() for target in TARGETS}
@@ -50,13 +31,7 @@ def predict_region_demand(region_code: str, horizon: int = 3) -> dict:
         month = _next_month(months[-1])
         row = {'month': month, 'is_forecast': True}
         for target in TARGETS:
-            target_evaluation = active_evaluation.get(target, {})
-            # 검증 구간에서 기준선이 최종 선택된 경우에는 후보 ML 모델을
-            # 사용하지 않고 전년 동월 값을 그대로 예측값으로 사용합니다.
-            if target_evaluation.get('selected_model') == BASELINE and len(histories[target]) >= 12:
-                value = float(histories[target][-12])
-            else:
-                value = float(models[target].predict(_model_inputs(histories, target, month))[0])
+            value = float(models[target].predict(_model_inputs(histories, target, month))[0])
             row[target] = _round_prediction(target, max(0.0, value))
         for target in TARGETS:
             histories[target].append(float(row[target]))

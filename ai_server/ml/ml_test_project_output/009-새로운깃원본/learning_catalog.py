@@ -196,9 +196,7 @@ def _build_module(
         evaluation={
             'selection_basis': evaluation.get('selection_basis'),
             'test_mae': test.get('mae'),
-            'test_mse': test.get('mse'),
             'test_rmse': test.get('rmse'),
-            'test_r2': test.get('r2'),
             'test_mape_percent': test.get('mape_percent'),
             'baseline_test_mape_percent': baseline.get('mape_percent'),
             'beats_baseline_on_test': evaluation.get('beats_baseline_on_test'),
