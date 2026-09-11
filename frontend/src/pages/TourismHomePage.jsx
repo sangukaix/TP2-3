@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 import { ArrowRight, BarChart3, Bot, FileText, MapPinned } from 'lucide-react'
+import HeaderActions from '../components/HeaderActions'
 import '../App.css'
 import logo from '../assets/logo.png'
-import './Signup.jsx'
-import './Login.css'
 
 const STEPS = [
   {
@@ -63,24 +62,7 @@ export default function TourismHomePage() {
           <div className="home-brand-wrap">
             <a className="home-brand" href="/" aria-label="OLIGO 홈"><img className="home-brand-logo" src={logo} alt="OLIGO (가제)" /></a>
             <a className="ml-learning-dot" href="/ml-test" aria-label="머신러닝 학습 결과 보기" title="머신러닝 학습 결과" />
-            <button
-              className="go_signup"
-              onClick={() => {
-                window.history.pushState({}, '', '/signup')
-                window.dispatchEvent(new PopStateEvent('popstate'))
-                window.scrollTo({ top: 0 })
-              }}>
-              회원가입~!@#
-            </button>
-            <button
-              className="go_login"
-              onClick={() => {
-                window.history.pushState({}, '', '/login')
-                window.dispatchEvent(new PopStateEvent('popstate'))
-                window.scrollTo({ top: 0 })
-              }}>
-              로-그-인♡
-            </button>
+            <HeaderActions />
           </div>
         </div>
       </header>

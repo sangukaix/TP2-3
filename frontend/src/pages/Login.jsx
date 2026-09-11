@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { KeyRound, LockKeyhole, Mail, UserRound } from 'lucide-react'
+import HeaderActions from '../components/HeaderActions'
 import '../App.css'
 import './Login.css'
 import logo from '../assets/logo5.png'
@@ -170,19 +171,19 @@ export default function Login() {
           aria-label="OLIGO-K 홈으로 이동">
           <img className="login-logo" src={logo} alt="OLIGO-K" />
         </a>
+        <HeaderActions />
       </header>
 
       <section className="login-content" aria-labelledby="login-title">
         <div className="login-card">
           <div className="login-card-heading">
-            <span>OLIGO-K ACCOUNT</span>
             <h1 id="login-title">
               {view === 'login' && '로그인'}
               {view === 'findPassword' && '비밀번호 찾기'}
               {view === 'findId' && '아이디 찾기'}
             </h1>
             <p>
-              {view === 'login' && 'OLIGO-K와 함께 지역의 가능성을 올려보세요.'}
+              {view === 'login' && 'OLIGO-K와 함께 지역의 가능성을 올려보세요!'}
               {view === 'findPassword' && '회원가입 당시 설정한 힌트로 본인을 확인합니다.'}
               {view === 'findId' && '회원가입 시 입력하신 이메일 주소를 기재해주세요!'}
             </p>

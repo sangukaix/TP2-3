@@ -5,6 +5,7 @@ import {
   ClipboardList,
 } from 'lucide-react'
 import logo from '../assets/logo.png'
+import HeaderActions from './HeaderActions'
 
 const menuItems = [
   { href: '/dashboard', label: '지역선택', icon: LayoutDashboard },
@@ -48,6 +49,7 @@ export default function WorkspaceShell({ children }) {
           <div className="home-brand-wrap">
             <a className="home-brand" href="/" aria-label="OLIGO 홈"><img className="home-brand-logo" src={logo} alt="OLIGO (가제)" /></a>
             <a className="ml-learning-dot" href="/ml-test" aria-label="머신러닝 학습 결과 보기" title="머신러닝 학습 결과" />
+            <HeaderActions />
           </div>
         </div>
       </header>
@@ -55,8 +57,8 @@ export default function WorkspaceShell({ children }) {
       <aside className="workspace-sidebar">
         <nav className="workspace-nav" aria-label="관광 분석 메뉴">
           <p>분석 업무</p>
-          {menuItems.map(({ href, label, icon: Icon }) => (
-            <a className={currentPath === href ? 'is-active' : ''} href={href} key={href}><Icon size={17} /><span>{label}</span></a>
+          {menuItems.map(({ href, label }, index) => (
+            <a className={currentPath === href ? 'is-active' : ''} href={href} key={href}><span>{index+1}</span><span>{label}</span></a>
           ))}
           <p>기획서 관리</p>
           <a className={currentPath === '/saved-plans' ? 'is-active' : ''} href="/saved-plans"><FileBarChart size={17} /><span>저장된 기획서</span></a>

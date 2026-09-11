@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Building2, LockKeyhole, Mail, Phone, UserRound } from 'lucide-react'
+import HeaderActions from '../components/HeaderActions'
 import '../App.css'
 import './Signup.css'
 import logo from '../assets/logo5.png'
@@ -20,6 +21,13 @@ const SECURITY_QUESTIONS = [
 ]
 
 const CUSTOM_SECURITY_QUESTION = 'custom'
+const VISIBLE_ASCII_PATTERN = /^[!-~]+$/
+
+function isValidAccountText(value, minLength, maxLength) {
+  return value.length >= minLength
+    && value.length <= maxLength
+    && VISIBLE_ASCII_PATTERN.test(value)
+}
 
 // TODO: 추후 전국 행정구역 데이터/API 연결
 const INITIAL_FORM = {
@@ -39,8 +47,16 @@ function validate(formData) {
   const nextErrors = {}
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-  if (!formData.userId.trim()) nextErrors.userId = '사용할 아이디를 입력해주세요.'
-  if (!formData.password) nextErrors.password = '비밀번호를 입력해주세요.'
+  if (!formData.userId.trim()) {
+    nextErrors.userId = '사용할 아이디를 입력해주세요.'
+  } else if (!isValidAccountText(formData.userId, 6, 12)) {
+    nextErrors.userId = '아이디는 6~12자의 영문, 숫자, 특수문자로 입력해주세요.'
+  }
+  if (!formData.password) {
+    nextErrors.password = '비밀번호를 입력해주세요.'
+  } else if (!isValidAccountText(formData.password, 4, 12)) {
+    nextErrors.password = '비밀번호는 4~12자의 영문, 숫자, 특수문자로 입력해주세요.'
+  }
   if (!formData.passwordConfirm) {
     nextErrors.passwordConfirm = '비밀번호를 한 번 더 입력해주세요.'
   } else if (formData.password !== formData.passwordConfirm) {
@@ -107,6 +123,11 @@ export default function Signup() {
     if (Object.keys(nextErrors).length > 0) {
       const firstError = Object.keys(nextErrors)[0]
       const firstInvalidId = firstError === 'municipality' && !formData.province ? 'province' : firstError
+      if (firstError === 'userId' && formData.userId.trim()) {
+        alert('아이디는 6~12자의 영문, 숫자, 특수문자로 입력해주세요.')
+      } else if (firstError === 'password' && formData.password) {
+        alert('비밀번호는 4~12자의 영문, 숫자, 특수문자로 입력해주세요.')
+      }
       const firstInvalidField = document.getElementById(firstInvalidId)
       firstInvalidField?.focus()
       return
@@ -162,6 +183,7 @@ export default function Signup() {
         <a className="signup-logo-link" href="/" onClick={navigateHome} aria-label="OLIGO-K 홈으로 이동">
           <img className="signup-logo" src={logo} alt="OLIGO-K" />
         </a>
+        <HeaderActions />
       </header>
 
       <section className="signup-content" aria-labelledby="signup-title">
@@ -174,27 +196,35 @@ export default function Signup() {
           <form className="signup-form" onSubmit={handleSubmit} noValidate>
             <div className="signup-field">
               <label htmlFor="userId"><UserRound size={17} />사용할 아이디 <b>필수</b></label>
+              <span className="signup-help" id="userId-help">6~12자 / 영문·숫자·특수문자 사용 가능</span>
               <input id="userId" name="userId" type="text" autoComplete="username"
-                value={formData.userId} onChange={handleChange} required
+                value={formData.userId} onChange={handleChange} minLength={6} maxLength={12} required
                 placeholder="사용할 아이디를 입력해주세요"
-                aria-invalid={Boolean(errors.userId)} aria-describedby={errors.userId ? 'userId-error' : undefined} />
+                aria-invalid={Boolean(errors.userId)}
+                aria-describedby={errors.userId ? 'userId-help userId-error' : 'userId-help'} />
               {errors.userId && <small className="signup-error" id="userId-error" role="alert">{errors.userId}</small>}
             </div>
 
             <div className="signup-password-grid">
               <div className="signup-field">
                 <label htmlFor="password"><LockKeyhole size={17} />비밀번호 <b>필수</b></label>
+                <span className="signup-help" id="password-help">4~12자 / 영문·숫자·특수문자 사용 가능</span>
                 <input id="password" name="password" type="password" autoComplete="new-password"
-                  value={formData.password} onChange={handleChange} placeholder="비밀번호를 입력해주세요" required
-                  aria-invalid={Boolean(errors.password)} aria-describedby={errors.password ? 'password-error' : undefined} />
+                  value={formData.password} onChange={handleChange} minLength={4} maxLength={12}
+                  placeholder="비밀번호를 입력해주세요" required aria-invalid={Boolean(errors.password)}
+                  aria-describedby={errors.password ? 'password-help password-error' : 'password-help'} />
                 {errors.password && <small className="signup-error" id="password-error" role="alert">{errors.password}</small>}
               </div>
               <div className="signup-field">
                 <label htmlFor="passwordConfirm"><LockKeyhole size={17} />비밀번호 확인 <b>필수</b></label>
+                <span className="signup-help" id="passwordConfirm-help">4~12자 / 영문·숫자·특수문자 사용 가능</span>
                 <input id="passwordConfirm" name="passwordConfirm" type="password" autoComplete="new-password"
-                  value={formData.passwordConfirm} onChange={handleChange} placeholder="비밀번호를 다시 입력해주세요" required
+                  value={formData.passwordConfirm} onChange={handleChange} minLength={4} maxLength={12}
+                  placeholder="비밀번호를 다시 입력해주세요" required
                   aria-invalid={Boolean(errors.passwordConfirm)}
-                  aria-describedby={errors.passwordConfirm ? 'passwordConfirm-error' : undefined} />
+                  aria-describedby={errors.passwordConfirm
+                    ? 'passwordConfirm-help passwordConfirm-error'
+                    : 'passwordConfirm-help'} />
                 {errors.passwordConfirm && <small className="signup-error" id="passwordConfirm-error" role="alert">{errors.passwordConfirm}</small>}
               </div>
             </div>

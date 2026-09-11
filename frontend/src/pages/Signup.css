@@ -12,8 +12,46 @@
 .signup-logo-link{display:grid;  place-items:center;  width:min(720px, calc(100% - 40px));
   padding:12px 0; border-radius:12px;
 }
-.signup-logo{display:block; width:100%; max-height:none; height:auto; object-fit:contain;
-  border-radius: 60px;
+.signup-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+
+  -webkit-mask-image:
+    linear-gradient(
+      to right,
+      transparent 0%,
+      #000 20%,
+      #000 80%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 10%,
+      #000 90%,
+      transparent 100%
+    );
+
+  -webkit-mask-composite: source-in;
+
+  mask-image:
+    linear-gradient(
+      to right,
+      transparent 0%,
+      #000 20%,
+      #000 80%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 10%,
+      #000 90%,
+      transparent 100%
+    );
+
+  mask-composite: intersect;
 }
 .signup-logo-link:focus-visible{outline:3px solid #72dce6; outline-offset:3px;}
 

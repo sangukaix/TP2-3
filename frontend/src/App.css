@@ -609,7 +609,10 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
    - 흰색 surface, 얇은 slate border, 최소한의 shadow를 동일하게 사용합니다.
 ----------------------------------------------------------------------------*/
 
-.workspace-shell{min-height:100vh; color:#0f172a; background:#f5f7fa;}
+.workspace-shell{min-height:100vh; color:#0f172a; background:#f5f7fa;
+  --workspace-sidebar-base:#0b3451;
+  --workspace-topbar-bg:color-mix(in srgb,var(--workspace-sidebar-base) 95%,#fff);
+  --workspace-main-bg:color-mix(in srgb,var(--workspace-topbar-bg) 95%,#fff);}
 .workspace-sidebar{position:fixed; z-index:100; top:64px; right:auto; bottom:0; left:0; display:flex;
   width:270px; box-sizing:border-box; flex-direction:column; padding:16px;
   border-right:1px solid #e2e8f0; background:#fff;}
@@ -626,7 +629,7 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 
 .workspace-nav{display:flex; min-height:0; flex:1; flex-direction:column; gap:4px; overflow-y:auto;
   padding:18px 0;}
-.workspace-nav p{margin:14px 10px 5px; color:#94a3b8; font-size:12px; font-weight:700;
+.workspace-nav p{margin:14px 10px 5px; color:#94a3b8; font-size:18px; font-weight:700;
   letter-spacing:.08em;}
 .workspace-nav p:first-child{margin-top:0;}
 .workspace-nav a,
@@ -913,7 +916,7 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 
 /*메인 페이지의 공통 헤더·히어로·업무 단계 영역입니다.*/
 .tourism-home{width:100%; min-height:100vh; overflow-x:clip; color:#0f172a;
-  background:radial-gradient(circle at 50% 20%,#fff 0,#f8fafc 46%,#f4f6f9 100%);}
+  background:#f5f9ff;}
 
 .home-header{position:sticky; z-index:100; top:0; border-bottom:1px solid #e2e8f0;
   background:#fffffff2; box-shadow:0 1px 0 rgb(15 23 42 / 2%); backdrop-filter:blur(12px);}
@@ -1588,9 +1591,10 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 /*분석 업무 화면은 아주 옅은 청회색 바탕으로 톤을 낮추고, 필요한 카드와 챗봇만 또렷하게 띄웁니다.*/
 .tourism-work-page{position:relative;}
 
-.workspace-shell{background:linear-gradient(135deg,#edf2f5 0%,#f3f6f8 48%,#eaf0f4 100%);}
-.workspace-topbar{border-bottom-color:#d8e1e7; background:#f9fbfc;
-  box-shadow:0 1px 0 rgb(15 23 42 / 3%);}
+.workspace-shell{background:linear-gradient(135deg,color-mix(in srgb,var(--workspace-main-bg) 90%,#000) 0%,
+  var(--workspace-main-bg) 100%);}
+.workspace-topbar{border-bottom-color:#d8e1e7; background:var(--workspace-topbar-bg);
+  box-shadow:inset 0 -2px 4px rgb(2 24 43 / 16%),inset 0 -1px 0 rgb(255 255 255 / 22%);}
 .workspace-sidebar{border-right-color:#d9e2e8; background:#f9fbfc;}
 .workspace-content{background:transparent;}
 .workspace-content .panel,
@@ -1789,8 +1793,24 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 }
 /*메인 시연 최종 구성: 모든 장면은 같은 4초 타임라인을 공유합니다.*/
 .home-process{padding-top:32px;}
-.home-workflow-layout{--demo-duration:4s; border-color:#244861;
-  background:linear-gradient(135deg,#102a43,#153b54); box-shadow:0 22px 48px rgb(12 37 57 / 18%);}
+.home-workflow-layout{
+  --demo-duration:4s;  position:relative;  border:1px solid #41677d;  border-radius:22px;
+  background:linear-gradient(145deg, #173b53 0%, #102a43 48%, #0c2339 100%);
+  /* 바깥 그림자 + 아래쪽 받침 그림자 */
+  box-shadow:
+    0 7px 0 rgb(4 18 31 / 55%),
+    0 18px 35px rgb(2 13 25 / 45%),
+    0 30px 60px rgb(3 18 32 / 25%);
+  transform:translateY(-4px);
+}
+.home-workflow-layout::after {
+  content:'';  position:absolute;  inset:0;  z-index:20;  border-radius:inherit;  pointer-events:none;
+  box-shadow:
+    inset 0 2px 0 rgb(255 255 255 / 24%),
+    inset 2px 0 0 rgb(255 255 255 / 10%),
+    inset 0 -4px 7px rgb(0 0 0 / 30%),
+    inset -2px 0 4px rgb(0 0 0 / 18%);
+}
 .home-step-rail{border-right-color:#31566d; background:linear-gradient(180deg,#102b43,#153a52);}
 .home-step-rail::before{background:linear-gradient(#36b7c4,#6677d7 70%,#365970);}
 .home-step-rail li button{color:#a9c0ce;}
@@ -2438,9 +2458,12 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 .workspace-shell:has(.dashboard-section){
   background:radial-gradient(circle at 78% -10%,#5d64b855,transparent 34%),
   radial-gradient(circle at 12% 72%,#1bb5c632,transparent 31%),
-  linear-gradient(135deg,#061b32 0%,#0c2d49 49%,#142753 100%);}
+  linear-gradient(135deg,color-mix(in srgb,var(--workspace-main-bg) 88%,#000) 0%,
+  var(--workspace-main-bg) 49%,color-mix(in srgb,var(--workspace-main-bg) 94%,#fff) 100%);}
 .workspace-shell:has(.dashboard-section) .workspace-sidebar{border-right-color:#42677d;
-  background:linear-gradient(180deg,#08233b,#0b3451 56%,#10284d); box-shadow:12px 0 34px #020e1d38;}
+  background:linear-gradient(180deg,#08233b,#0b3451 56%,#10284d);
+  box-shadow:inset -2px 0 4px rgb(255 255 255 / 16%),inset -1px 0 0 rgb(255 255 255 / 24%),
+  12px 0 34px #020e1d38;}
 .workspace-shell:has(.dashboard-section) .workspace-nav p{color:#8eb9cb;}
 .workspace-shell:has(.dashboard-section) .workspace-nav a{color:#c8deea;}
 .workspace-shell:has(.dashboard-section) .workspace-nav a:hover{color:#fff; background:#ffffff12;}
@@ -2448,10 +2471,16 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
   background:linear-gradient(105deg,#1a899b,#5166c2 67%,#a96d95);
   box-shadow:inset 3px 0 0 #8be8ef,0 8px 18px #05172e55;}
 .workspace-shell:has(.dashboard-section) .workspace-topbar{border-bottom-color:#6bb7c43b;
-  color:#eafaff; background:#08243fe8; box-shadow:0 2px 16px #020f1f55;}
+  color:#eafaff; background:var(--workspace-topbar-bg);
+  box-shadow:inset 0 -2px 4px rgb(2 24 43 / 16%),inset 0 -1px 0 rgb(255 255 255 / 22%);}
 .workspace-shell:has(.dashboard-section) .workspace-topbar p{color:#eefbff;}
-.workspace-shell:has(.dashboard-section) .workspace-content{
-  background:linear-gradient(180deg,#0d385855 0%,transparent 38%);}
+.workspace-shell.oligo-seoul-page .workspace-main {
+  min-height: 100vh;
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--workspace-main-bg) 82%, transparent),
+      color-mix(in srgb, var(--workspace-main-bg) 82%, transparent)
+    ),  url('./assets/Seoul.png') center / cover no-repeat;}
 .workspace-shell:has(.dashboard-section) .selected-region-heading h2{color:#f4fcff;
   text-shadow:0 2px 12px #03182f80;}
 .workspace-shell:has(.dashboard-section) .selected-region-detail-button{
@@ -2521,9 +2550,12 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 .workspace-shell:not(:has(.dashboard-section)){
   background:radial-gradient(circle at 78% -10%,#5d64b855,transparent 34%),
   radial-gradient(circle at 12% 72%,#1bb5c632,transparent 31%),
-  linear-gradient(135deg,#061b32 0%,#0c2d49 49%,#142753 100%);}
+  linear-gradient(135deg,color-mix(in srgb,var(--workspace-main-bg) 88%,#000) 0%,
+  var(--workspace-main-bg) 49%,color-mix(in srgb,var(--workspace-main-bg) 94%,#fff) 100%);}
 .workspace-shell:not(:has(.dashboard-section)) .workspace-sidebar{border-right-color:#42677d;
-  background:linear-gradient(180deg,#08233b,#0b3451 56%,#10284d); box-shadow:12px 0 34px #020e1d38;}
+  background:linear-gradient(180deg,#08233b,#0b3451 56%,#10284d);
+  box-shadow:inset -2px 0 4px rgb(255 255 255 / 16%),inset -1px 0 0 rgb(255 255 255 / 24%),
+  12px 0 34px #020e1d38;}
 .workspace-shell:not(:has(.dashboard-section)) .workspace-nav p{color:#8eb9cb;}
 .workspace-shell:not(:has(.dashboard-section)) .workspace-nav a{color:#c8deea;}
 .workspace-shell:not(:has(.dashboard-section)) .workspace-nav a:hover{color:#fff;
@@ -2532,10 +2564,11 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
   background:linear-gradient(105deg,#1a899b,#5166c2 67%,#a96d95);
   box-shadow:inset 3px 0 0 #8be8ef,0 8px 18px #05172e55;}
 .workspace-shell:not(:has(.dashboard-section)) .workspace-topbar{border-bottom-color:#6bb7c43b;
-  background:#08243fe8; box-shadow:0 2px 16px #020f1f55;}
+  background:var(--workspace-topbar-bg);
+  box-shadow:inset 0 -2px 4px rgb(2 24 43 / 16%),inset 0 -1px 0 rgb(255 255 255 / 22%);}
 .workspace-shell:not(:has(.dashboard-section)) .workspace-topbar p{color:#eefbff;}
 .workspace-shell:not(:has(.dashboard-section)) .workspace-content{
-  background:linear-gradient(180deg,#0d385855 0%,transparent 38%);}
+  background: transparent;}
 .workspace-shell:not(:has(.dashboard-section)) .work-page-header{border-bottom-color:#8ddce05c;}
 .workspace-shell:not(:has(.dashboard-section)) .work-page-header h1{color:#f4fcff;}
 .workspace-shell:not(:has(.dashboard-section)) .work-page-header span,
@@ -2574,9 +2607,11 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 .home-header,  .workspace-global-header{position:sticky; top:0; z-index:2000;}
 .workspace-shell .workspace-topbar{position:sticky; top:64px; z-index:1900;}
 /*메인 히어로의 남색을 한 단계 밝힌 공통 로고 바입니다. 화면 폭과 무관하게 로고는 왼쪽 여백에 고정합니다.*/
-.home-header,
-.workspace-global-header{border-bottom-color:#2d5e79; background:#0C3450;
+.home-header{border-bottom-color:#2d5e79; background:#0C3450;
   box-shadow:0 2px 16px rgb(2 24 43 / 24%);}
+.workspace-shell>.workspace-global-header{border-bottom-color:#2d5e79;
+  background:var(--workspace-topbar-bg);
+  box-shadow:inset 0 -2px 4px rgb(2 24 43 / 16%),inset 0 -1px 0 rgb(255 255 255 / 22%);}
 .home-header>div,
 .workspace-global-header>div{width:100%; margin:0; padding:0 24px;}
 .home-header nav a{color:#d4e7f1;}
@@ -2686,20 +2721,93 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 
 /*회원가입 화면과 동일한 서울 배경 및 navy/blue overlay를 주요 페이지에서 공유합니다.*/
 .oligo-seoul-page{position:relative; isolation:isolate; min-height:100vh; overflow-x:hidden;}
-.workspace-shell.oligo-seoul-page,
-.tourism-home.oligo-seoul-page{background-image:url('./assets/Seoul.png'); background-position:center;
-  background-repeat:no-repeat; background-size:cover; background-attachment:fixed;}
+.tourism-home.oligo-seoul-page {
+  background: linear-gradient(rgb(185 222 248 / 82%),  rgb(185 222 248 / 82%)),
+  url('./assets/Seoul.png') center / cover no-repeat;  background-attachment: fixed;}
 .workspace-shell.oligo-seoul-page{overflow-x:clip;}
 .oligo-seoul-page::before{position:fixed; z-index:-1; inset:0; pointer-events:none; content:'';
   background:linear-gradient(135deg,rgb(3 24 43 / 92%),rgb(8 48 76 / 86%) 48%,
   rgb(19 39 83 / 91%));}
 
-/* 재근 - 회원가입/로그인 버튼 작업 */
+/* 재근 - 회원가입/로그인/마이/데이나잇 버튼 작업 */
 .home-brand-wrap {position: relative; width: 100%; display: flex; align-items: center;}
-.home-auth-actions {position: absolute; right: 40px; top: 50%; transform: translateY(-50%);
-  display: flex; align-items: center; gap: 16px;}
-.go_login,
-.go_signup {
-  min-width: 90px; height: 38px; padding: 0 18px; border-radius: 10px; cursor: pointer;
-  font-weight: 700; border: 2px solid red;
+.global-header-actions{position:absolute; right:40px; top:50%; display:flex; align-items:center; gap:16px;
+  transform:translateY(-50%);}
+.global-header-actions button{
+  min-width:90px; height:38px; padding:0 18px; border:2px solid red; border-radius:10px; cursor:pointer;
+  font-weight:700;
+}
+@media(max-width:500px){
+  .global-header-actions{right:8px; gap:4px;}
+  .global-header-actions button{min-width:0; height:30px; padding:0 5px; border-width:1px; font-size:9px;}
+}
+/* 전역 테마는 HTML data-theme 속성만으로 판단하며, 기본 Night 스타일은 기존 규칙을 그대로 사용합니다. */
+html[data-theme='night']{--theme-outer-bg:#f4f7fb;}
+html[data-theme='day']{
+  --theme-outer-bg:#f4f7fb;
+  --theme-global-header-bg:#fffffff2;
+  --theme-workspace-topbar-bg:#f9fbfc;
+  --theme-workspace-sidebar-bg:#f9fbfc;
+  --theme-workspace-main-bg:linear-gradient(135deg,#edf2f5 0%,#f3f6f8 48%,#eaf0f4 100%);
+  --theme-home-main-bg:radial-gradient(circle at 50% 20%,#fff 0%,#f8fafc 46%,#f4f6f9 100%);
+}
+html[data-theme='day'],
+html[data-theme='day'] body{background:var(--theme-outer-bg);}
+html[data-theme='day'] .tourism-home{background:var(--theme-home-main-bg);}
+html[data-theme='day'] .tourism-home::before,
+html[data-theme='day'] .oligo-seoul-page::before{background:transparent;}
+html[data-theme='day'] .home-header{
+  background:var(--theme-global-header-bg); border-bottom-color:#e2e8f0;
+  box-shadow:0 1px 0 rgb(15 23 42 / 2%);
+}
+html[data-theme='day'] .workspace-shell{background:var(--theme-workspace-main-bg);}
+html[data-theme='day'] .workspace-shell>.workspace-global-header{
+  border-bottom-color:#e2e8f0; background:var(--theme-global-header-bg);
+  box-shadow:0 1px 0 rgb(15 23 42 / 2%);
+}
+html[data-theme='day'] .workspace-shell .workspace-sidebar{
+  border-right-color:#d9e2e8; background:var(--theme-workspace-sidebar-bg); box-shadow:none;
+}
+html[data-theme='day'] .workspace-shell .workspace-nav p{color:#94a3b8;}
+html[data-theme='day'] .workspace-shell .workspace-nav a{color:#64748b;}
+html[data-theme='day'] .workspace-shell .workspace-nav a:hover{color:#0f172a; background:#f8fafc;}
+html[data-theme='day'] .workspace-shell .workspace-nav a.is-active {
+  color: #fff; background: linear-gradient(105deg, #1a899b, #5166c2 67%, #a96d95); font-weight: 650;
+  box-shadow: inset 3px 0 0 #8be8ef, 0 8px 18px #05172e55;}
+html[data-theme='day'] .workspace-shell .workspace-topbar{
+  border-bottom-color:#d8e1e7; color:#0f172a; background:var(--theme-workspace-topbar-bg);
+  box-shadow:0 1px 0 rgb(15 23 42 / 3%);
+}
+html[data-theme='day'] .workspace-shell .workspace-topbar p{color:#0f172a;}
+html[data-theme='day'] .workspace-shell .workspace-main,
+html[data-theme='day'] .workspace-shell .workspace-content{background:transparent;}
+html[data-theme='day'] .workspace-shell .selected-region-heading h2,
+html[data-theme='day'] .workspace-shell .work-page-header h1{color:#163b61; text-shadow:none;}
+html[data-theme='day'] .workspace-shell .work-page-header span,
+html[data-theme='day'] .workspace-shell .work-region-picker{color:#64748b;}
+html[data-theme='day'] .workspace-shell .work-page-header{border-bottom-color:#e2e8f0;}
+html[data-theme='day'] .workspace-shell .work-region-picker select{
+  border-color:#cbd5e1; color:#334155; background:#fff;
+}
+@media(max-width:500px){
+  html[data-theme='day'] .workspace-shell .workspace-mobile-nav{
+    border-top-color:#d9e2e8; background:#f9fbfc;
+  }
+  html[data-theme='day'] .workspace-shell .workspace-mobile-nav a,
+  html[data-theme='day'] .workspace-shell .workspace-mobile-nav button{color:#64748b;}
+  html[data-theme='day'] .workspace-shell .workspace-mobile-nav .is-active{
+    color:#1d4ed8; background:#eff6ff;
+  }
+}
+html[data-theme='day'] .signup-page,
+html[data-theme='day'] .login-page,
+html[data-theme='day'] .my-page{background:var(--theme-outer-bg);}
+html[data-theme='day'] .signup-page::before,
+html[data-theme='day'] .login-page::before,
+html[data-theme='day'] .my-page::before{background:transparent;}
+html[data-theme='day'] .signup-header,
+html[data-theme='day'] .login-header,
+html[data-theme='day'] .my-header{
+  border-bottom-color:#e2e8f0; background:var(--theme-global-header-bg);
+  box-shadow:0 1px 0 rgb(15 23 42 / 2%);
 }

@@ -1,0 +1,32 @@
+[임시 회원가입]
+aaaaaa
+12345678
+
+
+9/9
+사이드바 너비 및 폰트 사이즈 증가
+메인페이지 [시작하기]버튼 호버시 색변경 문제 해결 및 호버시 폰트 사이즈 증가
+
+[해야할것]
+- 마이페이지    -- V
+- 메인화면만 배경 다시 하얗게
+- /dashboard : 그래프 처음엔 3개만 있다가 로딩5초 후 예측3개월 뜨도록
+- 각 페이지에 자동저장된다는 사실 기재
+- 2 modes TRY! (Day and Night)   -- V
+- /planning page (기획안 생성) - 임시저장 버튼 (모바일용) 위치조정
+- 지역선택 page - 데이모드일때 지도있는부분 색깔 흰색으로 - 단톡방 사진 참고
+
+9/11
+
+메인페이지 배경색 (Night Mode)
+.workspace-shell:has(.dashboard-section) .workspace-main {
+  min-height: 100vh; 
+  background:
+    linear-gradient(
+      color-mix(in srgb, var(--workspace-main-bg) 82%, transparent),
+      color-mix(in srgb, var(--workspace-main-bg) 82%, transparent)
+    ),  url('./assets/Seoul.png') center / cover no-repeat;}
+
+
+
+
