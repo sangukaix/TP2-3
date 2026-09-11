@@ -63,20 +63,8 @@ def _case_mechanism_family(case: dict[str, Any]) -> str:
     사용하는 내부 분류입니다. 이 값은 새로운 사실이나 사례 평가 점수를 만들지 않고,
     이번 요청에 이미 있는 사례 카드를 어떤 순서로 읽을지 돕는 용도입니다.
     """
-    text = compact_json(case).lower()
-    if any(word in text for word in ('숙박', '체크인', '숙소')):
-        return 'stay_conversion'
-    if any(word in text for word in ('야간', '밤', '저녁')):
-        return 'night_time_experience'
-    if any(word in text for word in ('교통', 'ktx', '항공', '시티투어', '이동')):
-        return 'access_and_mobility'
-    if any(word in text for word in ('예약', '재고', '시간대', '입장')):
-        return 'reservation_conversion'
-    if any(word in text for word in ('환급', '할인', '쿠폰', '상품권', '결제')):
-        return 'spend_conversion'
-    if any(word in text for word in ('재방문', '관광주민증', '회원', '반복')):
-        return 'return_visit'
-    return 'other_operation'
+    from ..case_mechanism import case_mechanism_family
+    return case_mechanism_family(case)
 
 
 class EvidenceTools:
@@ -136,7 +124,15 @@ class EvidenceTools:
             'note': '목록은 원문의 대체물이 아니다. 필요한 사례·ML·비교값·적용성 평가를 도구로 읽고 판단한다.',
         }
         if 'quality_review_feedback' in self.payload:
-            result['quality_review_feedback'] = self.payload['quality_review_feedback']
+            # 오류 목록은 최종 JSON 작성 직전에 원문 그대로 한 번 전달한다.
+            # 개요에도 전체 목록을 복제하면 실제 원주 보완 요청처럼 긴 수정 지시가
+            # 문맥을 두 번 차지하므로, 여기서는 위치와 개수만 공개한다.
+            feedback = self.payload.get('quality_review_feedback') or {}
+            result['quality_review_feedback_reference'] = {
+                'path': '/quality_review_feedback',
+                'issue_count': len(feedback.get('issues') or []),
+                'delivery': '최종 JSON 작성 직전에 원문 전체 제공',
+            }
         if 'deterministic_precheck' in self.payload:
             result['deterministic_precheck'] = self.payload['deterministic_precheck']
         return result
@@ -274,6 +270,11 @@ class EvidenceTools:
             key: f'{prefix}/transfer_assessment/{key}'
             for key in ('design_candidates', 'candidate_assessments') if key in assessment
         }
+        if self.task == 'transferability' and (self.payload.get('quality_review_feedback') or {}).get('issues'):
+            result['review_context'] = {
+                'status': 'rejected_candidate_draft',
+                'instruction': '이전 후보는 수정 대상이며 승인된 실행안이 아니다. 원문은 오류 대조용으로 보존한다. 사례 원문과 지역 사실로 후보를 다시 비교하고 잘못된 선정은 교체한다.',
+            }
         return result
 
     def _case_matrix(self) -> dict:
@@ -374,6 +375,15 @@ class EvidenceTools:
                 # 일반론만 반복하지 않도록, 작고 검증 가능한 표를 처음부터 전달한다.
                 # 원본 snapshot은 유지하고, 없을 때도 빈 목록으로 사실을 만들지 않는다.
                 result = {'period': self.pack.get('period'), 'observations': self.snapshot.get('observations', [])}
+                result['dataset_sources'] = deepcopy([
+                    row for row in self.pack.get('sources') or []
+                    if row.get('source_type') == 'dataset'
+                ])
+                result['source_link_rule'] = (
+                    'dataset_sources는 이번 요청에 등록된 출처 원문이다. 관측의 지표·값·기간·출처를 '
+                    '대조해 일치하는 source_id만 evidence_source_ids에 사용한다. '
+                    '목록 순서나 지역명만으로 연결하지 않으며 불일치하면 확인 필요로 남긴다.'
+                )
                 if 'consumption_by_category' in self.snapshot:
                     result['consumption_by_category'] = deepcopy(self.snapshot['consumption_by_category'])
                     result['consumption_interpretation'] = (
@@ -442,6 +452,9 @@ class EvidenceTools:
         """지시문뿐 아니라 코드로 필수 근거 확인을 강제해 제목만 보고 기획하지 않게 합니다."""
         completed = {event['tool'] for event in self.events if event['status'] == 'completed'}
         missing = []
+        feedback_issues = (self.payload.get('quality_review_feedback') or {}).get('issues') or []
+        is_targeted_revision = bool(feedback_issues) and self.task in {'transferability', 'planner_revision'}
+        is_report_composition = self.task in {'planner', 'planner_revision'}
         case_source_ids = [source_id for source_id, item in self.sources.items() if 'case' in item]
         for key, tool in (
             ('regional_tourism_status', 'get_regional_tourism_status'),
@@ -449,12 +462,15 @@ class EvidenceTools:
             ('nationwide_bigdata_context', 'get_nationwide_bigdata_context'),
             ('ml_analysis', 'get_ml_forecast'),
         ):
+            if (is_targeted_revision or is_report_composition) and tool == 'get_nationwide_bigdata_context':
+                continue
             if self.snapshot.get(key) and tool not in completed:
                 missing.append(tool)
         prefix = '/evidence_pack' if 'evidence_pack' in self.payload else ''
         if self.pack.get('transfer_assessment') and 'get_planning_decision' not in completed and f'{prefix}/transfer_assessment' not in self.read_paths:
             missing.append('get_planning_decision')
-        if self.task == 'transferability' and case_source_ids and 'get_case_comparison_matrix' not in completed:
+        if (self.task == 'transferability' and not is_targeted_revision and case_source_ids
+                and 'get_case_comparison_matrix' not in completed):
             missing.append('get_case_comparison_matrix')
         for path in ('/previous_draft', '/draft_report'):
             if self.payload.get(path[1:]) and path not in self.read_paths:

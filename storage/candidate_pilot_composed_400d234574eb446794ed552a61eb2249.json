@@ -1,0 +1,135 @@
+{
+  "status": "completed",
+  "report_approved": false,
+  "llm_called": false,
+  "source_artifact": "storage/candidate_pilot_contract_f4eccc5ba9d146078590faf764d6889b.json",
+  "source_request_sha256": "24581c6403bf7d3c8e2f03ee43b876597f739e8bd5115cd36672c62b44920f9c",
+  "deterministic_contract_applied": true,
+  "answer": {
+    "title": "원주 관광 시범안",
+    "compared_case_ids": [
+      "case:night_tourism_cities_2024",
+      "case:night_festival_2025"
+    ],
+    "case_comparison": "야간 콘텐츠 운영과 지역 체류 유도를 목표로 한 사례와 비교하며, 원주 특화 콘텐츠와 운영 모델을 기반으로 시범을 진행",
+    "wonju_pilot": "원주 지역 특화 야간 콘텐츠와 연계된 운영 모델을 기반으로 한 시범",
+    "operating_flow": [
+      {
+        "actor": "운영자",
+        "action": "준비",
+        "record": "콘텐츠, 안전, 교통, 식음 운영 계획 수립 및 참여업체 협의"
+      },
+      {
+        "actor": "예약자",
+        "action": "예약·결제",
+        "record": "시범 콘텐츠 예약 및 결제 진행"
+      },
+      {
+        "actor": "운영자",
+        "action": "이용완료 확인",
+        "record": "이용 완료 시각 및 상태 기록"
+      },
+      {
+        "actor": "운영자",
+        "action": "취소·중복 제거 집계",
+        "record": "취소 및 중복 예약 제거 후 유효 이용자 수 집계"
+      }
+    ],
+    "budget": {
+      "estimate_label": "temporary_planning_estimate",
+      "volume_assumption": "평가용 가정: 콘텐츠 2개 × 10일, 참여업체 5개, 유효 이용완료 100건",
+      "items": [
+        {
+          "name": "콘텐츠 회차 운영",
+          "quantity": 20,
+          "unit": "콘텐츠·일",
+          "assumed_unit_price_krw": 500000,
+          "subtotal_krw": 10000000,
+          "basis_and_limit": "평가용 가정 단가이며 공식 견적·확정 예산이 아님"
+        },
+        {
+          "name": "야간 안전·이동 보조",
+          "quantity": 10,
+          "unit": "운영일",
+          "assumed_unit_price_krw": 300000,
+          "subtotal_krw": 3000000,
+          "basis_and_limit": "평가용 가정 단가이며 공식 견적·확정 예산이 아님"
+        },
+        {
+          "name": "참여업체 운영 준비",
+          "quantity": 5,
+          "unit": "업체",
+          "assumed_unit_price_krw": 500000,
+          "subtotal_krw": 2500000,
+          "basis_and_limit": "평가용 가정 단가이며 공식 견적·확정 예산이 아님"
+        },
+        {
+          "name": "예약·결제·측정 원장 설계/정리",
+          "quantity": 1,
+          "unit": "식",
+          "assumed_unit_price_krw": 2000000,
+          "subtotal_krw": 2000000,
+          "basis_and_limit": "평가용 가정 단가이며 공식 견적·확정 예산이 아님"
+        }
+      ],
+      "total_krw": 17500000,
+      "excluded_costs": [
+        "시설 임차·신규 설비",
+        "대규모 광고",
+        "교통기관 할인 협약 비용"
+      ]
+    },
+    "development_potential": [
+      {
+        "name": "유효 이용완료율",
+        "current_baseline": "미확인-시범 전 조사",
+        "pilot_target": "유효 이용완료 100건; 완료율은 승인 예약 분모 확보 후 산출",
+        "numerator": "취소·중복을 제외한 이용완료 ID 수",
+        "denominator": "승인된 예약 ID 수",
+        "calculation": "유효 이용완료 ID/승인 예약 ID×100",
+        "data_record_fields": [
+          "예약ID",
+          "외지인 확인 상태",
+          "결제ID",
+          "이용완료 시각",
+          "취소 상태",
+          "중복 판정"
+        ],
+        "comparison": "콘텐츠·운영일별 승인 예약 대비 유효 이용완료와 이탈을 비교",
+        "interpretation_limit": "시범 참여자의 운영 전환 지표이며 원주시 전체 방문 증가나 인과효과가 아님"
+      },
+      {
+        "name": "유효 참여자의 야간 연계 결제액",
+        "current_baseline": "미확인-시범 전 조사",
+        "pilot_target": "금액 목표 미확정; 시범의 취소 제외 유효 결제액을 최초 기준으로 확보",
+        "numerator": "유효 이용완료 ID에 연결된 허용업체 결제액 합계",
+        "denominator": "사용하지 않음-금액 합계 지표",
+        "calculation": "취소 결제 제외 금액 합계",
+        "data_record_fields": [
+          "예약ID",
+          "업체ID",
+          "결제ID",
+          "결제시각",
+          "결제금액",
+          "취소금액",
+          "중복 판정"
+        ],
+        "comparison": "콘텐츠·운영일·업체별 유효 결제액을 함께 비교",
+        "interpretation_limit": "참여자의 관측 결제액이며 지역 전체 순증 소비나 정책 인과효과가 아님"
+      }
+    ],
+    "why_this_can_develop_wonju_tourism": "시범 기간 내 야간 콘텐츠 운영 모델을 기반으로 한 지속 가능한 운영 역량 구축 가능, 시범 기간 내 참여업체 및 이용자 수를 기반으로 한 규모 확장 가능성",
+    "limits": [
+      "시범 기간 및 규모에 따라 성과가 달라질 수 있음",
+      "야간 프로그램이 지역 정체성과 맞지 않으면 재방문 동기가 약해질 수 있음"
+    ]
+  },
+  "arithmetic": [
+    {
+      "candidate_id": "pilot",
+      "arithmetic_issues": [],
+      "semantic_approval": false
+    }
+  ],
+  "semantic_issues": []
+}

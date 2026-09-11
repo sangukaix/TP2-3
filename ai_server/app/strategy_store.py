@@ -8,12 +8,13 @@ Word·PowerPoint 파일을 저장합니다.
 from __future__ import annotations
 
 import json
-import os
 import re
 from datetime import datetime
 from hashlib import sha256
 from pathlib import Path
 from typing import Any
+
+from .runtime_env import load_project_env
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DOCUMENT_DIRECTORY = PROJECT_ROOT / 'storage' / 'strategy_documents'
@@ -26,15 +27,18 @@ def _connect():
     except ModuleNotFoundError as exc:
         raise RuntimeError('PyMySQL이 설치되지 않았습니다. requirements.txt를 설치해 주세요.') from exc
 
-    password = os.getenv('MYSQL_PASSWORD', '').strip()
+    # start-dev.ps1뿐 아니라 IDE의 uvicorn 직접 실행에서도 프로젝트 .env를 읽는다.
+    # 실행 환경의 비어 있지 않은 값이 우선되는 규칙은 AI 라우터와 동일하다.
+    env_values = load_project_env(PROJECT_ROOT)
+    password = str(env_values.get('MYSQL_PASSWORD') or '').strip()
     if not password:
         raise RuntimeError('MYSQL_PASSWORD가 설정되지 않았습니다.')
     return pymysql.connect(
-        host=os.getenv('MYSQL_HOST', '127.0.0.1'),
-        port=int(os.getenv('MYSQL_PORT', '3306')),
-        user=os.getenv('MYSQL_USER', 'tourism_app'),
+        host=str(env_values.get('MYSQL_HOST') or '127.0.0.1'),
+        port=int(env_values.get('MYSQL_PORT') or '3306'),
+        user=str(env_values.get('MYSQL_USER') or 'tourism_app'),
         password=password,
-        database=os.getenv('MYSQL_DATABASE', 'tourism_strategy'),
+        database=str(env_values.get('MYSQL_DATABASE') or 'tourism_strategy'),
         charset='utf8mb4',
         autocommit=True,
         cursorclass=pymysql.cursors.DictCursor,

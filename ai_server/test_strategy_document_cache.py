@@ -68,6 +68,23 @@ class _FakeConnection:
 class StrategyDocumentCacheStoreTests(unittest.TestCase):
     """저장소가 수정 원문과 낡은 렌더 파일을 섞지 않는지 확인합니다."""
 
+    def test_direct_server_connection_reads_project_env(self):
+        values = {
+            'MYSQL_HOST': 'db.internal', 'MYSQL_PORT': '3307',
+            'MYSQL_USER': 'tourism_writer', 'MYSQL_PASSWORD': 'secret-for-test',
+            'MYSQL_DATABASE': 'tourism_test',
+        }
+        with patch('ai_server.app.strategy_store.load_project_env', return_value=values) as load_env, \
+                patch('pymysql.connect') as connect:
+            strategy_store._connect()
+        load_env.assert_called_once_with(strategy_store.PROJECT_ROOT)
+        connect.assert_called_once()
+        kwargs = connect.call_args.kwargs
+        self.assertEqual(kwargs['host'], 'db.internal')
+        self.assertEqual(kwargs['port'], 3307)
+        self.assertEqual(kwargs['user'], 'tourism_writer')
+        self.assertEqual(kwargs['database'], 'tourism_test')
+
     def test_report_update_clears_both_cached_document_paths(self):
         state = {'report_json': {}}
         connection = _FakeConnection(state)

@@ -1,0 +1,233 @@
+{
+  "request": {
+    "model": "qwen3:14b",
+    "messages": [
+      {
+        "role": "system",
+        "content": "검수 사례 카드와 평가용 시범 조건을 서울특별시 강남구 관광 시범안 JSON으로 조립한다.\n조건에 없는 장소·기관·효과를 추가하지 않는다. 타지역 결과는 비교 근거이며 서울특별시 강남구 성과 예측이 아니다.\n운영 흐름에는 준비, 방문객 예약·결제, 이용완료 확인, 취소·중복 제거 집계를 각각 한 단계로 쓴다.\nbudget_contract의 수량·단가·소계를 그대로 쓰고 임시 추정임을 유지한다. 제외 비용을 확정 예산에 포함했다고 말하지 않는다.\nmeasurement_contract의 분자·분모·계산·원장 필드를 그대로 구체화한다. 이용완료와 야간 결제액은 시범 운영량이며 지역 전체 방문·소비 순증이 아니다.\n발전 가능성은 이 시범으로 구축·검증할 수 있는 운영 역량과 규모로 설명한다. 지정 JSON만 반환한다."
+      },
+      {
+        "role": "user",
+        "content": "{\"case_cards\": [{\"source_id\": \"case:night_tourism_cities_2024\", \"region_code\": \"ALL\", \"region_name\": \"전국 공통 사례\", \"case_region\": \"야간관광 특화도시 10곳\", \"intervention\": \"상설 야간 콘텐츠와 경관·교통·안전 운영\", \"problem_addressed\": \"당일 방문을 저녁 체류와 지역소비로 전환\", \"target_group\": \"주간 방문 후 체류 가능한 국내외 관광객\", \"operating_model\": \"지역 스토리를 반영한 야간 프로그램을 상설·행사형으로 운영하고 야간 경관, 이동, 식음, 안전 여건을 함께 구성\", \"duration\": \"2024년 평가 대상 사업\", \"public_budget\": \"지역별 예산은 각 지자체 예산·결산서에서 확인 필요\", \"observed_result\": \"정부업무평가 자료는 특화도시 10곳 방문객이 2023년 같은 기간보다 3% 증가했다고 기록\", \"measurement_period\": \"2023년 동기 대비 2024년 사업 평가 기간\", \"evidence_strength\": \"medium\", \"quantitative_result_approved\": null, \"transfer_conditions\": [\"야간에 실제 이용 가능한 식음·교통·안전 운영 필요\", \"일회성 행사보다 상설 운영일 확보\", \"숙박 또는 야간 결제 데이터로 성과 측정\"], \"risks\": [\"전년 대비 증가는 다른 계절·행사 효과를 포함할 수 있음\", \"경관 시설만 조성하고 운영 콘텐츠가 없으면 체류 전환이 약할 수 있음\"], \"source_title\": \"2024년도 정부업무평가 관광분야 성과자료\", \"source_url\": \"https://www.evaluation.go.kr/upload2/atch/eval/20250429095846463.pdf\", \"published_or_updated_at\": \"2025-04-29\"}, {\"source_id\": \"case:night_festival_2025\", \"region_code\": \"ALL\", \"region_name\": \"전국 공통 사례\", \"case_region\": \"야간관광 특화도시 10곳\", \"intervention\": \"도시별 야간 콘텐츠를 순회형 축제로 묶는 운영\", \"problem_addressed\": \"낮 시간대 중심 방문을 저녁 체류·지역상점 이용으로 확장\", \"target_group\": \"여름철 저녁 시간에 지역을 방문하는 국내 관광객\", \"operating_model\": \"10개 야간관광 특화도시의 대표 장소와 시간대를 연결하고, 공연·체험·지역 디저트·판매상품 등 도시별 콘텐츠를 순회 일정으로 운영\", \"duration\": \"2025년 6월~8월 대한민국 밤밤페스타\", \"public_budget\": \"공식 여행기사에는 총사업비가 공개되지 않아 예산 비교에는 사용할 수 없음\", \"observed_result\": \"공식 여행기사는 개최 도시·장소·운영 시간과 콘텐츠만 제시하며 방문·소비 성과 수치는 제시하지 않음\", \"measurement_period\": \"2025년 행사 일정\", \"evidence_strength\": \"medium\", \"quantitative_result_approved\": null, \"transfer_conditions\": [\"야간에도 이용 가능한 교통·안전·식음 운영을 함께 설계\", \"하나의 행사보다 지역별 대표 콘텐츠와 상점 참여를 연결\", \"행사일과 비행사일을 분리해 방문·결제·숙박 변화를 측정\"], \"risks\": [\"행사 방문 인원만으로 체류·소비 전환 성과를 판단할 수 없음\", \"야간 프로그램이 지역 정체성과 맞지 않으면 재방문 동기가 약해질 수 있음\"], \"source_title\": \"2025 대한민국 밤밤페스타 개최 도시 및 일정\", \"source_url\": \"https://korean.visitkorea.or.kr/detail/rem_detail.do?cotid=f9c636b2-dd7c-4f09-af3d-6af43b33d371\", \"published_or_updated_at\": \"2025\"}], \"pilot_contract\": {\"region_name\": \"서울특별시 강남구\", \"status\": \"evaluation_assumptions_not_confirmed_budget\", \"scope\": {\"contents\": 2, \"operating_days\": 10, \"participating_businesses\": 5, \"target_valid_completions\": 100}, \"budget_contract\": [{\"name\": \"콘텐츠 회차 운영\", \"quantity\": 20, \"unit\": \"콘텐츠·일\", \"assumed_unit_price_krw\": 500000, \"subtotal_krw\": 10000000}, {\"name\": \"야간 안전·이동 보조\", \"quantity\": 10, \"unit\": \"운영일\", \"assumed_unit_price_krw\": 300000, \"subtotal_krw\": 3000000}, {\"name\": \"참여업체 운영 준비\", \"quantity\": 5, \"unit\": \"업체\", \"assumed_unit_price_krw\": 500000, \"subtotal_krw\": 2500000}, {\"name\": \"예약·결제·측정 원장 설계/정리\", \"quantity\": 1, \"unit\": \"식\", \"assumed_unit_price_krw\": 2000000, \"subtotal_krw\": 2000000}], \"budget_total_krw\": 17500000, \"excluded_costs\": [\"시설 임차·신규 설비\", \"대규모 광고\", \"교통기관 할인 협약 비용\"], \"measurement_contract\": [{\"name\": \"유효 이용완료율\", \"numerator\": \"취소·중복을 제외한 이용완료 ID 수\", \"denominator\": \"승인된 예약 ID 수\", \"calculation\": \"유효 이용완료 ID/승인 예약 ID×100\", \"data_record\": \"예약ID, 외지인 확인 상태, 결제ID, 이용완료 시각, 취소 상태, 중복 판정\"}, {\"name\": \"유효 참여자의 야간 연계 결제액\", \"numerator\": \"유효 이용완료 ID에 연결된 허용업체 결제액 합계\", \"denominator\": \"사용하지 않음-금액 합계 지표\", \"calculation\": \"취소 결제 제외 금액 합계\", \"data_record\": \"예약ID, 업체ID, 결제ID, 결제시각, 결제금액, 취소금액, 중복 판정\"}]}}"
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "compared_case_ids": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "string"
+          }
+        },
+        "case_comparison": {
+          "type": "string",
+          "maxLength": 700
+        },
+        "operating_flow": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "actor": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "action": {
+                "type": "string",
+                "maxLength": 250
+              },
+              "record": {
+                "type": "string",
+                "maxLength": 150
+              }
+            },
+            "required": [
+              "actor",
+              "action",
+              "record"
+            ]
+          }
+        },
+        "budget": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "estimate_label": {
+              "const": "temporary_planning_estimate"
+            },
+            "volume_assumption": {
+              "type": "string",
+              "maxLength": 250
+            },
+            "items": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 4,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "quantity": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  },
+                  "unit": {
+                    "type": "string"
+                  },
+                  "assumed_unit_price_krw": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "subtotal_krw": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "basis_and_limit": {
+                    "type": "string",
+                    "maxLength": 180
+                  }
+                },
+                "required": [
+                  "name",
+                  "quantity",
+                  "unit",
+                  "assumed_unit_price_krw",
+                  "subtotal_krw",
+                  "basis_and_limit"
+                ]
+              }
+            },
+            "total_krw": {
+              "type": "number",
+              "minimum": 0
+            },
+            "excluded_costs": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 3,
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "estimate_label",
+            "volume_assumption",
+            "items",
+            "total_krw",
+            "excluded_costs"
+          ]
+        },
+        "development_potential": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "current_baseline": {
+                "type": "string"
+              },
+              "pilot_target": {
+                "type": "string"
+              },
+              "numerator": {
+                "type": "string"
+              },
+              "denominator": {
+                "type": "string"
+              },
+              "calculation": {
+                "type": "string"
+              },
+              "data_record_fields": {
+                "type": "array",
+                "minItems": 4,
+                "maxItems": 8,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "comparison": {
+                "type": "string"
+              },
+              "interpretation_limit": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "current_baseline",
+              "pilot_target",
+              "numerator",
+              "denominator",
+              "calculation",
+              "data_record_fields",
+              "comparison",
+              "interpretation_limit"
+            ]
+          }
+        },
+        "limits": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {
+            "type": "string"
+          }
+        },
+        "regional_pilot": {
+          "type": "string",
+          "maxLength": 700
+        },
+        "why_this_can_develop_region_tourism": {
+          "type": "string",
+          "maxLength": 700
+        }
+      },
+      "required": [
+        "title",
+        "compared_case_ids",
+        "case_comparison",
+        "operating_flow",
+        "budget",
+        "development_potential",
+        "limits",
+        "regional_pilot",
+        "why_this_can_develop_region_tourism"
+      ]
+    },
+    "max_output_tokens": 3000
+  },
+  "request_sha256": "7fad8d36270d6d5bb01f1f308bed049b9d706b94997d2e05eeb29b895a16f7a0",
+  "parent_request_sha256": "44e08dcb5a15d36328e0fdad1fb2df3a09570d4f9cab22239d9f9039d20d1600",
+  "status": "failed",
+  "region_name": "서울특별시 강남구",
+  "report_approved": false,
+  "think": false,
+  "temperature": 0.15,
+  "example": null,
+  "context_length": 40960,
+  "timeout_seconds": 420.0,
+  "error_code": "OLLAMA_CONNECTION_ERROR",
+  "usage": {},
+  "duration_ms": 115
+}

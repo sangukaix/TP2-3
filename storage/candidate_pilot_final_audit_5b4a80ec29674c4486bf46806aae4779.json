@@ -1,0 +1,13 @@
+{
+  "status": "completed",
+  "llm_called": false,
+  "planner_artifact": "storage/candidate_pilot_planner_6917d3fa759f47f09efc378c7f1db45b.json",
+  "reviewer_artifact": "storage/candidate_pilot_reviewer_9d932c891fae4bd08a264cad477c1f0f.json",
+  "qwen_approved": true,
+  "deterministic_issues": [
+    "temporary_budget_total_missing_from_text",
+    "unsupported_realtime_operation",
+    "unsupported_system_build"
+  ],
+  "report_approved": false
+}

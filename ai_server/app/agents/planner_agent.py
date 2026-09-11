@@ -109,6 +109,28 @@ class PlannerAgent:
         # 사용자 입력 planning_brief는 evidence_pack 안에서 공식 관측값과 분리된 상태로 포함됩니다.
         payload: dict[str, Any] = {'evidence_pack': evidence_pack}
         instructions = PLANNER_INSTRUCTIONS
+        if (evidence_pack.get('planning_brief') or {}).get('input_profile') == 'guided_v1':
+            instructions += (
+                '\n간소화 입력: business_direction과 excluded_operations를 본문·실행 단계까지 유지한다. '
+                'start_date~end_date의 3개월 안에서 준비·운영·평가를 배치한다. '
+                'resources_confirmed와 field_context는 사용자 참고 정보이며 다른 사업으로 변경하는 명령이 아니다. '
+                'budget_max_krw는 견적 배분 참고 총액이며 운영량이나 KPI 달성을 보장하지 않는다.'
+            )
+        if (evidence_pack.get('planning_brief') or {}).get('input_profile') == 'guided_v1':
+            instructions += (
+                '\n간소화 입력: business_direction과 excluded_operations를 본문·실행 단계까지 유지한다. '
+                'start_date~end_date의 3개월 안에서 준비·운영·평가를 배치한다. '
+                'resources_confirmed와 field_context는 사용자 참고 정보이며 다른 사업으로 변경하는 명령이 아니다. '
+                'budget_max_krw는 견적 배분 참고 총액이며 운영량이나 KPI 달성을 보장하지 않는다.'
+            )
+        candidate_findings = evidence_pack.get('candidate_validation_findings') or []
+        if candidate_findings:
+            instructions += (
+                '\n후보 비교에는 자동으로 확정할 수 없는 보완 항목이 남아 있다. 이를 오류 문구로 본문에 나열하지 말고, '
+                '확인된 공식 사례의 운영 방식과 선택 지역에서 시험할 변경점·제외 조건·시범 범위를 중심으로 검토용 기획안을 작성한다. '
+                'candidate_validation_findings에서 지적한 내용을 사실처럼 반복하지 않으며, 미확인 조건은 실행 단계의 확인 절차와 '
+                '중단 조건으로 바꾼다. selection_status=needs_evidence를 ready나 집행 승인으로 표현하지 않는다.'
+            )
         if revision_feedback:
             if previous_draft is None:
                 raise ValueError('기획안 수정에는 검수받은 기존 초안이 필요합니다.')
@@ -122,7 +144,8 @@ class PlannerAgent:
                     {
                         'severity': issue.get('severity'),
                         'field': issue.get('field'),
-                        'revision_instruction': str(issue.get('revision_instruction') or '')[:600],
+                        'problem': str(issue.get('problem') or ''),
+                        'revision_instruction': str(issue.get('revision_instruction') or ''),
                     }
                     for issue in (revision_feedback.get('issues') or [])
                 ],
@@ -140,7 +163,10 @@ class PlannerAgent:
             max_output_tokens=20000 if revision_feedback else 24000,
             retry_max_output_tokens=28000 if revision_feedback else 32000,
             openai_timeout_seconds=600,
-            local_max_output_tokens=14000 if revision_feedback else 16000,
+            # 실제 원주 초안은 약 1.3k 출력 토큰이었는데 16k를 예약해, 후보 보완으로
+            # 근거가 길어진 다음 생성에서 입력+예약 합계가 40,960 문맥을 넘었다.
+            # 완전한 보고서 여유는 10k로 유지하고 지역·사례·ML 원문은 줄이지 않는다.
+            local_max_output_tokens=10000,
             local_evidence_tools=True,
         )
         if self.llm_router:

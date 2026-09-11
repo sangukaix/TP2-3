@@ -22,12 +22,15 @@ class MlLearningAssistantTest(unittest.IsolatedAsyncioTestCase):
             result = await MlLearningAssistantAgent(env_values={
                 'OPENAI_API_KEY': 'test', 'OPENAI_ML_CHAT_MODEL': 'test-model',
             }).answer(
-                learning_region={'region_code': '11680', 'modules': [{'id': 'visitors'}]},
+                learning_region={'region_code': '11680', 'modules': [{'id': 'visitors', 'strategy_usage': {
+                    'role': '방문 규모', 'steps': [{'detail': '반복 화면 설명'}], 'tree': '반복 호출 트리',
+                }}]},
                 question='어떤 모델을 사용했어?', history=[],
             )
         payload = request.call_args.kwargs['input_payload']
         self.assertEqual(result['answer'], '답변')
         self.assertEqual(payload['learning_region']['region_code'], '11680')
+        self.assertEqual(payload['learning_region']['modules'][0]['strategy_usage'], {'role': '방문 규모'})
         self.assertIn('사용하지 않음', payload['implementation_map']['runtime']['rag_role'])
         self.assertEqual(request.call_args.kwargs['model'], 'test-model')
         self.assertEqual(request.call_args.kwargs['reasoning_effort'], 'low')

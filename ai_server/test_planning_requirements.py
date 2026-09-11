@@ -10,7 +10,8 @@ import unittest
 from ai_server.app.agents.planning_requirements import (
     EXECUTION_EVIDENCE_RULES, QUALITY_CONTRACT_VERSION, build_completion_checklist,
     candidate_delivery_issues, execution_delivery_issues, has_cost_formula, has_unlabeled_fixed_budget_total,
-    is_budget_only_title, measurement_missing, timeframe_schedule_issues,
+    is_budget_only_title, measurement_missing, overclaims_local_fit, stabilize_candidate_decision,
+    timeframe_schedule_issues, uses_region_wide_refund_budget,
 )
 from ai_server.app.agents.plan_quality_gate import build_plan_quality_precheck, merge_quality_precheck
 from ai_server.app.agents.planner_agent import _build_revision_evidence_pack
@@ -54,7 +55,184 @@ def pack(valid=True):
 
 
 class PlanningRequirementsTest(unittest.TestCase):
+    def test_regionwide_observations_cannot_become_pilot_refund_budget_or_effect(self):
+        budget = '외지인 방문객 수 × 평균 지출액 × 환급률 + 운영비 10%'
+        local_fit = '내비게이션 검색량을 바탕으로 교통 할인이 효과적일 수 있다.'
+        self.assertTrue(uses_region_wide_refund_budget(budget))
+        self.assertTrue(overclaims_local_fit(local_fit))
+        value = transfer()
+        value['design_candidates'][0]['budget_formula'] = budget
+        value['design_candidates'][0]['local_fit'] = local_fit
+        value['design_candidates'][0]['measurement_plan'] = (
+            '지표=사용률, 분자=사용 ID, 분모=발급 ID. 기준기간=운영 전 4주, 월별 측정. '
+            '원자료=사업 담당자의 발급·사용 원장. 비교집단=전국 평균 사용률.'
+        )
+        fields = {row['field'] for row in candidate_delivery_issues(pack(), value)}
+        self.assertIn('planning_decision.design_candidates[1].budget_formula.population_scope', fields)
+        self.assertIn('planning_decision.design_candidates[1].local_fit.interpretation', fields)
+        self.assertIn('planning_decision.design_candidates[1].measurement_plan.comparison_source', fields)
+        stabilized, corrections = stabilize_candidate_decision(pack(), value)
+        candidate = stabilized['design_candidates'][0]
+        self.assertIn('기획 가정/미확정', candidate['budget_formula'])
+        self.assertIn('사업의 적합성·효과 증거가 아니다', candidate['local_fit'])
+        self.assertNotIn('전국 평균', candidate['measurement_plan'])
+        self.assertEqual(stabilized['strategy_brief']['budget_formula'], candidate['budget_formula'])
+        self.assertTrue(corrections)
+        strategy = {'title': '원주시 환급 시범', 'budget': budget, 'kpi': candidate['measurement_plan'],
+                    'implementation_steps': []}
+        self.assertIn('strategies[1].budget.population_scope',
+                      {row['field'] for row in execution_delivery_issues(strategy, 'strategies[1]')})
+
+    def test_server_stabilizes_mechanical_candidate_errors_without_approving(self):
+        evidence = pack()
+        evidence['benchmark_cases'][0]['case_region'] = '전북특별자치도 전주시'
+        value = transfer(False)
+        value['selection_status'] = 'ready'
+        value['selected_candidate_id'] = 'candidate:missing'
+        value['recommended_case_ids'].append('case:invented')
+        value['strategy_brief'].update({
+            'pilot_scope': '전북특별자치도 전주시',
+            'budget_formula': '총 10억 원. 운영일수×일 단가',
+        })
+        value['design_candidates'][0]['title'] = '야간관광 예산 편성 모델 도입'
+        stabilized, corrections = stabilize_candidate_decision(evidence, value)
+        self.assertTrue(corrections)
+        self.assertEqual(stabilized['selection_status'], 'needs_evidence')
+        self.assertEqual(stabilized['selected_candidate_id'], 'candidate:1')
+        self.assertNotIn('case:invented', stabilized['recommended_case_ids'])
+        self.assertIn('강원특별자치도 원주시', stabilized['strategy_brief']['pilot_scope'])
+        self.assertIn('기획 가정/미확정', stabilized['strategy_brief']['budget_formula'])
+        self.assertIn('이용·결제', stabilized['design_candidates'][0]['title'])
+        self.assertIn('분자=', stabilized['design_candidates'][0]['measurement_plan'])
+        self.assertFalse(any(row['severity'] == 'critical'
+                             for row in candidate_delivery_issues(evidence, stabilized)))
+
+    def test_fresh_trial_budget_alias_type_and_unjustified_threshold_are_rejected(self):
+        value = transfer()
+        row = value['design_candidates'][1]
+        row.update(title='야간관광 특화도시 예산 편성 모델 도입',
+                   candidate_type='night_time_experience',
+                   stop_or_scale_rule='성공 기준: 소비 증가율 10% 이상. 중단 기준: 5% 미만.')
+        fields = {x['field'] for x in candidate_delivery_issues(pack(), value)}
+        for suffix in ('title', 'candidate_type', 'stop_or_scale_rule'):
+            self.assertIn('planning_decision.design_candidates[2].' + suffix, fields)
+        self.assertFalse(is_budget_only_title('야간 예약·체험 모델 도입'))
+
+    def test_quarterly_frequency_is_not_reported_as_missing(self):
+        self.assertNotIn('확인 주기', measurement_missing(MEASUREMENT.replace('매주', '분기별')))
+        self.assertIn('확인 주기', measurement_missing(MEASUREMENT.replace('매주', '정기적으로')))
+
+    def test_collection_ledger_is_valid_raw_measurement_source(self):
+        self.assertNotIn('원자료·수집방법', measurement_missing(
+            '분자=완료 ID, 분모=승인 ID. 운영 전 4주 기준, 매주 측정. '
+            '수집방법: 사업 담당자 집계 원장. 미운영일과 비교.'
+        ))
+
+    def test_unapproved_case_performance_is_removed_from_comparison(self):
+        evidence = pack()
+        evidence['benchmark_cases'][0].update(
+            case_region='전라남도 강진군', quantitative_result_approved=False,
+        )
+        report = _draft('본문')
+        report['strategies'][0]['comparison_analysis'] = '강진군 소비 118.7억 원, 전년 대비 1.7배 증가 사례를 적용한다.'
+        fields = {row['field'] for row in build_plan_quality_precheck(evidence, report, limit=None)['issues']}
+        self.assertIn('strategies[1].comparison_analysis.unapproved_case_result', fields)
+        report['strategies'][0]['comparison_analysis'] = '강진군의 신청·증빙·지역상품권 환급 절차만 참고한다.'
+        fields = {row['field'] for row in build_plan_quality_precheck(evidence, report, limit=None)['issues']}
+        self.assertNotIn('strategies[1].comparison_analysis.unapproved_case_result', fields)
+
+    def test_unlabeled_candidate_and_brief_totals_block_even_with_multiplication(self):
+        value = transfer()
+        value['selection_status'] = 'needs_evidence'
+        budget = '총 10억 원. 운영일수×일 단가 + 적격 건수×지급 단가'
+        value['design_candidates'][0]['budget_formula'] = budget
+        value['strategy_brief']['budget_formula'] = budget
+        found = [row for row in candidate_delivery_issues(pack(), value)
+                 if row['field'].endswith('.fixed_total')]
+        self.assertEqual(len(found), 2)
+        self.assertTrue(all(row['severity'] == 'critical' for row in found))
+        value['design_candidates'][0]['budget_formula'] = '미확정 참고 견적: ' + budget
+        value['strategy_brief']['budget_formula'] = '미확정 참고 견적: ' + budget
+        self.assertFalse(any(row['field'].endswith('.fixed_total')
+                             for row in candidate_delivery_issues(pack(), value)))
+
+    def test_other_city_scope_copy_is_rejected_but_reference_is_allowed(self):
+        evidence = pack()
+        evidence['benchmark_cases'][0]['case_region'] = '전북특별자치도 전주시'
+        value = transfer()
+        value['strategy_brief']['pilot_scope'] = '전북특별자치도 전주시'
+        self.assertTrue(any(row['field'].endswith('.pilot_scope') for row in candidate_delivery_issues(evidence, value)))
+        value['strategy_brief']['pilot_scope'] = '원주시에서 전주시 운영 방식을 참고한 조건부 한 권역 시범'
+        self.assertFalse(any(row['field'].endswith('.pilot_scope') for row in candidate_delivery_issues(evidence, value)))
+
+    def test_other_city_title_and_target_users_are_localized_without_approving(self):
+        evidence = pack()
+        evidence['benchmark_cases'][0]['case_region'] = '전라남도 강진군'
+        value = transfer()
+        value['design_candidates'][0]['title'] = '강진 반값여행 지역환급 모델 도입'
+        value['strategy_brief'].update({
+            'working_title': '강진 반값여행 지역환급 모델 도입',
+            'target_users': '강진을 여행하는 방문객',
+            'pilot_scope': '전라남도 강진군',
+        })
+        fields = {row['field'] for row in candidate_delivery_issues(evidence, value)}
+        self.assertIn('planning_decision.design_candidates[1].title', fields)
+        self.assertIn('planning_decision.strategy_brief.working_title', fields)
+        self.assertIn('planning_decision.strategy_brief.target_users', fields)
+        stabilized, corrections = stabilize_candidate_decision(evidence, value)
+        self.assertTrue(corrections)
+        self.assertEqual(stabilized['selection_status'], 'needs_evidence')
+        self.assertNotIn('강진', stabilized['design_candidates'][0]['title'])
+        self.assertNotIn('강진', stabilized['strategy_brief']['working_title'])
+        self.assertEqual(stabilized['strategy_brief']['target_users'], '강원특별자치도 원주시 방문객')
+        self.assertIn('강원특별자치도 원주시', stabilized['strategy_brief']['pilot_scope'])
+
+    def test_budget_only_mechanism_is_not_hidden_by_title_rewrite(self):
+        evidence = pack()
+        evidence['benchmark_cases'][0]['case_region'] = '전북특별자치도 전주시'
+        value = transfer()
+        value['design_candidates'][1].update({
+            'title': '전주시 야간관광 특화도시 예산 편성 모델 도입',
+            'mechanism': '야간 콘텐츠를 지속 운영할 예산 구조 마련',
+        })
+        stabilized, _ = stabilize_candidate_decision(evidence, value)
+        self.assertEqual(stabilized['design_candidates'][1]['title'], value['design_candidates'][1]['title'])
+        fields = {row['field'] for row in candidate_delivery_issues(evidence, stabilized)}
+        self.assertIn('planning_decision.design_candidates[2].title', fields)
+        self.assertIn('planning_decision.design_candidates[2].mechanism', fields)
+
+    def test_complete_revision_feedback_keeps_more_than_eight_findings(self):
+        findings = [{'severity': 'major', 'field': f'field:{i}', 'problem': f'problem:{i}',
+                     'revision_instruction': 'repair'} for i in range(16)]
+        review = {'approved': True, 'overall_score': 90, 'issues': [], 'summary': 'review'}
+        result = merge_quality_precheck(review, {'checked': True, 'issues': findings}, limit=None)
+        self.assertEqual(len(result['issues']), 16)
+        self.assertFalse(result['approved'])
+        repeated = merge_quality_precheck(result, {'checked': True, 'issues': findings}, limit=None)
+        self.assertEqual(repeated['summary'], result['summary'])
+        self.assertEqual(len(repeated['issues']), 16)
+
+    def test_corrupted_brief_case_id_is_rejected(self):
+        value = transfer()
+        value['strategy_brief']['supporting_case_ids'] = ['case:unknown']
+        self.assertTrue(any(row['field'].endswith('.case_source_ids') for row in candidate_delivery_issues(pack(), value)))
+
+    def test_candidate_without_registered_case_stays_needs_review(self):
+        value = transfer()
+        value['recommended_case_ids'] = []
+        value['design_candidates'][0]['case_source_ids'] = []
+        fields = {row['field'] for row in candidate_delivery_issues(pack(), value)}
+        self.assertIn('planning_decision.recommended_case_ids', fields)
+        self.assertIn('planning_decision.design_candidates[1].case_source_ids', fields)
+
+    def test_duplicate_candidate_types_are_rejected(self):
+        value = transfer()
+        value['design_candidates'][1]['candidate_type'] = 'spend_conversion'
+        self.assertTrue(any(row['field'].endswith('.candidate_type') for row in candidate_delivery_issues(pack(), value)))
+
     def test_budget_word_alone_is_not_a_formula(self):
+        self.assertFalse(has_cost_formula('수량×단가 산식: 사무관리(10%) 1억 원, 행사운영(40%) 4억 원. 기획 가정'))
+        self.assertTrue(has_cost_formula('수량×단가 산식: 운영일수×일 단가 + 적격 신청 건수×건별 단가'))
         self.assertFalse(has_cost_formula('상품권 발행비 + 환급금 + 홍보비 (공식 단가 확인 필요)'))
         self.assertTrue(has_cost_formula('신청 수량 × 공식 단가 + 운영일수 × 일 단가'))
 
@@ -65,6 +243,7 @@ class PlanningRequirementsTest(unittest.TestCase):
 
     def test_budget_only_title_is_not_an_intervention(self):
         self.assertTrue(is_budget_only_title('야간관광 특화도시 예산 편성'))
+        self.assertTrue(is_budget_only_title('야간관광 특화도시 운영 예산 체계 구축'))
         self.assertFalse(is_budget_only_title('야간 예약·식음 결제 연계 시범'))
 
     def test_step_outside_declared_timeframe_is_critical(self):
@@ -182,6 +361,35 @@ class PlanningRequirementsTest(unittest.TestCase):
         self.assertEqual(selected, evidence['transfer_assessment']['design_candidates'][0])
         self.assertEqual(workspace.pack, before)
 
+    def test_candidate_repair_does_not_prioritize_rejected_case_but_keeps_draft(self):
+        evidence = pack()
+        evidence['benchmark_cases'] = [
+            {'source_id': 'case:return', 'intervention': '관광주민증'},
+            {'source_id': 'case:refund', 'intervention': '반값여행 환급'},
+            {'source_id': 'case:budget', 'intervention': '야간 예산 편성'},
+        ]
+        evidence['transfer_assessment']['recommended_case_ids'] = ['case:budget']
+        # sources는 과거 선택안 순서일 수 있으므로 현재 benchmark_cases 순서와 다르게 둔다.
+        evidence['sources'].insert(0, {'source_id': 'case:budget', 'source_type': 'benchmark_case'})
+        evidence['transfer_assessment']['strategy_brief']['supporting_case_ids'] = ['case:budget']
+        payload = {'evidence_pack': evidence, 'quality_review_feedback': {'issues': [{'field': 'title'}]}}
+        before = deepcopy(payload)
+        workspace = EvidenceTools(payload, task='transferability')
+        fetched = _prefetch_required_evidence(workspace, 'transferability')
+        fetched_tools = {row['tool'] for row in fetched}
+        self.assertNotIn('get_nationwide_bigdata_context', fetched_tools)
+        self.assertNotIn('get_case_comparison_matrix', fetched_tools)
+        self.assertTrue({'case:return', 'case:refund'} <= workspace.read_source_ids)
+        self.assertNotIn('case:budget', workspace.read_source_ids)
+        decision = workspace.execute('get_planning_decision', {})
+        self.assertEqual(decision['review_context']['status'], 'rejected_candidate_draft')
+        self.assertEqual(decision['strategy_brief'], evidence['transfer_assessment']['strategy_brief'])
+        self.assertEqual(payload, before)
+        reviewer = EvidenceTools(payload, task='reviewer')
+        _prefetch_required_evidence(reviewer, 'reviewer')
+        self.assertIn('case:budget', reviewer.read_source_ids)
+        self.assertNotIn('review_context', reviewer.execute('get_planning_decision', {}))
+
     def test_revision_keeps_candidate_local_fact_and_added_case_source(self):
         evidence = pack()
         evidence['sources'].extend([
@@ -193,8 +401,28 @@ class PlanningRequirementsTest(unittest.TestCase):
         revised = _build_revision_evidence_pack(evidence, _draft('본문'))
         self.assertTrue({'regional-status:51130', 'case:3'} <= {row['source_id'] for row in revised['sources']})
 
+    def test_planner_prefetch_omits_duplicate_nationwide_macro_table(self):
+        evidence = pack()
+        evidence['snapshot']['nationwide_bigdata_context'] = {'available': True, 'monthly_rows': ['large']}
+        workspace = EvidenceTools({'evidence_pack': evidence}, task='planner')
+        fetched = _prefetch_required_evidence(workspace, 'planner')
+        self.assertNotIn('get_nationwide_bigdata_context', {row['tool'] for row in fetched})
+        self.assertNotIn('get_nationwide_bigdata_context', workspace.missing_required_reads())
+
 
 class RepairFlowTest(unittest.IsolatedAsyncioTestCase):
+    async def test_direct_provider_receives_repair_instructions_and_all_findings(self):
+        evidence = pack(False)
+        issues = candidate_delivery_issues(evidence, evidence['transfer_assessment'])
+        with patch('ai_server.app.agents.transferability_agent.create_structured_response',
+                   new_callable=AsyncMock, return_value={}) as generate:
+            await TransferabilityAgent(api_key='', model='unused').assess(
+                evidence_pack=evidence, revision_feedback=issues)
+        sent = generate.call_args.kwargs
+        self.assertIn('이번 호출은 후보 보완입니다', sent['instructions'])
+        self.assertEqual(sent['input_payload']['quality_review_feedback']['issues'], issues)
+        self.assertEqual(sent['input_payload']['transfer_assessment'], evidence['transfer_assessment'])
+
     async def test_repair_feedback_is_visible_in_local_tools_without_dropping_previous_comparison(self):
         router = SimpleNamespace(generate=AsyncMock(return_value={}))
         evidence = pack(False)
@@ -202,10 +430,12 @@ class RepairFlowTest(unittest.IsolatedAsyncioTestCase):
         await TransferabilityAgent(api_key='', model='unused', llm_router=router).assess(evidence_pack=evidence, revision_feedback=issues)
         request = router.generate.call_args.args[0]
         tools = EvidenceTools(request.input_payload, task='transferability')
-        self.assertEqual(tools.overview()['quality_review_feedback']['issues'], issues)
+        reference = tools.overview()['quality_review_feedback_reference']
+        self.assertEqual(reference['path'], '/quality_review_feedback')
+        self.assertEqual(reference['issue_count'], len(issues))
         self.assertEqual(tools.pack['transfer_assessment'], evidence['transfer_assessment'])
         self.assertEqual(request.task, 'transferability')
-        self.assertEqual(request.local_max_output_tokens, 5600)
+        self.assertEqual(request.local_max_output_tokens, 8000)
 
     async def run_flow(self, repair_fails=False, repair_valid=True):
         evidence = pack(False)
@@ -261,6 +491,7 @@ class RepairFlowTest(unittest.IsolatedAsyncioTestCase):
         result, calls, final_flags = await self.run_flow(repair_fails=True)
         self.assertEqual(len(calls), 2)
         self.assertEqual(result['planning_decision']['selection_status'], 'needs_evidence')
+        self.assertTrue(result['planning_decision']['automatic_corrections'])
         self.assertFalse(result['quality_review']['approved'])
         self.assertNotIn(True, final_flags)
         self.assertTrue(result['quality_review']['completion_checklist'])
@@ -268,8 +499,8 @@ class RepairFlowTest(unittest.IsolatedAsyncioTestCase):
     async def test_repair_still_insufficient_does_not_loop_or_force_ready(self):
         result, calls, final_flags = await self.run_flow(repair_valid=False)
         self.assertEqual(len(calls), 2)
+        self.assertEqual(result['planning_decision']['selection_status'], 'needs_evidence')
         self.assertFalse(result['quality_review']['approved'])
-        self.assertTrue(result['quality_review']['validation_findings'])
         self.assertNotIn(True, final_flags)
 
 

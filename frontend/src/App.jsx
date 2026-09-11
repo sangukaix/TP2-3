@@ -1,4 +1,9 @@
+
 import { lazy, Suspense, useEffect, useState } from 'react'
+
+import { lazy, Suspense } from 'react'
+import { resolveAppRoute } from './routes'
+
 
 // 첫 화면에서 Leaflet·Recharts·보고서 코드를 모두 내려받지 않도록 페이지 단위로 분리합니다.
 const TourismHomePage = lazy(() => import('./pages/TourismHomePage'))
@@ -9,8 +14,12 @@ const SavedStrategyPlansPage = lazy(() => import('./pages/SavedStrategyPlansBoar
 const MlTestPage = lazy(() => import('./pages/MlTest/MlTestPage'))
 const LearningArchitecturePage = lazy(() => import('./pages/MlTest/LearningArchitecturePage'))
 const LlmControlPage = lazy(() => import('./pages/MlTest/LlmControlPage'))
+
 const SignupPage = lazy(() => import('./pages/Signup'))
 const LoginPage = lazy(() => import('./pages/Login'))
+
+const ProjectTreePage = lazy(() => import('./pages/ProjectTreePage'))
+
 
 // 학습 주제별 wrapper를 App 바깥에 두어 화면이 다시 그려져도 챗봇 상태가 초기화되지 않게 합니다.
 function OpenAiLearningPage() {
@@ -29,8 +38,20 @@ function PageLoading() {
   )
 }
 
+function NotFoundPage() {
+  return (
+    <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#f8fafc', color: '#334155' }}>
+      <section style={{ textAlign: 'center' }}>
+        <p>요청한 화면을 찾지 못했습니다.</p>
+        <a href="/dashboard">지역선택 화면으로 이동</a>
+      </section>
+    </main>
+  )
+}
+
 /** 현재 페이지 수가 적어 별도 Router 의존성 없이 경로별 화면만 지연 로딩합니다. */
 export default function App() {
+
   const [path, setPath] = useState(window.location.pathname)
 
   useEffect(() => {
@@ -55,6 +76,22 @@ export default function App() {
   if (path === '/openai-test') Page = OpenAiLearningPage
   if (path === '/react-test') Page = ReactLearningPage
   if (path === '/llm-control') Page = LlmControlPage
+
+  const route = resolveAppRoute(window.location.pathname)
+  const pages = {
+    home: TourismHomePage,
+    dashboard: TourismDashboardPage,
+    planning: TourismPlanningPage,
+    strategy: TourismStrategyPage,
+    savedPlans: SavedStrategyPlansPage,
+    mlTest: MlTestPage,
+    openAiLearning: OpenAiLearningPage,
+    reactLearning: ReactLearningPage,
+    llmControl: LlmControlPage,
+    projectTree: ProjectTreePage,
+  }
+  const Page = pages[route.pageId] || NotFoundPage
+
 
   return <Suspense fallback={<PageLoading />}><Page /></Suspense>
 }

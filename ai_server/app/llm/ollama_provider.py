@@ -174,7 +174,7 @@ class OllamaProvider:
         if not self.base_url:
             return ProviderHealth(self.name, 'inactive', '로컬 LLM 주소가 설정되지 않았습니다.', [], list(self.capabilities))
         try:
-            async with httpx.AsyncClient(timeout=5.0) as client:
+            async with httpx.AsyncClient(timeout=15.0) as client:
                 response = await client.get(f'{self.base_url}/api/tags')
             if response.status_code >= 400:
                 return ProviderHealth(self.name, 'inactive', 'Ollama 모델 목록을 읽지 못했습니다.', [], list(self.capabilities))

@@ -29,7 +29,7 @@ LOCAL_LLM_BASE_URL=http://개인노트북-IP:11434
 OLLAMA_QWEN_MODEL=<ollama list의 Qwen tag>
 OLLAMA_GEMMA_MODEL=<ollama list의 Gemma tag>
 # Gemma 26B의 첫 로드·구조화 초안 생성까지 기다리는 기본 제한(초)
-LOCAL_LLM_TIMEOUT_SECONDS=420
+LOCAL_LLM_TIMEOUT_SECONDS=1800
 LLM_ADMIN_TOKEN=팀내부에서만공유하는긴토큰
 ```
 

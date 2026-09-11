@@ -132,6 +132,8 @@ def _build_openai_catalog() -> ProjectLearningCatalog:
     agent_files = _source_files(AI_APP_ROOT / 'agents', {'.py'})
     discovered = [row for path in agent_files for row in _python_classes(path)]
     core_agents = _ordered_report_agents(discovered)
+    from .agent_learning_guide import agent_contract
+    discovered = [{**row, 'contract': agent_contract(row['name'])} for row in discovered]
     all_routes = _fastapi_routes(AI_APP_ROOT / 'main.py')
     relevant_routes = [route for route in all_routes if any(key in route['path'] for key in ('strategy', 'assistant', 'learning'))]
     env_names = []
@@ -179,7 +181,7 @@ def _build_openai_catalog() -> ProjectLearningCatalog:
             {'title': '사실 분리', 'description': '공식 관측값·ML 전망·사용자 조건·AI 제안을 서로 다른 필드로 전달합니다.'},
             {'title': '구조화 출력', 'description': 'JSON Schema로 화면·저장·Word·PPT가 같은 결과 구조를 사용합니다.'},
             {'title': '품질 재검수', 'description': 'Reviewer가 기준 미달로 판단하면 Planner가 피드백을 반영해 한 번 다시 작성합니다.'},
-            {'title': '서버 키 보호', 'description': 'OpenAI 키와 프롬프트는 AI Server에만 있고 React로 내려가지 않습니다.'},
+            {'title': '서버 키 보호', 'description': 'API 키·실제 접속 정보는 서버에만 둡니다. 이 학습 화면은 공개 코드의 역할 지시문 발췌와 설정 이름만 보여 줍니다.'},
         ], chatbot_flow=chatbot_flow,
         update_note='페이지를 열 때 Agent 클래스·FastAPI route·환경변수 이름을 다시 읽습니다. 새 Agent나 API가 같은 구조로 추가되면 목록과 파일 지도가 갱신됩니다.',
     )
@@ -197,28 +199,30 @@ def _react_file_role(path: Path) -> tuple[str, str]:
     return group, role
 
 
-def _react_routes(app_source: str) -> list[dict[str, str]]:
-    """App.jsx의 lazy import와 path 분기를 연결해 페이지 라우트를 자동 추출합니다."""
+def _react_routes(app_source: str, routes_source: str) -> list[dict[str, str]]:
+    """중앙 경로 표와 App.jsx의 페이지 매핑을 연결해 라우트를 자동 추출합니다."""
     imports = dict(re.findall(r"const\s+(\w+)\s*=\s*lazy\(\(\)\s*=>\s*import\('([^']+)'\)\)", app_source))
+    page_components = dict(re.findall(r'^\s{4}(\w+):\s*(\w+),?\s*$', app_source, re.M))
+    route_block = re.search(r'APP_ROUTES\s*=\s*Object\.freeze\(\{(.*?)\}\)', routes_source, re.S)
+    alias_block = re.search(r'ROUTE_ALIASES\s*=\s*Object\.freeze\(\{(.*?)\}\)', routes_source, re.S)
+    route_ids = dict(re.findall(r"'([^']+)'\s*:\s*'([^']+)'", route_block.group(1) if route_block else ''))
+    aliases = dict(re.findall(r"'([^']+)'\s*:\s*'([^']+)'", alias_block.group(1) if alias_block else ''))
     routes = []
-    # 현재 App은 /dashboard를 별도 if가 아니라 기본 Page로 사용하므로 기본 할당도 route로 기록합니다.
-    default_page = re.search(r'let\s+Page\s*=\s*(\w+)', app_source)
-    if default_page:
-        page = default_page.group(1)
-        routes.append({'method': 'PAGE', 'path': '/dashboard', 'handler': page, 'file': imports.get(page, '')})
-    for match in re.finditer(r"if\s*\(path\s*===\s*'([^']+)'\)\s*Page\s*=\s*([^\r\n]+)", app_source):
-        path, assignment = match.group(1), match.group(2).strip()
-        direct_page = re.fullmatch(r'(\w+)', assignment)
-        component = direct_page.group(1) if direct_page else (
-            'LearningArchitecturePage' if 'LearningArchitecturePage' in assignment else 'InlinePage'
-        )
-        routes.append({'method': 'PAGE', 'path': path, 'handler': component, 'file': imports.get(component, '')})
+    for path, page_id in route_ids.items():
+        component = page_components.get(page_id, 'InlinePage')
+        source_component = 'LearningArchitecturePage' if component in {'OpenAiLearningPage', 'ReactLearningPage'} else component
+        routes.append({'method': 'PAGE', 'path': path, 'handler': component, 'file': imports.get(source_component, '')})
+    for path, canonical_path in aliases.items():
+        target = next((row for row in routes if row['path'] == canonical_path), None)
+        routes.append({'method': 'PAGE', 'path': path,
+                       'handler': target['handler'] if target else 'Alias',
+                       'file': target['file'] if target else ''})
     return routes
 
 
 def _development_ports() -> dict[str, str]:
     """start-dev.ps1에서 현재 로컬 실행 포트를 읽어 구조도와 실제 실행값을 맞춥니다."""
-    defaults = {'frontend': '5176', 'backend': '8100', 'ai': '8111', 'mysql': '3306'}
+    defaults = {'frontend': '5176', 'backend': '8100', 'ai': '8112', 'mysql': '3306'}
     script_path = PROJECT_ROOT / 'start-dev.ps1'
     if not script_path.exists():
         return defaults
@@ -277,12 +281,14 @@ def _build_react_catalog() -> ProjectLearningCatalog:
         group, role = _react_file_role(path)
         files.append(LearningFile(path=_relative(path), role=role, group=group))
     app_source = source_text.get(FRONTEND_ROOT / 'src' / 'App.jsx', '')
-    routes = _react_routes(app_source)
+    routes_source = source_text.get(FRONTEND_ROOT / 'src' / 'routes.js', '')
+    routes = _react_routes(app_source, routes_source)
     api_calls = []
     for path, source in source_text.items():
         if '/api/' not in f'/{_relative(path)}':
             continue
-        for endpoint in re.findall(r"fetch\(`?([^'`]+)", source):
+        # 동적 fetch(url, ...) 함수 정의는 실제 endpoint가 아니므로 문자열 리터럴만 수집합니다.
+        for _, endpoint in re.findall(r'''fetch\(\s*([\"'`])(.+?)\1''', source):
             api_calls.append({'method': 'FETCH', 'path': endpoint[:120], 'handler': _relative(path)})
     package = json.loads((FRONTEND_ROOT / 'package.json').read_text(encoding='utf-8'))
     dependencies = [
@@ -297,7 +303,7 @@ def _build_react_catalog() -> ProjectLearningCatalog:
     pipeline = [
         LearningNode(id='browser', title='브라우저 URL', role='사용자가 페이지 경로로 진입', kind='input'),
         LearningNode(id='vite', title='Vite 개발 서버', role='React 모듈 변환·HMR·/api·/ai proxy', file='frontend/vite.config.js', kind='runtime'),
-        LearningNode(id='app', title='App.jsx', role='경로별 페이지를 lazy import하고 Suspense로 로딩', file='frontend/src/App.jsx', kind='router'),
+        LearningNode(id='app', title='routes.js + App.jsx', role='경로 계약과 페이지 lazy import를 분리하고 Suspense로 로딩', file='frontend/src/routes.js', kind='router'),
         LearningNode(id='page', title='pages', role='URL 화면·상태·업무 흐름 조합', file='frontend/src/pages', kind='page'),
         LearningNode(id='component', title='components / features', role='공통 UI와 기능별 로직 재사용', file='frontend/src/components', kind='component'),
         LearningNode(id='api', title='api modules', role='Backend·AI Server 호출과 오류 처리', file='frontend/src/api', kind='api'),
@@ -314,7 +320,7 @@ def _build_react_catalog() -> ProjectLearningCatalog:
     return ProjectLearningCatalog(
         topic='react', title='React · Vite 구조',
         subtitle='현재 프런트엔드 폴더·라우트·컴포넌트·API 흐름을 실제 src와 package.json에서 다시 읽어 보여줍니다.',
-        generated_from=['frontend/src/**/*', 'frontend/package.json', 'frontend/vite.config.js'],
+        generated_from=['frontend/src/**/*', 'frontend/src/routes.js', 'frontend/package.json', 'frontend/vite.config.js'],
         summary=[
             {'label': '소스 파일', 'value': f'{len(source_files)}개'},
             {'label': '페이지 route', 'value': f'{len(routes)}개'},
@@ -359,7 +365,7 @@ def _build_react_catalog() -> ProjectLearningCatalog:
             },
         },
         folder_tree=_react_folder_tree(files),
-        update_note='페이지를 열 때 frontend/src, App.jsx, API fetch 패턴과 package.json을 다시 읽습니다. 새 페이지·파일·의존성이 추가되면 새로고침 후 목록과 수가 갱신됩니다.',
+        update_note='페이지를 열 때 frontend/src, routes.js, App.jsx, API fetch 패턴과 package.json을 다시 읽습니다. 새 페이지·파일·의존성이 추가되면 새로고침 후 목록과 수가 갱신됩니다.',
     )
 
 

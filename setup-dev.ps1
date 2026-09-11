@@ -125,6 +125,6 @@ if ($rawFiles.Count -eq 0) {
   Write-Host "관광 원본 파일 $($rawFiles.Count)개를 확인했습니다." -ForegroundColor Green
 }
 
-Write-Host "`n설치가 끝났습니다. 아래 명령으로 세 서버를 실행하세요:" -ForegroundColor Green
+Write-Host "`n설치가 끝났습니다. 아래 명령으로 개발 서버를 실행하세요:" -ForegroundColor Green
 Write-Host '  .\start-dev.ps1' -ForegroundColor White
 Write-Host '브라우저: http://localhost:5176' -ForegroundColor White

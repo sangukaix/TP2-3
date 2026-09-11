@@ -1,0 +1,247 @@
+{
+  "request": {
+    "model": "qwen3:14b",
+    "messages": [
+      {
+        "role": "system",
+        "content": "원주 동결 근거와 검수된 타지역 사례 카드를 비교해 원주 관광사업의 발전 방향 두 개를 설계한다.\n핵심은 현재 수치로 필요성을 증명하는 일이 아니라, 유사 사례의 어떤 운영 장치를 원주에 맞게 추가하면 무엇을 얼마나 시험할 수 있는지 제시하는 것이다.\n각 방향은 서로 다른 사례 2개 이상을 비교하고 source_id를 정확히 쓴다. 사례의 운영 장치, 적용 조건, 위험을 구분한다.\n타지역 성과율·총예산을 원주의 예상 효과나 예산으로 복사하지 않는다. 카드에 성과 인과가 확인되지 않았다면 그대로 밝힌다.\n예산은 확정값이 아니라 작은 시범사업의 temporary_planning_estimate다. 직접 정한 운영량과 가정 단가를 표시하고 수량×단가=소계, 소계 합=총액으로 쓴다. 빠진 비용도 적는다.\n발전 가능성은 보장된 방문·매출 증가율이 아니다. 참여업체 수, 실제 이용완료 건수, 야간 운영일, 상품권 재사용액처럼 시범사업이 관리할 수 있는 목표 범위로 제시한다.\n각 목표에는 현재 기준 존재 여부, 계산식, 수집 원장, 해석 한계를 쓴다. 지역 전체 데이터랩 변화는 보조 관찰이며 참여자 성과나 인과효과로 바꾸지 않는다.\n이용자 신청·예약·결제·증빙·취소/중복 처리와 담당자의 기록을 실제 흐름으로 작성한다. 확인되지 않은 협약·업체·장소는 제안으로 쓴다.\n두 방향을 비교해 먼저 시험할 하나와 작은 범위를 추천하되, 최종 승인이라고 표현하지 않는다. 지정 JSON만 반환한다.\n출력 과제를 시범 방향 하나로 제한한다. 가장 전이 가능한 사례 두 개만 비교하고 간결하게 작성한다."
+      },
+      {
+        "role": "user",
+        "content": "{\"region_code\":\"51130\",\"region_name\":\"강원특별자치도 원주시\",\"period\":\"2025-07 ~ 2026-06\",\"planning_brief\":{\"version\":1,\"end_date\":null,\"references\":[],\"start_date\":null,\"preferences\":\"\",\"region_code\":\"51130\",\"budget_status\":\"unknown\",\"field_context\":\"\",\"budget_max_krw\":null,\"budget_min_krw\":null,\"schedule_status\":\"unknown\",\"hard_constraints\":\"\",\"resources_status\":\"unknown\",\"budget_hard_limit\":false,\"constraints_status\":\"unknown\",\"resources_possible\":\"\",\"resources_confirmed\":\"\"},\"research_gaps\":[],\"case_search_policy\":{},\"case_search_coverage\":{},\"quality_contract_version\":\"execution-evidence-v1\",\"ml_status\":\"available\",\"ml_windows\":[{\"start_month\":\"202609\",\"end_month\":\"202611\",\"reliability\":\"exploratory_longer_horizon\"},{\"start_month\":\"202609\",\"end_month\":\"202702\",\"reliability\":\"exploratory_longer_horizon\"}],\"selected_candidate_id\":null,\"selection_status\":null,\"case_index\":{\"__evidence_table_v1__\":{\"columns\":[\"source_id\",\"title\",\"case_region\",\"retrieval_context\",\"mechanism_family\"],\"rows\":[[\"case:jeonju_night_budget_2026\",\"전주시 2026년도 관광산업과 세출예산 사업명세서\",\"전북특별자치도 전주시\",{},\"night_time_experience\"],[\"case:gangjin_half_price_2024\",\"강진 반값여행 지역경제 효과 소개\",\"전라남도 강진군\",{},\"spend_conversion\"],[\"case:digital_tourism_resident_2024\",\"2024년 6월 여행가는 달 추진 보도자료\",\"전국 인구감소지역 34곳\",{},\"return_visit\"],[\"case:kto_stay_discount_2022\",\"2022 대한민국 숙박대전 경제파급효과 공개자료\",\"전국 숙박할인쿠폰 지원사업\",{},\"stay_conversion\"],[\"case:night_festival_2025\",\"2025 대한민국 밤밤페스타 개최 도시 및 일정\",\"야간관광 특화도시 10곳\",{},\"night_time_experience\"],[\"case:night_tourism_cities_2024\",\"2024년도 정부업무평가 관광분야 성과자료\",\"야간관광 특화도시 10곳\",{},\"night_time_experience\"]]}},\"source_count\":58,\"source_chunk_count\":10,\"sections\":[\"/region_code\",\"/region_name\",\"/period\",\"/snapshot\",\"/planning_brief\",\"/benchmark_cases\",\"/sources\",\"/research_gaps\",\"/case_search_policy\",\"/case_search_coverage\",\"/quality_contract_version\",\"/transfer_assessment\",\"/quality_review_feedback\"],\"snapshot_sections\":[\"/snapshot/region_name\",\"/snapshot/period\",\"/snapshot/latest_month\",\"/snapshot/monthly_trend\",\"/snapshot/consumption_by_category\",\"/snapshot/regional_comparison\",\"/snapshot/nationwide_comparison\",\"/snapshot/nationwide_bigdata_context\",\"/snapshot/regional_tourism_status\",\"/snapshot/observations\",\"/snapshot/ml_analysis\"],\"other_sections\":[\"/region_code\",\"/region_name\",\"/period\",\"/snapshot\",\"/planning_brief\",\"/benchmark_cases\",\"/sources\",\"/research_gaps\",\"/case_search_policy\",\"/case_search_coverage\",\"/quality_contract_version\",\"/transfer_assessment\",\"/quality_review_feedback\"],\"note\":\"목록은 원문의 대체물이 아니다. 필요한 사례·ML·비교값·적용성 평가를 도구로 읽고 판단한다.\",\"quality_review_feedback\":{},\"observations_reference\":\"prefetched_evidence/get_region_metrics/observations\"}"
+      },
+      {
+        "role": "user",
+        "content": "서버가 사전 조회한 필수 읽기 전용 근거:\n[{\"tool\":\"get_region_metrics\",\"result\":{\"period\":\"2025-07 ~ 2026-06\",\"observations\":{\"__evidence_table_v1__\":{\"columns\":[\"metric\",\"value\",\"period\",\"source\"],\"rows\":[[\"월간 순 방문자 수\",\"2,285,734명\",\"2026-06\",\"한국관광 데이터랩 · 강원특별자치도 원주시 순 방문자 수 및 숙박 비율 (이동통신 기반 외지인)\"],[\"전년동월 외지인 방문자 증감률\",\"-2.7%\",\"2026-06\",\"한국관광 데이터랩 · 강원특별자치도 원주시 월간 순 방문자 수 (이동통신 기반 외지인)\"],[\"월간 외지인 관광소비 총액\",\"60,562,672,000원\",\"2026-06\",\"한국관광 데이터랩 · 강원특별자치도 원주시 관광소비 추이_외지인\"],[\"외지인 숙박 방문 비율\",\"12.5%\",\"2026-06\",\"한국관광 데이터랩 · 강원특별자치도 원주시 숙박방문자 비율 추이 (이동통신 기반 외지인)\"],[\"외지인 평균 숙박일수\",\"2.76일\",\"2026-06\",\"한국관광 데이터랩 · 강원특별자치도 원주시 평균 숙박일 (이동통신 기반 외지인)\"],[\"내비게이션 목적지 검색량\",\"303,921건\",\"2026-06\",\"한국관광 데이터랩 · 강원특별자치도 원주시 내비게이션 목적지 유형별 검색량\"],[\"SNS 언급량\",\"41,121건\",\"2026-06\",\"한국관광 데이터랩 · 강원특별자치도 원주시 SNS 언급량\"]]}},\"dataset_sources\":{\"__evidence_table_v1__\":{\"columns\":[\"title\",\"summary\",\"source_id\",\"source_url\",\"source_type\",\"observation_period\",\"published_or_updated_at\"],\"rows\":[[\"한국관광 데이터랩 · 강원특별자치도 원주시 순 방문자 수 및 숙박 비율 (이동통신 기반 외지인)\",\"월간 순 방문자 수: 2,285,734명 (관측 기준월: 2026-06)\",\"dataset:51130:1\",\"https://datalab.visitkorea.or.kr/\",\"dataset\",\"2026-06\",\"2026-06\"],[\"한국관광 데이터랩 · 강원특별자치도 원주시 월간 순 방문자 수 (이동통신 기반 외지인)\",\"전년동월 외지인 방문자 증감률: -2.7% (관측 기준월: 2026-06)\",\"dataset:51130:2\",\"https://datalab.visitkorea.or.kr/\",\"dataset\",\"2026-06\",\"2026-06\"],[\"한국관광 데이터랩 · 강원특별자치도 원주시 관광소비 추이_외지인\",\"월간 외지인 관광소비 총액: 60,562,672,000원 (관측 기준월: 2026-06)\",\"dataset:51130:3\",\"https://datalab.visitkorea.or.kr/\",\"dataset\",\"2026-06\",\"2026-06\"],[\"한국관광 데이터랩 · 강원특별자치도 원주시 숙박방문자 비율 추이 (이동통신 기반 외지인)\",\"외지인 숙박 방문 비율: 12.5% (관측 기준월: 2026-06)\",\"dataset:51130:4\",\"https://datalab.visitkorea.or.kr/\",\"dataset\",\"2026-06\",\"2026-06\"],[\"한국관광 데이터랩 · 강원특별자치도 원주시 평균 숙박일 (이동통신 기반 외지인)\",\"외지인 평균 숙박일수: 2.76일 (관측 기준월: 2026-06)\",\"dataset:51130:5\",\"https://datalab.visitkorea.or.kr/\",\"dataset\",\"2026-06\",\"2026-06\"],[\"한국관광 데이터랩 · 강원특별자치도 원주시 내비게이션 목적지 유형별 검색량\",\"내비게이션 목적지 검색량: 303,921건 (관측 기준월: 2026-06)\",\"dataset:51130:6\",\"https://datalab.visitkorea.or.kr/\",\"dataset\",\"2026-06\",\"2026-06\"],[\"한국관광 데이터랩 · 강원특별자치도 원주시 SNS 언급량\",\"SNS 언급량: 41,121건 (관측 기준월: 2026-06)\",\"dataset:51130:7\",\"https://datalab.visitkorea.or.kr/\",\"dataset\",\"2026-06\",\"2026-06\"]]}},\"source_link_rule\":\"dataset_sources는 이번 요청에 등록된 출처 원문이다. 관측의 지표·값·기간·출처를 대조해 일치하는 source_id만 evidence_source_ids에 사용한다. 목록 순서나 지역명만으로 연결하지 않으며 불일치하면 확인 필요로 남긴다.\",\"consumption_by_category\":{\"__evidence_table_v1__\":{\"columns\":[\"category\",\"spending_krw\",\"share_percent\"],\"rows\":[[\"식음료업\",18065103000,29.8],[\"쇼핑업\",15754151000,26.0],[\"운송업\",15298280000,25.3],[\"여가서비스업\",5782420000,9.5],[\"숙박업\",4444020000,7.3],[\"의료웰니스업\",1172360000,1.9],[\"여행업\",46337000,0.1]]}},\"consumption_interpretation\":\"같은 관측 기간의 업종별 관광소비 구성이다. 업종별 비중만으로 사업 효과나 개별 방문객의 지출 원인을 단정하지 않는다.\"}},{\"tool\":\"get_regional_tourism_status\",\"result\":{\"available\":true,\"region_code\":\"51130\",\"region_name\":\"강원특별자치도 원주시\",\"latest_historical_period\":\"2025-07 ~ 2026-06\",\"inflow_outflow\":{\"top_inflow_origins\":[{\"related_region_name\":\"강원 횡성군\",\"ratio_pct\":\"12.4\",\"rank_no\":\"1\",\"source_id\":\"regional-status:90f2be7a0f7d:b989a6c2e7bf\"},{\"related_region_name\":\"경기 여주시\",\"ratio_pct\":\"9.5\",\"rank_no\":\"2\",\"source_id\":\"regional-status:90f2be7a0f7d:b989a6c2e7bf\"},{\"related_region_name\":\"충북 제천시\",\"ratio_pct\":\"4.9\",\"rank_no\":\"3\",\"source_id\":\"regional-status:90f2be7a0f7d:b989a6c2e7bf\"}],\"top_outflow_destinations\":[{\"related_region_name\":\"강원 횡성군\",\"ratio_pct\":\"13.2\",\"rank_no\":\"1\",\"source_id\":\"regional-status:90f2be7a0f7d:b989a6c2e7bf\"},{\"related_region_name\":\"경기 여주시\",\"ratio_pct\":\"7.9\",\"rank_no\":\"2\",\"source_id\":\"regional-status:90f2be7a0f7d:b989a6c2e7bf\"},{\"related_region_name\":\"충북 제천시\",\"ratio_pct\":\"7.7\",\"rank_no\":\"3\",\"source_id\":\"regional-status:90f2be7a0f7d:b989a6c2e7bf\"}],\"inbound_destination_types\":{\"__evidence_table_v1__\":{\"columns\":[\"category_group\",\"category_detail\",\"share_pct\",\"group_share_pct\",\"source_id\"],\"rows\":[[\"쇼핑\",\"시장\",\"100\",\"2.6\",\"regional-status:90f2be7a0f7d:b989a6c2e7bf\"],[\"체험관광\",\"농/산/어촌체험\",\"100\",\"0.2\",\"regional-status:90f2be7a0f7d:b989a6c2e7bf\"],[\"레저스포츠\",\"육상레저스포츠\",\"84.2\",\"5.2\",\"regional-status:90f2be7a0f7d:b989a6c2e7bf\"]]}},\"outbound_destination_types\":{\"__evidence_table_v1__\":{\"columns\":[\"category_group\",\"category_detail\",\"share_pct\",\"group_share_pct\",\"source_id\"],\"rows\":[[\"쇼핑\",\"시장\",\"100\",\"2.1\",\"regional-status:90f2be7a0f7d:b989a6c2e7bf\"],[\"체험관광\",\"농/산/어촌체험\",\"100\",\"0.4\",\"regional-status:90f2be7a0f7d:b989a6c2e7bf\"],[\"기타관광\",\"교통시설\",\"88.7\",\"10.8\",\"regional-status:90f2be7a0f7d:b989a6c2e7bf\"]]}}},\"popular_places\":{\"total_hotspots\":{\"__evidence_table_v1__\":{\"columns\":[\"place_name\",\"classification\",\"rank_no\",\"metric_name\",\"metric_unit\",\"source_id\"],\"rows\":[[\"원주종합버스터미널\",\"교통시설\",\"1\",\"rank\",\"rank_only\",\"regional-status:edaf76986d99:c00fa7ffc0a7\"],[\"오크밸리CC\",\"육상레저스포츠\",\"2\",\"rank\",\"rank_only\",\"regional-status:edaf76986d99:c00fa7ffc0a7\"],[\"원주소금산출렁다리\",\"기타관광\",\"3\",\"rank\",\"rank_only\",\"regional-status:edaf76986d99:c00fa7ffc0a7\"]]}},\"nonlocal_hotspots\":{\"__evidence_table_v1__\":{\"columns\":[\"place_name\",\"classification\",\"rank_no\",\"metric_name\",\"metric_unit\",\"source_id\"],\"rows\":[[\"원주종합버스터미널\",\"교통시설\",\"1\",\"rank\",\"rank_only\",\"regional-status:edaf76986d99:c00fa7ffc0a7\"],[\"오크밸리CC\",\"육상레저스포츠\",\"2\",\"rank\",\"rank_only\",\"regional-status:edaf76986d99:c00fa7ffc0a7\"],[\"원주소금산출렁다리\",\"기타관광\",\"3\",\"rank\",\"rank_only\",\"regional-status:edaf76986d99:c00fa7ffc0a7\"]]}},\"restaurants\":{\"__evidence_table_v1__\":{\"columns\":[\"place_name\",\"classification\",\"rank_no\",\"metric_name\",\"metric_unit\",\"source_id\"],\"rows\":[[\"스톤크릭\",\"카페/찻집\",\"1\",\"rank\",\"rank_only\",\"regional-status:edaf76986d99:c00fa7ffc0a7\"],[\"카페고래호수\",\"카페/찻집\",\"2\",\"rank\",\"rank_only\",\"regional-status:edaf76986d99:c00fa7ffc0a7\"],[\"까치둥지\",\"한식\",\"3\",\"rank\",\"rank_only\",\"regional-status:edaf76986d99:c00fa7ffc0a7\"]]}},\"central_attractions\":{\"__evidence_table_v1__\":{\"columns\":[\"place_name\",\"classification\",\"rank_no\",\"metric_name\",\"metric_unit\",\"source_id\"],\"rows\":[[\"뮤지엄산\",\"문화관광\",\"1\",\"rank\",\"rank_only\",\"regional-status:edaf76986d99:c00fa7ffc0a7\"],[\"오크밸리리조트/빌리지센터\",\"문화관광\",\"2\",\"rank\",\"rank_only\",\"regional-status:edaf76986d99:c00fa7ffc0a7\"],[\"원주종합버스터미널\",\"기타관광\",\"3\",\"rank\",\"rank_only\",\"regional-status:edaf76986d99:c00fa7ffc0a7\"]]}},\"paid_attractions_by_admissions\":[{\"place_name\":\"소금산그랜드밸리\",\"admissions\":\"478549\",\"source_id\":\"regional-status:edaf76986d99:c00fa7ffc0a7\"},{\"place_name\":\"HDC(골프장)\",\"admissions\":\"162728\",\"source_id\":\"regional-status:edaf76986d99:c00fa7ffc0a7\"},{\"place_name\":\"한솔뮤지엄\",\"admissions\":\"146495\",\"source_id\":\"regional-status:edaf76986d99:c00fa7ffc0a7\"}]},\"concentration_30_day_signal\":{\"available\":true,\"signal_window_start\":\"2026-09-02\",\"signal_window_end\":\"2026-10-01\",\"minimum_visit_ratio_pct\":\"22.56\",\"maximum_visit_ratio_pct\":\"98.2\",\"source_id\":\"regional-status:c39767bd23e8:e3b081f6e6aa\",\"usage\":\"향후 30일 운영 참고 신호이며, ML 예측값·정책 효과·확정 방문자 수가 아니다.\"},\"source_records\":{\"__evidence_table_v1__\":{\"columns\":[\"source_id\",\"source_name\",\"source_page_url\",\"date_range\",\"review_status\"],\"rows\":[[\"regional-status:90f2be7a0f7d:b989a6c2e7bf\",\"한국관광 데이터랩 지역별 관광 현황 · 강원특별자치도 원주시 · 유입유출\",\"https://datalab.visitkorea.or.kr/\",\"2025-07 ~ 2026-06\",\"needs_exact_download_url\"],[\"regional-status:c39767bd23e8:e3b081f6e6aa\",\"한국관광 데이터랩 지역별 관광 현황 · 강원특별자치도 원주시 · 지역집중률\",\"https://datalab.visitkorea.or.kr/\",\"향후 30일 운영 신호\",\"needs_exact_download_url\"],[\"regional-status:edaf76986d99:c00fa7ffc0a7\",\"한국관광 데이터랩 지역별 관광 현황 · 강원특별자치도 원주시 · 인기관광지\",\"https://datalab.visitkorea.or.kr/\",\"2025-07 ~ 2026-06\",\"needs_exact_download_url\"]]}},\"limitations\":[\"유입·유출 비율과 인기 순위는 관측된 기간의 분포다. 실제 방문자 수·관광소비액 또는 사업 인과효과로 바꾸지 않는다.\",\"향후 30일 집중률은 운영 참고 신호이며 ML 학습 target이나 확정 수요 예측에 사용하지 않는다.\"],\"full_detail_path\":\"/snapshot/regional_tourism_status\",\"full_detail_read_rule\":\"이 결과는 후보 비교용 상위 관측 요약이다. 세부 순위·반복 열을 인용해야 하면 read_task_section으로 full_detail_path의 필요한 하위 목록을 읽는다.\",\"tool_usage\":\"유입·유출 비율과 인기 순위는 관측 분포다. 향후 30일 집중률은 운영 참고 신호이며 ML 예측·확정 수요·정책 효과로 사용하면 안 된다.\"}},{\"tool\":\"compare_regions\",\"result\":{\"available\":true,\"scope\":\"전국에서 동일한 12개월 관측값이 검증된 지역과의 비교\",\"period\":\"2025-07 ~ 2026-06\",\"comparison_period\":\"2024-07 ~ 2025-06\",\"method\":\"standardized_euclidean_v1\",\"selected_region\":{\"region_code\":\"51130\",\"region_name\":\"강원특별자치도 원주시\",\"visitors_12m\":35521876,\"visitors_yoy_pct\":5.962258,\"domestic_spend_12m_thousand_krw\":820004210.0,\"domestic_spend_yoy_pct\":5.32308,\"spend_per_visitor_krw\":23084.48,\"overnight_ratio_avg_pct\":13.75,\"avg_stay_days\":2.8133,\"percentiles\":{\"visitors_12m\":51.5,\"spend_per_visitor_krw\":79.04,\"overnight_ratio_avg_pct\":86.23,\"avg_stay_days\":41.32}},\"peer_regions\":{\"__evidence_table_v1__\":{\"columns\":[\"rank\",\"region_code\",\"region_name\",\"distance\",\"visitors_gap_pct\",\"spend_per_visitor_gap_krw\",\"overnight_ratio_gap_pct_point\",\"gap_directions\"],\"rows\":[[1,\"51110\",\"강원특별자치도 춘천시\",0.7624,17.576504,2387.43,-1.6917,{\"visitors_gap_pct\":\"higher\",\"spend_per_visitor_gap_krw\":\"higher\",\"overnight_ratio_gap_pct_point\":\"lower\"}],[2,\"41650\",\"경기도 포천시\",0.900797,21.81174,-1601.4,3.95,{\"visitors_gap_pct\":\"higher\",\"spend_per_visitor_gap_krw\":\"lower\",\"overnight_ratio_gap_pct_point\":\"higher\"}],[3,\"47110\",\"경상북도 포항시\",1.140879,-37.88616,5879.63,2.0667,{\"visitors_gap_pct\":\"lower\",\"spend_per_visitor_gap_krw\":\"higher\",\"overnight_ratio_gap_pct_point\":\"higher\"}],[4,\"47190\",\"경상북도 구미시\",1.166492,27.772952,3575.37,3.0,{\"visitors_gap_pct\":\"higher\",\"spend_per_visitor_gap_krw\":\"higher\",\"overnight_ratio_gap_pct_point\":\"higher\"}],[5,\"47113\",\"경상북도 포항시 북구\",1.226154,10.263739,6909.24,2.7583,{\"visitors_gap_pct\":\"higher\",\"spend_per_visitor_gap_krw\":\"higher\",\"overnight_ratio_gap_pct_point\":\"higher\"}]]}},\"source_ids\":[\"datalab:16d84bd9b1d0:620b2639a268\",\"datalab:242a2c1249d4:f84e1a5f3914\",\"datalab:a050e5a84ef4:3906c6ac70a7\",\"datalab:bd9d3d26da19:991f2264ad4a\",\"datalab:d54a3fb44037:ee4640b6178b\",\"datalab:ebce91b8bf02:1770c2d94cc6\"],\"source_records\":{\"__evidence_table_v1__\":{\"columns\":[\"source_id\",\"title\",\"source_url\",\"date_range\"],\"rows\":[[\"datalab:16d84bd9b1d0:620b2639a268\",\"한국관광 데이터랩 공식 다운로드 · 강원특별자치도_원주시/숙박_체류시간/2025_01_12.zip\",\"https://datalab.visitkorea.or.kr/\",\"2025-01~2025-12\"],[\"datalab:242a2c1249d4:f84e1a5f3914\",\"한국관광 데이터랩 공식 다운로드 · 강원특별자치도_원주시/숙박_체류시간/2026_01_06.zip\",\"https://datalab.visitkorea.or.kr/\",\"2026-01~2026-06\"],[\"datalab:a050e5a84ef4:3906c6ac70a7\",\"한국관광 데이터랩 공식 다운로드 · 강원특별자치도_원주시/방문자/2025_01_12.zip\",\"https://datalab.visitkorea.or.kr/\",\"2025-01~2025-12\"],[\"datalab:bd9d3d26da19:991f2264ad4a\",\"한국관광 데이터랩 공식 다운로드 · 강원특별자치도_원주시/방문자/2026_01_06.zip\",\"https://datalab.visitkorea.or.kr/\",\"2026-01~2026-06\"],[\"datalab:d54a3fb44037:ee4640b6178b\",\"한국관광 데이터랩 공식 다운로드 · 강원특별자치도_원주시/관광소비/2026_01_06.zip\",\"https://datalab.visitkorea.or.kr/\",\"2026-01~2026-06\"],[\"datalab:ebce91b8bf02:1770c2d94cc6\",\"한국관광 데이터랩 공식 다운로드 · 강원특별자치도_원주시/관광소비/2025_01_12.zip\",\"https://datalab.visitkorea.or.kr/\",\"2025-01~2025-12\"]]}},\"metric_definitions\":{\"spend_per_visitor_krw\":{\"label\":\"관광소비/방문지표 비율\",\"population_alignment_verified\":false,\"usage\":\"서로 다른 집계표의 비율이다. 표본 일치 검증 전에는 실제 관광객 1인의 평균 결제액·객단가로 해석하지 않는다.\"}},\"limitation\":\"관측된 12개월 비교와 유사 지표 거리다. 정책 실행 효과·전국 평균·인과관계를 뜻하지 않는다. 소비/방문 비율의 분자·분모 표본 일치는 미검증이다.\",\"gap_convention\":\"선택 지역 - 비교 지역. 양수: 선택 지역이 높음. 음수: 선택 지역이 낮음.\"}},{\"tool\":\"get_nationwide_bigdata_context\",\"result\":{\"available\":true,\"scope\":\"한국관광 데이터랩 팀 제공 다운로드의 시군구 기간합계·비중 및 전국 월별 추이\",\"municipal_period_metrics\":{\"__evidence_table_v1__\":{\"columns\":[\"metric\",\"audience\",\"dataset_group\",\"period\",\"period_kind\",\"value\",\"unit\",\"share_pct\",\"source_id\"],\"rows\":[[\"visitors\",\"domestic\",\"mobile\",\"2026-01 ~ 2026-06\",\"partial_period\",17060894.0,\"명\",13.0,\"team-bigdata:23ea68053684:6bfbcf8aabf6\"],[\"visitors\",\"foreign\",\"mobile\",\"2026-01 ~ 2026-06\",\"partial_period\",180404.0,\"명\",7.6,\"team-bigdata:98d4ae590d9a:3be52dd54323\"],[\"tourism_spend\",\"domestic\",\"credit_card\",\"2026-01 ~ 2026-06\",\"partial_period\",null,\"비율\",15.5,\"team-bigdata:367cd0294ec4:873930d645e5\"],[\"tourism_spend\",\"foreign\",\"credit_card\",\"2026-01 ~ 2026-06\",\"partial_period\",null,\"비율\",9.1,\"team-bigdata:553a0dad4bb4:5a31355dffe8\"],[\"navigation_searches\",\"all\",\"navigation\",\"2026-01 ~ 2026-06\",\"partial_period\",1591158.0,\"건\",10.0,\"team-bigdata:a53dbe1c21df:77a052de41d5\"],[\"visitors\",\"domestic\",\"mobile\",\"2025-01 ~ 2025-12\",\"annual\",34872719.0,\"명\",12.6,\"team-bigdata:823a38d1d61c:5385261d02e5\"],[\"visitors\",\"foreign\",\"mobile\",\"2025-01 ~ 2025-12\",\"annual\",362184.0,\"명\",8.5,\"team-bigdata:2723bdb0d589:1666a34058ed\"],[\"tourism_spend\",\"domestic\",\"credit_card\",\"2025-01 ~ 2025-12\",\"annual\",null,\"비율\",15.3,\"team-bigdata:83177a234971:c02cb7972e0f\"],[\"tourism_spend\",\"foreign\",\"credit_card\",\"2025-01 ~ 2025-12\",\"annual\",null,\"비율\",8.3,\"team-bigdata:58ded7732251:589c76395cbc\"],[\"navigation_searches\",\"all\",\"navigation\",\"2025-01 ~ 2025-12\",\"annual\",3510828.0,\"건\",9.9,\"team-bigdata:e28c947cb52f:bb4cb344a6ba\"],[\"visitors\",\"domestic\",\"mobile\",\"2024-01 ~ 2024-12\",\"annual\",33771454.0,\"명\",12.6,\"team-bigdata:8815bbb11a39:1a5988f5f8ec\"],[\"visitors\",\"foreign\",\"mobile\",\"2024-01 ~ 2024-12\",\"annual\",304068.0,\"명\",7.5,\"team-bigdata:19fd67fbb73d:afa4f0f54a2f\"]]}},\"national_monthly_context\":{\"__evidence_table_v1__\":{\"columns\":[\"month\",\"metric\",\"audience\",\"category\",\"value\",\"unit\",\"source_id\"],\"rows\":[[\"2026-06\",\"visitors\",\"domestic\",\"전체방문자(a+b)\",1094333065.0,\"명\",\"team-bigdata:23ea68053684:6bfbcf8aabf6\"],[\"2026-06\",\"visitors\",\"domestic\",\"현지인방문자(a)\",854691887.0,\"명\",\"team-bigdata:23ea68053684:6bfbcf8aabf6\"],[\"2026-06\",\"visitors\",\"domestic\",\"외지인방문자(b)\",239641178.0,\"명\",\"team-bigdata:23ea68053684:6bfbcf8aabf6\"],[\"2026-06\",\"visitors\",\"foreign\",\"전체\",19158448.0,\"명\",\"team-bigdata:98d4ae590d9a:3be52dd54323\"],[\"2026-06\",\"tourism_spend\",\"domestic\",\"관광총소비\",14981104445.0,\"천원\",\"team-bigdata:367cd0294ec4:873930d645e5\"],[\"2026-06\",\"tourism_spend\",\"domestic\",\"일반외식업\",3675322068.0,\"천원\",\"team-bigdata:367cd0294ec4:873930d645e5\"],[\"2026-06\",\"tourism_spend\",\"domestic\",\"육상운송\",3183507787.0,\"천원\",\"team-bigdata:367cd0294ec4:873930d645e5\"],[\"2026-06\",\"tourism_spend\",\"domestic\",\"대형쇼핑몰\",2448148686.0,\"천원\",\"team-bigdata:367cd0294ec4:873930d645e5\"],[\"2026-06\",\"tourism_spend\",\"domestic\",\"기타관광쇼핑\",2246498599.0,\"천원\",\"team-bigdata:367cd0294ec4:873930d645e5\"],[\"2026-06\",\"tourism_spend\",\"domestic\",\"제과음료업\",712071944.0,\"천원\",\"team-bigdata:367cd0294ec4:873930d645e5\"]]}},\"source_records\":{\"__evidence_table_v1__\":{\"columns\":[\"source_id\",\"title\",\"source_url\",\"review_status\"],\"rows\":[[\"team-bigdata:23ea68053684:6bfbcf8aabf6\",\"한국관광 데이터랩 전국 빅데이터 다운로드 · 이동통신/내국인/지역별 방문자수/20260820140607__202601-202606_데이터랩_다운로드.zip\",\"https://datalab.visitkorea.or.kr/\",\"needs_exact_download_url\"],[\"team-bigdata:98d4ae590d9a:3be52dd54323\",\"한국관광 데이터랩 전국 빅데이터 다운로드 · 이동통신/외국인/20260820141710_전국_202601-202606_데이터랩_다운로드.zip\",\"https://datalab.visitkorea.or.kr/\",\"needs_exact_download_url\"],[\"team-bigdata:367cd0294ec4:873930d645e5\",\"한국관광 데이터랩 전국 빅데이터 다운로드 · 신용카드/내국인/지역별 관광지출액/20260820140046__202601-202606_데이터랩_다운로드.zip\",\"https://datalab.visitkorea.or.kr/\",\"needs_exact_download_url\"],[\"team-bigdata:553a0dad4bb4:5a31355dffe8\",\"한국관광 데이터랩 전국 빅데이터 다운로드 · 신용카드/외국인/지역별 관광지출액/20260820140355__202601-202606_데이터랩_다운로드.zip\",\"https://datalab.visitkorea.or.kr/\",\"needs_exact_download_url\"],[\"team-bigdata:a53dbe1c21df:77a052de41d5\",\"한국관광 데이터랩 전국 빅데이터 다운로드 · 네비게이션/지역별 검색건수/20260820195507__202601-202606_데이터랩_다운로드.zip\",\"https://datalab.visitkorea.or.kr/\",\"needs_exact_download_url\"],[\"team-bigdata:823a38d1d61c:5385261d02e5\",\"한국관광 데이터랩 전국 빅데이터 다운로드 · 이동통신/내국인/지역별 방문자수/20260820140614__202501-202512_데이터랩_다운로드.zip\",\"https://datalab.visitkorea.or.kr/\",\"needs_exact_download_url\"],[\"team-bigdata:2723bdb0d589:1666a34058ed\",\"한국관광 데이터랩 전국 빅데이터 다운로드 · 이동통신/외국인/20260820141649_전국_202501-202512_데이터랩_다운로드.zip\",\"https://datalab.visitkorea.or.kr/\",\"needs_exact_download_url\"],[\"team-bigdata:83177a234971:c02cb7972e0f\",\"한국관광 데이터랩 전국 빅데이터 다운로드 · 신용카드/내국인/지역별 관광지출액/20260820135957__202501-202512_데이터랩_다운로드.zip\",\"https://datalab.visitkorea.or.kr/\",\"needs_exact_download_url\"],[\"team-bigdata:58ded7732251:589c76395cbc\",\"한국관광 데이터랩 전국 빅데이터 다운로드 · 신용카드/외국인/지역별 관광지출액/20260820140409__202501-202512_데이터랩_다운로드.zip\",\"https://datalab.visitkorea.or.kr/\",\"needs_exact_download_url\"],[\"team-bigdata:e28c947cb52f:bb4cb344a6ba\",\"한국관광 데이터랩 전국 빅데이터 다운로드 · 네비게이션/지역별 검색건수/20260820132007__202501-202512_데이터랩_다운로드.zip\",\"https://datalab.visitkorea.or.kr/\",\"needs_exact_download_url\"],[\"team-bigdata:8815bbb11a39:1a5988f5f8ec\",\"한국관광 데이터랩 전국 빅데이터 다운로드 · 이동통신/내국인/지역별 방문자수/20260820140624__202401-202412_데이터랩_다운로드.zip\",\"https://datalab.visitkorea.or.kr/\",\"needs_exact_download_url\"],[\"team-bigdata:19fd67fbb73d:afa4f0f54a2f\",\"한국관광 데이터랩 전국 빅데이터 다운로드 · 이동통신/외국인/20260820141639_전국_202401-202412_데이터랩_다운로드.zip\",\"https://datalab.visitkorea.or.kr/\",\"needs_exact_download_url\"]]}},\"limitations\":[\"시군구 값은 월별 관측값이 아니라 해당 기간의 합계 또는 비중이다. 연간과 반기 값을 같은 기간처럼 비교하지 않는다.\",\"전국 월별 추이는 선택 지역의 실적이나 예측값이 아니다. 지역 요인·정책 효과·전국 평균으로 해석하지 않는다.\",\"다운로드 조건의 정확한 데이터랩 URL은 팀 원본에 기록되지 않아 source review_status=needs_exact_download_url이다. 원문 조건을 확인한 뒤에만 강한 근거로 승격한다.\"],\"tool_usage\":\"선택 지역의 외국인·내국인·검색 관심도 범위를 보조적으로 확인한다. 지역 월별 ML, 정책효과, 1인당 소비 추정에는 사용하지 않는다.\",\"read_rule\":\"기간합계·비중은 같은 기간/같은 정의 안에서만 보조 비교한다. 전국 월별 추이는 지역 실적·예측·정책효과로 바꾸지 않는다.\"}},{\"tool\":\"get_ml_forecast\",\"result\":{\"status\":\"available\",\"cautions\":[\"관측 사실·ML 전망·사업 목표를 분리합니다. 전망은 정책 미실행 결과나 인과효과가 아닙니다.\",\"시험 표본이 적습니다. 지표·horizon별 기준선 대비 오차를 확인하고 우수성을 일반화하지 않습니다.\",\"below_baseline_on_test 또는 mixed_recursive_performance 전망은 단독 선정 근거·성과 목표로 쓰지 않습니다. seasonal_baseline은 전년 동월 반복이며 고도화 모델의 개선 성과가 아닙니다.\",\"관광소비액은 지역 사업자의 순이익이 아닙니다. 방문자와 소비 표본이 같다는 확인 없이 1인당 소비를 계산하지 않습니다.\",\"업종별 비중 변화·SNS 언급량·쿠폰 지급 효과·사업의 추가 매출은 이 모델이 학습한 대상이 아닙니다.\",\"내비게이션·숙박 검색량은 관심 신호이며 실제 방문·예약 건수로 해석하지 않습니다.\",\"일정 미정은 현재 월 이후의 3개월·6개월 실행 후보를 비교합니다. 준비기간도 후보 기간에 포함합니다.\",\"신뢰도는 실행기간 길이가 아니라 마지막 관측월로부터의 예측 거리로 판단합니다.\",\"관측 공백 월도 내부 예측에는 포함하지만 이미 지난 달은 실행 후보의 합계에서 제외합니다.\"],\"forecasts\":{\"__evidence_table_v1__\":{\"columns\":[\"month\",\"visitors\",\"is_forecast\",\"spending_krw\",\"stay_minutes\",\"lodging_nights\",\"lodging_rate_pct\",\"lodging_searches\",\"navigation_searches\",\"visitor_yoy_percent\",\"spending_yoy_percent\",\"metric_changes_percent\",\"previous_year_visitors\",\"previous_year_spending_krw\",\"previous_year_stay_minutes\",\"previous_year_lodging_nights\",\"previous_year_lodging_rate_pct\",\"previous_year_lodging_searches\",\"previous_year_navigation_searches\"],\"rows\":[[\"202607\",2366862,true,67735223997,1944.0,2.83,13.8,46511,297924,-1.04,14.97,{\"stay_minutes\":0.0,\"lodging_nights\":0.35,\"lodging_rate_pct\":0.0,\"lodging_searches\":17.21,\"navigation_searches\":0.0},2391642,58914875000,1944.0,2.82,13.8,39682,297924],[\"202608\",2642874,true,76161639833,1672.0,2.76,14.7,49759,346177,0.13,18.85,{\"stay_minutes\":0.0,\"lodging_nights\":1.1,\"lodging_rate_pct\":0.0,\"lodging_searches\":-0.93,\"navigation_searches\":0.0},2639487,64083943000,1672.0,2.73,14.7,50224,346177],[\"202609\",2363056,true,67047345591,2518.0,2.98,13.1,34529,259153,3.0,22.29,{\"stay_minutes\":0.0,\"lodging_nights\":1.02,\"lodging_rate_pct\":0.0,\"lodging_searches\":8.97,\"navigation_searches\":0.0},2294130,54826341000,2518.0,2.95,13.1,31686,259153],[\"202610\",2633270,true,83929975649,1683.0,2.87,15.5,50011,519488,-5.94,21.43,{\"stay_minutes\":0.0,\"lodging_nights\":1.77,\"lodging_rate_pct\":0.0,\"lodging_searches\":-21.42,\"navigation_searches\":0.0},2799509,69118387000,1683.0,2.82,15.5,63645,519488],[\"202611\",2632315,true,89947681558,1488.0,2.76,12.4,48286,352852,4.18,41.26,{\"stay_minutes\":0.0,\"lodging_nights\":2.22,\"lodging_rate_pct\":0.0,\"lodging_searches\":21.22,\"navigation_searches\":0.0},2526699,63675989000,1488.0,2.7,12.4,39833,352852],[\"202612\",2098615,true,82896802464,1866.0,2.85,14.1,28484,221560,-0.06,54.2,{\"stay_minutes\":0.0,\"lodging_nights\":2.15,\"lodging_rate_pct\":0.0,\"lodging_searches\":-1.09,\"navigation_searches\":0.0},2099852,53760591000,1866.0,2.79,14.1,28798,221560],[\"202701\",2042060,true,92579612143,1936.0,2.87,13.7,26563,205632,-2.23,80.91,{\"stay_minutes\":0.0,\"lodging_nights\":1.06,\"lodging_rate_pct\":0.0,\"lodging_searches\":-0.09,\"navigation_searches\":0.0},2088569,51173582000,1936.0,2.84,13.7,26588,205632],[\"202702\",2227050,true,103534829257,1714.0,2.82,15.7,25082,210385,3.2,104.79,{\"stay_minutes\":0.0,\"lodging_nights\":0.36,\"lodging_rate_pct\":0.0,\"lodging_searches\":2.79,\"navigation_searches\":0.0},2157943,50557418000,1714.0,2.81,15.7,24402,210385]]}},\"source_id\":\"ml:51130:regional-demand-v3.1:202606\",\"evaluation\":{\"metrics\":{\"visitors\":{\"test_mae\":103646.64,\"recursive_mae\":{\"1\":{\"baseline\":123311.5,\"selected\":95222.0,\"sample_count\":2},\"2\":{\"baseline\":90511.0,\"selected\":105947.5,\"sample_count\":2},\"3\":{\"baseline\":61165.0,\"selected\":93227.0,\"sample_count\":2}},\"selected_model\":\"RandomForestRegressor\",\"baseline_test_mae\":92238.25,\"model_reliability\":\"below_baseline_on_test\",\"beats_baseline_on_test\":false,\"recursive_horizons_worse_than_baseline\":[\"2\",\"3\"]},\"spending_krw\":{\"test_mae\":8003403761.33,\"recursive_mae\":{\"1\":{\"baseline\":5076101500.0,\"selected\":7122970056.0,\"sample_count\":2},\"2\":{\"baseline\":6206652500.0,\"selected\":11322988654.0,\"sample_count\":2},\"3\":{\"baseline\":4379312000.0,\"selected\":12415950624.0,\"sample_count\":2}},\"selected_model\":\"LinearRegression\",\"baseline_test_mae\":4727706750.0,\"model_reliability\":\"below_baseline_on_test\",\"beats_baseline_on_test\":false,\"recursive_horizons_worse_than_baseline\":[\"1\",\"2\",\"3\"]},\"stay_minutes\":{\"test_mae\":208.5,\"recursive_mae\":{\"1\":{\"baseline\":107.5,\"selected\":107.5,\"sample_count\":2},\"2\":{\"baseline\":360.0,\"selected\":360.0,\"sample_count\":2},\"3\":{\"baseline\":309.5,\"selected\":309.5,\"sample_count\":2}},\"selected_model\":\"seasonal_naive_previous_year_same_month\",\"baseline_test_mae\":208.5,\"model_reliability\":\"seasonal_baseline\",\"beats_baseline_on_test\":false,\"recursive_horizons_worse_than_baseline\":[]},\"lodging_nights\":{\"test_mae\":0.1,\"recursive_mae\":{\"1\":{\"baseline\":0.06,\"selected\":0.09,\"sample_count\":2},\"2\":{\"baseline\":0.08,\"selected\":0.11,\"sample_count\":2},\"3\":{\"baseline\":0.07,\"selected\":0.11,\"sample_count\":2}},\"selected_model\":\"LinearRegression\",\"baseline_test_mae\":0.07,\"model_reliability\":\"below_baseline_on_test\",\"beats_baseline_on_test\":false,\"recursive_horizons_worse_than_baseline\":[\"1\",\"2\",\"3\"]},\"lodging_rate_pct\":{\"test_mae\":0.57,\"recursive_mae\":{\"1\":{\"baseline\":0.8,\"selected\":0.8,\"sample_count\":2},\"2\":{\"baseline\":0.3,\"selected\":0.3,\"sample_count\":2},\"3\":{\"baseline\":0.35,\"selected\":0.35,\"sample_count\":2}},\"selected_model\":\"seasonal_naive_previous_year_same_month\",\"baseline_test_mae\":0.57,\"model_reliability\":\"seasonal_baseline\",\"beats_baseline_on_test\":false,\"recursive_horizons_worse_than_baseline\":[]},\"lodging_searches\":{\"test_mae\":3695.69,\"recursive_mae\":{\"1\":{\"baseline\":2404.0,\"selected\":3550.0,\"sample_count\":2},\"2\":{\"baseline\":2584.5,\"selected\":3318.0,\"sample_count\":2},\"3\":{\"baseline\":2765.5,\"selected\":3897.5,\"sample_count\":2}},\"selected_model\":\"RandomForestRegressor\",\"baseline_test_mae\":2584.75,\"model_reliability\":\"below_baseline_on_test\",\"beats_baseline_on_test\":false,\"recursive_horizons_worse_than_baseline\":[\"1\",\"2\",\"3\"]},\"navigation_searches\":{\"test_mae\":26562.0,\"recursive_mae\":{\"1\":{\"baseline\":30053.5,\"selected\":30053.5,\"sample_count\":2},\"2\":{\"baseline\":40942.5,\"selected\":40942.5,\"sample_count\":2},\"3\":{\"baseline\":23070.5,\"selected\":23070.5,\"sample_count\":2}},\"selected_model\":\"seasonal_naive_previous_year_same_month\",\"baseline_test_mae\":26562.0,\"model_reliability\":\"seasonal_baseline\",\"beats_baseline_on_test\":false,\"recursive_horizons_worse_than_baseline\":[]}},\"test_period\":\"202603~202606\",\"selection_basis\":\"validation_mae_only\",\"validation_period\":\"202512~202602\",\"longer_horizon_status\":\"exploratory_not_recursively_backtested\",\"forecast_horizon_months\":8,\"recursive_backtest_horizon_months\":[1,2,3]},\"reason_code\":\"\",\"region_code\":\"51130\",\"region_name\":\"강원특별자치도 원주시\",\"forecast_type\":\"historical_trend_not_policy_counterfactual\",\"model_version\":\"regional-demand-v3.1\",\"source_period\":\"202401~202606\",\"horizon_policy\":{\"notes\":[\"일정 미정은 현재 월 이후의 3개월·6개월 실행 후보를 비교합니다. 준비기간도 후보 기간에 포함합니다.\",\"신뢰도는 실행기간 길이가 아니라 마지막 관측월로부터의 예측 거리로 판단합니다.\",\"관측 공백 월도 내부 예측에는 포함하지만 이미 지난 달은 실행 후보의 합계에서 제외합니다.\"],\"as_of_date\":\"2026-09-07\",\"schedule_status\":\"unknown\",\"selection_basis\":\"unknown_compare_3_and_6_months\",\"decision_windows\":[{\"label\":\"3개월 실행 후보\",\"months\":3,\"end_month\":\"202611\",\"reliability\":\"exploratory_longer_horizon\",\"start_month\":\"202609\",\"forecast_end_index\":4,\"forecast_start_index\":2},{\"label\":\"6개월 실행 후보\",\"months\":6,\"end_month\":\"202702\",\"reliability\":\"exploratory_longer_horizon\",\"start_month\":\"202609\",\"forecast_end_index\":7,\"forecast_start_index\":2}],\"coverage_complete\":true,\"forecast_end_month\":\"202702\",\"requested_end_month\":\"\",\"forecast_start_month\":\"202607\",\"requested_start_month\":\"\",\"forecast_horizon_months\":8,\"strategy_duration_max_months\":6,\"strategy_duration_min_months\":3,\"validated_recursive_horizon_months\":3},\"data_fingerprint\":\"1f7caf31818b53f22347c7318503ea14cbef8a3765f5b75b8191fe8ca2193349\",\"latest_observed_month\":\"202606\",\"additional_sections\":{\"signals\":\"/snapshot/ml_analysis/signals\",\"research_questions\":\"/snapshot/ml_analysis/research_questions\"}}},{\"tool\":\"get_case_comparison_matrix\",\"result\":{\"rows\":{\"__evidence_table_v1__\":{\"columns\":[\"source_id\",\"mechanism_family\",\"case_region\",\"retrieval_context\",\"intervention\",\"problem_addressed\",\"operating_model_excerpt\",\"operating_model_truncated\",\"evidence_strength\",\"observed_result_excerpt\",\"observed_result_truncated\",\"transfer_condition_count\",\"risk_count\"],\"rows\":[[\"case:jeonju_night_budget_2026\",\"night_time_experience\",\"전북특별자치도 전주시\",{},\"야간관광 특화도시 예산 편성\",\"야간 콘텐츠와 관광여건을 지속 운영할 예산 구조 마련\",\"사무관리, 행사운영, 연구용역, 민간경상보조 등으로 사업비를 항목별 편성\",false,\"high\",\"예산서이므로 방문·소비 성과는 확인되지 않음\",false,3,2],[\"case:gangjin_half_price_2024\",\"spend_conversion\",\"전라남도 강진군\",{},\"반값여행 지역환급\",\"방문객 지출을 지역 안의 결제와 재방문으로 연결\",\"여행자가 지역에서 지출한 비용의 일부를 지역상품권으로 돌려받게 하여 혜택이 다시 지역 상점에서 사용되도록 설계\",false,\"low\",\"상품권 결제 변화에 관한 소개 자료는 있으나, 사업 참여자 범위·정확한 비교 기간·원자료를 확인하지 못해 성과 수치 인용을 보류한다.\",false,3,2],[\"case:digital_tourism_resident_2024\",\"return_visit\",\"전국 인구감소지역 34곳\",{},\"디지털 관광주민증과 교통·숙박·상점 할인 결합\",\"한 번의 방문을 숙박·식음·체험·지역상점 이용으로 연결\",\"디지털 관광주민증 참여업체 현장 인증과 숙박·식음·관람·체험 할인, 특정 시간대 KTX 할인과 방문 후 교통 할인권을 결합\",false,\"medium\",\"2024년 34개 지역 약 800개 관광업체에 혜택 구조를 적용\",false,3,2],[\"case:kto_stay_discount_2022\",\"stay_conversion\",\"전국 숙박할인쿠폰 지원사업\",{},\"온라인 예약 채널 숙박할인쿠폰\",\"비수기 국내여행 수요와 지역 숙박 전환 촉진\",\"온라인 여행사 예약 단계에서 할인쿠폰을 제공하고, 지역 숙소에서 사용할 수 있도록 참여 채널과 기간을 통합 운영\",false,\"medium\",\"한국관광공사 자료는 약 104만 명이 할인혜택을 이용했고 서울·제주를 제외한 지역 사용 비율이 76%였다고 소개함\",false,3,2],[\"case:night_festival_2025\",\"night_time_experience\",\"야간관광 특화도시 10곳\",{},\"도시별 야간 콘텐츠를 순회형 축제로 묶는 운영\",\"낮 시간대 중심 방문을 저녁 체류·지역상점 이용으로 확장\",\"10개 야간관광 특화도시의 대표 장소와 시간대를 연결하고, 공연·체험·지역 디저트·판매상품 등 도시별 콘텐츠를 순회 일정으로 운영\",false,\"medium\",\"공식 여행기사는 개최 도시·장소·운영 시간과 콘텐츠만 제시하며 방문·소비 성과 수치는 제시하지 않음\",false,3,2],[\"case:night_tourism_cities_2024\",\"night_time_experience\",\"야간관광 특화도시 10곳\",{},\"상설 야간 콘텐츠와 경관·교통·안전 운영\",\"당일 방문을 저녁 체류와 지역소비로 전환\",\"지역 스토리를 반영한 야간 프로그램을 상설·행사형으로 운영하고 야간 경관, 이동, 식음, 안전 여건을 함께 구성\",false,\"medium\",\"정부업무평가 자료는 특화도시 10곳 방문객이 2023년 같은 기간보다 3% 증가했다고 기록\",false,3,2]]}},\"citation_rule\":\"이 표는 비교용 요약이다. source_id를 최종 인용하려면 read_collected_source로 해당 원문을 읽어야 한다.\"}},{\"tool\":\"read_collected_source\",\"result\":{\"source_id\":\"case:jeonju_night_budget_2026\",\"source\":{\"title\":\"전주시 2026년도 관광산업과 세출예산 사업명세서\",\"summary\":\"전북특별자치도 전주시 · 야간관광 특화도시 예산 편성 · 예산서이므로 방문·소비 성과는 확인되지 않음\",\"source_id\":\"case:jeonju_night_budget_2026\",\"source_url\":\"https://jeonju.go.kr/resource/www/images/download/budget/2026/2026_31_2.pdf\",\"source_type\":\"benchmark_case\",\"evidence_strength\":\"high\",\"published_or_updated_at\":\"2026\",\"quantitative_result_approved\":null},\"case\":{\"source_id\":\"case:jeonju_night_budget_2026\",\"region_code\":\"ALL\",\"region_name\":\"전국 공통 사례\",\"case_region\":\"전북특별자치도 전주시\",\"intervention\":\"야간관광 특화도시 예산 편성\",\"problem_addressed\":\"야간 콘텐츠와 관광여건을 지속 운영할 예산 구조 마련\",\"target_group\":\"전주 야간관광 방문객과 참여 사업자\",\"operating_model\":\"사무관리, 행사운영, 연구용역, 민간경상보조 등으로 사업비를 항목별 편성\",\"duration\":\"2026년 본예산\",\"public_budget\":\"총 10억 원: 사무관리·행사운영·연구용역·민간경상보조 등 세부 편성\",\"observed_result\":\"예산서이므로 방문·소비 성과는 확인되지 않음\",\"measurement_period\":\"2026년 예산\",\"evidence_strength\":\"high\",\"quantitative_result_approved\":null,\"transfer_conditions\":[\"국비·도비·시비 분담 가능성 검토\",\"행사비와 상설운영비를 분리 산정\",\"성과평가 비용을 별도 항목으로 확보\"],\"risks\":[\"예산 규모만 복제하면 지역 수요와 맞지 않을 수 있음\",\"시설·행사 집행액이 관광소비 증가를 보장하지 않음\"],\"source_title\":\"전주시 2026년도 관광산업과 세출예산 사업명세서\",\"source_url\":\"https://jeonju.go.kr/resource/www/images/download/budget/2026/2026_31_2.pdf\",\"published_or_updated_at\":\"2026\"}}},{\"tool\":\"read_collected_source\",\"result\":{\"source_id\":\"case:gangjin_half_price_2024\",\"source\":{\"title\":\"강진 반값여행 지역경제 효과 소개\",\"summary\":\"전라남도 강진군 · 반값여행 지역환급 · 상품권 결제 변화에 관한 소개 자료는 있으나, 사업 참여자 범위·정확한 비교 기간·원자료를 확인하지 못해 성과 수치 인용을 보류한다.\",\"source_id\":\"case:gangjin_half_price_2024\",\"source_url\":\"https://jnfarm.jeonnam.go.kr/board/FARM_BOARD_008/boardView.do?bdId=BD_00000000000011721&menuCd=farm004002\",\"source_type\":\"benchmark_case\",\"evidence_strength\":\"low\",\"published_or_updated_at\":\"2025-01-02\",\"quantitative_result_approved\":false},\"case\":{\"source_id\":\"case:gangjin_half_price_2024\",\"region_code\":\"ALL\",\"region_name\":\"전국 공통 사례\",\"case_region\":\"전라남도 강진군\",\"intervention\":\"반값여행 지역환급\",\"problem_addressed\":\"방문객 지출을 지역 안의 결제와 재방문으로 연결\",\"target_group\":\"강진을 여행하며 정해진 조건을 충족한 방문객\",\"operating_model\":\"여행자가 지역에서 지출한 비용의 일부를 지역상품권으로 돌려받게 하여 혜택이 다시 지역 상점에서 사용되도록 설계\",\"duration\":\"2024년 사업\",\"public_budget\":\"공식 자료에서 총사업비 확인 필요\",\"observed_result\":\"상품권 결제 변화에 관한 소개 자료는 있으나, 사업 참여자 범위·정확한 비교 기간·원자료를 확인하지 못해 성과 수치 인용을 보류한다.\",\"measurement_period\":\"게시일과 사업 측정기간은 다르며, 비교기간과 집계범위 원자료 확인 필요\",\"evidence_strength\":\"low\",\"quantitative_result_approved\":false,\"transfer_conditions\":[\"지역상품권 사용처와 관광업체 참여 기준 필요\",\"여행 지출 증빙과 중복수혜 방지 절차 필요\",\"지원금보다 추가 지역소비가 큰지 사후 측정 필요\"],\"risks\":[\"사업 참여자 증가와 지역 전체 소비 증가를 같은 인과효과로 단정할 수 없음\",\"환급이 기존 방문객에게만 지급되면 순증 효과가 작을 수 있음\"],\"source_title\":\"강진 반값여행 지역경제 효과 소개\",\"source_url\":\"https://jnfarm.jeonnam.go.kr/board/FARM_BOARD_008/boardView.do?bdId=BD_00000000000011721&menuCd=farm004002\",\"published_or_updated_at\":\"2025-01-02\"}}}]"
+      },
+      {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "id": "call_9y3k2n33",
+            "function": {
+              "index": 0,
+              "name": "get_planning_decision",
+              "arguments": {}
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_name": "get_planning_decision",
+        "content": "{\"selected_candidate\":null,\"candidate_index\":[],\"additional_sections\":{}}"
+      },
+      {
+        "role": "user",
+        "content": "검수 카드 중 가장 전이 가능한 두 사례를 비교해 원주 시범 방향 하나, 임시 예산, 관리 가능한 발전 목표 두 개만 설계하라."
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "compared_case_ids": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "string"
+          }
+        },
+        "case_comparison": {
+          "type": "string",
+          "maxLength": 700
+        },
+        "wonju_pilot": {
+          "type": "string",
+          "maxLength": 700
+        },
+        "operating_flow": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "actor": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "action": {
+                "type": "string",
+                "maxLength": 250
+              },
+              "record": {
+                "type": "string",
+                "maxLength": 150
+              }
+            },
+            "required": [
+              "actor",
+              "action",
+              "record"
+            ]
+          }
+        },
+        "budget": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "estimate_label": {
+              "const": "temporary_planning_estimate"
+            },
+            "volume_assumption": {
+              "type": "string",
+              "maxLength": 250
+            },
+            "items": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 4,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "quantity": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  },
+                  "unit": {
+                    "type": "string"
+                  },
+                  "assumed_unit_price_krw": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "subtotal_krw": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "basis_and_limit": {
+                    "type": "string",
+                    "maxLength": 180
+                  }
+                },
+                "required": [
+                  "name",
+                  "quantity",
+                  "unit",
+                  "assumed_unit_price_krw",
+                  "subtotal_krw",
+                  "basis_and_limit"
+                ]
+              }
+            },
+            "total_krw": {
+              "type": "number",
+              "minimum": 0
+            },
+            "excluded_costs": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 3,
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "estimate_label",
+            "volume_assumption",
+            "items",
+            "total_krw",
+            "excluded_costs"
+          ]
+        },
+        "development_potential": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "current_baseline": {
+                "type": "string"
+              },
+              "pilot_target": {
+                "type": "string"
+              },
+              "calculation": {
+                "type": "string"
+              },
+              "data_record": {
+                "type": "string"
+              },
+              "interpretation_limit": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "current_baseline",
+              "pilot_target",
+              "calculation",
+              "data_record",
+              "interpretation_limit"
+            ]
+          }
+        },
+        "why_this_can_develop_wonju_tourism": {
+          "type": "string",
+          "maxLength": 700
+        },
+        "limits": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "title",
+        "compared_case_ids",
+        "case_comparison",
+        "wonju_pilot",
+        "operating_flow",
+        "budget",
+        "development_potential",
+        "why_this_can_develop_wonju_tourism",
+        "limits"
+      ]
+    },
+    "max_output_tokens": 3600
+  },
+  "request_sha256": "1f730ac0d747bc8e83920297f69862f34e120b132691985228d807e3501c9560",
+  "parent_request_sha256": "9271601f46105352ab0d06e64866ba4c0d2888568cc248aeeeb188b366846b92",
+  "status": "failed",
+  "report_approved": false,
+  "think": false,
+  "temperature": 0.15,
+  "example": null,
+  "context_length": 40960,
+  "timeout_seconds": 420.0,
+  "content": "{\n  \"title\": \"야간 콘텐츠 확장 및 지역소비 유도 시범 사업\",\n  \"compared_case_ids\": [\"case:night_festival_2025\", \"case:gangjin_half_price_2024\"],\n  \"case_comparison\": \"야간 콘텐츠 확장(전주시 야간 축제 운영)과 지역소비 유도(강진 반값여행) 두 사례를 비교하여, 원주에서 야간 콘텐츠와 지역소비 유도를 결합한 시범 사업을 설계함. 야간 콘텐츠는 방문객의 체류 시간을 늘리고, 지역소비 유도는 지역 내 지출을 촉진하여 관광소비를 증대시킬 수 있음.\",\n  \"wonju_pilot\": \"야간 콘텐츠 확장 및 지역소비 유도 시범 사업\",\n  \"operating_flow\": [\n    {\n      \"actor\": \"시 관광진흥원\",\n      \"action\": \"야간 콘텐츠 운영 계획 수립 및 지역 내 참여 업체 확보\",\n      \"record\": \"2025-07\"\n    },\n    {\n      \"actor\": \"시 관광진흥원\",\n      \"action\": \"야간 콘텐츠 운영 및 지역소비 유도 프로그램 운영\",\n      \"record\": \"2025-08 ~ 2026-06\"\n    },\n    {\n      \"actor\": \"참여 업체\",\n      \"action\": \"야간 콘텐츠 및 지역소비 유도 프로그램 참여\",\n      \"record\": \"2025-08 ~ 2026-06\"\n    },\n    {\n      \"actor\": \"시 관광진흥원\",\n      \"action\": \"야간 콘텐츠 운영 및 지역소비 유도 프로그램 성과 분석\",\n      \"record\": \"2026-07\"\n    }\n  ],\n  \"budget\": {\n    \"estimate_label\": \"temporary_planning_estimate\",\n    \"volume_assumption\": \"야간 콘텐츠 운영 10개소, 지역소비 유도 프로그램 참여 업체 50개소\",\n    \"items\": [\n      {\n        \"name\": \"야간 콘텐츠 운영비\",\n        \"quantity\": 10,\n        \"unit\": \"개소\",\n        \"assumed_unit_price_krw\": 1000000,\n        \"subtotal_krw\": 10000000,\n        \"basis_and_limit\": \"야간 콘텐츠 운영에 필요한 기본 비용\"\n      },\n      {\n        \"name\": \"지역소비 유도 프로그램 운영비\",\n        \"quantity\": 50,\n        \"unit\": \"개소\",\n        \"assumed_unit_price_krw\": 500000,\n        \"subtotal_krw\": 25000000,\n        \"basis_and_limit\": \"지역소비 유도 프로그램 운영에 필요한 기본 비용\"\n      },\n      {\n        \"name\": \"기타 비용\",\n        \"quantity\": 1,\n        \"unit\": \"건\",\n        \"assumed_unit_price_krw\": 5000000,\n        \"subtotal_krw\": 5000000,\n        \"basis_and_limit\": \"기타 비용\"\n      }\n    ],\n    \"total_krw\": 40000000,\n    \"excluded_costs\": [\n      \"야간 콘텐츠 운영에 필요한 추가 비용\",\n      \"지역소비 유도 프로그램 운영에 필요한 추가 비용\"\n    ]\n  },\n  \"development_potential\": [\n    {\n      \"name\": \"야간 콘텐츠 운영 참여 업체 수\",\n      \"current_baseline\": \"0\",\n      \"pilot_target\": \"10\",\n      \"calculation\": \"야간 콘텐츠 운영 참여 업체 수\",\n      \"data_record\": \"시 관광진흥원\",\n      \"interpretation_limit\": \"야간 콘텐츠 운영 참여 업체 수는 시 관광진흥원에서 관리함\"\n    },\n    {\n      \"name\": \"지역소비 유도 프로그램 이용완료 건수\",\n      \"current_baseline\": \"0\",\n      \"pilot_target\": \"100\",\n      \"calculation\": \"지역소비 유도 프로그램 이용완료 건수\",\n      \"data_record\": \"시 관광진흥원\",\n      \"interpretation_limit\": \"지역소비 유도 프로그램 이용완료 건수는 시 관광진흥원에서 관리함\"\n    }\n  ],\n  \"why_this_can_develop_wonju_tourism\": \"야간 콘텐츠 운영과 지역소비 유도 프로그램을 결합하여, 원주의 야간 콘텐츠와 지역소비를 증대시킬 수 있음. 야간 콘텐츠 운영은 방문객의 체류 시간을 늘리고, 지역소비 유도 프로그램은 지역 내 지출을 촉진하여 관광소비를 증대시킬 수 있음.\",\n  \"limits\": [\n    \"야간 콘텐츠 운영 참여 업체 수는 시 관광진흥원에서 관리함\",\n    \"지역소비 유도 프로그램 이용완료 건수는 시 관광진흥원에서 관리함\"\n  ]\n}",
+  "usage": {
+    "input_tokens": 15727,
+    "output_tokens": 1261,
+    "total_tokens": 16988
+  },
+  "error_code": "ValidationError",
+  "duration_ms": 73506
+}

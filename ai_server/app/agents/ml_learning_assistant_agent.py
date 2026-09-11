@@ -94,6 +94,12 @@ class MlLearningAssistantAgent:
         history: list[dict[str, str]],
     ) -> dict[str, Any]:
         """선택 지역의 실제 카탈로그와 최근 대화만 사용해 구조화된 답변을 만듭니다."""
+        # 화면용 긴 단계 설명 7벌은 반복 전송하지 않습니다. 지표별 활용과 표시 위치는 유지합니다.
+        learning_region = {**learning_region, 'modules': [
+            {**module, 'strategy_usage': {key: value for key, value in (module.get('strategy_usage') or {}).items()
+                                         if key not in {'steps', 'tree'}}}
+            for module in learning_region.get('modules', [])
+        ]}
         return await create_structured_response(
             api_key=self.api_key,
             model=self.model,

@@ -30,6 +30,30 @@ METRIC_LABELS = {
 }
 
 
+def saved_budget_view(report: dict[str, Any]) -> dict[str, Any]:
+    """Render the saved narrative, never substitute a document-only pilot budget.
+
+    A declared total is a transcription, not verification of its arithmetic.
+    Operators and amounts in the original formula remain unchanged.
+    """
+    strategy = (report.get('strategies') or [{}])[0]
+    raw = str(strategy.get('budget') or '').strip()
+    matches = re.findall(r'총\s*((?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?\s*(?:억\s*원|만\s*원|원))', raw)
+    totals = list(dict.fromkeys(matches))
+    total_label = '총 ' + totals[0] if len(totals) == 1 else '총액 미확정'
+    parts = [part.strip() for part in re.split(r'[\n;；]+', raw) if part.strip()]
+    # Bounded row count without throwing away text or interpreting '+' as a separator.
+    if len(parts) > 6:
+        parts = parts[:5] + ['; '.join(parts[5:])]
+    return {
+        'status': 'saved_report_budget', 'total_label': total_label,
+        'rows': [[f'산정 내역 {index}', part, '본문 기준'] for index, part in enumerate(parts, 1)]
+                or [['예산 산정', '저장 기획안에 예산 산식이 없습니다.', '미정']],
+        'original_text': raw, 'sources': [],
+        'note': '저장 기획안의 예산 산정 내용을 그대로 표시합니다. 확정 견적이 아니며 계약 전 수량·단가·세금과 합계를 확인합니다.',
+    }
+
+
 def build_reference_estimate(report: dict[str, Any]) -> dict[str, Any]:
     """Explicit quantity×allowance pilot estimate, scaled to the selected period.
 
@@ -44,9 +68,17 @@ def build_reference_estimate(report: dict[str, Any]) -> dict[str, Any]:
     duration_match = re.search(r'(\d+)\s*개월', str(strategy.get('timeframe') or ''))
     months = len(rows) or (int(duration_match[1]) if duration_match else 3)
     months = max(1, min(6, months))
-    quantity = round(1000 * months / 3)
+    from .proposal_presentation_v4 import _scenario_for_display
+    scenario, _ = _scenario_for_display(report)
+    additional = (sum(scenario['target_visitors']) - sum(scenario['baseline_visitors'])
+                  if scenario and scenario.get('has_target') else 0)
+    # Participation is a disclosed planning allocation, not estimated causal conversion.
+    quantity = math.ceil(max(0, additional) * .01) if additional > 0 else round(1000 * months / 3)
+    scale_basis = (f'사업기간 추가 방문 목표 {additional:,.0f}명 × 시범 담당 비중 1% → {quantity:,}건(올림). '
+                   '1%는 직접 운영할 참여량 배분 가정이며 전환율 예측이 아닙니다.' if additional > 0 else
+                   '기준 참여량 1,000건 × 운영 개월/3의 초기 운영 가정.')
     unit = 50_000 if refund else 10_000
-    staff_days = 20 * months  # two part-time field staff, ten days/month
+    staff_days = max(20 * months, math.ceil(quantity / 25))  # 25 cases per staff day: planning assumption
     fixed = staff_days * 150_000 + 8_000_000 + 5_000_000 + 3_000_000
     brief = report.get('planning_brief') or {}
     hard_limit = brief.get('budget_max_krw') if brief.get('budget_hard_limit') else None
@@ -57,7 +89,7 @@ def build_reference_estimate(report: dict[str, Any]) -> dict[str, Any]:
     reserve = math.ceil(subtotal * .10)
     total = subtotal + reserve
     return {
-        'version': 'reference-estimate-v1', 'status': 'planning_assumption_not_quote',
+        'version': 'reference-estimate-v2', 'scale_basis': scale_basis, 'additional_visitors_target': additional, 'pilot_share_pct': 1, 'status': 'planning_assumption_not_quote',
         'months': months, 'refund': refund, 'quantity': quantity, 'unit_krw': unit,
         'redemption_target_pct': 80, 'redemption_count': math.floor(quantity * .8),
         'qualifying_spend_krw': quantity * 100_000 if refund else None,
@@ -65,7 +97,7 @@ def build_reference_estimate(report: dict[str, Any]) -> dict[str, Any]:
         'within_hard_budget': hard_limit is None or total <= float(hard_limit),
         'items': [
             {'name': '여행비 환급 지원' if refund else '참여 혜택', 'basis': f'{quantity:,}건 × {unit:,}원', 'amount': benefits},
-            {'name': '현장 운영·정산', 'basis': f'{staff_days}인일 × 150,000원', 'amount': staff_days * 150_000},
+            {'name': '현장 운영·정산', 'basis': f'max(월 20인일 × {months}, {quantity:,}건 ÷ 25건/인일 올림) = {staff_days}인일 × 150,000원', 'amount': staff_days * 150_000},
             {'name': '신청·증빙 시스템', 'basis': '기존 시스템 설정 1식 × 800만원', 'amount': 8_000_000},
             {'name': '홍보·참여처 안내', 'basis': '콘텐츠·안내물 1식 × 500만원', 'amount': 5_000_000},
             {'name': '성과 집계·검토', 'basis': '자료 정리·평가 1식 × 300만원', 'amount': 3_000_000},

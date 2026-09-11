@@ -1,0 +1,32 @@
+..................F...........C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\joblib\numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  array.shape = self.shape
+...C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\joblib\numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  array.shape = self.shape
+.C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\joblib\numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  array.shape = self.shape
+.C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\joblib\numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  array.shape = self.shape
+.C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\joblib\numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  array.shape = self.shape
+C:\Users\Admin\mbca\TP2-3\backend\.venv\Lib\site-packages\joblib\numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+  array.shape = self.shape
+....
+======================================================================
+FAIL: test_estimate_and_provenance_do_not_invent_missing_facts (ai_server.test_proposal_presentation_v3_contract.ProposalPresentationV4ContractTest.test_estimate_and_provenance_do_not_invent_missing_facts)
+���� ������ Ȯ�� ������ �����ϰ� ��û��� AI �˼� ������ �����մϴ�.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Admin\mbca\TP2-3\ai_server\test_proposal_presentation_v3_contract.py", line 311, in test_estimate_and_provenance_do_not_invent_missing_facts
+    self.assertIn('Ȯ�� ������ �ƴϸ�', estimate_text)
+AssertionError: 'Ȯ�� ������ �ƴϸ�' not found in '����\n�ù� � ���� �ݾ�\n�� 3,850�� ��\n������ �ܰ��� ������ �ӽ� ���� �����̸� Ȯ�� ������ �ƴմϴ�. ���� ��� ���������ݡ��ܰ� Ȯ�� �� �����մϴ�.'
+
+----------------------------------------------------------------------
+Ran 40 tests in 17.737s
+
+FAILED (failures=1)

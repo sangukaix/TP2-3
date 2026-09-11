@@ -391,7 +391,8 @@ class ReportOrchestratorTest(unittest.IsolatedAsyncioTestCase):
         table_text = '\n'.join(cell.text for table in proposal.tables for row in table.rows for cell in row.cells)
 
         self.assertIn('ML 자연추세와 사업 목표', text)
-        self.assertIn('저장 모델의 자연추세 전망', table_text)
+        self.assertIn('+5%', table_text)
+        self.assertIn('기획 가정', text)
         self.assertNotIn('추가 관광소비', table_text)
 
 

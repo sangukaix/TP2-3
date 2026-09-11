@@ -5,6 +5,7 @@ import {
   ClipboardList,
 } from 'lucide-react'
 import logo from '../assets/logo.png'
+import { resolveAppRoute } from '../routes'
 
 const menuItems = [
   { href: '/dashboard', label: '지역선택', icon: LayoutDashboard },
@@ -19,10 +20,14 @@ const seoulBackgroundPaths = new Set(['/dashboard', '/planning', '/strategy', '/
  * 입찰·결제 메뉴는 제거하고 관광 분석 업무 흐름만 남겼습니다.
  */
 export default function WorkspaceShell({ children }) {
+
   const currentPath = window.location.pathname
   const pageClassName = seoulBackgroundPaths.has(currentPath)
     ? 'workspace-shell oligo-seoul-page'
     : 'workspace-shell'
+
+  const currentPath = resolveAppRoute(window.location.pathname).canonicalPath
+
   const topbarLabel = currentPath === '/dashboard'
     ? '1. 희망 지역을 선택해주세요'
     : currentPath === '/planning'
@@ -39,6 +44,8 @@ export default function WorkspaceShell({ children }) {
                 ? 'React · Vite 구조'
                 : currentPath === '/llm-control'
                   ? 'AI Router · LLM Control Center'
+                : currentPath === '/project-tree'
+                    ? '발표용 프로젝트 구조 지도'
           : '지역관광 전략 업무공간'
 
   return (

@@ -18,6 +18,28 @@ class ReportStub:
 
 
 class GenerationSafetyTests(unittest.IsolatedAsyncioTestCase):
+    async def test_missing_openai_key_does_not_preblock_local_orchestration(self):
+        request = main.ReportRequest(region_name='서울특별시 강남구')
+        with (patch.dict(main.ENV_VALUES, {'OPENAI_API_KEY': ''}),
+              patch.object(main, '_raise_if_strategy_generation_is_stale'),
+              patch.object(main, 'orchestrate_strategy_report', new=AsyncMock(side_effect=RuntimeError('router-called')))):
+            with self.assertRaisesRegex(RuntimeError, 'router-called'):
+                await main.generate_orchestrated_report('11680', request, snapshot={'region_name': request.region_name})
+
+    async def test_completed_job_without_saved_report_becomes_retryable_failure(self):
+        stored = {
+            'region_code': '11680', 'region_name': '서울특별시 강남구',
+            'status': 'completed', 'message': '완료', 'error': '',
+        }
+        with (patch.object(main, 'STRATEGY_REPORT_JOBS', {}),
+              patch.object(main, 'read_strategy_job', return_value=stored),
+              patch.object(main, 'read_strategy_report', return_value=None),
+              patch.object(main, '_persist_job_state_best_effort') as persist):
+            result = await main.read_region_strategy_report_job('11680', 'missing-report')
+        self.assertEqual(result.status, 'failed')
+        self.assertIn('다시 생성', result.error)
+        persist.assert_called_once()
+
     def test_no_implicit_growth_target(self):
         with self.assertRaises(ValidationError):
             main.ExecutionScenario.model_validate({})

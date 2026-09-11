@@ -26,7 +26,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { downloadAiStrategyPresentation, downloadAiStrategyProposal, getAiRegionDashboard, getAiRegionOpenApiInfo, getSidoBoundaries, getSigunguBoundaries } from '../api/dashboardApi'
+import { downloadAiStrategyPresentation, downloadAiStrategyProposal, getAiRegionDashboard, getAiRegionOpenApiInfo, getSidoBoundaries, getSigunguBoundaries, getRegionReadinessAudit } from '../api/dashboardApi'
 import TourismAssistant from '../components/TourismAssistant'
 import WorkspaceShell from '../components/WorkspaceShell'
 import '../App.css'
@@ -703,6 +703,15 @@ function DashboardApp() {
   // 이 값은 화면에 표시하지 않고 API 요청 효과를 다시 실행하는 용도로만 사용합니다.
   const [dashboardRefreshTick, setDashboardRefreshTick] = useState(0)
   const [regionSearch, setRegionSearch] = useState('')
+  const [readinessAudit, setReadinessAudit] = useState({ regions: [] })
+  useEffect(() => {
+    let active = true
+    const refresh = () => getRegionReadinessAudit().then((data) => { if (active) setReadinessAudit(data) }).catch(() => { if (active) setReadinessAudit({ regions: [] }) })
+    refresh()
+    const timer = window.setInterval(refresh, 60000)
+    return () => { active = false; window.clearInterval(timer) }
+  }, [])
+  const auditedRegion = readinessAudit.regions.find((r) => r.region_code === selectedCode)
   const [regionSearchMessage, setRegionSearchMessage] = useState('')
   const [isRegionInfoVisible, setIsRegionInfoVisible] = useState(false)
   const [regionInfo, setRegionInfo] = useState(null)
@@ -1071,13 +1080,15 @@ function DashboardApp() {
                   <span>시군구</span>
                   <select
                     disabled={!selectedSidoCode}
+                    style={{ color: auditedRegion?.generation_ready ? '#15803d' : undefined }}
+                    title="초록색: 자료 점검과 현재 로컬 모델 연결 통과. 생성 중 응답 성공 보장은 아닙니다."
                     value={sigunguInSelectedSido.some((feature) => feature.properties.region_code === selectedCode) ? selectedCode : ''}
                     onChange={(event) => selectSigungu(event.target.value)}
                   >
                     <option value="">시군구 전체</option>
                     {sigunguInSelectedSido.map((feature) => (
-                      <option key={feature.properties.region_code} value={feature.properties.region_code}>
-                        {feature.properties.display_name ?? feature.properties.region_name}
+                      <option key={feature.properties.region_code} value={feature.properties.region_code} style={{ color: readinessAudit.regions.some((r) => r.region_code === feature.properties.region_code && r.generation_ready) ? '#15803d' : undefined }}>
+                        {feature.properties.display_name ?? feature.properties.region_name}{readinessAudit.regions.some((r) => r.region_code === feature.properties.region_code && r.generation_ready) ? ' · 준비됨' : ' · 확인 필요'}
                       </option>
                     ))}
                   </select>
@@ -1087,6 +1098,10 @@ function DashboardApp() {
                   {(sidoBoundaries?.features ?? []).map((feature) => <option key={feature.properties.region_code} value={feature.properties.region_name} />)}
                   {(sigunguBoundaries?.features ?? []).map((feature) => <option key={feature.properties.region_code} value={feature.properties.region_name} />)}
                 </datalist>
+                <p className="map-region-search-message" role="status">
+                  초록색: 자료 점검·로컬 연결 통과. 그 외: 미점검 또는 준비 확인 필요(조회 가능). 생성 중 연결·응답 실패는 발생할 수 있습니다.
+                  {auditedRegion ? ` 선택 지역: ${auditedRegion.generation_ready ? '자료 준비됨' : auditedRegion.data_ready ? '자료 준비됨 · 로컬 연결 확인 필요' : '자료 확인 필요'}` : ' 선택 지역: 미점검 또는 점검 결과 만료'} {readinessAudit.local_model_message || ''}
+                </p>
                 {regionSearchMessage && <p className="map-region-search-message" role="status">{regionSearchMessage}</p>}
               </div>
               <div className="map-frame">

@@ -67,6 +67,33 @@ def _weak_ml_effect_issue(snapshot: dict[str, Any], strategy: dict[str, Any], pr
     return None
 
 
+def _unapproved_case_result_issues(evidence_pack: dict[str, Any], strategy: dict[str, Any], prefix: str) -> list[dict[str, str]]:
+    """정량 성과 사용이 보류된 사례의 증가율·실적을 본문에 되살리지 못하게 합니다."""
+    issues: list[dict[str, str]] = []
+    performance_pattern = re.compile(
+        r'(?:\d[\d,.]*\s*(?:%|배|억\s*원|만\s*원|명|건).{0,100}(?:증가|감소|성과|효과|달성|매출|소비)|'
+        r'(?:증가|감소|성과|효과|달성|매출|소비).{0,100}\d[\d,.]*\s*(?:%|배|억\s*원|만\s*원|명|건))',
+        re.S,
+    )
+    for field in ('comparison_analysis', 'expected_effect'):
+        text = str(strategy.get(field) or '')
+        if not performance_pattern.search(text):
+            continue
+        for case in evidence_pack.get('benchmark_cases') or []:
+            if case.get('quantitative_result_approved') is not False:
+                continue
+            region = str(case.get('case_region') or '').strip()
+            aliases = {region, re.split(r'\s+', region)[-1]} if region else set()
+            if any(alias and alias in text for alias in aliases):
+                issues.append(_issue(
+                    'major', f'{prefix}.{field}.unapproved_case_result',
+                    '정량 성과 인용이 보류된 타지역 사례의 실적·증가율을 본문에 사용했습니다.',
+                    '해당 수치는 삭제하고 사례에서는 이용 절차·운영 장치만 비교하세요. 발전 가능성은 선택 지역 시범의 대상 수×완료율×건별 측정값과 미운영 비교로 제시하세요.',
+                ))
+                break
+    return issues
+
+
 def build_plan_quality_precheck(evidence_pack: dict[str, Any], draft_report: dict[str, Any], *, limit: int | None = 8) -> dict[str, Any]:
     """출처·집행 단계·운영 방식·예산·KPI의 최소 실무 요건을 점검합니다.
 
@@ -174,6 +201,7 @@ def build_plan_quality_precheck(evidence_pack: dict[str, Any], draft_report: dic
 
         if evidence_pack.get('quality_contract_version') == QUALITY_CONTRACT_VERSION:
             issues.extend(execution_delivery_issues(strategy, prefix))
+            issues.extend(_unapproved_case_result_issues(evidence_pack, strategy, prefix))
             weak_ml_issue = _weak_ml_effect_issue(evidence_pack.get('snapshot') or {}, strategy, prefix)
             if weak_ml_issue:
                 issues.append(weak_ml_issue)
@@ -183,7 +211,7 @@ def build_plan_quality_precheck(evidence_pack: dict[str, Any], draft_report: dic
     return {'checked': True, 'issues': ranked if limit is None else ranked[:limit], 'issue_count': len(ranked)}
 
 
-def merge_quality_precheck(review: dict[str, Any], precheck: dict[str, Any]) -> dict[str, Any]:
+def merge_quality_precheck(review: dict[str, Any], precheck: dict[str, Any], *, limit: int | None = 8) -> dict[str, Any]:
     """결정적 오류를 Reviewer 결과에 합쳐, 승인 상태가 코드 규칙을 우회하지 못하게 합니다."""
     merged = dict(review)
     existing = list(merged.get('issues') or [])
@@ -199,7 +227,9 @@ def merge_quality_precheck(review: dict[str, Any], precheck: dict[str, Any]) -> 
     if any(issue['severity'] in {'critical', 'major'} for issue in deterministic_issues):
         merged['approved'] = False
         merged['overall_score'] = min(int(merged.get('overall_score') or 0), 81)
-        merged['summary'] = f"{merged.get('summary') or '검토 필요'} · 코드 점검에서 실행·근거 보완 항목이 확인되었습니다."
+        notice = '코드 점검에서 실행·근거 보완 항목이 확인되었습니다.'
+        if notice not in str(merged.get('summary') or ''):
+            merged['summary'] = f"{merged.get('summary') or '검토 필요'} · {notice}"
 
     # 프롬프트에만 있던 82점 규칙을 코드에서도 강제합니다. 모델이 approved=true를
     # 잘못 반환해도 점수가 낮거나 critical 이슈가 있으면 최종 통과할 수 없습니다.
@@ -215,5 +245,6 @@ def merge_quality_precheck(review: dict[str, Any], precheck: dict[str, Any]) -> 
             ))
     if any(str(issue.get('severity')) in {'critical', 'major'} for issue in existing):
         merged['approved'] = False
-    merged['issues'] = _rank_issues(existing)[:8]
+    ranked = _rank_issues(existing)
+    merged['issues'] = ranked if limit is None else ranked[:limit]
     return merged

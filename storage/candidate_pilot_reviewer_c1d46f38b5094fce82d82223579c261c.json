@@ -1,0 +1,97 @@
+{
+  "status": "failed",
+  "report_approved": false,
+  "request": {
+    "model": "qwen3:14b",
+    "messages": [
+      {
+        "role": "system",
+        "content": "타지역 사례 기반 원주 시범 기획의 독립 검토자다.\n서버 계약과 Gemma 본문을 비교한다. 타지역 성과를 원주 효과로 복사하거나 확인되지 않은 장소·기관·협약·시스템을 확정하면 승인하지 않는다.\n예산은 평가용 임시 추정이어도 허용하며 정확한 공식 견적을 요구하지 않는다. 다만 총액·가정 상태가 사라지거나 확정 예산으로 바뀌면 지적한다.\n발전 가능성은 유효 이용완료100건과 결제액 원장 등 시범 관리 목표로 평가한다. 지역 전체 방문·소비 증가 보장을 요구하지 않는다.\n실제 예약·결제 시스템 구축이 확인되지 않았으므로 원장/간단 접수 절차 제안과 시스템 구축 완료를 구분한다.\n형식 통과보다 실제 문장과 실행 가능성을 검토한다. blocking issue가 하나라도 있으면 approved=false다. 지정 JSON만 반환한다."
+      },
+      {
+        "role": "user",
+        "content": "{\"gemma_draft\": {\"strategy_title\": \"야간관광 콘텐츠 운영 모델 검토 및 원주 시범 계약 검토 보고\", \"case_comparison\": \"타지역(야간관광 특화도시 10곳)의 사례는 상설 야간 콘텐츠와 경관·교통·안전 운영을 결합하여 당일 방문객을 저녁 체류 및 지역 소비로 전환하는 모델을 보여줍니다. 특히 '밤밤페스타'와 같이 도시별 콘텐츠를 연결하는 운영 방식은 지역 상점 참여와 야간 이용 여건(식음·교통·안전)의 통합 설계가 핵심입니다. 원주 시범안은 이러한 타지역의 '콘텐츠-운영 인프라-지역 상점 연결' 구조를 벤치마킹하여, 원주 특화 콘텐츠를 기반으로 한 운영 모델의 실효성을 검증하고자 합니다.\", \"wonju_development_path\": \"본 시범은 확정 사업이 아닌 운영 역량 구축을 위한 검토 단계이며, 다음과 같은 단계로 진행될 예정입니다. [사례 검토 및 운영 설계] → [참여업체 모집 및 예약 시스템 구축] → [10일간의 시범 운영 및 이용 확인] → [취소·중복 데이터 제거 및 최종 평가] 순으로 실행하여 지속 가능한 운영 모델을 모색합니다.\", \"execution_steps\": [{\"phase\": \"사례 검토 및 운영 설계\", \"action\": \"타지역 운영 모델(콘텐츠+안전·교통·식음) 분석 및 원주 특화 콘텐츠 연계 설계\", \"deliverable\": \"운영 계획안 및 참여업체 협의\"}, {\"phase\": \"모집 및 예약\", \"action\": \"참여업체 모집 및 이용자 대상 시범 콘텐츠 예약·결제 시스템 가동\", \"deliverable\": \"예약 데이터 및 참여업체 리스트\"}, {\"phase\": \"10일 운영 및 확인\", \"action\": \"시범 운영 기간 내 콘텐츠 제공 및 이용 완료 시각·상태 기록\", \"deliverable\": \"실시간 이용 현황 기록\"}, {\"phase\": \"취소·중복 제거 및 평가\", \"action\": \"취소 및 중복 예약 데이터를 제외한 유효 이용자 수 및 결제액 집계\", \"deliverable\": \"유효 이용 완료 데이터 및 성과 분석 보고\"}], \"temporary_budget_note\": \"본 예산안은 시범 운영 검토를 위한 임시 추정 총액이며, 공식적인 견적이나 확정된 예산이 아님을 알려드립니다.\", \"measurement_note\": \"설정된 '이용완료 100건'은 시범 운영의 관리 목표치이며, 이를 통해 원주시 전체의 방문객 수나 지역 전체의 소비 증가를 보장하는 것은 아닙니다.\", \"source_ids\": [\"case:night_tourism_cities_2024\", \"case:night_festival_2025\"], \"limitations\": [\"시범 기간 및 규모에 따라 성과가 달라질 수 있음\", \"야간 프로그램이 지역 정체성과 맞지 않으면 재방문 동기가 약해질 수 있음\"]}, \"server_owned_contract\": {\"budget\": {\"estimate_label\": \"temporary_planning_estimate\", \"volume_assumption\": \"평가용 가정: 콘텐츠 2개 × 10일, 참여업체 5개, 유효 이용완료 100건\", \"items\": [{\"name\": \"콘텐츠 회차 운영\", \"quantity\": 20, \"unit\": \"콘텐츠·일\", \"assumed_unit_price_krw\": 500000, \"subtotal_krw\": 10000000, \"basis_and_limit\": \"평가용 가정 단가이며 공식 견적·확정 예산이 아님\"}, {\"name\": \"야간 안전·이동 보조\", \"quantity\": 10, \"unit\": \"운영일\", \"assumed_unit_price_krw\": 300000, \"subtotal_krw\": 3000000, \"basis_and_limit\": \"평가용 가정 단가이며 공식 견적·확정 예산이 아님\"}, {\"name\": \"참여업체 운영 준비\", \"quantity\": 5, \"unit\": \"업체\", \"assumed_unit_price_krw\": 500000, \"subtotal_krw\": 2500000, \"basis_and_limit\": \"평가용 가정 단가이며 공식 견적·확정 예산이 아님\"}, {\"name\": \"예약·결제·측정 원장 설계/정리\", \"quantity\": 1, \"unit\": \"식\", \"assumed_unit_price_krw\": 2000000, \"subtotal_krw\": 2000000, \"basis_and_limit\": \"평가용 가정 단가이며 공식 견적·확정 예산이 아님\"}], \"total_krw\": 17500000, \"excluded_costs\": [\"시설 임차·신규 설비\", \"대규모 광고\", \"교통기관 할인 협약 비용\"]}, \"development_potential\": [{\"name\": \"유효 이용완료율\", \"current_baseline\": \"미확인-시범 전 조사\", \"pilot_target\": \"유효 이용완료 100건; 완료율은 승인 예약 분모 확보 후 산출\", \"numerator\": \"취소·중복을 제외한 이용완료 ID 수\", \"denominator\": \"승인된 예약 ID 수\", \"calculation\": \"유효 이용완료 ID/승인 예약 ID×100\", \"data_record_fields\": [\"예약ID\", \"외지인 확인 상태\", \"결제ID\", \"이용완료 시각\", \"취소 상태\", \"중복 판정\"], \"comparison\": \"콘텐츠·운영일별 승인 예약 대비 유효 이용완료와 이탈을 비교\", \"interpretation_limit\": \"시범 참여자의 운영 전환 지표이며 원주시 전체 방문 증가나 인과효과가 아님\"}, {\"name\": \"유효 참여자의 야간 연계 결제액\", \"current_baseline\": \"미확인-시범 전 조사\", \"pilot_target\": \"금액 목표 미확정; 시범의 취소 제외 유효 결제액을 최초 기준으로 확보\", \"numerator\": \"유효 이용완료 ID에 연결된 허용업체 결제액 합계\", \"denominator\": \"사용하지 않음-금액 합계 지표\", \"calculation\": \"취소 결제 제외 금액 합계\", \"data_record_fields\": [\"예약ID\", \"업체ID\", \"결제ID\", \"결제시각\", \"결제금액\", \"취소금액\", \"중복 판정\"], \"comparison\": \"콘텐츠·운영일·업체별 유효 결제액을 함께 비교\", \"interpretation_limit\": \"참여자의 관측 결제액이며 지역 전체 순증 소비나 정책 인과효과가 아님\"}]}}"
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "approved": {
+          "type": "boolean"
+        },
+        "strengths": {
+          "type": "array",
+          "maxItems": 5,
+          "items": {
+            "type": "string"
+          }
+        },
+        "blocking_issues": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "field": {
+                "type": "string"
+              },
+              "issue": {
+                "type": "string"
+              },
+              "required_correction": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "field",
+              "issue",
+              "required_correction"
+            ]
+          }
+        },
+        "contract_checks": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "case_ids_preserved": {
+              "type": "boolean"
+            },
+            "temporary_budget_preserved": {
+              "type": "boolean"
+            },
+            "pilot_target_preserved": {
+              "type": "boolean"
+            },
+            "no_unsupported_effect_claim": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "case_ids_preserved",
+            "temporary_budget_preserved",
+            "pilot_target_preserved",
+            "no_unsupported_effect_claim"
+          ]
+        },
+        "next_action": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "approved",
+        "strengths",
+        "blocking_issues",
+        "contract_checks",
+        "next_action"
+      ]
+    },
+    "max_output_tokens": 2600
+  },
+  "request_sha256": "6f3f36b7cdda10f220263aa089f8236e3df34bb5afa54b686df156c67aa86238",
+  "source_planner_artifact": "storage/candidate_pilot_planner_6917d3fa759f47f09efc378c7f1db45b.json",
+  "error_code": "OLLAMA_CONNECTION_ERROR",
+  "usage": {},
+  "duration_ms": 136
+}

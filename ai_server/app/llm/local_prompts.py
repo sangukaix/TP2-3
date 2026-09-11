@@ -50,6 +50,10 @@ LOCAL_ROLES = {
 access_and_mobility, experience_product 중 하나로 쓰고 중복하지 않는다. 먼저 서로 다른 유형의 공식 사례를
 두 건 읽은 뒤 후보를 만든다. 먼저 get_case_comparison_matrix로 운영 원리·제약을 비교하고, 선택한 유형과
 관련 없는 사례는 제목만 보고 근거로 쓰지 않는다.
+quality_review_feedback가 있으면 이전 transfer_assessment를 그대로 반환하지 않는다.
+지적된 field와 연결된 strategy_brief를 함께 수정한다. source_id는 제공된 ID를 그대로 복사한다.
+target_users와 pilot_scope는 선택 지역의 대상·운영 범위다. 원 사례 지자체를 복사하지 않는다.
+예산 편성 자료는 비용 참고자료다. 방문객의 이용·예약·결제를 바꾸는 사업 후보로 변형할 근거가 없으면 선정하지 않는다.
 """,
     'planner': """
 역할: Gemma 실행기획자. 적용성 평가와 그 근거를 읽고 선택된 후보를 하나의 실행안으로 만든다.

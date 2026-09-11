@@ -22,7 +22,7 @@ from pptx.enum.chart import XL_LEGEND_POSITION
 from pptx.enum.text import PP_ALIGN
 
 from .presentation_theme import download_images, select_image_sources
-from .report_projection import execution_target, select_report_forecast, target_series
+from .report_projection import execution_target, select_report_forecast, target_series, visitor_linked_spending
 from .report_review_status import review_label
 
 
@@ -344,12 +344,20 @@ def _scenario_rows(report: dict[str, Any]) -> dict[str, Any] | None:
     baseline_spending = [_as_float(item.get('spending_krw')) for item in forecasts]
     target_visitors = target_series(baseline_visitors, visitor_target_pct)
     target_spending = target_series(baseline_spending, spending_target_pct)
+    linked = visitor_linked_spending(baseline_visitors, baseline_spending, target_visitors)
+    # 별도로 입력한 소비 목표는 보존합니다. 같은 목표율은 방문 증가분으로 산출합니다.
+    linked_mode = has_target and visitor_target_pct == spending_target_pct and all(
+        value is not None for value in linked['targets'])
+    if linked_mode:
+        target_spending = linked['targets']
     return {
         'categories': [_month_label(item.get('month')) for item in forecasts],
         'baseline_visitors': baseline_visitors,
         'baseline_spending': baseline_spending,
         'target_visitors': target_visitors,
         'target_spending': target_spending,
+        'spending_per_visit_proxy': linked['ratios'],
+        'spending_calculation': 'visitor_linked' if linked_mode else 'independent_target',
         'visitor_target_pct': visitor_target_pct,
         'spending_target_pct': spending_target_pct,
         'visitor_gap': sum(target_visitors) - sum(baseline_visitors),

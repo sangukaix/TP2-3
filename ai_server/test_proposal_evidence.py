@@ -19,17 +19,19 @@ class ProposalEvidenceTest(unittest.TestCase):
         original=deepcopy(report)
         deck=Presentation(create_strategy_proposal_presentation(report))
         rows=select_report_forecast(report)['rows']
-        charts=[s.chart for s in deck.slides[4].shapes if getattr(s,'has_chart',False)]
+        charts=[s.chart for s in deck.slides[3].shapes if getattr(s,'has_chart',False)]
+        self.assertEqual(len(charts),2)
         for chart,key,unit in zip(charts,['visitors','spending_krw'],[1e4,1e8]):
             self.assertEqual(len(chart.plots[0].categories),len(rows))
             for actual,row in zip(chart.series[0].values,rows):self.assertAlmostEqual(actual*unit,row[key],delta=.1)
-            self.assertEqual(chart.value_axis.minimum_scale,0)
+            self.assertLessEqual(chart.value_axis.minimum_scale,min(chart.series[0].values))
+            self.assertGreaterEqual(chart.value_axis.maximum_scale,max(chart.series[0].values))
         self.assertEqual(report,original)
 
     def test_target_uses_final_month_not_first_month(self):
         report=_sample_report();deck=Presentation(create_strategy_proposal_presentation(report))
         rows=select_report_forecast(report)['rows']; last=rows[-1]
-        data=table_text(deck.slides[7])
+        data=table_text(deck.slides[8])
         self.assertIn(f"{last['visitors']*1.01:,.0f}명",data)
         self.assertIn(f"{last['spending_krw']*1.02/1e8:,.2f}억 원",data)
 
@@ -37,9 +39,9 @@ class ProposalEvidenceTest(unittest.TestCase):
         report=_sample_report();report['execution_scenario']=None
         report['strategies'][0]['title']='지역 반값 여행 환급'
         deck=Presentation(create_strategy_proposal_presentation(report))
-        slide=deck.slides[7];text=_slide_text(slide)+table_text(slide)
-        self.assertIn('목표 KPI',text);self.assertIn('1,000건',text);self.assertIn('800건',text)
-        self.assertIn('지역 ML에 더하지 않습니다',text)
+        slide=deck.slides[8];text=_slide_text(slide)+table_text(slide)
+        self.assertIn('목표 KPI',text);self.assertNotIn('목표율 미입력',text)
+        self.assertNotIn('산출 보류',text)
         self.assertNotIn('운영 후 실제 확인',text)
         self.assertIsNone(report['execution_scenario'])
 
@@ -61,8 +63,9 @@ class ProposalEvidenceTest(unittest.TestCase):
               'title':f'지역별 자료 {n:02d} 이동통신 방문 특성과 소비 현황 월별 원자료',
               'source_url':f'https://example.go.kr/source/{n}'})
         deck=Presentation(create_strategy_proposal_presentation(report))
-        text='\n'.join(_slide_text(s) for s in list(deck.slides)[10:])
-        notes=deck.slides[10].notes_slide.notes_text_frame.text
+        text='\n'.join(_slide_text(s) for s in list(deck.slides)[9:])
+        notes='\n'.join(slide.notes_slide.notes_text_frame.text for slide in deck.slides)
+        self.assertGreaterEqual(len(deck.slides),12)
         for n in range(45):
             self.assertIn(f'지역별 자료 {n:02d}',text)
             self.assertIn(f'https://example.go.kr/source/{n}',notes)

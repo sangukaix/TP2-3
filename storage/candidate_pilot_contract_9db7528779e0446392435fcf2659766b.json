@@ -1,0 +1,274 @@
+{
+  "request": {
+    "model": "qwen3:14b",
+    "messages": [
+      {
+        "role": "system",
+        "content": "검수 사례 카드와 평가용 시범 조건을 서울특별시 강남구 관광 시범안 JSON으로 조립한다.\n조건에 없는 장소·기관·효과를 추가하지 않는다. 타지역 결과는 비교 근거이며 서울특별시 강남구 성과 예측이 아니다.\n지역 관측은 사업 필요성 확정이 아니라 적용 방향과 시범에서 더 확인할 범위를 설명하는 데만 쓴다.\nregional_context에서 dataset ID 하나 이상과 관광지/관광자원 ID 하나 이상을 정확히 골라 regional_evidence_source_ids에 쓴다.\n관광지·관광자원 정보는 등록명·주소·순위만 뒷받침한다. 운영시간·참여협약·야간 프로그램은 확인된 사실처럼 쓰지 않는다.\ncase_application은 두 사례 각각의 적용 장치, 지역에 맞게 바꿀 점, 제외하거나 미확인인 점, 시범으로 확인할 발전 범위를 분리한다.\n사례 요약 카드의 detail_level이 saved_official_source_summary이면 요약에 없는 이용절차·수치·인과효과를 보충하지 않는다.\n운영 흐름에는 준비, 방문객 예약·결제, 이용완료 확인, 취소·중복 제거 집계를 각각 한 단계로 쓴다.\nbudget_contract의 수량·단가·소계를 그대로 쓰고 임시 추정임을 유지한다. 제외 비용을 확정 예산에 포함했다고 말하지 않는다.\nmeasurement_contract의 분자·분모·계산·원장 필드를 그대로 구체화한다. 이용완료와 야간 결제액은 시범 운영량이며 지역 전체 방문·소비 순증이 아니다.\n발전 가능성은 이 시범으로 구축·검증할 수 있는 운영 역량과 규모로 설명한다. 지정 JSON만 반환한다."
+      },
+      {
+        "role": "user",
+        "content": "{\"case_cards\": [{\"source_id\": \"case:night_tourism_cities_2024\", \"region_code\": \"ALL\", \"region_name\": \"전국 공통 사례\", \"case_region\": \"야간관광 특화도시 10곳\", \"intervention\": \"상설 야간 콘텐츠와 경관·교통·안전 운영\", \"problem_addressed\": \"당일 방문을 저녁 체류와 지역소비로 전환\", \"target_group\": \"주간 방문 후 체류 가능한 국내외 관광객\", \"operating_model\": \"지역 스토리를 반영한 야간 프로그램을 상설·행사형으로 운영하고 야간 경관, 이동, 식음, 안전 여건을 함께 구성\", \"duration\": \"2024년 평가 대상 사업\", \"public_budget\": \"지역별 예산은 각 지자체 예산·결산서에서 확인 필요\", \"observed_result\": \"정부업무평가 자료는 특화도시 10곳 방문객이 2023년 같은 기간보다 3% 증가했다고 기록\", \"measurement_period\": \"2023년 동기 대비 2024년 사업 평가 기간\", \"evidence_strength\": \"medium\", \"quantitative_result_approved\": null, \"transfer_conditions\": [\"야간에 실제 이용 가능한 식음·교통·안전 운영 필요\", \"일회성 행사보다 상설 운영일 확보\", \"숙박 또는 야간 결제 데이터로 성과 측정\"], \"risks\": [\"전년 대비 증가는 다른 계절·행사 효과를 포함할 수 있음\", \"경관 시설만 조성하고 운영 콘텐츠가 없으면 체류 전환이 약할 수 있음\"], \"source_title\": \"2024년도 정부업무평가 관광분야 성과자료\", \"source_url\": \"https://www.evaluation.go.kr/upload2/atch/eval/20250429095846463.pdf\", \"published_or_updated_at\": \"2025-04-29\"}, {\"source_id\": \"case:2c54c6aaf2117a\", \"detail_level\": \"saved_official_source_summary\", \"source_title\": \"6월부터 밤마다 인천으로—올 나이츠 인천 고도화\", \"summary\": \"인천광역시 송도·월미도·개항장 · 올 나이츠 인천: 야시장·야간마켓·공연·상권쿠폰·시티투어·바 호핑 결합 · 인천시는 2022년 11월~2023년 사업을 통해 관광객 29만2,034명, 지역소비 220억 원, 간접일자리 751명을 성과로 제시했다. 캔들라이트 콘서트에는 850명이 참여했다고 밝혔다. 산정 방법과 대조군이 공개되지 않아 순증 또는 인과효과로 해석할 수 없다. ([incheon.go.kr](https://www.incheon.go.kr/IC010205/view?curPage=233&repSeq=DOM_0000000010085993))\", \"source_url\": \"https://www.incheon.go.kr/IC010205/view?curPage=233&repSeq=DOM_0000000010085993\", \"published_or_updated_at\": \"2024-06-11\", \"evidence_strength\": \"medium\", \"use_limit\": \"저장된 공식 출처 요약 범위만 사용하며 세부 절차·성과 산식은 추가 확인 대상으로 둔다.\"}], \"regional_context\": {\"region_code\": \"11680\", \"region_name\": \"서울특별시 강남구\", \"observation_period\": \"2025-08 ~ 2026-07\", \"observed_metrics\": [{\"claim\": \"월간 순 방문자 수: 17,963,441명 (관측 기준월: 2026-07)\", \"period\": \"2026-07\", \"source_id\": \"dataset:11680:1\"}, {\"claim\": \"전년동월 외지인 방문자 증감률: -8.3% (관측 기준월: 2026-07)\", \"period\": \"2026-07\", \"source_id\": \"dataset:11680:2\"}, {\"claim\": \"월간 외지인 관광소비 총액: 481,986,415,000원 (관측 기준월: 2026-07)\", \"period\": \"2026-07\", \"source_id\": \"dataset:11680:3\"}, {\"claim\": \"외지인 숙박 방문 비율: 3.1% (관측 기준월: 2026-07)\", \"period\": \"2026-07\", \"source_id\": \"dataset:11680:4\"}, {\"claim\": \"외지인 평균 숙박일수: 2.91일 (관측 기준월: 2026-07)\", \"period\": \"2026-07\", \"source_id\": \"dataset:11680:5\"}, {\"claim\": \"내비게이션 목적지 검색량: 773,380건 (관측 기준월: 2026-07)\", \"period\": \"2026-07\", \"source_id\": \"dataset:11680:6\"}, {\"claim\": \"SNS 언급량: 310,482건 (관측 기준월: 2026-06)\", \"period\": \"2026-06\", \"source_id\": \"dataset:11680:7\"}], \"popular_places\": [{\"name\": \"수서역\", \"classification\": \"교통시설\", \"rank\": \"1\", \"source_id\": \"regional-status:61118189b5d7:c3aa16a77cf7\"}, {\"name\": \"코엑스\", \"classification\": \"전시시설\", \"rank\": \"2\", \"source_id\": \"regional-status:61118189b5d7:c3aa16a77cf7\"}, {\"name\": \"현대백화점압구정본점\", \"classification\": \"백화점\", \"rank\": \"3\", \"source_id\": \"regional-status:61118189b5d7:c3aa16a77cf7\"}], \"registered_tourism_resources\": [{\"name\": \"강남\", \"address\": \"서울특별시 강남구 압구정로 161 (압구정동)\", \"content_type_id\": \"12\", \"source_id\": \"tour-api:264570\"}, {\"name\": \"강남 마이스 관광특구\", \"address\": \"서울특별시 강남구 영동대로 513 (삼성동)\", \"content_type_id\": \"12\", \"source_id\": \"tour-api:2456536\"}, {\"name\": \"강남 미디어 윈터페스타\", \"address\": \"서울특별시 강남구 영동대로 511 (삼성동)\", \"content_type_id\": \"15\", \"source_id\": \"tour-api:3439947\"}, {\"name\": \"강남스테이힐(Gangnam Stay Hill)\", \"address\": \"서울특별시 강남구 테헤란로13길 65\", \"content_type_id\": \"32\", \"source_id\": \"tour-api:2574118\"}, {\"name\": \"갤러리 마노\", \"address\": \"서울특별시 강남구 압구정로46길 71\", \"content_type_id\": \"14\", \"source_id\": \"tour-api:130581\"}, {\"name\": \"갤러리 서림\", \"address\": \"서울특별시 강남구 학동로 523\", \"content_type_id\": \"14\", \"source_id\": \"tour-api:129927\"}], \"interpretation_limit\": \"관측값은 사업 필요성·인과효과를 확정하지 않는다. 인기 순위와 관광자원은 등록명·분류·주소만 확인하며, 시범 참여·야간 운영·예약 가능 여부는 별도 확인할 제안 조건이다.\"}, \"pilot_contract\": {\"region_name\": \"서울특별시 강남구\", \"status\": \"evaluation_assumptions_not_confirmed_budget\", \"scope\": {\"contents\": 2, \"operating_days\": 10, \"participating_businesses\": 5, \"target_valid_completions\": 100}, \"budget_contract\": [{\"name\": \"콘텐츠 회차 운영\", \"quantity\": 20, \"unit\": \"콘텐츠·일\", \"assumed_unit_price_krw\": 500000, \"subtotal_krw\": 10000000}, {\"name\": \"야간 안전·이동 보조\", \"quantity\": 10, \"unit\": \"운영일\", \"assumed_unit_price_krw\": 300000, \"subtotal_krw\": 3000000}, {\"name\": \"참여업체 운영 준비\", \"quantity\": 5, \"unit\": \"업체\", \"assumed_unit_price_krw\": 500000, \"subtotal_krw\": 2500000}, {\"name\": \"예약·결제·측정 원장 설계/정리\", \"quantity\": 1, \"unit\": \"식\", \"assumed_unit_price_krw\": 2000000, \"subtotal_krw\": 2000000}], \"budget_total_krw\": 17500000, \"excluded_costs\": [\"시설 임차·신규 설비\", \"대규모 광고\", \"교통기관 할인 협약 비용\"], \"measurement_contract\": [{\"name\": \"유효 이용완료율\", \"numerator\": \"취소·중복을 제외한 이용완료 ID 수\", \"denominator\": \"승인된 예약 ID 수\", \"calculation\": \"유효 이용완료 ID/승인 예약 ID×100\", \"data_record\": \"예약ID, 외지인 확인 상태, 결제ID, 이용완료 시각, 취소 상태, 중복 판정\"}, {\"name\": \"유효 참여자의 야간 연계 결제액\", \"numerator\": \"유효 이용완료 ID에 연결된 허용업체 결제액 합계\", \"denominator\": \"사용하지 않음-금액 합계 지표\", \"calculation\": \"취소 결제 제외 금액 합계\", \"data_record\": \"예약ID, 업체ID, 결제ID, 결제시각, 결제금액, 취소금액, 중복 판정\"}]}}"
+      }
+    ],
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "compared_case_ids": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "string"
+          }
+        },
+        "case_comparison": {
+          "type": "string",
+          "maxLength": 700
+        },
+        "operating_flow": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "actor": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "action": {
+                "type": "string",
+                "maxLength": 250
+              },
+              "record": {
+                "type": "string",
+                "maxLength": 150
+              }
+            },
+            "required": [
+              "actor",
+              "action",
+              "record"
+            ]
+          }
+        },
+        "budget": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "estimate_label": {
+              "const": "temporary_planning_estimate"
+            },
+            "volume_assumption": {
+              "type": "string",
+              "maxLength": 250
+            },
+            "items": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 4,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "quantity": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  },
+                  "unit": {
+                    "type": "string"
+                  },
+                  "assumed_unit_price_krw": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "subtotal_krw": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "basis_and_limit": {
+                    "type": "string",
+                    "maxLength": 180
+                  }
+                },
+                "required": [
+                  "name",
+                  "quantity",
+                  "unit",
+                  "assumed_unit_price_krw",
+                  "subtotal_krw",
+                  "basis_and_limit"
+                ]
+              }
+            },
+            "total_krw": {
+              "type": "number",
+              "minimum": 0
+            },
+            "excluded_costs": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 3,
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "estimate_label",
+            "volume_assumption",
+            "items",
+            "total_krw",
+            "excluded_costs"
+          ]
+        },
+        "development_potential": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "current_baseline": {
+                "type": "string"
+              },
+              "pilot_target": {
+                "type": "string"
+              },
+              "numerator": {
+                "type": "string"
+              },
+              "denominator": {
+                "type": "string"
+              },
+              "calculation": {
+                "type": "string"
+              },
+              "data_record_fields": {
+                "type": "array",
+                "minItems": 4,
+                "maxItems": 8,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "comparison": {
+                "type": "string"
+              },
+              "interpretation_limit": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "current_baseline",
+              "pilot_target",
+              "numerator",
+              "denominator",
+              "calculation",
+              "data_record_fields",
+              "comparison",
+              "interpretation_limit"
+            ]
+          }
+        },
+        "limits": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {
+            "type": "string"
+          }
+        },
+        "regional_pilot": {
+          "type": "string",
+          "maxLength": 700
+        },
+        "why_this_can_develop_region_tourism": {
+          "type": "string",
+          "maxLength": 700
+        },
+        "regional_evidence_source_ids": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "case_application": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "source_id": {
+                "type": "string"
+              },
+              "mechanism_to_apply": {
+                "type": "string"
+              },
+              "regional_change": {
+                "type": "string"
+              },
+              "excluded_or_unverified": {
+                "type": "string"
+              },
+              "pilot_learning": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "source_id",
+              "mechanism_to_apply",
+              "regional_change",
+              "excluded_or_unverified",
+              "pilot_learning"
+            ]
+          }
+        }
+      },
+      "required": [
+        "title",
+        "compared_case_ids",
+        "case_comparison",
+        "operating_flow",
+        "budget",
+        "development_potential",
+        "limits",
+        "regional_pilot",
+        "why_this_can_develop_region_tourism",
+        "regional_evidence_source_ids",
+        "case_application"
+      ]
+    },
+    "max_output_tokens": 3000
+  },
+  "request_sha256": "efe4b7087479db3cf32921dd4454d3bb35af7caf4853a911cdf413d8cc61e72b",
+  "parent_request_sha256": "44e08dcb5a15d36328e0fdad1fb2df3a09570d4f9cab22239d9f9039d20d1600",
+  "status": "prepared",
+  "region_name": "서울특별시 강남구",
+  "report_approved": false,
+  "think": false,
+  "temperature": 0.15,
+  "example": null,
+  "context_length": 40960,
+  "timeout_seconds": 420.0
+}

@@ -1,0 +1,67 @@
+{
+  "issues": [
+    {
+      "severity": "major",
+      "field": "planning_decision.design_candidates[1].stop_or_scale_rule",
+      "problem": "후보의 성공·중단 수치에 근거나 가정 표시가 없습니다.",
+      "revision_instruction": "근거 없는 문턱값을 확정하지 말고 출처·산출 방법 또는 가정 목표와 착수 전 확정 절차를 쓰세요."
+    },
+    {
+      "severity": "major",
+      "field": "planning_decision.design_candidates[1].local_fit",
+      "problem": "후보의 지역 적합성에 선택 지역/전국 비교 지표가 연결되지 않았습니다.",
+      "revision_instruction": "get_region_metrics/compare_regions의 실제 지표·기간으로 local_fit을 보완하고 해당 source_id를 evidence_source_ids에 연결하세요. 사례 효과를 지역 근거로 대신 쓰지 마세요."
+    },
+    {
+      "severity": "major",
+      "field": "planning_decision.design_candidates[1].measurement_plan",
+      "problem": "후보 측정 설계 누락: 분자·분모 또는 금액 합계 정의",
+      "revision_instruction": "지표 정의, 기준기간, 주기, 원자료, 같은 범위의 비교집단을 짧게 명시하세요. 없는 자료는 수집 담당·확보 시점을 쓰세요."
+    },
+    {
+      "severity": "major",
+      "field": "planning_decision.design_candidates[2].candidate_type",
+      "problem": "허용된 사업 후보 유형이 아닙니다.",
+      "revision_instruction": "사례 비교용 분류를 복사하지 말고 실제 운영 원리에 맞는 spend_conversion, stay_conversion, reservation_conversion, return_visit, access_and_mobility, experience_product 중 하나를 사용하세요."
+    },
+    {
+      "severity": "major",
+      "field": "planning_decision.design_candidates[2].stop_or_scale_rule",
+      "problem": "후보의 성공·중단 수치에 근거나 가정 표시가 없습니다.",
+      "revision_instruction": "근거 없는 문턱값을 확정하지 말고 출처·산출 방법 또는 가정 목표와 착수 전 확정 절차를 쓰세요."
+    },
+    {
+      "severity": "major",
+      "field": "planning_decision.design_candidates[2].title",
+      "problem": "후보 제목이 예산 편성만 설명하고 실제 관광사업을 설명하지 않습니다.",
+      "revision_instruction": "예산은 산식에만 두고, 방문객의 이용·예약·결제·체험 중 무엇을 어떻게 바꾸는 사업인지 제목과 mechanism을 고치세요."
+    },
+    {
+      "severity": "major",
+      "field": "planning_decision.design_candidates[2].local_fit",
+      "problem": "후보의 지역 적합성에 선택 지역/전국 비교 지표가 연결되지 않았습니다.",
+      "revision_instruction": "get_region_metrics/compare_regions의 실제 지표·기간으로 local_fit을 보완하고 해당 source_id를 evidence_source_ids에 연결하세요. 사례 효과를 지역 근거로 대신 쓰지 마세요."
+    },
+    {
+      "severity": "major",
+      "field": "planning_decision.design_candidates[2].budget_formula",
+      "problem": "후보 예산이 비용 항목 나열에 그칩니다.",
+      "revision_instruction": "항목별 수량×단가 산식으로 쓰세요. 미확정 단가는 변수와 견적 확보 담당·시점을 적고 금액을 꾸미지 마세요."
+    },
+    {
+      "severity": "critical",
+      "field": "planning_decision.design_candidates[2].budget_formula.fixed_total",
+      "problem": "후보에 출처·가정 표시 없는 확정 총예산이 제시됐습니다.",
+      "revision_instruction": "수량×단가가 있어도 타지역 총액을 선택 지역 확정 예산으로 복사하지 마세요. 기획 가정/참고 견적과 확인 절차를 명시하세요."
+    },
+    {
+      "severity": "major",
+      "field": "planning_decision.design_candidates[2].measurement_plan",
+      "problem": "후보 측정 설계 누락: 분자·분모 또는 금액 합계 정의",
+      "revision_instruction": "지표 정의, 기준기간, 주기, 원자료, 같은 범위의 비교집단을 짧게 명시하세요. 없는 자료는 수집 담당·확보 시점을 쓰세요."
+    }
+  ],
+  "original_count": 6,
+  "current_count": 10,
+  "report_approved": false
+}

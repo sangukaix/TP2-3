@@ -78,6 +78,8 @@ def _load_curated_case_cards(project_root: Path, domains: list[str]) -> list[dic
             continue
         cards.append({
             'source_id': str(record.get('source_id') or _case_source_id(source_url)),
+            'document_type': record.get('document_type'),
+            'retrieval_method': 'curated_registry',
             'region_code': str(record.get('region_code') or 'ALL'),
             'region_name': str(record.get('region_name') or ''),
             'case_region': str(record.get('case_region') or record.get('region_name') or '전국 공통'),
@@ -102,20 +104,8 @@ def _load_curated_case_cards(project_root: Path, domains: list[str]) -> list[dic
 
 def _case_mechanism_family(case: dict[str, Any]) -> str:
     """검수 카드가 실제로 서로 다른 해법을 담았는지 판별하는 비공개 보조 분류입니다."""
-    text = json.dumps(case, ensure_ascii=False).lower()
-    if any(word in text for word in ('숙박', '체크인', '숙소')):
-        return 'stay_conversion'
-    if any(word in text for word in ('야간', '밤', '저녁')):
-        return 'night_time_experience'
-    if any(word in text for word in ('교통', 'ktx', '항공', '시티투어', '이동')):
-        return 'access_and_mobility'
-    if any(word in text for word in ('예약', '재고', '시간대', '입장')):
-        return 'reservation_conversion'
-    if any(word in text for word in ('환급', '할인', '쿠폰', '상품권', '결제')):
-        return 'spend_conversion'
-    if any(word in text for word in ('재방문', '관광주민증', '회원', '반복')):
-        return 'return_visit'
-    return 'other_operation'
+    from ..case_mechanism import case_mechanism_family
+    return case_mechanism_family(case)
 
 
 def _case_research_lenses(snapshot: dict[str, Any]) -> list[str]:
@@ -316,7 +306,7 @@ class CaseStudyAgent:
                     source_url = str(case.get('source_url') or '')
                     if not _url_is_allowed(source_url, self.domains):
                         continue
-                    cases.append({'source_id': _case_source_id(source_url), **case})
+                    cases.append({**case, 'source_id': _case_source_id(source_url), 'retrieval_method': 'official_web_search'})
                 gaps.extend(result.get('gaps') or [])
                 trace.append({
                     'agent': 'case_scout', 'stage': 'official_case_web', 'status': 'completed', 'items': len(cases),
@@ -351,8 +341,17 @@ class CaseStudyAgent:
             'source_url': case['source_url'],
             'published_or_updated_at': case['published_or_updated_at'],
             'summary': f"{case['case_region']} · {case['intervention']} · {case['observed_result']}",
+            'case_region': case['case_region'],
+            'intervention': case['intervention'],
+            'operating_model': case['operating_model'],
             'evidence_strength': case['evidence_strength'],
             'quantitative_result_approved': case.get('quantitative_result_approved'),
+            'document_type': case.get('document_type'),
+            'retrieval_method': case.get('retrieval_method', 'unrecorded'),
+            'retrieval_context': case.get('retrieval_context'),
+            'observed_result': case.get('observed_result'),
+            'measurement_period': case.get('measurement_period'),
+            'transfer_conditions': case.get('transfer_conditions'),
         } for case in cases]
         # 최신 검수 카드와 같은 출처의 오래된 Chroma 요약이 교정 내용을 덮어쓰지 않게 한다.
         current_ids = {row['source_id'] for row in sources}

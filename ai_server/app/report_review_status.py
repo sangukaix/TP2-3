@@ -13,7 +13,9 @@ def review_label(report: dict[str, Any]) -> str:
         score = float(review.get('overall_score') or 0)
     except (TypeError, ValueError):
         score = 0
-    blocked = any(item.get('severity') in {'critical', 'major'} for item in review.get('issues') or [])
+    findings = [*(review.get('issues') or []), *(review.get('validation_findings') or [])]
+    blocked = any(isinstance(item, dict) and item.get('severity') in {'critical', 'major'} for item in findings)
+    blocked = blocked or review.get('final_audit_completed') is False
     if review.get('approved') is True and score >= 82 and not blocked:
         return 'AI 검수 통과 · 담당자 확인 필요'
     return '검토용 초안 · 보완 필요'
