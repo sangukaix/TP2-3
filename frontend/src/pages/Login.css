@@ -4,14 +4,6 @@
 .login-page::before{position:fixed; z-index:-1; inset:0; content:'';
   background:linear-gradient(135deg,rgb(3 24 43 / 92%),rgb(8 48 76 / 86%) 48%,rgb(19 39 83 / 91%));}
 
-.login-header{position:sticky; z-index:10; top:0; display:grid; place-items:center; min-height:auto;
-  border-bottom:1px solid rgb(109 208 220 / 28%); background:rgb(6 39 62 / 76%);
-  box-shadow:0 8px 28px rgb(1 14 29 / 24%); backdrop-filter:blur(16px);}
-.login-logo-link{display:grid; place-items:center; width:min(720px,calc(100% - 40px)); padding:12px 0;
-  border-radius:12px;}
-.login-logo{display:block; width:100%; max-height:none; height:auto; object-fit:contain; border-radius:60px;}
-.login-logo-link:focus-visible{outline:3px solid #72dce6; outline-offset:3px;}
-
 .login-content{display:grid; justify-items:center; align-items:start; padding:44px 20px 52px;}
 .login-card{width:min(520px,100%); padding:34px 38px 30px; border:1px solid rgb(116 216 226 / 42%);
   border-radius:20px; background:linear-gradient(145deg,rgb(8 45 70 / 86%),rgb(13 38 77 / 82%));
@@ -75,9 +67,7 @@
 .login-back-button:hover{color:#efffff;}
 
 @media(max-width:500px){
-  .login-header{min-height:76px;}
-  .login-logo{width:clamp(170px,54vw,220px); max-height:58px;}
-  .login-content{min-height:calc(100vh - 76px); padding:22px 14px 34px;}
+  .login-content{min-height:calc(100vh - var(--mobile-global-header-height)); padding:22px 14px 34px;}
   .login-card{padding:26px 18px 24px; border-radius:16px;}
   .login-card-heading h1{font-size:27px;}
   .login-card-heading p{font-size:12px;}

@@ -7,6 +7,7 @@ import HeaderActions from '../components/HeaderActions'
 import '../App.css'
 import './My.css'
 import logo from '../assets/logo5.png'
+import dayLogo from '../assets/logo-day.png'
 
 const SECURITY_QUESTIONS = [
   '내가 졸업한 초등학교는?',
@@ -195,14 +196,16 @@ export default function My() {
 
   return (
     <main className="my-page">
-      <header className="my-header">
-        <a className="my-logo-link" href="/" onClick={handlePageLink('/')}
-          aria-label="OLIGO-K 홈으로 이동">
-          <img className="my-logo" src={logo} alt="OLIGO-K" />
-        </a>
-        <HeaderActions />
+      <header className="my-header account-header">
+        <div className="account-header-inner">
+          <a className="my-logo-link account-header-logo" href="/" onClick={handlePageLink('/')}
+            aria-label="OLIGO-K 홈으로 이동">
+            <img className="my-logo account-logo theme-logo theme-logo--night" src={logo} alt="OLIGO-K" />
+            <img className="my-logo account-logo theme-logo theme-logo--day" src={dayLogo} alt="OLIGO-K" />
+          </a>
+          <HeaderActions />
+        </div>
       </header>
-
       <section className="my-content" aria-labelledby="my-title">
         <div className="my-page-heading">          
           <h1 id="my-title">MY PAGE</h1>

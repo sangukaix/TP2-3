@@ -3,14 +3,6 @@
   background-size:cover; font-family:'Pretendard','Noto Sans KR','Malgun Gothic',Arial,sans-serif;}
 .my-page::before{position:fixed; z-index:-1; inset:0; content:'';
   background:linear-gradient(135deg,rgb(3 24 43 / 92%),rgb(8 48 76 / 86%) 48%,rgb(19 39 83 / 91%));}
-.my-header{position:sticky; z-index:10; top:0; display:grid; place-items:center; min-height:auto;
-  border-bottom:1px solid rgb(109 208 220 / 28%); background:rgb(6 39 62 / 76%);
-  box-shadow:0 8px 28px rgb(1 14 29 / 24%); backdrop-filter:blur(16px);}
-.my-logo-link{display:grid; place-items:center; width:min(720px,calc(100% - 40px)); padding:12px 0;
-  border-radius:12px;}
-.my-logo{display:block; width:100%; height:auto; object-fit:contain; border-radius:60px;}
-.my-logo-link:focus-visible{outline:3px solid #72dce6; outline-offset:3px;}
-
 .my-content{width:min(1040px,calc(100% - 40px)); margin:0 auto; padding:40px 0 58px;}
 .my-page-heading{margin-bottom:28px; text-align:center;}
 .my-page-heading>span{color:#69d6e2; font-size:13px; font-weight:800; letter-spacing:.16em;}
@@ -131,8 +123,6 @@
 }
 
 @media(max-width:500px){
-  .my-header{min-height:76px;}
-  .my-logo{width:clamp(170px,54vw,220px); max-height:58px;}
   .my-content{width:calc(100% - 28px); padding:26px 0 40px;}
   .my-page-heading{margin-bottom:22px;}
   .my-page-heading h1{font-size:32px;}

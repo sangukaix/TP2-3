@@ -4,6 +4,7 @@ import HeaderActions from '../components/HeaderActions'
 import '../App.css'
 import './Login.css'
 import logo from '../assets/logo5.png'
+import dayLogo from '../assets/logo-day.png'
 
 const INITIAL_LOGIN = {
   userId: '',
@@ -166,14 +167,16 @@ export default function Login() {
 
   return (
     <main className="login-page">
-      <header className="login-header">
-        <a className="login-logo-link" href="/" onClick={handlePageLink('/')}
-          aria-label="OLIGO-K 홈으로 이동">
-          <img className="login-logo" src={logo} alt="OLIGO-K" />
-        </a>
-        <HeaderActions />
+      <header className="login-header account-header">
+        <div className="account-header-inner">
+          <a className="login-logo-link account-header-logo" href="/" onClick={handlePageLink('/')}
+            aria-label="OLIGO-K 홈으로 이동">
+            <img className="login-logo account-logo theme-logo theme-logo--night" src={logo} alt="OLIGO-K" />
+            <img className="login-logo account-logo theme-logo theme-logo--day" src={dayLogo} alt="OLIGO-K" />
+          </a>
+          <HeaderActions />
+        </div>
       </header>
-
       <section className="login-content" aria-labelledby="login-title">
         <div className="login-card">
           <div className="login-card-heading">

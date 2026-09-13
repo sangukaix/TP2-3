@@ -5,6 +5,7 @@ import {
   ClipboardList,
 } from 'lucide-react'
 import logo from '../assets/logo.png'
+import dayLogo from '../assets/logo-day.png'
 import HeaderActions from './HeaderActions'
 
 const menuItems = [
@@ -47,7 +48,10 @@ export default function WorkspaceShell({ children }) {
       <header className="home-header workspace-global-header">
         <div>
           <div className="home-brand-wrap">
-            <a className="home-brand" href="/" aria-label="OLIGO 홈"><img className="home-brand-logo" src={logo} alt="OLIGO (가제)" /></a>
+            <a className="home-brand" href="/" aria-label="OLIGO 홈">
+              <img className="home-brand-logo theme-logo theme-logo--night" src={logo} alt="OLIGO (가제)" />
+              <img className="home-brand-logo theme-logo theme-logo--day" src={dayLogo} alt="OLIGO (가제)" />
+            </a>
             <a className="ml-learning-dot" href="/ml-test" aria-label="머신러닝 학습 결과 보기" title="머신러닝 학습 결과" />
             <HeaderActions />
           </div>

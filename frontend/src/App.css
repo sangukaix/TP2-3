@@ -613,7 +613,7 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
   --workspace-sidebar-base:#0b3451;
   --workspace-topbar-bg:color-mix(in srgb,var(--workspace-sidebar-base) 95%,#fff);
   --workspace-main-bg:color-mix(in srgb,var(--workspace-topbar-bg) 95%,#fff);}
-.workspace-sidebar{position:fixed; z-index:100; top:64px; right:auto; bottom:0; left:0; display:flex;
+.workspace-sidebar{position:fixed; z-index:100; top:72px; right:auto; bottom:0; left:0; display:flex;
   width:270px; box-sizing:border-box; flex-direction:column; padding:16px;
   border-right:1px solid #e2e8f0; background:#fff;}
 
@@ -644,7 +644,7 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 .workspace-nav a svg,
 .workspace-nav>button svg{flex:0 0 auto;}
 .workspace-main{min-width:0; margin-left:270px;}
-.workspace-topbar{position:sticky; z-index:90; top:64px; display:flex; height:64px;
+.workspace-topbar{position:sticky; z-index:90; top:72px; display:flex; height:64px;
   box-sizing:border-box; align-items:center; justify-content:space-between; padding:0 36px;
   border-bottom:1px solid #e2e8f0; background:#fff;}
 .workspace-topbar p{margin:0; color:#0f172a; font-size:13px; font-weight:650;}
@@ -792,6 +792,21 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
   .work-region-picker{min-width:0;}
   .strategy-briefs{grid-template-columns:1fr;}
 }
+@media (max-width:500px) {
+  .workspace-content .planning-page .planning-layout {
+    grid-template-columns:minmax(0,1fr); grid-template-areas:"header" "fields" "summary";
+    gap:24px; margin-top:0;
+  }
+  .workspace-content .planning-page .planning-fields{grid-area:fields;}
+  .workspace-content .planning-page .planning-summary-column{grid-area:summary;}
+  .planning-page .work-page-header {
+    display: grid;  grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "title save"  "region region";  align-items: center;  gap: 14px 10px;
+  }
+  .planning-page .work-page-header > :first-child {grid-area: title; min-width: 0;}
+  .planning-page .work-region-picker {grid-area: region;  width: 100%;  min-width: 0;}
+  .planning-page .planning-header-save {grid-area: save; justify-self: end; align-self: center; margin: 0;}
+}
 .dashboard-top-grid--map-first{grid-template-columns:minmax(540px,1.35fr) minmax(380px,.85fr);
   grid-template-areas:"map analysis"; align-items:start; gap:18px;}
 .dashboard-top-grid--map-first>.map-panel{grid-area:map; min-height:842px;}
@@ -920,10 +935,10 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 
 .home-header{position:sticky; z-index:100; top:0; border-bottom:1px solid #e2e8f0;
   background:#fffffff2; box-shadow:0 1px 0 rgb(15 23 42 / 2%); backdrop-filter:blur(12px);}
-.home-header>div{display:flex; width:min(1152px,calc(100% - 32px)); height:64px; align-items:center;
+.home-header>div{display:flex; width:min(1152px,calc(100% - 32px)); height:72px; align-items:center;
   justify-content:space-between; margin:0 auto;}
 .home-brand{display:flex; align-items:center; color:#0f172a; font-size:13px; text-decoration:none;}
-.home-brand-logo{display:block; width:auto; height:44px; object-fit:contain;}
+.home-brand-logo{display:block; width:auto; height:68px; max-width:calc(100vw - 40px); margin:2px; padding:0; object-fit:contain;}
 .home-brand b{letter-spacing:.08em;}
 .home-header nav{display:flex; align-items:center; gap:3px;}
 .home-header nav a{padding:9px 12px; border-radius:6px; color:#64748b; font-size:12px;
@@ -959,8 +974,8 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 .home-footer p{margin:0; font-size:10px;}
 
 @media(max-width:500px){
-  .home-header>div{height:58px;}
-  .home-header nav{position:absolute; top:58px; right:0; left:0; display:none; box-sizing:border-box;
+  .home-header>div{height:var(--mobile-global-header-height);}
+  .home-header nav{position:absolute; top:var(--mobile-global-header-height); right:0; left:0; display:none; box-sizing:border-box;
     flex-direction:column; align-items:stretch; padding:10px 16px 14px;
     border-bottom:1px solid #e2e8f0; background:#fff; box-shadow:0 9px 24px #0f172a14;}
   .home-header nav.is-open{display:flex;}
@@ -2594,6 +2609,11 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 .workspace-shell:not(:has(.dashboard-section)) .strategy-preview-header button{
   border-color:transparent; color:#fff;
   background:linear-gradient(105deg,#28b4c1,#536dcf 62%,#876bc5); box-shadow:0 8px 18px #174b7860;}
+.workspace-shell:not(:has(.dashboard-section)) .planning-header-save {
+  transition: padding .18s ease, font-size .18s ease, transform .18s ease, box-shadow .18s ease, background .18s ease;}
+.workspace-shell:not(:has(.dashboard-section)) .planning-header-save:hover {
+  color: #fff; border-color: transparent; background: linear-gradient(105deg, #28b4c1, #536dcf 62%, #876bc5);
+  padding: 11px 14px;  font-size: 12px;  transform: translateY(-2px);  box-shadow: 0 11px 22px #174b7868;}
 .workspace-shell:not(:has(.dashboard-section)) .workspace-chat-intro,
 .workspace-shell:not(:has(.dashboard-section)) .strategy-summary,
 .workspace-shell:not(:has(.dashboard-section)) .strategy-document-actions{border-color:#bee5eb;
@@ -2605,7 +2625,7 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
   overflow:visible; background:transparent; box-shadow:none;}
 /*모든 페이지의 상단 고정 영역: 로고 바 → 업무 안내 바 순서로 항상 화면 위에 유지합니다.*/
 .home-header,  .workspace-global-header{position:sticky; top:0; z-index:2000;}
-.workspace-shell .workspace-topbar{position:sticky; top:64px; z-index:1900;}
+.workspace-shell .workspace-topbar{position:sticky; top:72px; z-index:1900;}
 /*메인 히어로의 남색을 한 단계 밝힌 공통 로고 바입니다. 화면 폭과 무관하게 로고는 왼쪽 여백에 고정합니다.*/
 .home-header{border-bottom-color:#2d5e79; background:#0C3450;
   box-shadow:0 2px 16px rgb(2 24 43 / 24%);}
@@ -2621,7 +2641,7 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
   .workspace-global-header>div{justify-content:center; padding:0;}
 }
 /*메인 페이지는 상위 영역의 overflow 설정과 무관하게 브라우저 화면에 직접 고정합니다.*/
-.tourism-home{padding-top:64px;}
+.tourism-home{padding-top:72px;}
 .tourism-home>.home-header{
   position:fixed; top:0; right:auto; left:0; width:min(1920px,100%); z-index:2000;}
 /*업무 페이지도 같은 공통 로고 바를 브라우저 화면에 직접 고정합니다.*/
@@ -2633,7 +2653,7 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
   .tourism-home>.home-header,
   .workspace-shell>.workspace-global-header{left:50%; transform:translateX(-50%);}
 }
-@media(max-width:500px){.tourism-home,  .workspace-shell{padding-top:58px;}}
+@media(max-width:500px){.tourism-home,  .workspace-shell{padding-top:var(--mobile-global-header-height);}}
 /*501px 이상 웹 화면: 1920px에서 정한 업무 패널 폭을 가로 스크롤 구간에서도 그대로 유지합니다.*/
 @media(min-width:501px){
   /*지도 상단의 핫플레이스 버튼은 선택 지역명 오른쪽의 기존 여백에 맞춥니다.*/
@@ -2642,7 +2662,19 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
   .workspace-content .dashboard-section,
   .tourism-work-page{width:min(1580px,100%);}
   .dashboard-top-grid--map-first{grid-template-columns:minmax(540px,1.35fr) minmax(600px,1.2fr);}
-  .planning-layout{grid-template-columns:minmax(0,1fr) 520px;}
+  .workspace-content .planning-page .planning-layout{
+    grid-template-columns:minmax(0,1fr) 520px; grid-template-areas:"header summary" "fields summary";
+    grid-template-rows:auto 1fr; align-items:start; column-gap:24px; row-gap:0; margin-top:0;
+  }
+  .workspace-content .planning-page .work-page-header{
+    display:grid; grid-area:header; grid-template-columns:minmax(0,1fr) auto;
+    grid-template-areas:"title save" "region region"; align-items:center; gap:14px 10px;
+  }
+  .workspace-content .planning-page .work-page-header>:first-child{grid-area:title; min-width:0;}
+  .workspace-content .planning-page .work-region-picker{grid-area:region; width:100%; min-width:0;}
+  .workspace-content .planning-page .planning-header-save{grid-area:save; justify-self:end; align-self:center; margin:0;}
+  .workspace-content .planning-page .planning-fields{grid-area:fields; margin-top:24px;}
+  .workspace-content .planning-page .planning-summary-column{grid-area:summary;}
   .strategy-workspace{grid-template-columns:minmax(0,1fr) 570px;}
   .saved-board-page{width:min(1300px,calc(100% - 36px));}
   .home-workflow-layout{max-width:1460px;}
@@ -2737,9 +2769,35 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
   min-width:90px; height:38px; padding:0 18px; border:2px solid red; border-radius:10px; cursor:pointer;
   font-weight:700;
 }
+.account-header{position:relative; z-index:10; height:84px; box-sizing:border-box; border:0; background:transparent;
+  box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none;}
+.account-header-inner{display:grid; width:100%; height:100%; box-sizing:border-box;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:center; padding:0 24px;}
+.account-header-logo{display:grid; grid-column:2; height:84px; place-items:center; justify-self:center; padding:0;}
+.account-logo{display:block; width:auto; height:80px; max-width:calc(100vw - 40px); max-height:80px;
+  margin:2px; padding:0; border-radius:0; clip-path:none; object-fit:contain;
+  -webkit-mask-image:none; mask-image:none;}
+.account-header .global-header-actions{position:static; grid-column:3; justify-self:start; align-self:center;
+  margin-left:16px; transform:none;}
+@media (min-width:501px) and (max-width:870px){
+  .global-header-actions{right:calc(100vw - 830px);}
+}
 @media(max-width:500px){
-  .global-header-actions{right:8px; gap:4px;}
-  .global-header-actions button{min-width:0; height:30px; padding:0 5px; border-width:1px; font-size:9px;}
+  :root{--mobile-global-header-height:106px;}
+  .home-header>div{height:var(--mobile-global-header-height);}
+  .home-brand-wrap{height:100%; box-sizing:border-box; flex-direction:column; align-items:center;
+    justify-content:center; gap:4px;}
+  .home-brand-wrap .global-header-actions{position:static; right:auto; top:auto; width:100%; box-sizing:border-box;
+    justify-content:center; gap:4px; padding:0 4px; transform:none;}
+  .account-header{height:var(--mobile-global-header-height);}
+  .account-header-inner{grid-template-columns:minmax(0,1fr); grid-template-rows:72px 30px;
+    justify-items:center; align-content:center; row-gap:4px; padding:0;}
+  .account-header-logo{grid-column:1; grid-row:1; height:72px;}
+  .account-logo{height:68px; max-height:68px;}
+  .account-header .global-header-actions{position:static; grid-column:1; grid-row:2; justify-self:center;
+    width:100%; box-sizing:border-box; justify-content:center; gap:4px; margin-left:0; padding:0 4px; transform:none;}
+  .global-header-actions button{min-width:0; height:30px; flex:0 1 auto; padding:0 5px; border-width:1px;
+    font-size:9px; white-space:nowrap;}
 }
 /* 전역 테마는 HTML data-theme 속성만으로 판단하며, 기본 Night 스타일은 기존 규칙을 그대로 사용합니다. */
 html[data-theme='night']{--theme-outer-bg:#f4f7fb;}
@@ -2789,6 +2847,23 @@ html[data-theme='day'] .workspace-shell .work-page-header{border-bottom-color:#e
 html[data-theme='day'] .workspace-shell .work-region-picker select{
   border-color:#cbd5e1; color:#334155; background:#fff;
 }
+html[data-theme='day'] .theme-logo--night,
+.theme-logo--day{display:none !important;}
+html[data-theme='day'] .theme-logo--day{display:block !important;}
+html[data-theme='day'] .workspace-shell:has(.dashboard-section) .dashboard-top-grid--map-first>.map-panel{
+  border-color:#e1e7ef; background:#fff; box-shadow:0 1px 2px rgb(15 23 42 / 4%);
+}
+html[data-theme='day'] .workspace-shell:has(.dashboard-section) .map-selection-controls{
+  border:1px solid #e1e9f1; border-radius:10px; background:#f6f9fc;
+}
+html[data-theme='day'] .workspace-shell:has(.dashboard-section) .region-select-label{color:#617089;}
+html[data-theme='day'] .workspace-shell:has(.dashboard-section) .region-select-label select{
+  color:#3e5574; background:#fff; border:1px solid #d8e1ec;
+}
+html[data-theme='day'] .workspace-shell:has(.dashboard-section) .map-frame{
+  border:0; border-radius:0; box-shadow:none;
+}
+html[data-theme='day'] .workspace-shell:has(.dashboard-section) .map-caption{color:#718199;}
 @media(max-width:500px){
   html[data-theme='day'] .workspace-shell .workspace-mobile-nav{
     border-top-color:#d9e2e8; background:#f9fbfc;
@@ -2805,9 +2880,3 @@ html[data-theme='day'] .my-page{background:var(--theme-outer-bg);}
 html[data-theme='day'] .signup-page::before,
 html[data-theme='day'] .login-page::before,
 html[data-theme='day'] .my-page::before{background:transparent;}
-html[data-theme='day'] .signup-header,
-html[data-theme='day'] .login-header,
-html[data-theme='day'] .my-header{
-  border-bottom-color:#e2e8f0; background:var(--theme-global-header-bg);
-  box-shadow:0 1px 0 rgb(15 23 42 / 2%);
-}

@@ -4,6 +4,7 @@ import HeaderActions from '../components/HeaderActions'
 import '../App.css'
 import './Signup.css'
 import logo from '../assets/logo5.png'
+import dayLogo from '../assets/logo-day.png'
 
 const MUNICIPALITIES = {
   서울특별시: ['강남구', '마포구', '서대문구', '송파구', '용산구', '종로구'],
@@ -159,14 +160,6 @@ export default function Signup() {
     setIsValidated(true)
   }
 
-  const navigateHome = (event) => {
-    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
-    event.preventDefault()
-    window.history.pushState({}, '', '/')
-    window.dispatchEvent(new PopStateEvent('popstate'))
-    window.scrollTo({ top: 0 })
-  }
-
   const navigateLogin = (event) => {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
     event.preventDefault()
@@ -175,17 +168,27 @@ export default function Signup() {
     window.scrollTo({ top: 0 })
   }
 
+  const navigateHome = (event) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+    event.preventDefault()
+    window.history.pushState({}, '', '/')
+    window.dispatchEvent(new PopStateEvent('popstate'))
+    window.scrollTo({ top: 0 })
+  }
+
   const municipalityOptions = formData.province ? MUNICIPALITIES[formData.province] : []
 
   return (
     <main className="signup-page">
-      <header className="signup-header">
-        <a className="signup-logo-link" href="/" onClick={navigateHome} aria-label="OLIGO-K 홈으로 이동">
-          <img className="signup-logo" src={logo} alt="OLIGO-K" />
-        </a>
-        <HeaderActions />
+      <header className="signup-header account-header">
+        <div className="account-header-inner">
+          <a className="signup-logo-link account-header-logo" href="/" onClick={navigateHome} aria-label="OLIGO-K 홈으로 이동">
+            <img className="signup-logo account-logo theme-logo theme-logo--night" src={logo} alt="OLIGO-K" />
+            <img className="signup-logo account-logo theme-logo theme-logo--day" src={dayLogo} alt="OLIGO-K" />
+          </a>
+          <HeaderActions />
+        </div>
       </header>
-
       <section className="signup-content" aria-labelledby="signup-title">
         <div className="signup-card">
           <div className="signup-card-heading">
