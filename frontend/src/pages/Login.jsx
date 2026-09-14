@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import { KeyRound, LockKeyhole, Mail, UserRound } from 'lucide-react'
-import HeaderActions from '../components/HeaderActions'
 import '../App.css'
 import './Login.css'
 import logo from '../assets/logo5.png'
-import dayLogo from '../assets/logo-day.png'
+import dayLogo from '../assets/logo6.png'
 
 const INITIAL_LOGIN = {
   userId: '',
@@ -174,7 +173,6 @@ export default function Login() {
             <img className="login-logo account-logo theme-logo theme-logo--night" src={logo} alt="OLIGO-K" />
             <img className="login-logo account-logo theme-logo theme-logo--day" src={dayLogo} alt="OLIGO-K" />
           </a>
-          <HeaderActions />
         </div>
       </header>
       <section className="login-content" aria-labelledby="login-title">

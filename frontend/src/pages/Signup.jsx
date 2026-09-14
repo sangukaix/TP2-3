@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import { Building2, LockKeyhole, Mail, Phone, UserRound } from 'lucide-react'
-import HeaderActions from '../components/HeaderActions'
 import '../App.css'
 import './Signup.css'
 import logo from '../assets/logo5.png'
-import dayLogo from '../assets/logo-day.png'
+import dayLogo from '../assets/logo6.png'
 
 const MUNICIPALITIES = {
   서울특별시: ['강남구', '마포구', '서대문구', '송파구', '용산구', '종로구'],
@@ -186,7 +185,6 @@ export default function Signup() {
             <img className="signup-logo account-logo theme-logo theme-logo--night" src={logo} alt="OLIGO-K" />
             <img className="signup-logo account-logo theme-logo theme-logo--day" src={dayLogo} alt="OLIGO-K" />
           </a>
-          <HeaderActions />
         </div>
       </header>
       <section className="signup-content" aria-labelledby="signup-title">

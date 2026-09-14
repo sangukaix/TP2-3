@@ -3,11 +3,10 @@ import {
   Building2, CalendarDays, FileText, KeyRound, LockKeyhole, LogOut, Mail, MapPinned,
   Phone, ShieldCheck, Trash2, Upload, UserRound,
 } from 'lucide-react'
-import HeaderActions from '../components/HeaderActions'
 import '../App.css'
 import './My.css'
 import logo from '../assets/logo5.png'
-import dayLogo from '../assets/logo-day.png'
+import dayLogo from '../assets/logo6.png'
 
 const SECURITY_QUESTIONS = [
   '내가 졸업한 초등학교는?',
@@ -203,7 +202,6 @@ export default function My() {
             <img className="my-logo account-logo theme-logo theme-logo--night" src={logo} alt="OLIGO-K" />
             <img className="my-logo account-logo theme-logo theme-logo--day" src={dayLogo} alt="OLIGO-K" />
           </a>
-          <HeaderActions />
         </div>
       </header>
       <section className="my-content" aria-labelledby="my-title">

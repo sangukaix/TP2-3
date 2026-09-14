@@ -4,7 +4,7 @@
 .signup-page::before{position:fixed; z-index:-1; inset:0; content:'';
   background:linear-gradient(135deg,rgb(3 24 43 / 92%),rgb(8 48 76 / 86%) 48%,rgb(19 39 83 / 91%));}
 
-.signup-content{display:grid; justify-items:center; align-items:start; padding:20px 20px 52px;}
+.signup-content{display:grid; justify-items:center; align-items:start; padding:1px 20px 52px;}
 .signup-card{width:min(720px,100%); padding:34px 38px 30px; border:1px solid rgb(116 216 226 / 42%);
   border-radius:20px; background:linear-gradient(145deg,rgb(8 45 70 / 86%),rgb(13 38 77 / 82%));
   box-shadow:0 24px 60px rgb(0 12 30 / 48%),inset 0 1px 0 rgb(255 255 255 / 9%);
@@ -67,7 +67,14 @@
   border:0; clip:rect(0 0 0 0); white-space:nowrap;}
 
 @media(max-width:500px){
-  .signup-content{min-height:calc(100vh - var(--mobile-global-header-height)); padding:22px 14px 34px;}
+  .signup-page .account-header{height:auto; min-height:0; overflow:visible;}
+  .signup-page .account-header-inner{display:block; width:calc(100% - 28px); height:auto;
+    min-height:0; margin:0 auto; padding:0;}
+  .signup-page .account-header-logo{display:block; width:100%; height:auto; min-height:0;
+    margin:0 auto;}
+  .signup-page .signup-logo{display:block; width:100%; height:auto; max-width:100%; max-height:none;
+    object-fit:contain;}
+  .signup-content{min-height:auto; padding:1px 14px 34px;}
   .signup-card{padding:26px 18px 24px; border-radius:16px;}
   .signup-card-heading h1{font-size:27px;}
   .signup-card-heading p{font-size:12px;}
@@ -83,3 +90,97 @@
 @media(prefers-reduced-motion:reduce){
   .signup-submit{transition:none;}
 }
+
+/* 회원가입 Night Mode 메인 배경은 브랜드 지정 단색을 사용합니다. */
+html[data-theme='night'] .signup-page{
+  background-color:#092338;
+  background-image:url('../assets/Seoul.png');
+  background-repeat:no-repeat;
+  background-position:center bottom;
+  background-size:cover;
+}
+
+html[data-theme='night'] .signup-page::before{
+  background:linear-gradient(to bottom,
+    rgba(9,35,56,1) 0%,
+    rgba(9,35,56,.98) 42%,
+    rgba(9,35,56,.90) 62%,
+    rgba(9,35,56,.68) 78%,
+    rgba(9,35,56,.35) 90%,
+    rgba(9,35,56,.08) 97%,
+    rgba(9,35,56,0) 100%);
+}
+
+.signup-page .signup-logo{
+  -webkit-mask-image:linear-gradient(to right,transparent 0%,#000 12%,#000 88%,transparent 100%),
+    linear-gradient(to bottom,transparent 0%,#000 8%,#000 92%,transparent 100%);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to right,transparent 0%,#000 12%,#000 88%,transparent 100%),
+    linear-gradient(to bottom,transparent 0%,#000 8%,#000 92%,transparent 100%);
+  mask-composite:intersect;
+}
+
+html[data-theme='day'] .signup-page{
+  color:#334155;
+  background-color:#edf2f5;
+  background-image:url('../assets/Seoul-day.png');
+  background-repeat:no-repeat;
+  background-position:center bottom;
+  background-size:cover;
+}
+html[data-theme='day'] .signup-page::before{
+  background:linear-gradient(135deg,
+    rgb(237 242 245 / 98%) 0%,
+    rgb(243 246 248 / 95%) 48%,
+    rgb(234 240 244 / 76%) 78%,
+    rgb(234 240 244 / 32%) 100%);
+}
+html[data-theme='day'] .signup-page .account-header-logo{
+  aspect-ratio:1746 / 628;
+  overflow:hidden;
+}
+html[data-theme='day'] .signup-page .theme-logo--day{
+  height:100%;
+  object-fit:cover;
+  object-position:center bottom;
+}
+html[data-theme='day'] .signup-card{
+  border-color:#d9e2e8;
+  background:rgb(255 255 255 / 94%);
+  box-shadow:0 14px 30px rgb(15 23 42 / 8%),inset 0 1px 0 rgb(255 255 255 / 72%);
+}
+html[data-theme='day'] .signup-card-heading h1{color:#163b61;}
+html[data-theme='day'] .signup-card-heading p{color:#64748b;}
+html[data-theme='day'] .signup-field label,
+html[data-theme='day'] .signup-fieldset legend{color:#334155;}
+html[data-theme='day'] .signup-field label svg,
+html[data-theme='day'] .signup-fieldset legend svg,
+html[data-theme='day'] .signup-field label b,
+html[data-theme='day'] .signup-fieldset legend b{color:#1a899b;}
+html[data-theme='day'] .signup-field label em{color:#64748b;}
+html[data-theme='day'] .signup-field input,
+html[data-theme='day'] .signup-fieldset select{
+  border-color:#cbd5e1;
+  color:#334155;
+  background:#fff;
+}
+html[data-theme='day'] .signup-field input::placeholder{color:#94a3b8;}
+html[data-theme='day'] .signup-fieldset{
+  border-color:#d9e2e8;
+  background:#f9fbfc;
+}
+html[data-theme='day'] .signup-fieldset select:disabled{color:#94a3b8; background:#f1f5f9;}
+html[data-theme='day'] .signup-help{color:#718199;}
+html[data-theme='day'] .signup-error{color:#b91c1c;}
+html[data-theme='day'] .signup-submit{
+  border-color:rgb(81 102 194 / 36%);
+  background:linear-gradient(105deg,#1a899b,#5166c2 67%,#a96d95);
+  box-shadow:0 12px 26px rgb(81 102 194 / 22%);
+}
+html[data-theme='day'] .signup-success{
+  border-color:rgb(22 143 161 / 30%);
+  color:#157283;
+  background:rgb(226 246 247 / 88%);
+}
+html[data-theme='day'] .signup-login-prompt{color:#64748b;}
+html[data-theme='day'] .signup-login-prompt a{color:#1a899b; text-decoration-color:rgb(26 137 155 / 42%);}

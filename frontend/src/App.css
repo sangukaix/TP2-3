@@ -2340,6 +2340,21 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 
 /*실제값과 예측값을 나누는 현재 날짜 기준선. 차트 폭이 바뀌어도 비율로 함께 이동.*/
 .monthly-trend-chart{position:relative; width:100%; height:100%;}
+.monthly-trend-chart--forecast{isolation:isolate; overflow:hidden;}
+.monthly-trend-chart--forecast>.recharts-responsive-container{position:relative; z-index:1;}
+.monthly-trend-forecast-zone{position:absolute; z-index:0; top:28px; right:20px; bottom:42px; left:50%;
+  border-left:1px solid rgb(180 128 169 / 35%); background:linear-gradient(90deg,rgb(245 221 235 / 30%),rgb(239 224 244 / 46%));
+  display:flex; align-items:center; justify-content:center; overflow:hidden; pointer-events:none; transition:background .35s ease, border-color .35s ease;}
+.monthly-trend-forecast-loading-image{display:block; width:min(88%, 220px); max-width:calc(100% - 18px); max-height:68%; height:auto; object-fit:contain; opacity:1; transition:opacity .45s ease;}
+.monthly-trend-forecast-status{position:absolute; top:50%; left:50%; display:block; width:max-content; max-width:calc(100% - 18px);
+  padding:6px 9px; border:1px solid rgb(190 145 181 / 38%); border-radius:999px; color:#806779;
+  background:rgb(255 249 253 / 82%); box-shadow:0 4px 12px rgb(120 83 125 / 10%);
+  font-size:10px; line-height:1.2; text-align:center; opacity:0; transform:translate(-50%,-50%); transition:opacity .4s ease;}
+.monthly-trend-chart--forecast.is-ready .monthly-trend-forecast-loading-image{opacity:0;}
+.monthly-trend-chart--forecast.is-ready .monthly-trend-forecast-status{color:#765f8b; background:rgb(250 244 255 / 72%); opacity:1;}
+.monthly-trend-chart--forecast .monthly-trend-forecast-cell,
+.monthly-trend-chart--forecast .recharts-line-curve,
+.monthly-trend-chart--forecast .recharts-line-dot{transition:opacity .45s ease;}
 
 .planning-page .work-region-picker{display:flex; align-items:center; gap:10px; min-width:280px;}
 .planning-page .work-region-picker span{margin:0; white-space:nowrap;}
@@ -2771,6 +2786,12 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 }
 .account-header{position:relative; z-index:10; height:84px; box-sizing:border-box; border:0; background:transparent;
   box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none;}
+.signup-header .account-header-inner{width:min(720px,calc(100% - 40px)); margin:0 auto; padding:0; grid-template-columns:1fr;}
+.login-header .account-header-inner{width:min(720px,calc(100% - 40px)); margin:0 auto; padding:0; grid-template-columns:1fr;}
+.my-header .account-header-inner{width:min(720px,calc(100% - 40px)); margin:0 auto; padding:0; grid-template-columns:1fr;}
+.signup-header .account-header-logo,
+.login-header .account-header-logo,
+.my-header .account-header-logo{grid-column:1; width:100%;}
 .account-header-inner{display:grid; width:100%; height:100%; box-sizing:border-box;
   grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:center; padding:0 24px;}
 .account-header-logo{display:grid; grid-column:2; height:84px; place-items:center; justify-self:center; padding:0;}
@@ -2790,6 +2811,9 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
   .home-brand-wrap .global-header-actions{position:static; right:auto; top:auto; width:100%; box-sizing:border-box;
     justify-content:center; gap:4px; padding:0 4px; transform:none;}
   .account-header{height:var(--mobile-global-header-height);}
+  .signup-header .account-header-inner,
+  .login-header .account-header-inner,
+  .my-header .account-header-inner{width:calc(100% - 28px);}
   .account-header-inner{grid-template-columns:minmax(0,1fr); grid-template-rows:72px 30px;
     justify-items:center; align-content:center; row-gap:4px; padding:0;}
   .account-header-logo{grid-column:1; grid-row:1; height:72px;}
@@ -2799,8 +2823,35 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
   .global-header-actions button{min-width:0; height:30px; flex:0 1 auto; padding:0 5px; border-width:1px;
     font-size:9px; white-space:nowrap;}
 }
+/* 계정 페이지 로고는 wrapper가 아니라 실제 이미지가 본문 폭을 모두 사용합니다. */
+.signup-header.account-header,
+.login-header.account-header,
+.my-header.account-header{height:auto; min-height:0;}
+.signup-header .account-header-inner,
+.login-header .account-header-inner,
+.my-header .account-header-inner{height:auto; min-height:0;}
+.signup-header .account-header-logo,
+.login-header .account-header-logo,
+.my-header .account-header-logo{height:auto; min-height:0; width:100%;}
+.signup-header .account-header-logo .account-logo,
+.login-header .account-header-logo .account-logo,
+.my-header .account-header-logo .account-logo{
+  display:block; width:100%; height:auto; max-width:none; max-height:none;
+  margin:0; object-fit:contain;
+}
 /* 전역 테마는 HTML data-theme 속성만으로 판단하며, 기본 Night 스타일은 기존 규칙을 그대로 사용합니다. */
 html[data-theme='night']{--theme-outer-bg:#f4f7fb;}
+html[data-theme='night'] .tourism-home.oligo-seoul-page::before {
+  background:linear-gradient(
+    to bottom,
+    rgb(3 24 43 / 98%) 0%,
+    rgb(5 31 53 / 96%) 45%,
+    rgb(8 48 76 / 92%) 65%,
+    rgb(12 44 75 / 86%) 80%,
+    rgb(19 39 83 / 80%) 92%,
+    rgb(19 39 83 / 76%) 100%
+  );
+}
 html[data-theme='day']{
   --theme-outer-bg:#f4f7fb;
   --theme-global-header-bg:#fffffff2;
