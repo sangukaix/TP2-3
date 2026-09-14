@@ -3,6 +3,7 @@ import { KeyRound, LockKeyhole, Mail, UserRound } from 'lucide-react'
 import '../App.css'
 import './Login.css'
 import logo from '../assets/logo5.png'
+import dayLogo from '../assets/logo6.png'
 
 const INITIAL_LOGIN = {
   userId: '',
@@ -165,24 +166,25 @@ export default function Login() {
 
   return (
     <main className="login-page">
-      <header className="login-header">
-        <a className="login-logo-link" href="/" onClick={handlePageLink('/')}
-          aria-label="OLIGO-K 홈으로 이동">
-          <img className="login-logo" src={logo} alt="OLIGO-K" />
-        </a>
+      <header className="login-header account-header">
+        <div className="account-header-inner">
+          <a className="login-logo-link account-header-logo" href="/" onClick={handlePageLink('/')}
+            aria-label="OLIGO-K 홈으로 이동">
+            <img className="login-logo account-logo theme-logo theme-logo--night" src={logo} alt="OLIGO-K" />
+            <img className="login-logo account-logo theme-logo theme-logo--day" src={dayLogo} alt="OLIGO-K" />
+          </a>
+        </div>
       </header>
-
       <section className="login-content" aria-labelledby="login-title">
         <div className="login-card">
           <div className="login-card-heading">
-            <span>OLIGO-K ACCOUNT</span>
             <h1 id="login-title">
               {view === 'login' && '로그인'}
               {view === 'findPassword' && '비밀번호 찾기'}
               {view === 'findId' && '아이디 찾기'}
             </h1>
             <p>
-              {view === 'login' && 'OLIGO-K와 함께 지역의 가능성을 올려보세요.'}
+              {view === 'login' && 'OLIGO-K와 함께 지역의 가능성을 올려보세요!'}
               {view === 'findPassword' && '회원가입 당시 설정한 힌트로 본인을 확인합니다.'}
               {view === 'findId' && '회원가입 시 입력하신 이메일 주소를 기재해주세요!'}
             </p>

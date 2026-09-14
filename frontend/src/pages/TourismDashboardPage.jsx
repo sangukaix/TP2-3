@@ -29,6 +29,7 @@ import {
 import { downloadAiStrategyPresentation, downloadAiStrategyProposal, getAiRegionDashboard, getAiRegionOpenApiInfo, getSidoBoundaries, getSigunguBoundaries } from '../api/dashboardApi'
 import TourismAssistant from '../components/TourismAssistant'
 import WorkspaceShell from '../components/WorkspaceShell'
+import loadingImage from '../assets/loading2.png'
 import '../App.css'
 
 // 섬이 많거나 길쭉한 시도는 도형의 가운데에 자동으로 이름을 찍으면 글자가 바다 쪽으로 밀릴 수 있습니다.
@@ -537,9 +538,24 @@ function TourismChartLegend({ payload }) {
  * 상대지수로 변환하지 않아 담당자가 월별 실제 규모를 바로 읽을 수 있습니다.
  */
 function MonthlyActualTrendChart({ trend, height = 278, emptyMessage = '월간 원자료를 불러오는 중입니다.' }) {
+  const hasForecast = Boolean(trend?.some((point) => point.is_forecast))
+  const forecastKey = trend?.filter((point) => point.is_forecast).map((point) => point.month).join('|') || ''
+  const [forecastVisible, setForecastVisible] = useState(false)
   const formatVisitorTick = (value) => `${Math.round(value / 10_000).toLocaleString('ko-KR')}만`
   const formatSpendingTick = (value) => `${Math.round(value / 100_000_000).toLocaleString('ko-KR')}억`
-  const renderVisitorBarLabel = ({ x, y, width, height: barHeight, value }) => {
+  useEffect(() => {
+    if (!hasForecast) {
+      setForecastVisible(true)
+      return undefined
+    }
+    setForecastVisible(false)
+    const timer = window.setTimeout(() => setForecastVisible(true), 6000)
+    return () => window.clearTimeout(timer)
+  }, [hasForecast, forecastKey])
+
+  const showForecast = !hasForecast || forecastVisible
+  const renderVisitorBarLabel = ({ x, y, width, height: barHeight, value, payload }) => {
+    if (payload?.is_forecast && !showForecast) return null
     const amount = Number(value)
     // 매우 낮은 막대는 두 줄 라벨이 겹칠 수 있어 표시하지 않습니다.
     if (!Number.isFinite(amount) || Number(barHeight) < 32) return null
@@ -571,24 +587,32 @@ function MonthlyActualTrendChart({ trend, height = 278, emptyMessage = '월간 �
     // 예측선은 첫 예측월(8월)부터만 그려 실제선(7월까지)과 색이 섞이지 않게 합니다.
     spending_forecast_krw: point.is_forecast ? point.spending_krw : null,
   }))
+  const visitorAxisMax = paddedAxisMax(Math.max(...chartData.map((point) => Number(point.visitors) || 0)))
+  const spendingAxisMax = paddedAxisMax(Math.max(...chartData.map((point) => Number(point.spending_krw) || 0)))
   return (
-    <div className="monthly-trend-chart">
+    <div className={`monthly-trend-chart${hasForecast ? ' monthly-trend-chart--forecast' : ''}${showForecast ? ' is-ready' : ' is-loading'}`}>
+      {hasForecast && (
+        <div className="monthly-trend-forecast-zone" aria-live="polite">
+          <img className="monthly-trend-forecast-loading-image" src={loadingImage} alt="예측 데이터 계산 중" />
+          <span className="monthly-trend-forecast-status">{showForecast ? '예측' : '예측 데이터 계산 중...'}</span>
+        </div>
+      )}
       <ResponsiveContainer width="100%" height={height}>
       <ComposedChart data={chartData} margin={{ top: 28, right: 20, left: 14, bottom: 10 }}>
         <CartesianGrid stroke="#dfe5ea" strokeDasharray="0" vertical={false} />
         <XAxis dataKey="month" axisLine={{ stroke: '#2f3640' }} tickLine={{ stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: 11 }} />
-        <YAxis yAxisId="visitors" axisLine={{ stroke: '#2f3640' }} tickLine={{ stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: 10 }} width={54} tickFormatter={formatVisitorTick} domain={[0, paddedAxisMax]} />
-        <YAxis yAxisId="spending" orientation="right" axisLine={{ stroke: '#2f3640' }} tickLine={{ stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: 10 }} width={54} tickFormatter={formatSpendingTick} domain={[0, paddedAxisMax]} />
+        <YAxis yAxisId="visitors" axisLine={{ stroke: '#2f3640' }} tickLine={{ stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: 10 }} width={54} tickFormatter={formatVisitorTick} domain={[0, visitorAxisMax]} />
+        <YAxis yAxisId="spending" orientation="right" axisLine={{ stroke: '#2f3640' }} tickLine={{ stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: 10 }} width={54} tickFormatter={formatSpendingTick} domain={[0, spendingAxisMax]} />
         <ChartTooltip cursor={{ fill: '#1fbac80d' }} content={<TourismChartTooltip />} />
         <Legend verticalAlign="bottom" content={<TourismChartLegend />} />
         <Bar yAxisId="visitors" dataKey="visitors" name={TOURISM_CHART_CONFIG.visitors.label} fill={TOURISM_CHART_CONFIG.visitors.color} barSize={25} radius={[4, 4, 0, 0]}>
           {/* 8월부터는 저장 모델의 예측값이므로 실제값과 부드러운 보라색으로 구분합니다. */}
-          {chartData.map((point) => <Cell key={`visitor-${point.month}`} fill={point.is_forecast ? '#7a87d8' : TOURISM_CHART_CONFIG.visitors.color} />)}
+          {chartData.map((point) => <Cell key={`visitor-${point.month}`} className={point.is_forecast ? 'monthly-trend-forecast-cell' : undefined} fill={point.is_forecast ? '#7a87d8' : TOURISM_CHART_CONFIG.visitors.color} opacity={point.is_forecast && !showForecast ? 0 : 1} />)}
           {/* 막대 내부 중앙에 두 줄로 표시해 어떤 화면 크기에서도 라벨이 막대 밖으로 튀지 않게 합니다. */}
           <LabelList content={renderVisitorBarLabel} />
         </Bar>
         <Line yAxisId="spending" type="monotone" dataKey="spending_actual_krw" name={TOURISM_CHART_CONFIG.spending_krw.label} stroke={TOURISM_CHART_CONFIG.spending_krw.color} strokeWidth={3.5} dot={{ r: 4, fill: '#fff', stroke: TOURISM_CHART_CONFIG.spending_krw.color, strokeWidth: 2 }} activeDot={{ r: 6 }} />
-        <Line yAxisId="spending" type="monotone" dataKey="spending_forecast_krw" name="관광소비액 예상" stroke="#ee7180" strokeWidth={3.5} dot={{ r: 4, fill: '#fff', stroke: '#ee7180', strokeWidth: 2 }} activeDot={{ r: 6 }} legendType="none" />
+        <Line yAxisId="spending" type="monotone" dataKey="spending_forecast_krw" name="관광소비액 예상" stroke="#ee7180" strokeWidth={3.5} dot={{ r: 4, fill: '#fff', stroke: '#ee7180', strokeWidth: 2 }} activeDot={{ r: 6 }} legendType="none" opacity={showForecast ? 1 : 0} />
       </ComposedChart>
       </ResponsiveContainer>
     </div>

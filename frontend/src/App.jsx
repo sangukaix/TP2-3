@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
+import { initializeTheme } from './theme'
 
 // 첫 화면에서 Leaflet·Recharts·보고서 코드를 모두 내려받지 않도록 페이지 단위로 분리합니다.
 const TourismHomePage = lazy(() => import('./pages/TourismHomePage'))
@@ -11,6 +12,7 @@ const LearningArchitecturePage = lazy(() => import('./pages/MlTest/LearningArchi
 const LlmControlPage = lazy(() => import('./pages/MlTest/LlmControlPage'))
 const SignupPage = lazy(() => import('./pages/Signup'))
 const LoginPage = lazy(() => import('./pages/Login'))
+const MyPage = lazy(() => import('./pages/My'))
 
 // 학습 주제별 wrapper를 App 바깥에 두어 화면이 다시 그려져도 챗봇 상태가 초기화되지 않게 합니다.
 function OpenAiLearningPage() {
@@ -34,6 +36,10 @@ export default function App() {
   const [path, setPath] = useState(window.location.pathname)
 
   useEffect(() => {
+    initializeTheme()
+  }, [])
+
+  useEffect(() => {
     const updatePath = () => setPath(window.location.pathname)
     window.addEventListener('popstate', updatePath)
     return () => window.removeEventListener('popstate', updatePath)
@@ -43,6 +49,7 @@ export default function App() {
   if (path === '/') Page = TourismHomePage
   if (path === '/signup') Page = SignupPage
   if (path === '/login') Page = LoginPage
+  if (path === '/my') Page = MyPage
   // 진단 지표는 지역선택 화면 안에 통합했습니다. 예전 주소도 대시보드를 표시해 링크가 끊기지 않게 합니다.
   if (path === '/diagnosis') Page = TourismDashboardPage
   if (path === '/strategy') Page = TourismStrategyPage
