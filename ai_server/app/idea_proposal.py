@@ -26,13 +26,34 @@ def target_basis(report):
             '강진군의회 2024-11-20 시정연설: 10월 말 관광객 약 248만 명, 전년 대비 25% 증가. '
             '전년 규모 역산: 248만÷1.25≈198.4만 명, 차이≈49.6만 명. 역산값은 별도 관측 원자료가 아니다. '
             '반값여행과 축제의 동시기 실적이며 사업 단독 효과·ML 대비 증가율은 아니다. '
-            f"{report.get('region_name') or '선택 지역'}은 최종월 방문 +20%를 도전 목표로 제안한다(25% × 80%). 80%는 전면 적용 대신 단계 운영을 고려한 계획 가정이며 인구 보정·통계 추정 계수가 아니다. "
+            f"{report.get('region_name') or '선택 지역'}에서는 최종월 방문 +20%를 도전 목표로 제안한다(25% × 80%). 80%는 전면 적용 대신 단계 운영을 고려한 계획 가정이며 인구 보정·통계 추정 계수가 아니다. "
             '기본 소비 목표는 월별 소비/방문 비율을 추가 방문 수에 적용한 계획 가정이며 강진 소비 실적으로 계산한 값이 아니다.'
             if gangjin else
             '선정 사례의 운영 방식을 참고하여 최종월 방문·소비 +5%를 초기 계획 목표로 제안한다. '
             '이 비율은 사례의 검증된 효과율이나 ML 결과가 아니라 조정 가능한 기획 가정이다.'
         ),
     }
+
+
+def align_business_period(report):
+    brief = report.get('planning_brief') or {}
+    if brief.get('input_profile') != 'guided_v2' or not brief.get('start_date') or not brief.get('end_date'):
+        return
+    start, end = str(brief['start_date'])[:7], str(brief['end_date'])[:7]
+    months = (int(end[:4]) - int(start[:4])) * 12 + int(end[5:]) - int(start[5:]) + 1
+    audit = report.setdefault('planning_decision', {}).setdefault('period_alignment', [])
+    for index, strategy in enumerate(report.get('strategies') or []):
+        expected = f'{start} ~ {end}, {months}개월'
+        if strategy.get('timeframe') != expected:
+            audit.append({'field': f'strategies[{index}].timeframe', 'original': strategy.get('timeframe'), 'updated': expected})
+            strategy['timeframe'] = expected
+        for step in strategy.get('implementation_steps') or []:
+            original = str(step.get('schedule') or '')
+            updated = re.sub(r'20\d{2}-(?:0[1-9]|1[0-2])(?!\d)', lambda match: min(end, max(start, match[0])), original)
+            updated = re.sub(r'(20\d{2}-\d{2})\s*[~∼]\s*\1', r'\1', updated)
+            if updated != original:
+                audit.append({'field': f'strategies[{index}].step[{step.get("step")}].schedule', 'original': original, 'updated': updated})
+                step['schedule'] = updated
 
 
 def prepare_idea_report(report):
@@ -44,6 +65,7 @@ def prepare_idea_report(report):
     result['planning_decision'] = link_decision(result.get('planning_decision') or {},
         [s for s in result.get('evidence_sources') or [] if s.get('source_type') == 'benchmark_case'])
     result['summary'] = re.sub(r'\s*·?\s*코드 점검에서 실행·근거 보완 항목이 확인되었습니다\.?', '', str(result.get('summary') or ''))
+    align_business_period(result)
     basis = target_basis(result)
     if execution_target(result) is None:
         result['execution_scenario'] = {key: basis[key] for key in ('visitor_target_pct', 'spending_target_pct')}
@@ -57,7 +79,7 @@ def prepare_idea_report(report):
     basis['visitor_target_pct'], basis['spending_target_pct'] = actual
     result['target_proposal_basis'] = basis
     for strategy in result.get('strategies') or []:
-        strategy['expected_effect'] = f'계획 목표: 최종월 ML 기준 전망 대비 방문 +{actual[0]:g}%, 소비 +{actual[1]:g}%. 월별 목표는 단계 적용하며 상품권 재사용률 등 운영 실적은 별도 집계합니다.'
+        strategy['expected_effect'] = f'계획 목표: 최종월 ML 기준 전망 대비 방문 +{actual[0]:g}%, 소비 +{actual[1]:g}%. 월별 목표는 단계 적용하며 참여·이용 실적은 별도 집계합니다.'
         kpi = str(strategy.get('kpi') or '')
         if '⑥성공/중단 기준:' in kpi:
             strategy['kpi'] = kpi.split('⑥성공/중단 기준:', 1)[0].rstrip() + ' ⑥성과 판단: 위 계획 목표와 실제 집계 결과를 비교합니다.'
@@ -65,7 +87,7 @@ def prepare_idea_report(report):
         result['reference_estimate'] = build_reference_estimate(result)
         estimate = result['reference_estimate']
         brief = result.get('planning_brief') or {}
-        if brief.get('input_profile') == 'guided_v1' and brief.get('budget_max_krw'):
+        if brief.get('input_profile') in ('guided_v1', 'guided_v2') and brief.get('budget_max_krw'):
             scale_estimate(estimate, brief['budget_max_krw'])
         if not estimate['within_hard_budget']:
             cap = int((result.get('planning_brief') or {})['budget_max_krw'])
@@ -125,4 +147,5 @@ def scale_estimate(estimate, total):
         row.update(amount=amount, basis='요청 총액 내 항목별 배분 가정 · 운영량 별도 조정')
     for key in ('quantity', 'unit_krw', 'redemption_count', 'qualifying_spend_krw'):
         estimate.pop(key, None)
+    estimate['scale_basis'] = f'사용자 참고 총액 {total:,}원을 기존 항목 비중으로 재배분. 수량·단가는 별도 조정하는 배분 예시입니다.'
     estimate.update(total_krw=total, reserve_krw=amounts[-1], subtotal_krw=sum(amounts[:-1]), within_hard_budget=True)

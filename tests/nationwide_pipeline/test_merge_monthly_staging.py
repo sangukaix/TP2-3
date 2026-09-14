@@ -55,6 +55,35 @@ def write_rows(path: Path, rows: list[dict[str, str]]) -> None:
 
 
 class MergeMonthlyStagingTest(unittest.TestCase):
+    def test_missing_values_keep_metric_lineage_and_never_replace_existing_numbers(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            primary, secondary = root / 'primary.csv', root / 'secondary.csv'
+            old = row('11680', '2026-01', '', 'old')
+            old.update(visitors_source_id='', missing_metrics='visitors', data_status='partial')
+            new = row('11680', '2026-01', '100', 'new')
+            write_rows(primary, [old])
+            write_rows(secondary, [new])
+            result = merge_staging(primary, secondary, root / 'filled', fill_missing=True)
+            self.assertEqual(result['supplemented_row_count'], 1)
+            with (root / 'filled/tourism_monthly_staging.csv').open(encoding='utf-8-sig') as stream:
+                merged = next(csv.DictReader(stream))
+            self.assertEqual((merged['visitors'], merged['visitors_source_id']), ('100', 'new'))
+            self.assertEqual(merged['avg_stay_days_source_id'], 'old')
+            self.assertEqual(merged['data_status'], 'complete')
+            # A corrected existing measure cannot slip through as a missing-value supplement.
+            new['avg_stay_days'] = '99'
+            write_rows(secondary, [new])
+            result = merge_staging(primary, secondary, root / 'conflicting', fill_missing=True)
+            self.assertEqual(result['supplemented_row_count'], 0)
+            self.assertEqual(result['conflict_count'], 1)
+            new['avg_stay_days'] = '2'
+            new['visitors_source_id'] = ''
+            write_rows(secondary, [new])
+            result = merge_staging(primary, secondary, root / 'unsourced', fill_missing=True)
+            self.assertEqual(result['supplemented_row_count'], 0)
+            self.assertEqual(result['conflict_count'], 1)
+
     def test_same_values_are_aliases_and_conflicts_are_not_silently_overwritten(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)

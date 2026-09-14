@@ -1,0 +1,74 @@
+[
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/src/api/dashboardApi.js"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/regions/readiness-audit"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/api/v1/boundaries/sido"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/api/v1/boundaries/sigungu?sido_code=11"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/demo/11680/dashboard?region_name=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EA%B0%95%EB%82%A8%EA%B5%AC"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/regions/readiness-audit"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/api/v1/boundaries/sido"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/api/v1/boundaries/sigungu?sido_code=11"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/demo/11680/dashboard?region_name=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EA%B0%95%EB%82%A8%EA%B5%AC"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/src/api/dashboardApi.js"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/regions/readiness-audit"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/demo/11680/generation-readiness?region_name=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EA%B0%95%EB%82%A8%EA%B5%AC"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/regions/catalog"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/demo/11680/dashboard?region_name=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EA%B0%95%EB%82%A8%EA%B5%AC"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/regions/readiness-audit"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/demo/11680/generation-readiness?region_name=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EA%B0%95%EB%82%A8%EA%B5%AC"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/regions/catalog"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/demo/11680/dashboard?region_name=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EA%B0%95%EB%82%A8%EA%B5%AC"
+  }
+]

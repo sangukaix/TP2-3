@@ -34,7 +34,7 @@ from ...ml.planning_evidence import build_planning_ml_evidence
 _EVIDENCE_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
 _CASE_STUDY_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
 # 지역 맞춤 사례 조사 관점·후보 다양성 계약을 바꾸면 같은 서버 안의 기존 조사 캐시도 재사용하지 않습니다.
-RESEARCH_CONTRACT_VERSION = '2026-09-07-nationwide-execution-evidence-v3'
+RESEARCH_CONTRACT_VERSION = '2026-09-12-regional-case-research-v6'
 LOGGER = logging.getLogger(__name__)
 
 
@@ -185,7 +185,8 @@ async def _collect_case_studies(
 
     case_pack = await agent.collect(region_code=region_code, snapshot=snapshot, planning_brief=planning_brief)
     # 한 번의 통신 오류를 6시간 캐시해 다음 기획에도 자료가 빠지는 일을 막습니다.
-    if ttl_seconds and not any(row.get('status') == 'failed' for row in case_pack.get('trace') or []):
+    if ttl_seconds and (case_pack.get('case_search_coverage') or {}).get('sufficient_for_comparison', True) and not any(row.get('status') == 'failed' or row.get('grounding', {}).get('rejected_cases')
+                               for row in case_pack.get('trace') or []):
         expired_keys = [key for key, (created_at, _) in _CASE_STUDY_CACHE.items() if now - created_at >= ttl_seconds]
         for key in expired_keys:
             _CASE_STUDY_CACHE.pop(key, None)
@@ -225,7 +226,7 @@ async def orchestrate_strategy_report(
         build_planning_ml_evidence, region_code, snapshot['region_name'], planning_brief,
     )
     snapshot['ml_analysis'] = ml_evidence.model_dump(mode='json')
-    if (planning_brief or {}).get('input_profile') == 'guided_v1' and not snapshot['ml_analysis'].get('horizon_policy', {}).get('coverage_complete'):
+    if (planning_brief or {}).get('input_profile') in ('guided_v1', 'guided_v2') and not snapshot['ml_analysis'].get('horizon_policy', {}).get('coverage_complete'):
         raise OpenAIResponseError('PLANNING_PERIOD_UNSUPPORTED', '선택한 3개월 전체의 ML 전망을 제공할 수 없습니다. 시작 월을 앞당기거나 최신 데이터를 반영해 주세요.', status_code=422)
     snapshot['decision_facts'] = build_decision_facts(snapshot)
     trace.append({'agent': 'ml', 'stage': 'forecast_evidence', 'status': ml_evidence.status,
@@ -277,6 +278,7 @@ async def orchestrate_strategy_report(
 
     evidence_pack['benchmark_cases'] = case_pack.get('benchmark_cases') or []
     evidence_pack['case_search_policy'] = case_pack.get('case_search_policy') or {}
+    evidence_pack['case_research_plan'] = case_pack.get('case_research_plan') or {}
     evidence_pack['case_search_coverage'] = case_pack.get('case_search_coverage') or {}
     evidence_pack['research_gaps'] = list(dict.fromkeys([
         *(evidence_pack.get('research_gaps') or []),
@@ -285,6 +287,14 @@ async def orchestrate_strategy_report(
     evidence_pack['sources'] = merge_evidence_sources(
         evidence_pack.get('sources') or [], case_pack.get('sources') or [],
     )
+    # Do not silently turn a failed regional search into the same nationwide
+    # default proposal. Explicitly selected business directions can compare
+    # within that operation; automatic recommendation needs real alternatives.
+    if ((planning_brief or {}).get('business_direction', 'auto') == 'auto'
+            and evidence_pack['case_search_coverage'].get('sufficient_for_comparison') is False):
+        raise OpenAIResponseError('CASE_RESEARCH_INCOMPLETE',
+            '지역별 사업 사례를 충분히 비교하지 못해 초안 작성을 시작하지 않았습니다. '
+            '공식 사례 조사 상태를 확인한 뒤 다시 생성해 주세요. 같은 공통 사례로 자동 대체하지 않습니다.', status_code=503)
 
     transfer_model = str(
         env_values.get('OPENAI_TRANSFER_MODEL')
@@ -313,6 +323,7 @@ async def orchestrate_strategy_report(
         previous_cases.update({row['source_id']: row for row in augmented.get('benchmark_cases') or []})
         evidence_pack['benchmark_cases'] = list(previous_cases.values())
         evidence_pack['case_search_policy'] = augmented.get('case_search_policy') or evidence_pack.get('case_search_policy', {})
+        evidence_pack['case_research_plan'] = augmented.get('case_research_plan') or evidence_pack.get('case_research_plan', {})
         evidence_pack['case_search_coverage'] = augmented.get('case_search_coverage') or evidence_pack.get('case_search_coverage', {})
         evidence_pack['sources'] = merge_evidence_sources(
             evidence_pack['sources'], augmented.get('sources') or [],
@@ -354,7 +365,7 @@ async def orchestrate_strategy_report(
         # 고칠 수 있는 값은 서버 계약으로 한 번 보정한다. 원래 LLM 판단은 correction
         # 기록에 남기며, 보정됐다는 이유로 ready/승인으로 바꾸지 않는다.
         transfer_assessment, corrections = stabilize_candidate_decision(evidence_pack, transfer_assessment)
-        if (planning_brief or {}).get('input_profile') == 'guided_v1':
+        if (planning_brief or {}).get('input_profile') in ('guided_v1', 'guided_v2'):
             from ..case_recommendation import constrain_decision
             transfer_assessment = constrain_decision(transfer_assessment, evidence_pack.get('benchmark_cases') or [], planning_brief)
         evidence_pack['transfer_assessment'] = transfer_assessment

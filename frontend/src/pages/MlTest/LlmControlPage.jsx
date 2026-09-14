@@ -6,6 +6,8 @@ import LearningSectionNav from './LearningSectionNav'
 import { getLlmConfig, getLlmStatus, getLlmTrace, resetLlmConfig, saveLlmConfig } from '../../api/llmControlApi'
 import './mlTest.css'
 import './LlmControlPage.css'
+import CurrentWorkflowGuide from './CurrentWorkflowGuide'
+import { ProjectTutor } from './LearningArchitecturePage'
 
 const LABELS = {
   evidence: '지역 근거 조사', case_study: '공식 사례 조사', local_web_query_planner: '무료 공식 검색 질문 설계', transferability: '지역 적합성 판단',
@@ -63,7 +65,8 @@ export default function LlmControlPage() {
   const changeRoute = (task, field, value) => setConfig((current) => ({ ...current, routes: { ...current.routes, [task]: { ...current.routes[task], [field]: value } } }))
   const save = async () => { setBusy(true); try { setConfig(await saveLlmConfig(config, adminToken)); setMessage('저장했습니다. 다음 Agent 실행부터 이 설정이 적용됩니다.') } catch (error) { setMessage(error.message) } finally { setBusy(false) } }
   const restore = async () => { setBusy(true); try { setConfig(await resetLlmConfig(adminToken)); setMessage('서버 환경변수의 기본 라우팅으로 복구했습니다.') } catch (error) { setMessage(error.message) } finally { setBusy(false) } }
-  return <WorkspaceShell><main className="ml-test-page llm-control-page"><LearningSectionNav />
+  return <WorkspaceShell><main className="ml-test-page llm-control-page admin-study-page"><LearningSectionNav /><div className="learning-architecture-layout"><div className="learning-architecture-content">
+    <CurrentWorkflowGuide topic="router" />
     <header className="ml-test-hero"><div><p>LLM CONTROL CENTER</p><h1>AI Router</h1><span>Qwen은 근거 비교·검색 질문 설계·사전 검수, Gemma는 기획·수정, OpenAI는 필요한 공식 웹 조사와 독립 최종 검수를 맡습니다. 학생 절약 모드는 무료 공식 검색 API와 저장 근거를 우선 사용하고 OpenAI 최종 검수 1회만 허용합니다. ACTIVE는 연결 확인이며, 실제 추론은 실행 기록으로 확인합니다.</span></div><button type="button" onClick={refresh}><RefreshCw size={15} />새로고침</button></header>
     {status?.cost_policy?.student_budget ? <p className="llm-control-message">학생 절약 모드 적용 중 · Qwen·Gemma가 비교·작성·재검수를 수행 · OpenAI 웹 조사는 자동 실행하지 않음 · 무료 검색 API 키가 있으면 Qwen 질문으로 공식 도메인 원문 후보만 제한 조회 · 로컬 검수 통과본만 OpenAI 독립 최종 검수 1회 · 저장 근거가 부족하면 미승인으로 남습니다.</p> : status?.cost_policy?.local_first && <p className="llm-control-message">로컬 우선 적용 중 · 기획 생성 1건의 OpenAI 요청 최대 3회 · 로컬 요청 제한 {Math.round((status.cost_policy.local_llm_timeout_seconds || 1800) / 60)}분 · 로컬 실패 시 유료 자동 대체 없음 · 로컬 검수 미통과 시 최종 유료 검수 생략. 웹검색 내부 호출·토큰에 따른 금액 상한을 뜻하지 않습니다.</p>}
     {status?.cost_policy?.free_official_web_search && <p className="llm-control-message">무료 공식 검색 도구 · {status.cost_policy.free_official_web_search.configured_providers?.length ? `${status.cost_policy.free_official_web_search.configured_providers.join(' → ')} 연결됨` : 'API 키 미설정'} · 보고서 1건당 최대 {status.cost_policy.free_official_web_search.max_queries_per_report}개 질문 · 검색 요약은 원문 검수 전 후보로만 사용</p>}
@@ -92,5 +95,5 @@ export default function LlmControlPage() {
       <footer><input type="password" value={adminToken} onChange={(event) => setAdminToken(event.target.value)} placeholder="LLM 관리자 토큰 (저장하지 않음)" /><button type="button" disabled={busy} onClick={restore}>기본값 복구</button><button type="button" disabled={busy} onClick={save}><Save size={14} />설정 저장</button></footer>
     </section>}
     <section className="llm-trace-panel"><header><div><CircleDotDashed size={18} /><div><h2>실시간 실행 기록</h2><p>시도별 성공·실패·대체 실행을 표시합니다. 근거 조회는 이번 요청의 수집 자료 대상이며, 실시간 웹검색과 구분합니다.</p></div></div>{usage && <span><DatabaseZap size={14} />실행 시도 {usage.tracked_calls}회 · 확인된 토큰 {usage.total_tokens.toLocaleString()}<small>사용량 미확인 {usage.usage_unknown_attempts ?? 0}회 · 비용은 별도 검증 필요</small></span>}</header><div>{trace.length === 0 ? <p className="llm-empty">아직 이 AI Server에서 실행된 LLM 호출이 없습니다.</p> : trace.map((event, index) => <TraceEvent key={`${event.recorded_at}-${index}`} event={event} />)}</div></section>
-  </main></WorkspaceShell>
+  </div><ProjectTutor topic="openai" /></div></main></WorkspaceShell>
 }

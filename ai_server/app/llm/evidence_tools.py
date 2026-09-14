@@ -16,6 +16,7 @@ from jsonschema import Draft202012Validator, ValidationError
 
 from .errors import LLMProviderError
 from ..evidence_sources import merge_evidence_sources
+from ..case_recommendation import budget_only
 
 
 def compact_json(value: Any) -> str:
@@ -40,7 +41,8 @@ TOOL_DEFINITIONS = [
     _tool('get_ml_forecast', '저장 ML 전망·기간 정책·검증 경계를 읽는다. 재학습이나 정책효과 추정은 하지 않는다.',
           {'start_month': {'type': 'string', 'pattern': '^\\d{4}-(0[1-9]|1[0-2])$'},
            'end_month': {'type': 'string', 'pattern': '^\\d{4}-(0[1-9]|1[0-2])$'}}),
-    _tool('get_case_comparison_matrix', '수집된 공식 사례를 운영 원리·조건·위험별로 한눈에 비교한다. 원문 인용 전에는 read_collected_source를 별도로 호출해야 한다.'),
+    _tool('get_case_comparison_matrix', '수집된 사례와 지역 조사 계획을 비교한다. 분할 응답이면 next_offset까지 모두 읽는다. 원문 인용 전에는 read_collected_source를 별도로 호출한다.',
+          {'offset': {'type': 'integer', 'minimum': 0}}),
     _tool('search_collected_sources', '이번 요청에 수집된 공식 사례/출처의 목록을 검색한다. 실시간 웹검색이 아니다.',
           {'query': {'type': 'string', 'maxLength': 120},
            'offset': {'type': 'integer', 'minimum': 0},
@@ -90,6 +92,7 @@ class EvidenceTools:
         self.source_chunk_reads: dict[str, set[int]] = {}
         self.read_paths: set[str] = set()
         self.segment_reads: dict[str, set[int]] = {}
+        self.case_matrix_reads: set[int] = set()
         self.events: list[dict[str, Any]] = []
 
     def overview(self) -> dict[str, Any]:
@@ -258,8 +261,14 @@ class EvidenceTools:
 
     def _decision(self) -> dict:
         assessment = self.pack.get('transfer_assessment') or {}
+        # Audit copies describe superseded decisions, not current instructions.
+        # Keep them at explicit read-only paths instead of duplicating all past
+        # candidate prose in every planner/reviewer request.
+        deferred = ('design_candidates', 'candidate_assessments',
+                    'original_candidate_assessments', 'automatic_corrections',
+                    'original_selection_reason')
         result = deepcopy({key: value for key, value in assessment.items()
-                           if key not in ('design_candidates', 'candidate_assessments')})
+                           if key not in deferred})
         selected = assessment.get('selected_candidate_id')
         candidates = assessment.get('design_candidates') or []
         result['selected_candidate'] = next((deepcopy(row) for row in candidates
@@ -268,7 +277,7 @@ class EvidenceTools:
         prefix = '/evidence_pack' if 'evidence_pack' in self.payload else ''
         result['additional_sections'] = {
             key: f'{prefix}/transfer_assessment/{key}'
-            for key in ('design_candidates', 'candidate_assessments') if key in assessment
+            for key in deferred if key in assessment
         }
         if self.task == 'transferability' and (self.payload.get('quality_review_feedback') or {}).get('issues'):
             result['review_context'] = {
@@ -288,7 +297,7 @@ class EvidenceTools:
         rows = []
         for source_id, item in self.sources.items():
             case = item.get('case')
-            if not case:
+            if not case or budget_only(case):
                 continue
             operating_model, operating_model_truncated = excerpt(case.get('operating_model'))
             observed_result, observed_result_truncated = excerpt(case.get('observed_result'), limit=280)
@@ -309,6 +318,7 @@ class EvidenceTools:
             })
         return {
             'rows': rows,
+            'research_plan': self.pack.get('case_research_plan') or {},
             'citation_rule': '이 표는 비교용 요약이다. source_id를 최종 인용하려면 read_collected_source로 해당 원문을 읽어야 한다.',
         }
 
@@ -402,6 +412,20 @@ class EvidenceTools:
                 result = self._forecast(arguments)
             elif name == 'get_case_comparison_matrix':
                 result = self._case_matrix()
+                raw = compact_json(result)
+                if len(raw.encode('utf-8')) > 12000:
+                    # Keep the complete plan and every comparison row. The ordinary
+                    # tool-size guard still applies to each page and the model's
+                    # context guard still applies to the combined conversation.
+                    segments = [raw[i:i + 2200] for i in range(0, len(raw), 2200)]
+                    offset = arguments.get('offset', 0)
+                    if offset >= len(segments):
+                        raise ValueError('사례 비교표 페이지 범위를 벗어났습니다.')
+                    result = {'segment_index': offset, 'segment_count': len(segments),
+                              'serialized_json_segment': segments[offset],
+                              'next_offset': offset + 1 if offset + 1 < len(segments) else None}
+                elif arguments.get('offset', 0):
+                    raise ValueError('사례 비교표 페이지 범위를 벗어났습니다.')
             elif name == 'search_collected_sources':
                 result = self._search(arguments)
             elif name == 'read_collected_source':
@@ -426,6 +450,8 @@ class EvidenceTools:
                       'message': '원문은 보존되어 있습니다. read_task_section으로 하위 경로/목록 한 건씩 읽으세요.',
                       'root': prefix, 'keys': list(result)}
         success = 'error' not in result
+        if name == 'get_case_comparison_matrix' and success:
+            self.case_matrix_reads.add(result.get('segment_index', 0))
         if name == 'read_collected_source' and success:
             source_id = arguments['source_id']
             if result.get('chunk_count'):
@@ -455,7 +481,8 @@ class EvidenceTools:
         feedback_issues = (self.payload.get('quality_review_feedback') or {}).get('issues') or []
         is_targeted_revision = bool(feedback_issues) and self.task in {'transferability', 'planner_revision'}
         is_report_composition = self.task in {'planner', 'planner_revision'}
-        case_source_ids = [source_id for source_id, item in self.sources.items() if 'case' in item]
+        case_source_ids = [source_id for source_id, item in self.sources.items() if 'case' in item
+                           and (self.task != 'transferability' or not budget_only(item['case']))]
         for key, tool in (
             ('regional_tourism_status', 'get_regional_tourism_status'),
             ('nationwide_comparison', 'compare_regions'),
@@ -469,9 +496,11 @@ class EvidenceTools:
         prefix = '/evidence_pack' if 'evidence_pack' in self.payload else ''
         if self.pack.get('transfer_assessment') and 'get_planning_decision' not in completed and f'{prefix}/transfer_assessment' not in self.read_paths:
             missing.append('get_planning_decision')
-        if (self.task == 'transferability' and not is_targeted_revision and case_source_ids
-                and 'get_case_comparison_matrix' not in completed):
-            missing.append('get_case_comparison_matrix')
+        if self.task == 'transferability' and not is_targeted_revision and case_source_ids:
+            raw_matrix = compact_json(self._case_matrix())
+            page_count = math.ceil(len(raw_matrix) / 2200) if len(raw_matrix.encode('utf-8')) > 12000 else 1
+            if not set(range(page_count)).issubset(self.case_matrix_reads):
+                missing.append('get_case_comparison_matrix')
         for path in ('/previous_draft', '/draft_report'):
             if self.payload.get(path[1:]) and path not in self.read_paths:
                 segments = self.draft_segments(path)
@@ -479,11 +508,10 @@ class EvidenceTools:
                 missing.append(f'read_task_section({path}, offset={next_index}, limit=1)' if segments else f'read_task_section({path})')
         read_case_ids = [source_id for source_id in self.read_source_ids if source_id in case_source_ids]
         if case_source_ids:
-            # Qwen의 후보 비교 단계는 서로 다른 운영 원리의 공식 사례를 두 건 이상 확인해야 합니다.
-            # 사례 풀이 실제로 한 유형뿐이면 억지로 두 건을 요구하지 않습니다.
+            # 확보한 서로 다른 원리 세 가지를 비교합니다. 없는 원리는 요구하지 않습니다.
             available_families = {_case_mechanism_family(self.sources[source_id]['case']) for source_id in case_source_ids}
             read_families = {_case_mechanism_family(self.sources[source_id]['case']) for source_id in read_case_ids}
-            required_family_count = min(2, len(available_families)) if self.task == 'transferability' else 1
+            required_family_count = min(3, len(available_families)) if self.task == 'transferability' else 1
             if len(read_families) < required_family_count:
                 detail = '서로 다른 운영 방식의 공식 사례 source_id' if required_family_count > 1 else '관련 사례 source_id'
                 missing.append(f'read_collected_source({detail})')

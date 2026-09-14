@@ -71,6 +71,70 @@ class OpenAITokenRecoveryTest(unittest.TestCase):
         self.assertEqual(result['usage']['total_tokens'], 33)
         self.assertEqual(self.timeouts, [600])
 
+    def test_http_failure_diagnostics_distinguish_limits_without_retry(self):
+        cases = [
+            (401, 'invalid_api_key', 'invalid_request_error', 'OPENAI_AUTH_ERROR'),
+            (403, None, None, 'OPENAI_ACCESS_ERROR'),
+            (429, 'credit_balance_exhausted', 'insufficient_quota', 'OPENAI_QUOTA_ERROR'),
+            (429, 'organization_spend_limit_exceeded', 'insufficient_quota', 'OPENAI_QUOTA_ERROR'),
+            (429, 'project_spend_limit_exceeded', 'insufficient_quota', 'OPENAI_QUOTA_ERROR'),
+            (429, 'organization_usage_limit_exceeded', 'insufficient_quota', 'OPENAI_QUOTA_ERROR'),
+            (429, 'insufficient_quota', 'insufficient_quota', 'OPENAI_QUOTA_ERROR'),
+            (429, 'rate_limit_exceeded', 'rate_limit_error', 'OPENAI_RATE_LIMIT_ERROR'),
+            (429, 'slow_down', 'rate_limit_error', 'OPENAI_RATE_LIMIT_ERROR'),
+            (429, None, None, 'OPENAI_LIMIT_ERROR'),
+            (500, None, None, 'OPENAI_SERVER_ERROR'),
+            (503, 'server_is_overloaded', 'service_unavailable_error', 'OPENAI_SERVER_ERROR'),
+            (400, 'context_length_exceeded', 'invalid_request_error', 'OPENAI_MODEL_OR_REQUEST_ERROR'),
+            (404, 'model_not_found', 'invalid_request_error', 'OPENAI_MODEL_OR_REQUEST_ERROR'),
+            (422, None, None, 'OPENAI_MODEL_OR_REQUEST_ERROR'),
+        ]
+        for status, code, kind, expected in cases:
+            with self.subTest(status=status, code=code):
+                reply = httpx.Response(status, json={'error': {
+                    'code': code, 'type': kind, 'message': 'private echoed request', 'param': 'secret field'}})
+                with self.assertRaises(OpenAIResponseError) as caught:
+                    self.call([reply])
+                error = caught.exception
+                self.assertEqual(error.code, expected)
+                self.assertEqual(error.attempts[0]['upstream_error'], {
+                    'http_status': status, 'code': code or 'unknown', 'type': kind or 'unknown'})
+                self.assertFalse(error.attempts[0]['usage_reported'])
+                self.assertEqual(error.usage, {})
+                self.assertEqual(len(self.requests), 1)
+                self.assertNotIn('private echoed request', str(error) + json.dumps(error.attempts))
+                self.assertNotIn('secret field', json.dumps(error.attempts))
+
+    def test_malformed_error_body_stays_typed_and_does_not_retry(self):
+        replies = [httpx.Response(502, text='<html>private proxy output</html>'),
+                   httpx.Response(502, text='{broken', headers={'content-type': 'application/json'}),
+                   httpx.Response(502, json=['bad']), httpx.Response(502, json={'error': 'bad'}),
+                   httpx.Response(429, json={'error': {'code': ['bad'], 'type': {'bad': True}}})]
+        for reply in replies:
+            with self.subTest(reply=reply.content):
+                with self.assertRaises(OpenAIResponseError) as caught:
+                    self.call([reply])
+                detail = caught.exception.attempts[0]['upstream_error']
+                self.assertEqual(detail, {'http_status': reply.status_code, 'code': 'unknown', 'type': 'unknown'})
+                self.assertEqual(len(self.requests), 1)
+
+    def test_unknown_upstream_fields_cannot_echo_credentials(self):
+        secret = 'private-value-not-for-logs'
+        with self.assertRaises(OpenAIResponseError) as caught:
+            self.call([httpx.Response(429, json={'error': {
+                'code': secret, 'type': secret, 'message': secret, 'param': secret}})])
+        self.assertNotIn(secret, str(caught.exception) + json.dumps(vars(caught.exception)))
+        self.assertEqual(caught.exception.code, 'OPENAI_LIMIT_ERROR')
+
+    def test_http_error_after_token_retry_keeps_prior_usage_and_cause(self):
+        first = response_payload(status='incomplete', reason='max_output_tokens', output_tokens=16000)
+        second = httpx.Response(429, json={'error': {'code': 'credit_balance_exhausted'}})
+        with self.assertRaises(OpenAIResponseError) as caught:
+            self.call([first, second])
+        self.assertEqual(caught.exception.usage['total_tokens'], 16020)
+        self.assertEqual(caught.exception.attempts[-1]['upstream_error']['code'], 'credit_balance_exhausted')
+        self.assertEqual(len(self.requests), 2)
+
     def test_token_limit_retries_same_evidence_once_and_sums_usage(self):
         partial = response_payload(status='incomplete', reason='max_output_tokens',
                                    answer='{"answer":', output_tokens=16000)

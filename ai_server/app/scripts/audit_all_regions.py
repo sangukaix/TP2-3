@@ -1,16 +1,18 @@
 """Audit registered regions without LLM calls, training or SQL writes."""
 import json
+import argparse
 import httpx
 from datetime import datetime,timezone
 from concurrent.futures import ThreadPoolExecutor,as_completed
 from ai_server.app.scripts.check_generation_readiness import inspect_region
 from ai_server.ml.region_catalog import list_region_data_catalog
-from ai_server.app.region_readiness_audit import AUDIT_PATH
+from ai_server.app.region_readiness_audit import AUDIT_PATH, file_signature, sql_signatures
 from ai_server.app.report_projection import execution_target,select_report_forecast
 
 def inspect(entry,reports):
     row={'region_code':entry.region_code,'region_name':entry.region_name,'verified':False,'data_ready':False,'issues':[]}
     try:
+        before = file_signature(entry)
         data=inspect_region(entry.region_code)
         row['details']=data
         from ai_server.app.main import assess_data_freshness
@@ -20,6 +22,11 @@ def inspect(entry,reports):
                 'peers':data['peer_count']>0,'cases':data['official_cases_allowed']>=4}
         row['checks']=checks;row['data_ready']=all(checks.values())
         row['issues']=[k for k,v in checks.items() if not v]
+        after = file_signature(entry)
+        if before != after:
+            row['data_ready'] = False
+            row['issues'].append('점검 도중 입력 파일 변경')
+        row['input_signature'] = after
         matching=[r for r in reports if r['regionCode']==entry.region_code]
         if not matching:row['issues'].append('기획안 실생성·목표·출력 미검증')
         else:
@@ -43,14 +50,28 @@ def inspect(entry,reports):
     return row
 
 def main():
-    response=httpx.get('http://127.0.0.1:8112/ai/v1/strategy-reports',timeout=30)
-    response.raise_for_status();reports=response.json()
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--data-only', action='store_true', help='서버 실행 없이 생성 입력을 점검합니다. 실생성 승인을 부여하지 않습니다.')
+    args=parser.parse_args()
+    if args.data_only:
+        reports=[]
+    else:
+        response=httpx.get('http://127.0.0.1:8112/ai/v1/strategy-reports',timeout=30)
+        response.raise_for_status();reports=response.json()
     entries=list(list_region_data_catalog(enabled_only=True));rows=[]
+    sql_before = sql_signatures()
     with ThreadPoolExecutor(max_workers=2) as pool:
         jobs=[pool.submit(inspect,e,reports) for e in entries]
         for f in as_completed(jobs):
             r=f.result();rows.append(r);print(f"{len(rows)}/{len(entries)} {r['region_code']} data={r['data_ready']}",flush=True)
-    payload={'checked_at':datetime.now(timezone.utc).isoformat(),'status':'completed','regions':sorted(rows,key=lambda r:r['region_code'])}
+    sql_after = sql_signatures()
+    for row in rows:
+        code = row['region_code']
+        row['sql_signature'] = sql_after.get(code)
+        if not sql_after.get(code) or sql_before.get(code) != sql_after[code]:
+            row['data_ready'] = False
+            row['issues'].append('SQL 자료 점검 도중 변경 또는 누락')
+    payload={'checked_at':datetime.now(timezone.utc).isoformat(),'status':'completed','scope':'generation_inputs' if args.data_only else 'generation_inputs_and_saved_reports','regions':sorted(rows,key=lambda r:r['region_code'])}
     temporary=AUDIT_PATH.with_suffix('.tmp')
     temporary.write_text(json.dumps(payload,ensure_ascii=False,indent=2),encoding='utf-8')
     temporary.replace(AUDIT_PATH)

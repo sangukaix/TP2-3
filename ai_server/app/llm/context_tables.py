@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+from copy import deepcopy
 from typing import Any
 
 TABLE = '__evidence_table_v1__'
@@ -77,3 +78,28 @@ def schema_field_guidance(schema: dict) -> str:
         return ''
     return ('\n이번 출력 필드의 뜻은 다음과 같다. format은 형태만 제한하므로 이 설명도 반드시 따른다. '
             '요청하지 않은 기획 본문을 문자열 필드 안에 대신 넣지 마라.\n' + _json(descriptions))
+
+
+def schema_without_guided_descriptions(schema: dict) -> dict:
+    """이미 system 지시문에 전달한 설명만 format에서 중복 제거한다.
+
+    검증 키워드·필드명·enum은 그대로 둔다. guidance가 방문하지 않는 $defs 등은
+    설명까지 보존한다. 원본 Schema는 최종 검증과 다른 공급자 경로에서 계속 사용한다.
+    """
+    result = deepcopy(schema)
+
+    def visit(node: Any) -> None:
+        if not isinstance(node, dict):
+            return
+        if isinstance(node.get('description'), str) and node['description'].strip():
+            node.pop('description')
+        for child in (node.get('properties') or {}).values():
+            visit(child)
+        if isinstance(node.get('items'), dict):
+            visit(node['items'])
+        for key in ('anyOf', 'oneOf', 'allOf'):
+            for child in node.get(key) or []:
+                visit(child)
+
+    visit(result)
+    return result

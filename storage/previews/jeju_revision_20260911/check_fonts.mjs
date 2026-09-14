@@ -1,0 +1,11 @@
+import fs from 'node:fs/promises';
+import {chromium} from 'file:///C:/Users/Admin/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
+const root='C:/Users/Admin/mbca/TP2-3';
+const browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});
+const page=await browser.newPage({viewport:{width:1100,height:330}});
+await page.setContent(`<style>${await fs.readFile(root+'/frontend/src/App.css','utf8')}</style><div class="strategy-briefs"><article><span>예상 견적 · 실제 금액과 다를 수 있습니다</span><strong>총 876,645,000원</strong><ul><li>여행비 환급 지원 · 697,250,000원</li><li>현장 운영·정산 · 83,700,000원</li><li>신청·증빙 시스템 · 8,000,000원</li></ul></article><article><span>성과 측정 방법</span><p>환급 후 재사용률: 적격 재결제액 합계 ÷ 지급 환급액 합계</p></article></div>`);
+const sizes=await page.evaluate(()=>['.strategy-briefs li','.strategy-briefs p','.strategy-briefs strong'].map(s=>getComputedStyle(document.querySelector(s)).fontSize));
+if(!sizes.every(s=>s==='12px'))throw Error(JSON.stringify(sizes));
+await page.screenshot({path:root+'/storage/previews/jeju_revision_20260911/web-fonts.png'});
+await fs.writeFile(root+'/storage/previews/jeju_revision_20260911/web-fonts.json',JSON.stringify({sizes,scope:'actual project CSS and matching estimate markup; no generation POST'}));
+await browser.close();console.log(sizes);

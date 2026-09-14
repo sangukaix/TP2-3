@@ -53,7 +53,7 @@ def build_case_search_policy(snapshot: dict[str, Any]) -> dict[str, Any]:
         'search_scope': 'nationwide',
         'review_order': ['same_province', 'cross_province_peer', 'national_mechanism'],
         'cross_province_review': 'always',
-        'peer_regions': [{key: peer.get(key) for key in ('region_code', 'region_name', 'rank')}
+        'peer_regions': [{key: peer.get(key) for key in ('region_code', 'region_name', 'rank', 'distance', 'visitors_gap_pct', 'spend_per_visitor_gap_krw', 'overnight_ratio_gap_pct_point')}
                          for peer in peers],
         'peer_period': comparison.get('period') if comparison.get('available') else None,
         # 현재 peer 계산에는 주민등록 인구가 없다. 방문자를 주민 수로 바꾸지 않는다.
@@ -92,7 +92,10 @@ def select_case_cards(cards: list[dict[str, Any]], snapshot: dict[str, Any], *,
         key = str(card.get('source_url') or card.get('source_id') or '')
         if key:
             unique.setdefault(key, deepcopy(card))
-    rows = list(unique.values())
+    # 예산서가 운영 사례의 제한된 비교 슬롯을 차지하지 않게 한다.
+    # 비용 문서는 별도 RAG 근거로 남고 관광사업 후보로 승격하지 않는다.
+    from .case_recommendation import budget_only
+    rows = [row for row in unique.values() if not budget_only(row)]
     for row in rows:
         row['retrieval_context'] = case_relation(row, snapshot)
     scope_order = {'selected_region': 0, 'same_province': 1, 'cross_province_peer': 2,

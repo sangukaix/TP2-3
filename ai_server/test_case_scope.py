@@ -76,6 +76,11 @@ class CaseScopeTests(unittest.TestCase):
         self.assertEqual(coverage['excluded_candidates'], 4)
         self.assertEqual(rows, original)
 
+    def test_budget_document_does_not_take_an_operating_candidate_slot(self):
+        rows=[card('budget','강원도 춘천시','야간관광 예산 편성'),card('operation','전남 강진군','지역 환급')]
+        selected,_=select_case_cards(rows,snapshot(),mechanism_key=_case_mechanism_family,limit=1)
+        self.assertEqual([row['source_id'] for row in selected],['operation'])
+
     def test_sparse_local_catalog_still_uses_nationwide_cards(self):
         rows = [card('outside', '전남 강진군'), card('national', '전국 참여지역')]
         selected, coverage = select_case_cards(rows, snapshot(), mechanism_key=_case_mechanism_family)
@@ -88,14 +93,14 @@ class CaseScopeTests(unittest.TestCase):
         self.assertIn('경기도 의정부시', query)
         self.assertNotIn('원주시', query)
 
-    def test_prefetch_keeps_two_mechanisms_and_reads_outside_case(self):
+    def test_prefetch_keeps_three_mechanisms_and_reads_outside_case(self):
         rows = [card('local1', '강원도 춘천시'), card('local2', '강원도 강릉시', '체크인 숙박 운영'),
                 card('outside', '경기도 의정부시', '교통 접근 운영')]
         for row in rows:
             row['retrieval_context'] = case_relation(row, snapshot())
         workspace = EvidenceTools({'snapshot': snapshot(), 'benchmark_cases': rows}, task='transferability')
         _prefetch_required_evidence(workspace, 'transferability')
-        self.assertEqual(set(workspace.read_case_source_ids()), {'local1', 'outside'})
+        self.assertEqual(set(workspace.read_case_source_ids()), {'local1', 'local2', 'outside'})
         self.assertEqual(workspace.missing_required_reads(), [])
 
     def test_revision_preserves_case_scope(self):

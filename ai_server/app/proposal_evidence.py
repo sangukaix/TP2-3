@@ -83,7 +83,18 @@ def build_reference_estimate(report: dict[str, Any]) -> dict[str, Any]:
     brief = report.get('planning_brief') or {}
     hard_limit = brief.get('budget_max_krw') if brief.get('budget_hard_limit') else None
     if hard_limit is not None:
-        quantity = min(quantity, max(0, math.floor((float(hard_limit) / 1.1 - fixed) / unit)))
+        low, high = 0, quantity
+        while low < high:
+            middle = (low + high + 1) // 2
+            cost = middle * unit + max(20 * months, math.ceil(middle / 25)) * 150_000 + 16_000_000
+            if cost + math.ceil(cost * .1) <= hard_limit:
+                low = middle
+            else:
+                high = middle - 1
+        quantity = low
+        staff_days = max(20 * months, math.ceil(quantity / 25))
+        fixed = staff_days * 150_000 + 16_000_000
+        scale_basis += f' 입력 상한에 따라 실제 견적은 {quantity:,}건과 {staff_days:,}인일로 조정.'
     benefits = quantity * unit
     subtotal = benefits + fixed
     reserve = math.ceil(subtotal * .10)

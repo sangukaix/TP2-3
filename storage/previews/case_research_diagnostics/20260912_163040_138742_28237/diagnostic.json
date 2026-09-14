@@ -1,0 +1,1584 @@
+{
+  "report_id": "e3f26ee7a95144a0a1fc2449ce68bda1",
+  "region_name": "인천광역시 부평구",
+  "report_approved": false,
+  "paid_calls": 1,
+  "research_plan": {
+    "version": "regional-case-research-v1",
+    "selected_region": "인천광역시 부평구",
+    "peer_method": "standardized_euclidean_v1",
+    "peer_period": "2025-07 ~ 2026-06",
+    "selected_observed_profile": {
+      "region_code": "28237",
+      "region_name": "인천광역시 부평구",
+      "visitors_12m": 50883440,
+      "visitors_yoy_pct": 5.230015,
+      "domestic_spend_12m_thousand_krw": 994601151.0,
+      "domestic_spend_yoy_pct": 6.519112,
+      "spend_per_visitor_krw": 19546.66,
+      "overnight_ratio_avg_pct": 7.2333,
+      "avg_stay_days": 2.91,
+      "percentiles": {
+        "visitors_12m": 75.29,
+        "spend_per_visitor_krw": 71.1,
+        "overnight_ratio_avg_pct": 44.11,
+        "avg_stay_days": 61.41
+      }
+    },
+    "peer_source_ids": [
+      "datalab:088dce68db8c:f9e07528e9cc",
+      "datalab:12893561bbea:153ed3aa5a6e",
+      "datalab:328e6d50da04:877452ad2b59",
+      "datalab:5104039977f5:37dc3b7e64b5",
+      "datalab:b7bac265962d:97cf4d1db102",
+      "datalab:bd21758c8a88:9597865e62ef"
+    ],
+    "signal_groups": [
+      {
+        "id": "spend",
+        "question": "지역 상권·콘텐츠 이용과 소비를 늘린 운영",
+        "signals": [
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "below_baseline_on_test",
+            "metric": "spending_krw",
+            "period": "202610~202612",
+            "aggregation": "3_month_sum",
+            "forecast_value": 243545949020.0,
+            "previous_year_same_months_value": 251691159000.0,
+            "change_percent": -3.24,
+            "unit": "원",
+            "source_id": "ml:28237:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 관광소비액의 전년 동기간 대비 감소 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          }
+        ],
+        "search_priority_change_pct": -3.24
+      },
+      {
+        "id": "visit",
+        "question": "관심을 방문·예약으로 연결한 운영",
+        "signals": [
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "below_baseline_on_test",
+            "metric": "visitors",
+            "period": "202610~202612",
+            "aggregation": "3_month_sum",
+            "forecast_value": 11268139.0,
+            "previous_year_same_months_value": 11515444.0,
+            "change_percent": -2.15,
+            "unit": "명",
+            "source_id": "ml:28237:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 방문자 수의 전년 동기간 대비 감소 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          },
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "seasonal_baseline",
+            "metric": "navigation_searches",
+            "period": "202610~202612",
+            "aggregation": "3_month_sum",
+            "forecast_value": 487596.0,
+            "previous_year_same_months_value": 487596.0,
+            "change_percent": 0.0,
+            "unit": "건",
+            "source_id": "ml:28237:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 내비게이션 검색량의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          }
+        ],
+        "search_priority_change_pct": -1.075
+      },
+      {
+        "id": "stay",
+        "question": "체류·체험·숙박을 연결한 운영",
+        "signals": [
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "limited_backtest_support",
+            "metric": "lodging_nights",
+            "period": "202610~202612",
+            "aggregation": "3_month_average",
+            "forecast_value": 2.8966666666666665,
+            "previous_year_same_months_value": 2.8766666666666665,
+            "change_percent": 0.7,
+            "unit": "일",
+            "source_id": "ml:28237:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 평균 숙박일수의 전년 동기간 대비 증가 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          },
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "seasonal_baseline",
+            "metric": "lodging_rate_pct",
+            "period": "202610~202612",
+            "aggregation": "3_month_average",
+            "forecast_value": 7.466666666666666,
+            "previous_year_same_months_value": 7.466666666666666,
+            "change_percent": 0.0,
+            "unit": "%",
+            "source_id": "ml:28237:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 숙박방문자 비율의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          },
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "below_baseline_on_test",
+            "metric": "stay_minutes",
+            "period": "202610~202612",
+            "aggregation": "3_month_average",
+            "forecast_value": 1187.54,
+            "previous_year_same_months_value": 1171.0,
+            "change_percent": 1.41,
+            "unit": "분",
+            "source_id": "ml:28237:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 평균 체류시간의 전년 동기간 대비 증가 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          },
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "seasonal_baseline",
+            "metric": "lodging_searches",
+            "period": "202610~202612",
+            "aggregation": "3_month_sum",
+            "forecast_value": 22241.0,
+            "previous_year_same_months_value": 22241.0,
+            "change_percent": 0.0,
+            "unit": "건",
+            "source_id": "ml:28237:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 숙박 목적지 검색량의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          }
+        ],
+        "search_priority_change_pct": 0.5275
+      }
+    ],
+    "search_tasks": [
+      {
+        "region_code": "31140",
+        "region_name": "울산광역시 남구",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 1,
+          "region_code": "31140",
+          "region_name": "울산광역시 남구",
+          "distance": 0.318546,
+          "visitors_gap_pct": 3.041117,
+          "spend_per_visitor_gap_krw": -1895.31,
+          "overnight_ratio_gap_pct_point": 0.6166
+        },
+        "query": "울산광역시 남구 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": "28200",
+        "region_name": "인천광역시 남동구",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 2,
+          "region_code": "28200",
+          "region_name": "인천광역시 남동구",
+          "distance": 0.33655,
+          "visitors_gap_pct": -14.242767,
+          "spend_per_visitor_gap_krw": 79.22,
+          "overnight_ratio_gap_pct_point": 1.4666
+        },
+        "query": "인천광역시 남동구 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": "28177",
+        "region_name": "인천광역시 미추홀구",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 3,
+          "region_code": "28177",
+          "region_name": "인천광역시 미추홀구",
+          "distance": 0.409766,
+          "visitors_gap_pct": 7.274723,
+          "spend_per_visitor_gap_krw": -227.23,
+          "overnight_ratio_gap_pct_point": 0.4916
+        },
+        "query": "인천광역시 미추홀구 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": "41630",
+        "region_name": "경기도 양주시",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 4,
+          "region_code": "41630",
+          "region_name": "경기도 양주시",
+          "distance": 0.448959,
+          "visitors_gap_pct": 46.771184,
+          "spend_per_visitor_gap_krw": 810.41,
+          "overnight_ratio_gap_pct_point": -0.0167
+        },
+        "query": "경기도 양주시 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": "41113",
+        "region_name": "경기도 수원시 권선구",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 5,
+          "region_code": "41113",
+          "region_name": "경기도 수원시 권선구",
+          "distance": 0.47323,
+          "visitors_gap_pct": 0.658202,
+          "spend_per_visitor_gap_krw": -1444.25,
+          "overnight_ratio_gap_pct_point": 1.6833
+        },
+        "query": "경기도 수원시 권선구 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": null,
+        "region_name": "전국 확장",
+        "reason": "유사지역 목록 밖의 성공 운영도 비교; 지역 조건의 차이는 적용 설계에서 조정",
+        "query": "전국 2023 2024 2025 2026 지역 상권·콘텐츠 이용과 소비를 늘린 운영 관광사업 성과평가 전후 비교"
+      },
+      {
+        "region_code": null,
+        "region_name": "전국 확장",
+        "reason": "유사지역 목록 밖의 성공 운영도 비교; 지역 조건의 차이는 적용 설계에서 조정",
+        "query": "전국 2023 2024 2025 2026 관심을 방문·예약으로 연결한 운영 관광사업 성과평가 전후 비교"
+      },
+      {
+        "region_code": null,
+        "region_name": "전국 확장",
+        "reason": "유사지역 목록 밖의 성공 운영도 비교; 지역 조건의 차이는 적용 설계에서 조정",
+        "query": "전국 2023 2024 2025 2026 체류·체험·숙박을 연결한 운영 관광사업 성과평가 전후 비교"
+      }
+    ],
+    "eligibility": "peer는 검색 우선순위이며 필수 일치 조건이 아니다. 일부 조건이 다른 지역의 운영도 비교한다.",
+    "comparison_contract": [
+      "실제 지역과 사업명이 있는 서로 다른 운영 사례를 우선 3건 이상 조사한다. 없는 사례는 만들지 않는다.",
+      "사업 시행연도·운영방식·시행 전후 동일기간 방문/소비 수치와 각 원문 URL을 확인한다.",
+      "성과 미확인 운영 사례와 수치가 확인된 성과 사례를 구분한다. 전후 증가는 사업 단독 효과가 아니다.",
+      "선택 지역의 관측/ML 신호 → 사례 운영과 실적 → 공통점/차이 → 바꿀 운영조건 → 대안보다 선택한 이유를 연결한다.",
+      "ML이 약한 지표는 관측 자료와 함께 해석한다. 인구·지리·교통은 확인된 별도 근거가 있을 때만 비교한다."
+    ]
+  },
+  "status": "insufficient_diverse_evidence",
+  "case_pack": {
+    "benchmark_cases": [
+      {
+        "source_id": "case:gangjin_half_price_2024",
+        "document_type": "case_study",
+        "retrieval_method": "curated_registry",
+        "region_code": "ALL",
+        "region_name": "전국 공통 사례",
+        "case_region": "전라남도 강진군",
+        "intervention": "반값여행 지역환급",
+        "problem_addressed": "방문객 지출을 지역 안의 결제와 재방문으로 연결",
+        "target_group": "강진을 여행하며 정해진 조건을 충족한 방문객",
+        "operating_model": "여행자가 지역에서 지출한 비용의 일부를 지역상품권으로 돌려받게 하여 혜택이 다시 지역 상점에서 사용되도록 설계",
+        "duration": "2024년 사업",
+        "public_budget": "공식 자료에서 총사업비 확인 필요",
+        "observed_result": "상품권 결제 변화에 관한 소개 자료는 있으나, 사업 참여자 범위·정확한 비교 기간·원자료를 확인하지 못해 성과 수치 인용을 보류한다.",
+        "measurement_period": "게시일과 사업 측정기간은 다르며, 비교기간과 집계범위 원자료 확인 필요",
+        "evidence_strength": "low",
+        "quantitative_result_approved": false,
+        "transfer_conditions": [
+          "지역상품권 사용처와 관광업체 참여 기준 필요",
+          "여행 지출 증빙과 중복수혜 방지 절차 필요",
+          "지원금보다 추가 지역소비가 큰지 사후 측정 필요"
+        ],
+        "risks": [
+          "사업 참여자 증가와 지역 전체 소비 증가를 같은 인과효과로 단정할 수 없음",
+          "환급이 기존 방문객에게만 지급되면 순증 효과가 작을 수 있음"
+        ],
+        "source_title": "강진 반값여행 지역경제 효과 소개",
+        "source_url": "https://jnfarm.jeonnam.go.kr/board/FARM_BOARD_008/boardView.do?bdId=BD_00000000000011721&menuCd=farm004002",
+        "published_or_updated_at": "2025-01-02",
+        "retrieval_context": {
+          "scope": "cross_province",
+          "peer_region_code": null
+        }
+      },
+      {
+        "source_id": "case:digital_tourism_resident_2024",
+        "document_type": "case_study",
+        "retrieval_method": "curated_registry",
+        "region_code": "ALL",
+        "region_name": "전국 공통 사례",
+        "case_region": "전국 인구감소지역 34곳",
+        "intervention": "디지털 관광주민증과 교통·숙박·상점 할인 결합",
+        "problem_addressed": "한 번의 방문을 숙박·식음·체험·지역상점 이용으로 연결",
+        "target_group": "인구감소지역을 방문하는 외지인",
+        "operating_model": "디지털 관광주민증 참여업체 현장 인증과 숙박·식음·관람·체험 할인, 특정 시간대 KTX 할인과 방문 후 교통 할인권을 결합",
+        "duration": "2024년 여행가는 달 연계",
+        "public_budget": "개별 지역별 집행예산은 공식 자료에서 확인 필요",
+        "observed_result": "2024년 34개 지역 약 800개 관광업체에 혜택 구조를 적용",
+        "measurement_period": "2024년 6월 운영 계획",
+        "evidence_strength": "medium",
+        "quantitative_result_approved": null,
+        "transfer_conditions": [
+          "지역 내 참여업체 수와 혜택 매력도 확보",
+          "QR 또는 위치인증과 실제 사용기록 수집",
+          "교통 할인 제공기관과 협약 필요"
+        ],
+        "risks": [
+          "발급 건수와 실제 지역소비를 혼동할 수 있음",
+          "혜택 사용률이 낮으면 홍보비만 증가할 수 있음"
+        ],
+        "source_title": "2024년 6월 여행가는 달 추진 보도자료",
+        "source_url": "https://mcst.go.kr/servlets/eduport/front/upload/UplDownloadFile?pFileName=%280514%29%EB%AC%B8%EC%B2%B4%EB%B6%80%EB%B3%B4%EB%8F%84%EC%9E%90%EB%A3%8C-6%EC%9B%94_%EC%97%AC%ED%96%89%EA%B0%80%EB%8A%94_%EB%8B%AC_%EC%B6%94%EC%A7%84.pdf&pPath=0302000000&pRealName=20240514083202149235802932_PRESS20240514083202456506.pdf",
+        "published_or_updated_at": "2024-05-14",
+        "retrieval_context": {
+          "scope": "national_or_unresolved",
+          "peer_region_code": null
+        }
+      },
+      {
+        "source_id": "case:kto_stay_discount_2022",
+        "document_type": "case_study",
+        "retrieval_method": "curated_registry",
+        "region_code": "ALL",
+        "region_name": "전국 공통 사례",
+        "case_region": "전국 숙박할인쿠폰 지원사업",
+        "intervention": "온라인 예약 채널 숙박할인쿠폰",
+        "problem_addressed": "비수기 국내여행 수요와 지역 숙박 전환 촉진",
+        "target_group": "국내 숙박여행을 예약하는 이용자와 참여 숙박업체",
+        "operating_model": "온라인 여행사 예약 단계에서 할인쿠폰을 제공하고, 지역 숙소에서 사용할 수 있도록 참여 채널과 기간을 통합 운영",
+        "duration": "2022년 대한민국 숙박대전",
+        "public_budget": "개별 지자체 예산이 아니라 중앙정부 지원사업으로 운영되어 지역별 단가·분담액은 별도 확인 필요",
+        "observed_result": "한국관광공사 자료는 약 104만 명이 할인혜택을 이용했고 서울·제주를 제외한 지역 사용 비율이 76%였다고 소개함",
+        "measurement_period": "2022년 사업 종료 후 한국관광공사 공개 자료",
+        "evidence_strength": "medium",
+        "quantitative_result_approved": null,
+        "transfer_conditions": [
+          "참여 숙소·예약 채널·쿠폰 조건을 사전에 확정",
+          "주말과 성수기 쏠림을 막을 사용 가능일 설계",
+          "쿠폰 발급량이 아니라 실제 숙박 완료·지역소비를 함께 측정"
+        ],
+        "risks": [
+          "공식 생산유발효과 추정치를 특정 지역의 순증 효과로 단정할 수 없음",
+          "할인만 제공하면 식음·체험 소비로 이어지지 않을 수 있음"
+        ],
+        "source_title": "2022 대한민국 숙박대전 경제파급효과 공개자료",
+        "source_url": "https://kto.visitkorea.or.kr/upload/flexer/upload/ktobiz/20220928/b623b5f9-3ec0-11ed-9832-ddf31964842e.hwp.files/Sections1.html",
+        "published_or_updated_at": "2022-09-28",
+        "retrieval_context": {
+          "scope": "national_or_unresolved",
+          "peer_region_code": null
+        }
+      },
+      {
+        "source_id": "case:night_festival_2025",
+        "document_type": "case_study",
+        "retrieval_method": "curated_registry",
+        "region_code": "ALL",
+        "region_name": "전국 공통 사례",
+        "case_region": "야간관광 특화도시 10곳",
+        "intervention": "도시별 야간 콘텐츠를 순회형 축제로 묶는 운영",
+        "problem_addressed": "낮 시간대 중심 방문을 저녁 체류·지역상점 이용으로 확장",
+        "target_group": "여름철 저녁 시간에 지역을 방문하는 국내 관광객",
+        "operating_model": "10개 야간관광 특화도시의 대표 장소와 시간대를 연결하고, 공연·체험·지역 디저트·판매상품 등 도시별 콘텐츠를 순회 일정으로 운영",
+        "duration": "2025년 6월~8월 대한민국 밤밤페스타",
+        "public_budget": "공식 여행기사에는 총사업비가 공개되지 않아 예산 비교에는 사용할 수 없음",
+        "observed_result": "공식 여행기사는 개최 도시·장소·운영 시간과 콘텐츠만 제시하며 방문·소비 성과 수치는 제시하지 않음",
+        "measurement_period": "2025년 행사 일정",
+        "evidence_strength": "medium",
+        "quantitative_result_approved": null,
+        "transfer_conditions": [
+          "야간에도 이용 가능한 교통·안전·식음 운영을 함께 설계",
+          "하나의 행사보다 지역별 대표 콘텐츠와 상점 참여를 연결",
+          "행사일과 비행사일을 분리해 방문·결제·숙박 변화를 측정"
+        ],
+        "risks": [
+          "행사 방문 인원만으로 체류·소비 전환 성과를 판단할 수 없음",
+          "야간 프로그램이 지역 정체성과 맞지 않으면 재방문 동기가 약해질 수 있음"
+        ],
+        "source_title": "2025 대한민국 밤밤페스타 개최 도시 및 일정",
+        "source_url": "https://korean.visitkorea.or.kr/detail/rem_detail.do?cotid=f9c636b2-dd7c-4f09-af3d-6af43b33d371",
+        "published_or_updated_at": "2025",
+        "retrieval_context": {
+          "scope": "national_or_unresolved",
+          "peer_region_code": null
+        }
+      },
+      {
+        "source_id": "case:night_tourism_cities_2024",
+        "document_type": "case_study",
+        "retrieval_method": "curated_registry",
+        "region_code": "ALL",
+        "region_name": "전국 공통 사례",
+        "case_region": "야간관광 특화도시 10곳",
+        "intervention": "상설 야간 콘텐츠와 경관·교통·안전 운영",
+        "problem_addressed": "당일 방문을 저녁 체류와 지역소비로 전환",
+        "target_group": "주간 방문 후 체류 가능한 국내외 관광객",
+        "operating_model": "지역 스토리를 반영한 야간 프로그램을 상설·행사형으로 운영하고 야간 경관, 이동, 식음, 안전 여건을 함께 구성",
+        "duration": "2024년 평가 대상 사업",
+        "public_budget": "지역별 예산은 각 지자체 예산·결산서에서 확인 필요",
+        "observed_result": "정부업무평가 자료는 특화도시 10곳 방문객이 2023년 같은 기간보다 3% 증가했다고 기록",
+        "measurement_period": "2023년 동기 대비 2024년 사업 평가 기간",
+        "evidence_strength": "medium",
+        "quantitative_result_approved": null,
+        "transfer_conditions": [
+          "야간에 실제 이용 가능한 식음·교통·안전 운영 필요",
+          "일회성 행사보다 상설 운영일 확보",
+          "숙박 또는 야간 결제 데이터로 성과 측정"
+        ],
+        "risks": [
+          "전년 대비 증가는 다른 계절·행사 효과를 포함할 수 있음",
+          "경관 시설만 조성하고 운영 콘텐츠가 없으면 체류 전환이 약할 수 있음"
+        ],
+        "source_title": "2024년도 정부업무평가 관광분야 성과자료",
+        "source_url": "https://www.evaluation.go.kr/upload2/atch/eval/20250429095846463.pdf",
+        "published_or_updated_at": "2025-04-29",
+        "retrieval_context": {
+          "scope": "national_or_unresolved",
+          "peer_region_code": null
+        }
+      }
+    ],
+    "web_research_attempted": true,
+    "sources": [
+      {
+        "source_id": "case:gangjin_half_price_2024",
+        "source_type": "benchmark_case",
+        "title": "강진 반값여행 지역경제 효과 소개",
+        "source_url": "https://jnfarm.jeonnam.go.kr/board/FARM_BOARD_008/boardView.do?bdId=BD_00000000000011721&menuCd=farm004002",
+        "published_or_updated_at": "2025-01-02",
+        "summary": "전라남도 강진군 · 반값여행 지역환급 · 상품권 결제 변화에 관한 소개 자료는 있으나, 사업 참여자 범위·정확한 비교 기간·원자료를 확인하지 못해 성과 수치 인용을 보류한다.",
+        "case_region": "전라남도 강진군",
+        "intervention": "반값여행 지역환급",
+        "operating_model": "여행자가 지역에서 지출한 비용의 일부를 지역상품권으로 돌려받게 하여 혜택이 다시 지역 상점에서 사용되도록 설계",
+        "evidence_strength": "low",
+        "quantitative_result_approved": false,
+        "document_type": "case_study",
+        "retrieval_method": "curated_registry",
+        "retrieval_context": {
+          "scope": "cross_province",
+          "peer_region_code": null
+        },
+        "observed_result": "상품권 결제 변화에 관한 소개 자료는 있으나, 사업 참여자 범위·정확한 비교 기간·원자료를 확인하지 못해 성과 수치 인용을 보류한다.",
+        "measurement_period": "게시일과 사업 측정기간은 다르며, 비교기간과 집계범위 원자료 확인 필요",
+        "transfer_conditions": [
+          "지역상품권 사용처와 관광업체 참여 기준 필요",
+          "여행 지출 증빙과 중복수혜 방지 절차 필요",
+          "지원금보다 추가 지역소비가 큰지 사후 측정 필요"
+        ]
+      },
+      {
+        "source_id": "case:digital_tourism_resident_2024",
+        "source_type": "benchmark_case",
+        "title": "2024년 6월 여행가는 달 추진 보도자료",
+        "source_url": "https://mcst.go.kr/servlets/eduport/front/upload/UplDownloadFile?pFileName=%280514%29%EB%AC%B8%EC%B2%B4%EB%B6%80%EB%B3%B4%EB%8F%84%EC%9E%90%EB%A3%8C-6%EC%9B%94_%EC%97%AC%ED%96%89%EA%B0%80%EB%8A%94_%EB%8B%AC_%EC%B6%94%EC%A7%84.pdf&pPath=0302000000&pRealName=20240514083202149235802932_PRESS20240514083202456506.pdf",
+        "published_or_updated_at": "2024-05-14",
+        "summary": "전국 인구감소지역 34곳 · 디지털 관광주민증과 교통·숙박·상점 할인 결합 · 2024년 34개 지역 약 800개 관광업체에 혜택 구조를 적용",
+        "case_region": "전국 인구감소지역 34곳",
+        "intervention": "디지털 관광주민증과 교통·숙박·상점 할인 결합",
+        "operating_model": "디지털 관광주민증 참여업체 현장 인증과 숙박·식음·관람·체험 할인, 특정 시간대 KTX 할인과 방문 후 교통 할인권을 결합",
+        "evidence_strength": "medium",
+        "quantitative_result_approved": null,
+        "document_type": "case_study",
+        "retrieval_method": "curated_registry",
+        "retrieval_context": {
+          "scope": "national_or_unresolved",
+          "peer_region_code": null
+        },
+        "observed_result": "2024년 34개 지역 약 800개 관광업체에 혜택 구조를 적용",
+        "measurement_period": "2024년 6월 운영 계획",
+        "transfer_conditions": [
+          "지역 내 참여업체 수와 혜택 매력도 확보",
+          "QR 또는 위치인증과 실제 사용기록 수집",
+          "교통 할인 제공기관과 협약 필요"
+        ]
+      },
+      {
+        "source_id": "case:kto_stay_discount_2022",
+        "source_type": "benchmark_case",
+        "title": "2022 대한민국 숙박대전 경제파급효과 공개자료",
+        "source_url": "https://kto.visitkorea.or.kr/upload/flexer/upload/ktobiz/20220928/b623b5f9-3ec0-11ed-9832-ddf31964842e.hwp.files/Sections1.html",
+        "published_or_updated_at": "2022-09-28",
+        "summary": "전국 숙박할인쿠폰 지원사업 · 온라인 예약 채널 숙박할인쿠폰 · 한국관광공사 자료는 약 104만 명이 할인혜택을 이용했고 서울·제주를 제외한 지역 사용 비율이 76%였다고 소개함",
+        "case_region": "전국 숙박할인쿠폰 지원사업",
+        "intervention": "온라인 예약 채널 숙박할인쿠폰",
+        "operating_model": "온라인 여행사 예약 단계에서 할인쿠폰을 제공하고, 지역 숙소에서 사용할 수 있도록 참여 채널과 기간을 통합 운영",
+        "evidence_strength": "medium",
+        "quantitative_result_approved": null,
+        "document_type": "case_study",
+        "retrieval_method": "curated_registry",
+        "retrieval_context": {
+          "scope": "national_or_unresolved",
+          "peer_region_code": null
+        },
+        "observed_result": "한국관광공사 자료는 약 104만 명이 할인혜택을 이용했고 서울·제주를 제외한 지역 사용 비율이 76%였다고 소개함",
+        "measurement_period": "2022년 사업 종료 후 한국관광공사 공개 자료",
+        "transfer_conditions": [
+          "참여 숙소·예약 채널·쿠폰 조건을 사전에 확정",
+          "주말과 성수기 쏠림을 막을 사용 가능일 설계",
+          "쿠폰 발급량이 아니라 실제 숙박 완료·지역소비를 함께 측정"
+        ]
+      },
+      {
+        "source_id": "case:night_festival_2025",
+        "source_type": "benchmark_case",
+        "title": "2025 대한민국 밤밤페스타 개최 도시 및 일정",
+        "source_url": "https://korean.visitkorea.or.kr/detail/rem_detail.do?cotid=f9c636b2-dd7c-4f09-af3d-6af43b33d371",
+        "published_or_updated_at": "2025",
+        "summary": "야간관광 특화도시 10곳 · 도시별 야간 콘텐츠를 순회형 축제로 묶는 운영 · 공식 여행기사는 개최 도시·장소·운영 시간과 콘텐츠만 제시하며 방문·소비 성과 수치는 제시하지 않음",
+        "case_region": "야간관광 특화도시 10곳",
+        "intervention": "도시별 야간 콘텐츠를 순회형 축제로 묶는 운영",
+        "operating_model": "10개 야간관광 특화도시의 대표 장소와 시간대를 연결하고, 공연·체험·지역 디저트·판매상품 등 도시별 콘텐츠를 순회 일정으로 운영",
+        "evidence_strength": "medium",
+        "quantitative_result_approved": null,
+        "document_type": "case_study",
+        "retrieval_method": "curated_registry",
+        "retrieval_context": {
+          "scope": "national_or_unresolved",
+          "peer_region_code": null
+        },
+        "observed_result": "공식 여행기사는 개최 도시·장소·운영 시간과 콘텐츠만 제시하며 방문·소비 성과 수치는 제시하지 않음",
+        "measurement_period": "2025년 행사 일정",
+        "transfer_conditions": [
+          "야간에도 이용 가능한 교통·안전·식음 운영을 함께 설계",
+          "하나의 행사보다 지역별 대표 콘텐츠와 상점 참여를 연결",
+          "행사일과 비행사일을 분리해 방문·결제·숙박 변화를 측정"
+        ]
+      },
+      {
+        "source_id": "case:night_tourism_cities_2024",
+        "source_type": "benchmark_case",
+        "title": "2024년도 정부업무평가 관광분야 성과자료",
+        "source_url": "https://www.evaluation.go.kr/upload2/atch/eval/20250429095846463.pdf",
+        "published_or_updated_at": "2025-04-29",
+        "summary": "야간관광 특화도시 10곳 · 상설 야간 콘텐츠와 경관·교통·안전 운영 · 정부업무평가 자료는 특화도시 10곳 방문객이 2023년 같은 기간보다 3% 증가했다고 기록",
+        "case_region": "야간관광 특화도시 10곳",
+        "intervention": "상설 야간 콘텐츠와 경관·교통·안전 운영",
+        "operating_model": "지역 스토리를 반영한 야간 프로그램을 상설·행사형으로 운영하고 야간 경관, 이동, 식음, 안전 여건을 함께 구성",
+        "evidence_strength": "medium",
+        "quantitative_result_approved": null,
+        "document_type": "case_study",
+        "retrieval_method": "curated_registry",
+        "retrieval_context": {
+          "scope": "national_or_unresolved",
+          "peer_region_code": null
+        },
+        "observed_result": "정부업무평가 자료는 특화도시 10곳 방문객이 2023년 같은 기간보다 3% 증가했다고 기록",
+        "measurement_period": "2023년 동기 대비 2024년 사업 평가 기간",
+        "transfer_conditions": [
+          "야간에 실제 이용 가능한 식음·교통·안전 운영 필요",
+          "일회성 행사보다 상설 운영일 확보",
+          "숙박 또는 야간 결제 데이터로 성과 측정"
+        ]
+      },
+      {
+        "source_id": "reference:kto:2026:local-airport",
+        "source_type": "rag",
+        "title": "요즘, 한국관광 2호 - 지방공항 연계 지역관광 활성화 방안",
+        "source_url": "https://datalab.visitkorea.or.kr/site/portal/ex/bbs/View.do?bcIdx=311068&cbIdx=1135&pageIndex=1",
+        "published_or_updated_at": "2026-08",
+        "document_type": "policy",
+        "region_code": "ALL",
+        "region_name": "전국 공통",
+        "case_region": "",
+        "intervention": "",
+        "evidence_strength": "medium",
+        "summary": "44제 2장 지방공항 연계 지역관광 활성화 방안 요즘, 한국관광 한국관광공사는 본래의 기능인 해외 홍보마케팅을 통한 인지 형성, 지역 관광생태계 육성, 관광사업 추진을 여정 단계에 맞춰 재배치해야 한다. 해외지사와 국내지사를 연결한 중점지사제를 '관문-연계도시' 단위로 운영하고, 글로벌 OTA 와 현지 여행사가 실제 상품을 만들 수 있도록 상품화 모듈과 전세·임시편 유치를 고도화하며, 선상 마케팅처럼 항공사 기내·LCC 채널을 활용한 권역 홍보를 확대할 수 있어야 할 것이다. 특히 성과지표를 입국자 수와 공급석 중심에서 '입국객의 권역 내 첫 숙박률이나, 1인당 권역 내 소비, 지방 이동 비중' 중심으로 전환하고, 통신·카드 데이터에 소셜 담론 데이터를 결합한 공항-권역 대시보드를 상시 운영해 데이터 기반 성과관리를 지속적으로 보여주는 데이터 기반의 지방공항 중심 관광권 상황실을 구축하여야 한다. 지방자치단체와 한국공항공사는 공항에서 지역 상권까지 이어지는 현장 수용태세를 보다 면밀히 고려하는 정책과 사업이 필요하다. 공항 접근 교통과 안내·결제, 다국어 환경, 터미널과 도심·거점 관광지를 잇는 셔틀, 권역 내 숙박과 야간 콘텐츠는 지자체의 실행력이 좌우하는 영역이다. 공항 소재 지자체 단위 협의를 넘어 청주는 대전·세종·충남, 대구는 경북과 함께 상품·교통·마케팅 예산을 묶는 관광권 협의체를 구성하고, 중장기적으로는 일본의 광역연계 DMO처럼 권역 단위의 상설 조직과 재원으로 발전시켜야 한다. 민관협력은 이 체계를 지속 가능하게 만드는 가장 중요한 동인이라 할 수 있다. 항공사·LCC에는 신규 노선의 초기 리스크를 지방정부·공사와 분담하는 노선 개발 협약과 기내 권역 홍보를, 글로벌 OTA·현지 여행사에는 권역 루트 상품의",
+        "retrieval_method": "local_curated_chunk",
+        "matched_terms": [
+          "결제",
+          "관광사업",
+          "상권",
+          "성과",
+          "소비",
+          "수와",
+          "숙박",
+          "실제",
+          "연결한",
+          "예산",
+          "운영",
+          "이어지는",
+          "전환",
+          "중심으로",
+          "지역",
+          "체류",
+          "함께",
+          "현장",
+          "협약"
+        ],
+        "page_references": "PDF 44쪽",
+        "source_note": "지방공항·연계 지역에 관한 자료입니다. 다른 시군구의 사업 효과·예산을 보장하는 근거로 사용하지 않습니다.",
+        "chunk_id": "reference:kto:2026:local-airport:page:044:chunk:01",
+        "parent_source_id": "reference:kto:2026:local-airport"
+      },
+      {
+        "source_id": "reference:kto:2026:local-airport",
+        "source_type": "rag",
+        "title": "요즘, 한국관광 2호 - 지방공항 연계 지역관광 활성화 방안",
+        "source_url": "https://datalab.visitkorea.or.kr/site/portal/ex/bbs/View.do?bcIdx=311068&cbIdx=1135&pageIndex=1",
+        "published_or_updated_at": "2026-08",
+        "document_type": "policy",
+        "region_code": "ALL",
+        "region_name": "전국 공통",
+        "case_region": "",
+        "intervention": "",
+        "evidence_strength": "medium",
+        "summary": "36제 2장 지방공항 연계 지역관광 활성화 방안 요즘, 한국관광 [제안 1] 의료·쇼핑 소비를 영남권 체류형 관광루트로 연결 대구공항 입국 방한객의 소비가 대구의 의료·쇼핑을 중심으로 형성되고, 경산·구미·포항·경주 등 경북 지역으로 이동하고 있는 점을 활용한다. 대구에서 시작된 의료·쇼핑 소비를 영남의 역사문화·해양·미식 등 관광자원과 연계해, 이미 형성된 지역 간 이동을 체류형 관광루트로 고도화한다. 특히 대만(30~40대)·중국(20대)·일본(20대·50대)으로 국가별 핵심 연령층이 다른 만큼, 연령층별 관심사와 이동 패턴을 반영한 맞춤형 루트를 함께 구성하는 것이 효과적이다. [제안 2] 의료 수요를 5박 6일 프리미엄 체류 패키지로 상품화 피부·성형을 핵심 의료 서비스로, 한방·치과·종합검진을 선택형 연계 서비스로 구성한 '대구 프리미엄 의료 패키지(5박 6 일)'를 개발한다. 진료와 회복 일정에 쇼핑·미식·문화관광을 결합하고 대경권 주요 관광지까지 동선을 확장해, 의료 목적 방문을 장기 체류와 광역 소비로 연결한다. 국가별 핵심 연령층이 다른 점을 고려해 대만 30~40대를 겨냥한 프리미엄 의료·웰니스 상품, 중국·일본 20대를 겨냥한 미용·체험 중심 상품으로 타깃을 세분화한다. [제안 3] 교통·결제 편의성 개선으로 소비 동선의 단절 해소 공항-도심-경북 주요 도시 간 이동정보와 예약을 다국어로 연결하고, 해외카드를 활용한 대중교통 이용 등 외국인이 도착 직후 겪는 교통·결제 불편을 줄여 의료·관광 소비 동선이 끊기지 않도록 한다. 취항 국가는 7개국에서 10개국으로, 취항 도시는 15개에서 27개로 늘었지만 실제 운항 편수는 오히려 줄어, 연결 범위 확대가 아직 공급 증가로 이어지지 않고 있다.",
+        "retrieval_method": "local_curated_chunk",
+        "matched_terms": [
+          "결제",
+          "방문",
+          "소비",
+          "실제",
+          "연결하고",
+          "연결한",
+          "예약",
+          "이용",
+          "일정",
+          "중심으로",
+          "지역",
+          "체류",
+          "체험",
+          "함께"
+        ],
+        "page_references": "PDF 36쪽",
+        "source_note": "지방공항·연계 지역에 관한 자료입니다. 다른 시군구의 사업 효과·예산을 보장하는 근거로 사용하지 않습니다.",
+        "chunk_id": "reference:kto:2026:local-airport:page:036:chunk:01",
+        "parent_source_id": "reference:kto:2026:local-airport"
+      },
+      {
+        "source_id": "reference:kto:2026:local-airport",
+        "source_type": "rag",
+        "title": "요즘, 한국관광 2호 - 지방공항 연계 지역관광 활성화 방안",
+        "source_url": "https://datalab.visitkorea.or.kr/site/portal/ex/bbs/View.do?bcIdx=311068&cbIdx=1135&pageIndex=1",
+        "published_or_updated_at": "2026-08",
+        "document_type": "policy",
+        "region_code": "ALL",
+        "region_name": "전국 공통",
+        "case_region": "",
+        "intervention": "",
+        "evidence_strength": "medium",
+        "summary": "41제 2장 지방공항 연계 지역관광 활성화 방안 요즘, 한국관광 관광상품을 만들어도 공항에서 관광지까지 이동하기 어렵다면 실제 지역 방문으로 연결되기 어렵다. 이에 공사는 지자체· 공항공사·교통기관 등 대외 협업체계와 함께 지방공항으로 유입된 방한객이 지역 관광지까지 불편 없이 이동할 수 있도록 교통 연계와 이용 편의 인프라를 개선하는 방향으로 사업을 추진하고 있다. 공사는 충청남도, 충청북도(광역지자체) 및 충 남문화재단, 충북문화재단(RTO)과 협업하여 청주공항과 오 송역, 공주터미널, 부여터미널 등 충청권 주요 관광지를 연결하는 광역 순환버스와 DRT(수요 응답형 버스) 운영을 지원하고 있다. 2026년 상반기 순환버스와 DRT 이용객은 총 7 ,470명으로, 공항에서 충청권 주요 관광지까지 직접 이동할 수 있는 선택지가 확대되고 있다. 대구공항에서는 외국인이 별도의 교통카드 없이 해외 신용카드 등으로 대중교통을 이용할 수 있는 개방형 교통결제 시스템 도입을 지원하고 있으며, 간편결제·관광안내·환전 및 면세 등 이용 편의도 단계적으로 보완하고 있다. 지방공항의 역할을 항공기에서 내리는 지점에 그치지 않고 지역 여행을 실제로 시작할 수 있는 관문으로 넓히는 과정이다. 추진사업 3. 교통 편의 인프라 - 공항 도착 이후 지역으로 이어지는 이동·편의 기반 구축 성과 | 전방위 유치·마케팅 성과 가시화…청주공항 방한객 6만 명 돌파, 부정기 항공편도 대폭 확대 한국관광공사, 공항활성화 협의체 및 관계기관의 협업체계가 잘 작동하고, 전방위적 역량을 집중한 결과, 지방공항 유치· 마케팅의 성과가 방한객 유입과 항공 공급 지표에서 가시화되고 있다. 특히 청주공항은 2026년 상반기 방한객이 6만 2,971 명으로 6만 명을 돌파하며 전년 동기 대비 109.1% 급증했다.",
+        "retrieval_method": "local_curated_chunk",
+        "matched_terms": [
+          "결제",
+          "방문",
+          "방문으로",
+          "사업을",
+          "성과",
+          "소비",
+          "실제",
+          "운영",
+          "이어지는",
+          "이용",
+          "이후",
+          "지역",
+          "체류",
+          "함께"
+        ],
+        "page_references": "PDF 41쪽",
+        "source_note": "지방공항·연계 지역에 관한 자료입니다. 다른 시군구의 사업 효과·예산을 보장하는 근거로 사용하지 않습니다.",
+        "chunk_id": "reference:kto:2026:local-airport:page:041:chunk:01",
+        "parent_source_id": "reference:kto:2026:local-airport"
+      },
+      {
+        "source_id": "reference:kto:2026:local-airport",
+        "source_type": "rag",
+        "title": "요즘, 한국관광 2호 - 지방공항 연계 지역관광 활성화 방안",
+        "source_url": "https://datalab.visitkorea.or.kr/site/portal/ex/bbs/View.do?bcIdx=311068&cbIdx=1135&pageIndex=1",
+        "published_or_updated_at": "2026-08",
+        "document_type": "policy",
+        "region_code": "ALL",
+        "region_name": "전국 공통",
+        "case_region": "",
+        "intervention": "",
+        "evidence_strength": "medium",
+        "summary": "남부관광의 해 연계 지역상품 홍보 타이베이 지사가 개발한 2025년 대구 파워풀페스티벌 상품 홍보 로고 일본 시장은 다른 방식으로 접근하고 있다. 일본은 방한 재방문율이 높고 서울 이외의 새로운 지역과 관광콘텐츠를 찾는 수요가 비교적 뚜렷한 시장이다. 공사는 지방 직항노선을 기반으로 동남권 각 도시의 특색을 여행 목적과 테마로 재구성하고, 현지 여행사·항공사와 연계해 실제 상품과 모객으로 이어지도록 하는 방식을 추진하고 있다. 같은 지방공항 유치 사업이라도 시장 특성에 따라 대만은 지역의 범위를 단계적으로 넓히고, 일본은 재방문객에게 새로운 지역 방문 이유를 만드는 방식으로 접근하는 것이다. 해외에서 지방공항을 선택하게 하려면 노선과 함께 '도착한 뒤 무엇을 할 것인가'가 제시돼야 한다. 이를 위해 공사는 청주· 대구공항을 중심으로 지역 관광콘텐츠를 발굴하고, 이를 공항과 연결된 권역형·초광역형 관광코스로 구성했다. 2026년 6월 기준 발굴된 콘텐츠는 17개 테마 333개, 관광코스는 35개다. 럭셔리·한류·의료·웰니스·해양·축제·역사문화·미식·쇼핑 등 지역의 다양한 관광자원을 활용하되, 개별 콘텐츠에 그치지 않고 공항을 시작점으로 여러 지역을 이동할 수 있도록 연결한 것이 특징이다. 대표적으로 청주공항에서는 청주-공주-부여-전주를 잇는 백제 역사문화 루트와 같이 충청권과 인접 지역을 연결하는 코스를, 대구공항에서는 대구-경주-울산-부산을 잇는 유네스코 헤리티지 루트와 같이 영남권의 주요 관광자원을 묶은 광역 코스를 구성했다. 지방공항을 특정 도시 하나의 관문이 아니라 여러 지역으로 이동하는 여행의 출발점으로 활용하는 방식이다. 추진사업 2. 지역 콘텐츠를 실제 방한상품으로 연결",
+        "retrieval_method": "local_curated_chunk",
+        "matched_terms": [
+          "관광콘텐츠",
+          "다양한",
+          "방문",
+          "방식으로",
+          "방식을",
+          "소비",
+          "실제",
+          "연결한",
+          "중심으로",
+          "지역",
+          "체류",
+          "콘텐츠를",
+          "함께"
+        ],
+        "page_references": "PDF 40쪽",
+        "source_note": "지방공항·연계 지역에 관한 자료입니다. 다른 시군구의 사업 효과·예산을 보장하는 근거로 사용하지 않습니다.",
+        "chunk_id": "reference:kto:2026:local-airport:page:040:chunk:02",
+        "parent_source_id": "reference:kto:2026:local-airport"
+      },
+      {
+        "source_id": "reference:kto:2026:local-airport",
+        "source_type": "rag",
+        "title": "요즘, 한국관광 2호 - 지방공항 연계 지역관광 활성화 방안",
+        "source_url": "https://datalab.visitkorea.or.kr/site/portal/ex/bbs/View.do?bcIdx=311068&cbIdx=1135&pageIndex=1",
+        "published_or_updated_at": "2026-08",
+        "document_type": "policy",
+        "region_code": "ALL",
+        "region_name": "전국 공통",
+        "case_region": "",
+        "intervention": "",
+        "evidence_strength": "medium",
+        "summary": "작동하고, 전방위적 역량을 집중한 결과, 지방공항 유치· 마케팅의 성과가 방한객 유입과 항공 공급 지표에서 가시화되고 있다. 특히 청주공항은 2026년 상반기 방한객이 6만 2,971 명으로 6만 명을 돌파하며 전년 동기 대비 109.1% 급증했다. 인바운드 비중도 7 .9%에서 11.1%로 전년 동기 대비 3.2%p 상승했고, 국제선 공급석은 146만 3,061석으로 전년보다 43.0% 대폭 확대됐다. 대구공항도 같은 기간 방한객이 5만 7 ,058명으로 전년 동기 대비 2.6% 증가했고, 국제선 공급석은 90만 2,286석으로 6.3% 늘었다. 특히 부정기 항공편에서는 확대 폭이 더욱 뚜렷하다. 2026년 상반기 부정기 항공편은 청주공항 574회, 대구공항 458회로 총 1,032회가 확정됐으며, 전년 동기 대비 각각 178.6%, 854.2% 급증했다. 부정기 확대편의 사례로 공사에서 유치한 후쿠시마-청주 전세기 운영을 들 수 있다. 공사 도쿄지사가 한일 비운항지역인 후쿠시마를 대상으로, 현지 여행사, 항공사가 협력해 운항한 두 차례 전세기 360석이 모두 매진됐다. 해외 현지 수요를 발굴하고 항공편과 관광상품을 함께 구성해 지방공항 입국으로 연결한 사례라는 데 의미가 있다. 발굴한 콘텐츠가 실제 해외 여행상품으로 이어질 수 있도록 '인바운드 관광 상품화 툴킷'도 함께 마련했다. 지역별 교통· 숙박·쇼핑·식당과 관광사업자, 지자체 지원정보 등 해외 여행사가 상품을 구성할 때 필요한 정보를 한데 모아 제공하는 자료다. 해외지사는 이를 활용해 현지 여행사 ·OTA와 지방공항 연계 상품 을 개발하고 있으며, 2026년 6월 기준 청주공항 연계 상품 49개, 대구공항 연계 상품 10개가 개발됐다.",
+        "retrieval_method": "local_curated_chunk",
+        "matched_terms": [
+          "관광사업",
+          "사례",
+          "성과",
+          "소비",
+          "숙박",
+          "실제",
+          "연결한",
+          "운영",
+          "지역",
+          "체류",
+          "필요한",
+          "함께",
+          "활용해"
+        ],
+        "page_references": "PDF 41쪽",
+        "source_note": "지방공항·연계 지역에 관한 자료입니다. 다른 시군구의 사업 효과·예산을 보장하는 근거로 사용하지 않습니다.",
+        "chunk_id": "reference:kto:2026:local-airport:page:041:chunk:02",
+        "parent_source_id": "reference:kto:2026:local-airport"
+      },
+      {
+        "source_id": "reference:kto:2026:local-airport",
+        "source_type": "rag",
+        "title": "요즘, 한국관광 2호 - 지방공항 연계 지역관광 활성화 방안",
+        "source_url": "https://datalab.visitkorea.or.kr/site/portal/ex/bbs/View.do?bcIdx=311068&cbIdx=1135&pageIndex=1",
+        "published_or_updated_at": "2026-08",
+        "document_type": "policy",
+        "region_code": "ALL",
+        "region_name": "전국 공통",
+        "case_region": "",
+        "intervention": "",
+        "evidence_strength": "medium",
+        "summary": "43제 2장 지방공항 연계 지역관광 활성화 방안 요즘, 한국관광 (전문가 제언) 지방공항 관문 활성화를 넘어 '지방관광 권역 활성화'로5. 지방공항을 통한 방한 입국은 분명한 성장 국면이다. 그러나 지방공항 관문 활성화가 곧바로 지방공항과 지역관광의 경쟁력으로 해석하기에는 아직 이르다. 최근의 지방공항 입국 증가는 대만 시장의 고성장, LCC의 공격적 공급 확대, 중국 단체 무비자와 중·일 관계 변화에 따른 수요 이동 등 외부 요인과 일부 결합되어 나타난 측면도 있기 때문이다. 지금 필요한 것은 입국자 수와 노선 수의 증가에 만족하는 것이 아니라, 이를 지역관광의 체질 전환과 고부가가치화로 연결하는 전략이 필요하다. 또한 특정 관광시장에 대한 의존도가 높을수록 공항은 외부 변수에 취약해질 수밖에 없고, 체류 전환이 약할수록 늘어난 유입은 지역에 효과를 남기지 않으며, 공항별 차이를 무시한 일률적 지원은 성과를 도출하기 어렵게 만든다. 결국 이제는 정책의 단위를 '공항' 중심에서 보다 관문과 연결되는 연계된 도시로 확장할 필요가 있다. 지방공항 활성화의 중장기 과제는 단순히 더 많은 노선을 유치하는 데서 끝나서는 안 되며, 공항을 관문으로 하는 배후 관광권 단위로 성과를 설계하고 측정하는 방향으로 전환되어야 한다. 정책의 단위를 '지방공항'에서 '지방관광 권역'으로 지방공항과 지방관광이 동시에 활성화하려면 두 관점이 함께 필요하다. 하나는 관문 기능의 고도화(노선·운수권·전세기 유치, CIQ와 터미널 용량, 공항-거점 교통의 직결성)이고, 다른 하나는 배후권역의 체류 전환(입국 이후 첫 숙박·첫 소비를 권역 안에서 완결되게 설계, 권역 내 이동의 관광 루트화, 지역 특화 업종의 객단가 제고)이다. 지금까지의 정책이",
+        "retrieval_method": "local_curated_chunk",
+        "matched_terms": [
+          "성과",
+          "소비",
+          "수와",
+          "숙박",
+          "이후",
+          "전환",
+          "전환과",
+          "지역",
+          "체류",
+          "측정",
+          "필요한",
+          "함께"
+        ],
+        "page_references": "PDF 43쪽",
+        "source_note": "지방공항·연계 지역에 관한 자료입니다. 다른 시군구의 사업 효과·예산을 보장하는 근거로 사용하지 않습니다.",
+        "chunk_id": "reference:kto:2026:local-airport:page:043:chunk:01",
+        "parent_source_id": "reference:kto:2026:local-airport"
+      },
+      {
+        "source_id": "reference:kto:2026:local-airport",
+        "source_type": "rag",
+        "title": "요즘, 한국관광 2호 - 지방공항 연계 지역관광 활성화 방안",
+        "source_url": "https://datalab.visitkorea.or.kr/site/portal/ex/bbs/View.do?bcIdx=311068&cbIdx=1135&pageIndex=1",
+        "published_or_updated_at": "2026-08",
+        "document_type": "policy",
+        "region_code": "ALL",
+        "region_name": "전국 공통",
+        "case_region": "",
+        "intervention": "",
+        "evidence_strength": "medium",
+        "summary": "권·전세기 유치, CIQ와 터미널 용량, 공항-거점 교통의 직결성)이고, 다른 하나는 배후권역의 체류 전환(입국 이후 첫 숙박·첫 소비를 권역 안에서 완결되게 설계, 권역 내 이동의 관광 루트화, 지역 특화 업종의 객단가 제고)이다. 지금까지의 정책이 전자에 집중되어 왔다면, 앞으로의 무게중심은 후자를 함께 설계하는 데 있으며 지방공항 활성화의 성과는 공항 소재 시· 도 행정구역이 아니라 권역단위로 측정되어야 한다. 한국관광공사 관광컨설팅팀 협조를 통해 본 신세시오를 활용한 다국어 소셜 데이터에서도 청주는 여정 7단계 1) 가운데 '숙박·체류' 담론이 가장 약하고 대구는 '인지·정보·예약' 단계가 가장 약한 것 으로 나타난다. 같은 지방공항이라도 방한객의 여정에서 막히는 지점이 다르며, 전략은 그 병목 단계에 맞춰 설계되어야 할 것이다. 또한 지역 단위로 분산된 해외 홍보를 관문공항 단위의 공동 홍보로 전환해야 한다. 아직도 일부 방한외래객은 지역을 알지 못하기 때문에 서울만 방문하고, 정보의 다수는 글로벌 앱이나 유튜브 등에서 얻는 현실에서 시·군 단위 개별 마케팅은 효과가 제한적일 수밖에 없다. 대만 시장에서 부산을 출 발점으로 경남·남부권·중부권으로 대상 지역을 단계적으로 넓혀 온 ‘남부관광의 해’ 등 권역 중심의 홍보 전략은 시장 특성에 맞춘 권역형 인지 전략의 좋은 선례라 할 수 있다. 여기에 AI 검색 시대에 대응한 5대 관광권 정보의 AEO(AI 답변 최적화) 표준화가 더해진다면 보다 효과적인 마케팅이 가능할 것이다. 명확한 기관별 역할분담과 민관협력 문화체육관광부는 지방공항과 5대 관광권 2) 정책을 하나의 체계로 묶는 컨트롤타워가 되어야 한다. 5대 관광권의 지정과",
+        "retrieval_method": "local_curated_chunk",
+        "matched_terms": [
+          "검색",
+          "방문",
+          "성과",
+          "소비",
+          "숙박",
+          "예약",
+          "이후",
+          "전환",
+          "지역",
+          "체류",
+          "측정",
+          "함께"
+        ],
+        "page_references": "PDF 43쪽",
+        "source_note": "지방공항·연계 지역에 관한 자료입니다. 다른 시군구의 사업 효과·예산을 보장하는 근거로 사용하지 않습니다.",
+        "chunk_id": "reference:kto:2026:local-airport:page:043:chunk:02",
+        "parent_source_id": "reference:kto:2026:local-airport"
+      },
+      {
+        "source_id": "reference:kto:2026:local-airport",
+        "source_type": "rag",
+        "title": "요즘, 한국관광 2호 - 지방공항 연계 지역관광 활성화 방안",
+        "source_url": "https://datalab.visitkorea.or.kr/site/portal/ex/bbs/View.do?bcIdx=311068&cbIdx=1135&pageIndex=1",
+        "published_or_updated_at": "2026-08",
+        "document_type": "policy",
+        "region_code": "ALL",
+        "region_name": "전국 공통",
+        "case_region": "",
+        "intervention": "",
+        "evidence_strength": "medium",
+        "summary": "광권 정보의 AEO(AI 답변 최적화) 표준화가 더해진다면 보다 효과적인 마케팅이 가능할 것이다. 명확한 기관별 역할분담과 민관협력 문화체육관광부는 지방공항과 5대 관광권 2) 정책을 하나의 체계로 묶는 컨트롤타워가 되어야 한다. 5대 관광권의 지정과 예산 통합, 국토교통부·법무부·지방정부와의 협업을 통해 운수권·슬롯·공항시설 사용료 인센티브, 비자·입국 절차, 광역 교통을 권역 단위로 조율하고, 민간의 지역 투자를 끌어내기 위한 장기적 관점의 규제 특례를 마련해야 한다. 무엇보다 공항별 성장 단계와 시장 구조에 따라 KPI와 사업적 특성을 권역에 맞게 적용하는 유형별 육성 로드맵이 필요하다. 1) 소셜 데이터의 담론을 7가지의 여정으로 구분하였는데, 여정은 1) 인지, 정보 및 예약, 2) 입국 및 방문, 3) 교통 및 이동, 4) 숙박 및 체류, 5) 관광 및 체험, 6) 쇼핑 및 식음, 7) 공유 및 재방문으로 구분하였다. 2) 시도 및 시군구 등 행정권역을 넘어 방한객의 여행 동선을 따라 여러 지역이 이어지는 관광 중심 권역을 의미하며, 방한객의 지역 입국이 시작되는 지 방국제공항이 있는 김해·대구·청주·무안·양양공항 등 관문도시를 중심으로 해 인근에 특화 관광자원을 보유한 연계 도시를 연결하는 전략으로 '관광권' 을 설계(출처: 대한민국 정책브리핑, 2026). 프로젝트수 대표, 한양대학교 관광학부 겸임교수 정란수",
+        "retrieval_method": "local_curated_chunk",
+        "matched_terms": [
+          "민간",
+          "방문",
+          "방문으로",
+          "소비",
+          "숙박",
+          "예산",
+          "예약",
+          "이어지는",
+          "중심으로",
+          "지역",
+          "체류",
+          "체험"
+        ],
+        "page_references": "PDF 43쪽",
+        "source_note": "지방공항·연계 지역에 관한 자료입니다. 다른 시군구의 사업 효과·예산을 보장하는 근거로 사용하지 않습니다.",
+        "chunk_id": "reference:kto:2026:local-airport:page:043:chunk:03",
+        "parent_source_id": "reference:kto:2026:local-airport"
+      }
+    ],
+    "case_search_policy": {
+      "version": "nationwide-case-scope-v1",
+      "selected_region": "인천광역시 부평구",
+      "selected_province": "인천",
+      "search_scope": "nationwide",
+      "review_order": [
+        "same_province",
+        "cross_province_peer",
+        "national_mechanism"
+      ],
+      "cross_province_review": "always",
+      "peer_regions": [
+        {
+          "region_code": "31140",
+          "region_name": "울산광역시 남구",
+          "rank": 1,
+          "distance": 0.318546,
+          "visitors_gap_pct": 3.041117,
+          "spend_per_visitor_gap_krw": -1895.31,
+          "overnight_ratio_gap_pct_point": 0.6166
+        },
+        {
+          "region_code": "28200",
+          "region_name": "인천광역시 남동구",
+          "rank": 2,
+          "distance": 0.33655,
+          "visitors_gap_pct": -14.242767,
+          "spend_per_visitor_gap_krw": 79.22,
+          "overnight_ratio_gap_pct_point": 1.4666
+        },
+        {
+          "region_code": "28177",
+          "region_name": "인천광역시 미추홀구",
+          "rank": 3,
+          "distance": 0.409766,
+          "visitors_gap_pct": 7.274723,
+          "spend_per_visitor_gap_krw": -227.23,
+          "overnight_ratio_gap_pct_point": 0.4916
+        },
+        {
+          "region_code": "41630",
+          "region_name": "경기도 양주시",
+          "rank": 4,
+          "distance": 0.448959,
+          "visitors_gap_pct": 46.771184,
+          "spend_per_visitor_gap_krw": 810.41,
+          "overnight_ratio_gap_pct_point": -0.0167
+        },
+        {
+          "region_code": "41113",
+          "region_name": "경기도 수원시 권선구",
+          "rank": 5,
+          "distance": 0.47323,
+          "visitors_gap_pct": 0.658202,
+          "spend_per_visitor_gap_krw": -1444.25,
+          "overnight_ratio_gap_pct_point": 1.6833
+        }
+      ],
+      "peer_period": "2025-07 ~ 2026-06",
+      "resident_population_comparison": "not_available_in_current_peer_features",
+      "rule": "같은 시도는 우선 탐색할 맥락이지 제한이 아니다. 전국 사례의 운영 방식·수요·예산·접근성 차이를 검토하고, 인구 유사성이나 성과 이전을 추정하지 않는다."
+    },
+    "case_research_plan": {
+      "version": "regional-case-research-v1",
+      "selected_region": "인천광역시 부평구",
+      "peer_method": "standardized_euclidean_v1",
+      "peer_period": "2025-07 ~ 2026-06",
+      "selected_observed_profile": {
+        "region_code": "28237",
+        "region_name": "인천광역시 부평구",
+        "visitors_12m": 50883440,
+        "visitors_yoy_pct": 5.230015,
+        "domestic_spend_12m_thousand_krw": 994601151.0,
+        "domestic_spend_yoy_pct": 6.519112,
+        "spend_per_visitor_krw": 19546.66,
+        "overnight_ratio_avg_pct": 7.2333,
+        "avg_stay_days": 2.91,
+        "percentiles": {
+          "visitors_12m": 75.29,
+          "spend_per_visitor_krw": 71.1,
+          "overnight_ratio_avg_pct": 44.11,
+          "avg_stay_days": 61.41
+        }
+      },
+      "peer_source_ids": [
+        "datalab:088dce68db8c:f9e07528e9cc",
+        "datalab:12893561bbea:153ed3aa5a6e",
+        "datalab:328e6d50da04:877452ad2b59",
+        "datalab:5104039977f5:37dc3b7e64b5",
+        "datalab:b7bac265962d:97cf4d1db102",
+        "datalab:bd21758c8a88:9597865e62ef"
+      ],
+      "signal_groups": [
+        {
+          "id": "spend",
+          "question": "지역 상권·콘텐츠 이용과 소비를 늘린 운영",
+          "signals": [
+            {
+              "kind": "forecast_signal",
+              "window_label": "입력 일정 전망",
+              "window_months": 3,
+              "reliability": "exploratory_longer_horizon",
+              "model_reliability": "below_baseline_on_test",
+              "metric": "spending_krw",
+              "period": "202610~202612",
+              "aggregation": "3_month_sum",
+              "forecast_value": 243545949020.0,
+              "previous_year_same_months_value": 251691159000.0,
+              "change_percent": -3.24,
+              "unit": "원",
+              "source_id": "ml:28237:regional-demand-v3.1:202606",
+              "interpretation": "입력 일정 전망에서 관광소비액의 전년 동기간 대비 감소 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+            }
+          ],
+          "search_priority_change_pct": -3.24
+        },
+        {
+          "id": "visit",
+          "question": "관심을 방문·예약으로 연결한 운영",
+          "signals": [
+            {
+              "kind": "forecast_signal",
+              "window_label": "입력 일정 전망",
+              "window_months": 3,
+              "reliability": "exploratory_longer_horizon",
+              "model_reliability": "below_baseline_on_test",
+              "metric": "visitors",
+              "period": "202610~202612",
+              "aggregation": "3_month_sum",
+              "forecast_value": 11268139.0,
+              "previous_year_same_months_value": 11515444.0,
+              "change_percent": -2.15,
+              "unit": "명",
+              "source_id": "ml:28237:regional-demand-v3.1:202606",
+              "interpretation": "입력 일정 전망에서 방문자 수의 전년 동기간 대비 감소 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+            },
+            {
+              "kind": "forecast_signal",
+              "window_label": "입력 일정 전망",
+              "window_months": 3,
+              "reliability": "exploratory_longer_horizon",
+              "model_reliability": "seasonal_baseline",
+              "metric": "navigation_searches",
+              "period": "202610~202612",
+              "aggregation": "3_month_sum",
+              "forecast_value": 487596.0,
+              "previous_year_same_months_value": 487596.0,
+              "change_percent": 0.0,
+              "unit": "건",
+              "source_id": "ml:28237:regional-demand-v3.1:202606",
+              "interpretation": "입력 일정 전망에서 내비게이션 검색량의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+            }
+          ],
+          "search_priority_change_pct": -1.075
+        },
+        {
+          "id": "stay",
+          "question": "체류·체험·숙박을 연결한 운영",
+          "signals": [
+            {
+              "kind": "forecast_signal",
+              "window_label": "입력 일정 전망",
+              "window_months": 3,
+              "reliability": "exploratory_longer_horizon",
+              "model_reliability": "limited_backtest_support",
+              "metric": "lodging_nights",
+              "period": "202610~202612",
+              "aggregation": "3_month_average",
+              "forecast_value": 2.8966666666666665,
+              "previous_year_same_months_value": 2.8766666666666665,
+              "change_percent": 0.7,
+              "unit": "일",
+              "source_id": "ml:28237:regional-demand-v3.1:202606",
+              "interpretation": "입력 일정 전망에서 평균 숙박일수의 전년 동기간 대비 증가 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+            },
+            {
+              "kind": "forecast_signal",
+              "window_label": "입력 일정 전망",
+              "window_months": 3,
+              "reliability": "exploratory_longer_horizon",
+              "model_reliability": "seasonal_baseline",
+              "metric": "lodging_rate_pct",
+              "period": "202610~202612",
+              "aggregation": "3_month_average",
+              "forecast_value": 7.466666666666666,
+              "previous_year_same_months_value": 7.466666666666666,
+              "change_percent": 0.0,
+              "unit": "%",
+              "source_id": "ml:28237:regional-demand-v3.1:202606",
+              "interpretation": "입력 일정 전망에서 숙박방문자 비율의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+            },
+            {
+              "kind": "forecast_signal",
+              "window_label": "입력 일정 전망",
+              "window_months": 3,
+              "reliability": "exploratory_longer_horizon",
+              "model_reliability": "below_baseline_on_test",
+              "metric": "stay_minutes",
+              "period": "202610~202612",
+              "aggregation": "3_month_average",
+              "forecast_value": 1187.54,
+              "previous_year_same_months_value": 1171.0,
+              "change_percent": 1.41,
+              "unit": "분",
+              "source_id": "ml:28237:regional-demand-v3.1:202606",
+              "interpretation": "입력 일정 전망에서 평균 체류시간의 전년 동기간 대비 증가 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+            },
+            {
+              "kind": "forecast_signal",
+              "window_label": "입력 일정 전망",
+              "window_months": 3,
+              "reliability": "exploratory_longer_horizon",
+              "model_reliability": "seasonal_baseline",
+              "metric": "lodging_searches",
+              "period": "202610~202612",
+              "aggregation": "3_month_sum",
+              "forecast_value": 22241.0,
+              "previous_year_same_months_value": 22241.0,
+              "change_percent": 0.0,
+              "unit": "건",
+              "source_id": "ml:28237:regional-demand-v3.1:202606",
+              "interpretation": "입력 일정 전망에서 숙박 목적지 검색량의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+            }
+          ],
+          "search_priority_change_pct": 0.5275
+        }
+      ],
+      "search_tasks": [
+        {
+          "region_code": "31140",
+          "region_name": "울산광역시 남구",
+          "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+          "comparison": {
+            "rank": 1,
+            "region_code": "31140",
+            "region_name": "울산광역시 남구",
+            "distance": 0.318546,
+            "visitors_gap_pct": 3.041117,
+            "spend_per_visitor_gap_krw": -1895.31,
+            "overnight_ratio_gap_pct_point": 0.6166
+          },
+          "query": "울산광역시 남구 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+        },
+        {
+          "region_code": "28200",
+          "region_name": "인천광역시 남동구",
+          "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+          "comparison": {
+            "rank": 2,
+            "region_code": "28200",
+            "region_name": "인천광역시 남동구",
+            "distance": 0.33655,
+            "visitors_gap_pct": -14.242767,
+            "spend_per_visitor_gap_krw": 79.22,
+            "overnight_ratio_gap_pct_point": 1.4666
+          },
+          "query": "인천광역시 남동구 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+        },
+        {
+          "region_code": "28177",
+          "region_name": "인천광역시 미추홀구",
+          "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+          "comparison": {
+            "rank": 3,
+            "region_code": "28177",
+            "region_name": "인천광역시 미추홀구",
+            "distance": 0.409766,
+            "visitors_gap_pct": 7.274723,
+            "spend_per_visitor_gap_krw": -227.23,
+            "overnight_ratio_gap_pct_point": 0.4916
+          },
+          "query": "인천광역시 미추홀구 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+        },
+        {
+          "region_code": "41630",
+          "region_name": "경기도 양주시",
+          "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+          "comparison": {
+            "rank": 4,
+            "region_code": "41630",
+            "region_name": "경기도 양주시",
+            "distance": 0.448959,
+            "visitors_gap_pct": 46.771184,
+            "spend_per_visitor_gap_krw": 810.41,
+            "overnight_ratio_gap_pct_point": -0.0167
+          },
+          "query": "경기도 양주시 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+        },
+        {
+          "region_code": "41113",
+          "region_name": "경기도 수원시 권선구",
+          "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+          "comparison": {
+            "rank": 5,
+            "region_code": "41113",
+            "region_name": "경기도 수원시 권선구",
+            "distance": 0.47323,
+            "visitors_gap_pct": 0.658202,
+            "spend_per_visitor_gap_krw": -1444.25,
+            "overnight_ratio_gap_pct_point": 1.6833
+          },
+          "query": "경기도 수원시 권선구 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+        },
+        {
+          "region_code": null,
+          "region_name": "전국 확장",
+          "reason": "유사지역 목록 밖의 성공 운영도 비교; 지역 조건의 차이는 적용 설계에서 조정",
+          "query": "전국 2023 2024 2025 2026 지역 상권·콘텐츠 이용과 소비를 늘린 운영 관광사업 성과평가 전후 비교"
+        },
+        {
+          "region_code": null,
+          "region_name": "전국 확장",
+          "reason": "유사지역 목록 밖의 성공 운영도 비교; 지역 조건의 차이는 적용 설계에서 조정",
+          "query": "전국 2023 2024 2025 2026 관심을 방문·예약으로 연결한 운영 관광사업 성과평가 전후 비교"
+        },
+        {
+          "region_code": null,
+          "region_name": "전국 확장",
+          "reason": "유사지역 목록 밖의 성공 운영도 비교; 지역 조건의 차이는 적용 설계에서 조정",
+          "query": "전국 2023 2024 2025 2026 체류·체험·숙박을 연결한 운영 관광사업 성과평가 전후 비교"
+        }
+      ],
+      "eligibility": "peer는 검색 우선순위이며 필수 일치 조건이 아니다. 일부 조건이 다른 지역의 운영도 비교한다.",
+      "comparison_contract": [
+        "실제 지역과 사업명이 있는 서로 다른 운영 사례를 우선 3건 이상 조사한다. 없는 사례는 만들지 않는다.",
+        "사업 시행연도·운영방식·시행 전후 동일기간 방문/소비 수치와 각 원문 URL을 확인한다.",
+        "성과 미확인 운영 사례와 수치가 확인된 성과 사례를 구분한다. 전후 증가는 사업 단독 효과가 아니다.",
+        "선택 지역의 관측/ML 신호 → 사례 운영과 실적 → 공통점/차이 → 바꿀 운영조건 → 대안보다 선택한 이유를 연결한다.",
+        "ML이 약한 지표는 관측 자료와 함께 해석한다. 인구·지리·교통은 확인된 별도 근거가 있을 때만 비교한다."
+      ]
+    },
+    "case_search_coverage": {
+      "catalog_candidates": 5,
+      "selected_candidates": 5,
+      "excluded_candidates": 0,
+      "scope_counts": {
+        "cross_province": 1,
+        "national_or_unresolved": 4
+      },
+      "selected_source_ids": [
+        "case:gangjin_half_price_2024",
+        "case:digital_tourism_resident_2024",
+        "case:kto_stay_discount_2022",
+        "case:night_festival_2025",
+        "case:night_tourism_cities_2024"
+      ],
+      "registry_candidates": 5,
+      "registry_excluded": 0,
+      "concrete_region_count": 1,
+      "operation_family_count": 4,
+      "sufficient_for_comparison": false,
+      "rule": "지역 완전 일치는 요구하지 않는다. 최소 2개 실제 지역·2개 운영 원리를 비교; 성과의 사실성은 별도 검수.",
+      "research_status": "insufficient_diverse_evidence",
+      "web_status": "failed"
+    },
+    "research_gaps": [
+      "공식 성공사례 웹 조사 실패: OPENAI_QUOTA_ERROR",
+      "같은 시도의 타 시군구 공식 사례 카드는 현재 후보에 없습니다. 전국 사례를 비교하되 인근 사업이 없다고 단정하지 않습니다."
+    ],
+    "trace": [
+      {
+        "agent": "case_scout",
+        "stage": "curated_registry",
+        "status": "completed",
+        "items": 5
+      },
+      {
+        "agent": "case_scout",
+        "stage": "regional_research_plan",
+        "status": "completed",
+        "research_plan": {
+          "version": "regional-case-research-v1",
+          "selected_region": "인천광역시 부평구",
+          "peer_method": "standardized_euclidean_v1",
+          "peer_period": "2025-07 ~ 2026-06",
+          "selected_observed_profile": {
+            "region_code": "28237",
+            "region_name": "인천광역시 부평구",
+            "visitors_12m": 50883440,
+            "visitors_yoy_pct": 5.230015,
+            "domestic_spend_12m_thousand_krw": 994601151.0,
+            "domestic_spend_yoy_pct": 6.519112,
+            "spend_per_visitor_krw": 19546.66,
+            "overnight_ratio_avg_pct": 7.2333,
+            "avg_stay_days": 2.91,
+            "percentiles": {
+              "visitors_12m": 75.29,
+              "spend_per_visitor_krw": 71.1,
+              "overnight_ratio_avg_pct": 44.11,
+              "avg_stay_days": 61.41
+            }
+          },
+          "peer_source_ids": [
+            "datalab:088dce68db8c:f9e07528e9cc",
+            "datalab:12893561bbea:153ed3aa5a6e",
+            "datalab:328e6d50da04:877452ad2b59",
+            "datalab:5104039977f5:37dc3b7e64b5",
+            "datalab:b7bac265962d:97cf4d1db102",
+            "datalab:bd21758c8a88:9597865e62ef"
+          ],
+          "signal_groups": [
+            {
+              "id": "spend",
+              "question": "지역 상권·콘텐츠 이용과 소비를 늘린 운영",
+              "signals": [
+                {
+                  "kind": "forecast_signal",
+                  "window_label": "입력 일정 전망",
+                  "window_months": 3,
+                  "reliability": "exploratory_longer_horizon",
+                  "model_reliability": "below_baseline_on_test",
+                  "metric": "spending_krw",
+                  "period": "202610~202612",
+                  "aggregation": "3_month_sum",
+                  "forecast_value": 243545949020.0,
+                  "previous_year_same_months_value": 251691159000.0,
+                  "change_percent": -3.24,
+                  "unit": "원",
+                  "source_id": "ml:28237:regional-demand-v3.1:202606",
+                  "interpretation": "입력 일정 전망에서 관광소비액의 전년 동기간 대비 감소 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+                }
+              ],
+              "search_priority_change_pct": -3.24
+            },
+            {
+              "id": "visit",
+              "question": "관심을 방문·예약으로 연결한 운영",
+              "signals": [
+                {
+                  "kind": "forecast_signal",
+                  "window_label": "입력 일정 전망",
+                  "window_months": 3,
+                  "reliability": "exploratory_longer_horizon",
+                  "model_reliability": "below_baseline_on_test",
+                  "metric": "visitors",
+                  "period": "202610~202612",
+                  "aggregation": "3_month_sum",
+                  "forecast_value": 11268139.0,
+                  "previous_year_same_months_value": 11515444.0,
+                  "change_percent": -2.15,
+                  "unit": "명",
+                  "source_id": "ml:28237:regional-demand-v3.1:202606",
+                  "interpretation": "입력 일정 전망에서 방문자 수의 전년 동기간 대비 감소 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+                },
+                {
+                  "kind": "forecast_signal",
+                  "window_label": "입력 일정 전망",
+                  "window_months": 3,
+                  "reliability": "exploratory_longer_horizon",
+                  "model_reliability": "seasonal_baseline",
+                  "metric": "navigation_searches",
+                  "period": "202610~202612",
+                  "aggregation": "3_month_sum",
+                  "forecast_value": 487596.0,
+                  "previous_year_same_months_value": 487596.0,
+                  "change_percent": 0.0,
+                  "unit": "건",
+                  "source_id": "ml:28237:regional-demand-v3.1:202606",
+                  "interpretation": "입력 일정 전망에서 내비게이션 검색량의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+                }
+              ],
+              "search_priority_change_pct": -1.075
+            },
+            {
+              "id": "stay",
+              "question": "체류·체험·숙박을 연결한 운영",
+              "signals": [
+                {
+                  "kind": "forecast_signal",
+                  "window_label": "입력 일정 전망",
+                  "window_months": 3,
+                  "reliability": "exploratory_longer_horizon",
+                  "model_reliability": "limited_backtest_support",
+                  "metric": "lodging_nights",
+                  "period": "202610~202612",
+                  "aggregation": "3_month_average",
+                  "forecast_value": 2.8966666666666665,
+                  "previous_year_same_months_value": 2.8766666666666665,
+                  "change_percent": 0.7,
+                  "unit": "일",
+                  "source_id": "ml:28237:regional-demand-v3.1:202606",
+                  "interpretation": "입력 일정 전망에서 평균 숙박일수의 전년 동기간 대비 증가 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+                },
+                {
+                  "kind": "forecast_signal",
+                  "window_label": "입력 일정 전망",
+                  "window_months": 3,
+                  "reliability": "exploratory_longer_horizon",
+                  "model_reliability": "seasonal_baseline",
+                  "metric": "lodging_rate_pct",
+                  "period": "202610~202612",
+                  "aggregation": "3_month_average",
+                  "forecast_value": 7.466666666666666,
+                  "previous_year_same_months_value": 7.466666666666666,
+                  "change_percent": 0.0,
+                  "unit": "%",
+                  "source_id": "ml:28237:regional-demand-v3.1:202606",
+                  "interpretation": "입력 일정 전망에서 숙박방문자 비율의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+                },
+                {
+                  "kind": "forecast_signal",
+                  "window_label": "입력 일정 전망",
+                  "window_months": 3,
+                  "reliability": "exploratory_longer_horizon",
+                  "model_reliability": "below_baseline_on_test",
+                  "metric": "stay_minutes",
+                  "period": "202610~202612",
+                  "aggregation": "3_month_average",
+                  "forecast_value": 1187.54,
+                  "previous_year_same_months_value": 1171.0,
+                  "change_percent": 1.41,
+                  "unit": "분",
+                  "source_id": "ml:28237:regional-demand-v3.1:202606",
+                  "interpretation": "입력 일정 전망에서 평균 체류시간의 전년 동기간 대비 증가 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+                },
+                {
+                  "kind": "forecast_signal",
+                  "window_label": "입력 일정 전망",
+                  "window_months": 3,
+                  "reliability": "exploratory_longer_horizon",
+                  "model_reliability": "seasonal_baseline",
+                  "metric": "lodging_searches",
+                  "period": "202610~202612",
+                  "aggregation": "3_month_sum",
+                  "forecast_value": 22241.0,
+                  "previous_year_same_months_value": 22241.0,
+                  "change_percent": 0.0,
+                  "unit": "건",
+                  "source_id": "ml:28237:regional-demand-v3.1:202606",
+                  "interpretation": "입력 일정 전망에서 숙박 목적지 검색량의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+                }
+              ],
+              "search_priority_change_pct": 0.5275
+            }
+          ],
+          "search_tasks": [
+            {
+              "region_code": "31140",
+              "region_name": "울산광역시 남구",
+              "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+              "comparison": {
+                "rank": 1,
+                "region_code": "31140",
+                "region_name": "울산광역시 남구",
+                "distance": 0.318546,
+                "visitors_gap_pct": 3.041117,
+                "spend_per_visitor_gap_krw": -1895.31,
+                "overnight_ratio_gap_pct_point": 0.6166
+              },
+              "query": "울산광역시 남구 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+            },
+            {
+              "region_code": "28200",
+              "region_name": "인천광역시 남동구",
+              "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+              "comparison": {
+                "rank": 2,
+                "region_code": "28200",
+                "region_name": "인천광역시 남동구",
+                "distance": 0.33655,
+                "visitors_gap_pct": -14.242767,
+                "spend_per_visitor_gap_krw": 79.22,
+                "overnight_ratio_gap_pct_point": 1.4666
+              },
+              "query": "인천광역시 남동구 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+            },
+            {
+              "region_code": "28177",
+              "region_name": "인천광역시 미추홀구",
+              "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+              "comparison": {
+                "rank": 3,
+                "region_code": "28177",
+                "region_name": "인천광역시 미추홀구",
+                "distance": 0.409766,
+                "visitors_gap_pct": 7.274723,
+                "spend_per_visitor_gap_krw": -227.23,
+                "overnight_ratio_gap_pct_point": 0.4916
+              },
+              "query": "인천광역시 미추홀구 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+            },
+            {
+              "region_code": "41630",
+              "region_name": "경기도 양주시",
+              "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+              "comparison": {
+                "rank": 4,
+                "region_code": "41630",
+                "region_name": "경기도 양주시",
+                "distance": 0.448959,
+                "visitors_gap_pct": 46.771184,
+                "spend_per_visitor_gap_krw": 810.41,
+                "overnight_ratio_gap_pct_point": -0.0167
+              },
+              "query": "경기도 양주시 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+            },
+            {
+              "region_code": "41113",
+              "region_name": "경기도 수원시 권선구",
+              "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+              "comparison": {
+                "rank": 5,
+                "region_code": "41113",
+                "region_name": "경기도 수원시 권선구",
+                "distance": 0.47323,
+                "visitors_gap_pct": 0.658202,
+                "spend_per_visitor_gap_krw": -1444.25,
+                "overnight_ratio_gap_pct_point": 1.6833
+              },
+              "query": "경기도 수원시 권선구 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+            },
+            {
+              "region_code": null,
+              "region_name": "전국 확장",
+              "reason": "유사지역 목록 밖의 성공 운영도 비교; 지역 조건의 차이는 적용 설계에서 조정",
+              "query": "전국 2023 2024 2025 2026 지역 상권·콘텐츠 이용과 소비를 늘린 운영 관광사업 성과평가 전후 비교"
+            },
+            {
+              "region_code": null,
+              "region_name": "전국 확장",
+              "reason": "유사지역 목록 밖의 성공 운영도 비교; 지역 조건의 차이는 적용 설계에서 조정",
+              "query": "전국 2023 2024 2025 2026 관심을 방문·예약으로 연결한 운영 관광사업 성과평가 전후 비교"
+            },
+            {
+              "region_code": null,
+              "region_name": "전국 확장",
+              "reason": "유사지역 목록 밖의 성공 운영도 비교; 지역 조건의 차이는 적용 설계에서 조정",
+              "query": "전국 2023 2024 2025 2026 체류·체험·숙박을 연결한 운영 관광사업 성과평가 전후 비교"
+            }
+          ],
+          "eligibility": "peer는 검색 우선순위이며 필수 일치 조건이 아니다. 일부 조건이 다른 지역의 운영도 비교한다.",
+          "comparison_contract": [
+            "실제 지역과 사업명이 있는 서로 다른 운영 사례를 우선 3건 이상 조사한다. 없는 사례는 만들지 않는다.",
+            "사업 시행연도·운영방식·시행 전후 동일기간 방문/소비 수치와 각 원문 URL을 확인한다.",
+            "성과 미확인 운영 사례와 수치가 확인된 성과 사례를 구분한다. 전후 증가는 사업 단독 효과가 아니다.",
+            "선택 지역의 관측/ML 신호 → 사례 운영과 실적 → 공통점/차이 → 바꿀 운영조건 → 대안보다 선택한 이유를 연결한다.",
+            "ML이 약한 지표는 관측 자료와 함께 해석한다. 인구·지리·교통은 확인된 별도 근거가 있을 때만 비교한다."
+          ]
+        }
+      },
+      {
+        "agent": "case_scout",
+        "stage": "case_rag",
+        "status": "completed",
+        "items": 8
+      },
+      {
+        "agent": "case_scout",
+        "stage": "official_case_web",
+        "status": "failed",
+        "items": 0,
+        "error_code": "OPENAI_QUOTA_ERROR",
+        "upstream_error": {
+          "http_status": 429,
+          "code": "credit_balance_exhausted",
+          "type": "insufficient_quota"
+        },
+        "grounding": {}
+      },
+      {
+        "agent": "case_scout",
+        "stage": "national_case_selection",
+        "status": "completed",
+        "items": 5,
+        "catalog_candidates": 5,
+        "selected_candidates": 5,
+        "excluded_candidates": 0,
+        "scope_counts": {
+          "cross_province": 1,
+          "national_or_unresolved": 4
+        },
+        "selected_source_ids": [
+          "case:gangjin_half_price_2024",
+          "case:digital_tourism_resident_2024",
+          "case:kto_stay_discount_2022",
+          "case:night_festival_2025",
+          "case:night_tourism_cities_2024"
+        ],
+        "registry_candidates": 5,
+        "registry_excluded": 0,
+        "concrete_region_count": 1,
+        "operation_family_count": 4,
+        "sufficient_for_comparison": false,
+        "rule": "지역 완전 일치는 요구하지 않는다. 최소 2개 실제 지역·2개 운영 원리를 비교; 성과의 사실성은 별도 검수.",
+        "research_status": "insufficient_diverse_evidence",
+        "web_status": "failed"
+      }
+    ]
+  },
+  "provider_trace": [
+    {
+      "agent": "case_scout",
+      "stage": "case_study",
+      "status": "failed",
+      "provider": "openai",
+      "requested_provider": "openai",
+      "model": "gpt-5.6-sol",
+      "duration_ms": 2030,
+      "usage": {},
+      "fallback": false,
+      "fallback_reason": "OPENAI_QUOTA_ERROR",
+      "error_code": "OPENAI_QUOTA_ERROR",
+      "web_search_used": false,
+      "attempts": [
+        {
+          "attempt": 1,
+          "max_output_tokens": 16000,
+          "status": "failed",
+          "reason": "OPENAI_QUOTA_ERROR",
+          "usage": {},
+          "usage_reported": false,
+          "duration_ms": 2028,
+          "upstream_error": {
+            "http_status": 429,
+            "code": "credit_balance_exhausted",
+            "type": "insufficient_quota"
+          }
+        }
+      ],
+      "tool_trace": [],
+      "max_output_tokens": 16000,
+      "paid_reason": "부족한 공식 근거의 웹 조사",
+      "retry_count": 0
+    }
+  ]
+}

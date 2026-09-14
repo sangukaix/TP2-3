@@ -1,0 +1,36 @@
+test_all_unverified_records_failure_diagnostics (ai_server.test_case_research_plan.GroundedCaseRecoveryTests.test_all_unverified_records_failure_diagnostics) ... ok
+test_bad_card_does_not_discard_other_verified_case (ai_server.test_case_research_plan.GroundedCaseRecoveryTests.test_bad_card_does_not_discard_other_verified_case) ... ok
+test_other_schemas_keep_strict_whole_response_validation (ai_server.test_case_research_plan.GroundedCaseRecoveryTests.test_other_schemas_keep_strict_whole_response_validation) ... ok
+test_search_execution_is_still_mandatory (ai_server.test_case_research_plan.GroundedCaseRecoveryTests.test_search_execution_is_still_mandatory) ... ok
+test_insufficient_case_pack_is_never_cached (ai_server.test_case_research_plan.ResearchFailureFlowTests.test_insufficient_case_pack_is_never_cached) ... Executing <Task finished name='Task-14' coro=<ResearchFailureFlowTests.test_insufficient_case_pack_is_never_cached() done, defined at C:\Users\Admin\mbca\TP2-3\ai_server\test_case_research_plan.py:145> result=None created at C:\Users\Admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\asyncio\runners.py:100> took 2.265 seconds
+ok
+test_research_failure_does_not_reach_planner (ai_server.test_case_research_plan.ResearchFailureFlowTests.test_research_failure_does_not_reach_planner) ... ok
+test_actual_signals_and_peer_gaps_reach_model_matrix (ai_server.test_case_research_plan.ResearchPlanTests.test_actual_signals_and_peer_gaps_reach_model_matrix) ... ok
+test_budget_disbursement_is_not_an_outcome_even_when_called_a_goal (ai_server.test_case_research_plan.ResearchPlanTests.test_budget_disbursement_is_not_an_outcome_even_when_called_a_goal) ... ok
+test_diversity_does_not_require_an_exact_peer (ai_server.test_case_research_plan.ResearchPlanTests.test_diversity_does_not_require_an_exact_peer) ... ok
+test_large_matrix_is_lossless_and_requires_every_page (ai_server.test_case_research_plan.ResearchPlanTests.test_large_matrix_is_lossless_and_requires_every_page) ... ok
+test_neighborhood_descriptions_do_not_inflate_region_diversity (ai_server.test_case_research_plan.ResearchPlanTests.test_neighborhood_descriptions_do_not_inflate_region_diversity) ... ok
+test_same_city_suffixes_and_districts_are_counted_consistently (ai_server.test_case_research_plan.ResearchPlanTests.test_same_city_suffixes_and_districts_are_counted_consistently) ... ok
+test_unavailable_peer_and_ml_do_not_invent_facts (ai_server.test_case_research_plan.ResearchPlanTests.test_unavailable_peer_and_ml_do_not_invent_facts) ... ok
+test_generates_strategy_deck_with_calculation_pages (ai_server.test_proposal_presentation.ProposalPresentationTest.test_generates_strategy_deck_with_calculation_pages) ... ok
+test_approved_template_positions_and_final_decision_copy_are_preserved (ai_server.test_proposal_presentation_v3_contract.ProposalPresentationV4ContractTest.test_approved_template_positions_and_final_decision_copy_are_preserved)
+출력 때 이미 정돈한 최신 템플릿을 다시 이동하거나 축소하지 않습니다. ... ok
+test_comparison_uses_selected_case_and_only_plots_observed_yoy (ai_server.test_proposal_presentation_v3_contract.ProposalPresentationV4ContractTest.test_comparison_uses_selected_case_and_only_plots_observed_yoy)
+사례 선택을 보존하고 수치가 없을 때는 장식 막대를 사실처럼 남기지 않습니다. ... ok
+test_estimate_and_provenance_do_not_invent_missing_facts (ai_server.test_proposal_presentation_v3_contract.ProposalPresentationV4ContractTest.test_estimate_and_provenance_do_not_invent_missing_facts)
+참고 견적을 확정 견적과 구분하고 요청대로 AI 검수 블록을 제외합니다. ... ok
+test_generates_editable_slides_with_native_charts_and_calculations (ai_server.test_proposal_presentation_v3_contract.ProposalPresentationV4ContractTest.test_generates_editable_slides_with_native_charts_and_calculations)
+각 장을 이미지 한 장으로 붙이지 않고 텍스트·사진·차트를 편집 가능하게 유지합니다. ... ok
+test_legacy_twelve_slide_template_is_preserved_for_v3 (ai_server.test_proposal_presentation_v3_contract.ProposalPresentationV4ContractTest.test_legacy_twelve_slide_template_is_preserved_for_v3)
+새 템플릿 교체가 과거 v3 직접 호출의 레이아웃 원본을 덮어쓰지 않습니다. ... ok
+test_missing_optional_image_and_ml_data_keeps_twelve_slide_structure (ai_server.test_proposal_presentation_v3_contract.ProposalPresentationV4ContractTest.test_missing_optional_image_and_ml_data_keeps_twelve_slide_structure)
+사진 URL이나 ML 전망이 없어도 외부 통신 없이 동일한 템플릿으로 출력합니다. ... ok
+test_missing_template_fails_instead_of_silent_legacy_fallback (ai_server.test_proposal_presentation_v3_contract.ProposalPresentationV4ContractTest.test_missing_template_fails_instead_of_silent_legacy_fallback)
+배포 누락을 구형 출력으로 숨기지 않고 즉시 명확한 오류로 드러냅니다. ... ok
+test_public_entrypoint_uses_approved_template_renderer (ai_server.test_proposal_presentation_v3_contract.ProposalPresentationV4ContractTest.test_public_entrypoint_uses_approved_template_renderer)
+기존 API import가 새 구현을 가리키고 템플릿 파일이 실제로 존재해야 합니다. ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 11.439s
+
+OK

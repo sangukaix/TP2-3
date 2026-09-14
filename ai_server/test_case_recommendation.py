@@ -34,6 +34,38 @@ class RecommendationTest(unittest.TestCase):
         source=sources()[1];source['source_url']=''
         self.assertEqual(match_cases(decision()['design_candidates'][0],[source]),[])
 
+    def test_valid_citation_and_selection_explanation_survive_linkage(self):
+        original=decision()
+        original['selection_reason']='숙박 결제 유도를 검토하되 참여업체 협의 부담을 대안과 비교했다.'
+        original['design_candidates'][0]['case_source_ids']=['case:z_valid']
+        pool=[{**sources()[1],'source_id':'case:a_other','evidence_strength':'high'}, {**sources()[1],'source_id':'case:z_valid'}]
+        linked=link_decision(original,pool)
+        self.assertEqual(linked['recommended_case_ids'],['case:z_valid'])
+        self.assertEqual(linked['selection_reason'],original['selection_reason'])
+        self.assertEqual(link_decision(linked,pool),linked)
+
+    def test_missing_citation_uses_region_context_not_alphabetical_id(self):
+        pool=[{**sources()[1],'source_id':'case:a_far','retrieval_context':{'scope':'cross_province'}}, {**sources()[1],'source_id':'case:z_local','retrieval_context':{'scope':'same_province'}}]
+        self.assertEqual(link_decision(decision(),pool)['recommended_case_ids'],['case:z_local'])
+
+    def test_auto_includes_documented_reservation_mobility_and_experience(self):
+        from ai_server.app.case_recommendation import allowed_operation
+        for mechanism in ['시간대 예약 입장', '시티투어 교통 연계', '공예 체험 운영']:
+            candidate={'mechanism':mechanism}
+            self.assertTrue(allowed_operation(candidate,{'input_profile':'guided_v2','business_direction':'auto'}))
+            self.assertFalse(allowed_operation(candidate,{'input_profile':'guided_v2','business_direction':'spend_conversion'}))
+
+    def test_extra_reference_is_not_mislabelled_as_evaluated_candidate(self):
+        from ai_server.app.case_recommendation import case_reference_role
+        report={'strategies':[{'solution':'여행비 환급'}], 'planning_decision':{},'evidence_sources':[{**source,'source_type':'benchmark_case'} for source in sources()]}
+        self.assertEqual(case_reference_role(report,report['evidence_sources'][1]),'핵심 운영 참고')
+        self.assertEqual(case_reference_role(report,report['evidence_sources'][2]),'추가 운영 참고')
+
+    def test_export_primary_keeps_the_selected_reference(self):
+        from ai_server.app.case_recommendation import report_cases
+        report={'strategies':[{'solution':'여행비 환급'}], 'planning_decision':{'selected_candidate_id':'a','design_candidates':[{'candidate_id':'a','mechanism':'여행비 환급','case_source_ids':['case:z_valid']}]},'evidence_sources':[{**sources()[1],'source_id':sid,'source_type':'benchmark_case'} for sid in ['case:a_other','case:z_valid']]}
+        self.assertEqual(report_cases(report)[1][0]['source_id'],'case:z_valid')
+
 
 class AgentIntegrationTest(unittest.IsolatedAsyncioTestCase):
     async def test_budget_filtered_before_model_and_result_linked_after_model(self):

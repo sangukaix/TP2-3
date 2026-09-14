@@ -16,13 +16,21 @@ export function threeMonthSchedule(month) {
   const end = new Date(Date.UTC(year, value + 2, 0)).toISOString().slice(0, 10)
   return { schedule_status: 'fixed', start_date: `${month}-01`, end_date: end }
 }
+export const RESOURCE_OPTIONS = [['information_center', '관광안내소'], ['merchants', '상인회·지역 상점'], ['lodging', '숙박업체'], ['events', '기존 행사'], ['cultural_spaces', '문화·체험 공간'], ['promotion', '지역 홍보 채널']]
+export const CONTEXT_OPTIONS = [['families', '가족 방문객 중심'], ['young_adults', '청년 방문객 중심'], ['weekend', '주말 방문 연계'], ['weekdays', '평일 방문 확대'], ['event_link', '기존 행사 연계'], ['experience', '지역 체험 연계']]
+export const optionLabels = (options, selected = []) => options.filter(([key]) => selected.includes(key)).map(([, label]) => label).join(' · ')
+export function nextThreeMonthSchedule(now = new Date()) {
+  const korea = new Date(now.getTime() + 9 * 60 * 60 * 1000)
+  const start = new Date(Date.UTC(korea.getUTCFullYear(), korea.getUTCMonth() + 1, 1))
+  return threeMonthSchedule(start.toISOString().slice(0, 7))
+}
 export function simplifiedDraft(code) {
   const prior = readPlanningDraft(code)
-  return { ...emptyPlanningBrief(code), input_profile: 'guided_v1', business_direction: prior.business_direction || 'auto', excluded_operations: prior.excluded_operations || [],
+  return { ...emptyPlanningBrief(code), input_profile: 'guided_v2', business_direction: prior.business_direction || 'auto', excluded_operations: [],
     budget_status: prior.budget_max_krw ? 'indicative' : 'unknown', budget_max_krw: prior.budget_max_krw,
-    ...threeMonthSchedule(prior.start_date?.slice(0, 7)),
-    resources_status: prior.resources_confirmed ? 'known' : 'unknown', resources_confirmed: (prior.resources_confirmed || '').slice(0, 300),
-    field_context: [prior.field_context, prior.preferences].filter(Boolean).join('\n').slice(0, 500) }
+    ...nextThreeMonthSchedule(),
+    resource_options: RESOURCE_OPTIONS.filter(([key]) => prior.resource_options?.includes(key)).map(([key]) => key),
+    context_options: CONTEXT_OPTIONS.filter(([key]) => prior.context_options?.includes(key)).map(([key]) => key) }
 }
 
 // 자유 입력과 첨부 본문은 같은 LLM 문맥을 사용하므로 합계도 제한합니다.
@@ -39,7 +47,7 @@ export function planningContextCharCount(brief) {
 const key = (code) => `tour-insight-planning-brief-${code}`
 export function readPlanningDraft(code) {
   try {
-    const saved = JSON.parse(window.localStorage.getItem(key(code)) || 'null')
+    const saved = JSON.parse(window.localStorage.getItem(`${key(code)}-v2`) || window.localStorage.getItem(key(code)) || 'null')
     if (saved?.brief?.region_code === code && saved.brief.version === 1 && Array.isArray(saved.brief.references)) {
       // 이전 초안에는 상태 필드가 없으므로, 이미 적은 내용이 사라지지 않게 한 번만 보정합니다.
       const legacy = saved.brief
@@ -55,7 +63,7 @@ export function readPlanningDraft(code) {
 export function savePlanningDraft(brief) {
   // 첨부 본문은 생성 요청에만 쓰고 브라우저 초안에는 남기지 않습니다.
   const draft = { ...brief, references: [] }
-  window.localStorage.setItem(key(brief.region_code), JSON.stringify({ brief: draft, saved_at: new Date().toISOString() }))
+  window.localStorage.setItem(brief.input_profile === 'guided_v2' ? `${key(brief.region_code)}-v2` : key(brief.region_code), JSON.stringify({ brief: draft, saved_at: new Date().toISOString() }))
 }
 export function validatePlanningBrief(brief) {
   if (brief.input_profile === 'guided_v1') {

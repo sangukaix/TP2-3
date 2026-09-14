@@ -156,6 +156,21 @@ class EvidenceToolTests(unittest.TestCase):
         self.assertIn('candidate_assessments', result['additional_sections'])
         self.assertNotIn('get_planning_decision', self.tools.missing_required_reads())
 
+    def test_decision_audit_history_is_available_without_duplicate_prefetch(self):
+        audit = [{'reason': '교정 전 판단 원문 ' * 300}]
+        self.tools.pack['transfer_assessment'] = {
+            'selected_candidate_id': 'C1', 'selection_reason': '현재 선정 이유',
+            'design_candidates': [{'candidate_id': 'C1', 'budget': '현재 산식'}],
+            'original_candidate_assessments': audit,
+        }
+        result = self.tools.execute('get_planning_decision', {})
+        self.assertEqual(result['selected_candidate']['budget'], '현재 산식')
+        self.assertNotIn('original_candidate_assessments', result)
+        path = result['additional_sections']['original_candidate_assessments']
+        detail = self.tools.execute('read_task_section', {'path': path, 'offset': 0, 'limit': 1})
+        self.assertIn('교정 전 판단 원문', str(detail))
+        self.assertEqual(self.tools.pack['transfer_assessment']['original_candidate_assessments'], audit)
+
     def test_transferability_reads_two_distinct_case_mechanisms(self):
         """Qwen 후보 비교는 숙박/야간 같은 한 사례만 읽고 끝낼 수 없습니다."""
         payload = fixture()
@@ -323,6 +338,7 @@ class LocalAgentRunnerTests(unittest.TestCase):
         self.assertIn('$.proposal.strategy_brief.pilot_scope', system)
         self.assertIn('견적 확보 담당', system)
         self.assertIn('동일 범위 비교집단', system)
+        self.assertNotIn('description', provider.seen[-1]['schema']['properties']['proposal']['properties']['design_candidates']['items']['properties']['budget_formula'])
 
     def test_native_tool_result_is_returned_to_model_before_final_json(self):
         provider = self.provider([
@@ -357,6 +373,18 @@ class LocalAgentRunnerTests(unittest.TestCase):
         # 필수 근거 4개는 서버가 먼저 읽고, 모델이 같은 도구를 두 번 더 요청해도
         # 제한된 횟수만 실행합니다.
         self.assertEqual(len(result.tool_trace), 10)
+
+    def test_duplicate_successful_results_reference_preserved_prefetch(self):
+        calls = required_calls()
+        provider = self.provider([calls, calls, {'role': 'assistant', 'content': '{"answer":"확인"}'}])
+        original = request()
+        asyncio.run(provider.generate(original))
+        messages = provider.seen[-1]['messages']
+        results = [json.loads(m['content']) for m in messages if m['role'] == 'tool']
+        self.assertTrue(all(row.get('already_provided') for row in results))
+        self.assertTrue(all(row['reference'].startswith('prefetched_evidence[') for row in results))
+        self.assertIn('17963441', messages[2]['content'])
+        self.assertIn('실제 이용 완료 확인', messages[2]['content'])
 
     def test_invalid_arguments_are_rejected_then_repaired_without_expanding_permissions(self):
         provider = self.provider([
@@ -413,6 +441,30 @@ class LocalAgentRunnerTests(unittest.TestCase):
             asyncio.run(provider.generate(original))
         self.assertEqual(error.exception.code, 'OLLAMA_INCOMPLETE_RESPONSE')
         self.assertEqual(error.exception.attempts[-1]['status'], 'failed')
+        self.assertEqual(len(provider.seen), 1)
+
+    def test_empty_optional_selection_can_proceed_but_empty_final_cannot(self):
+        def empty():
+            return LLMProviderError('OLLAMA_OUTPUT_MISSING', '선택 응답 없음',
+                                    usage={'input_tokens': 100, 'output_tokens': 34, 'total_tokens': 134})
+        provider = self.provider([empty(), {'role': 'assistant', 'content': '{"answer":"확인"}'}])
+        result = asyncio.run(provider.generate(request()))
+        self.assertEqual(result.payload, {'answer': '확인'})
+        self.assertEqual(result.usage['total_tokens'], 149)
+        self.assertEqual(result.attempts[0]['status'], 'continued_without_optional_tools')
+        provider = self.provider([{'role': 'assistant', 'content': '준비됨'}, empty()])
+        with self.assertRaises(LLMProviderError) as error:
+            asyncio.run(provider.generate(request()))
+        self.assertEqual(error.exception.code, 'OLLAMA_OUTPUT_MISSING')
+        self.assertEqual(error.exception.attempts[-1]['phase'], 'final_json')
+
+    def test_empty_selection_cannot_skip_missing_required_source(self):
+        original = request()
+        original.input_payload['evidence_pack']['benchmark_cases'][0]['large_text'] = '원문' * 5000
+        provider = self.provider([LLMProviderError('OLLAMA_OUTPUT_MISSING', '빈 선택')])
+        with self.assertRaises(LLMProviderError) as error:
+            asyncio.run(provider.generate(original))
+        self.assertEqual(error.exception.code, 'OLLAMA_OUTPUT_MISSING')
         self.assertEqual(len(provider.seen), 1)
 
     def test_final_json_output_limit_retries_once_without_using_partial_output(self):

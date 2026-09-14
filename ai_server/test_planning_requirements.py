@@ -29,7 +29,7 @@ MEASUREMENT = '분자: 취소 제외 지급 건수 / 분모: 적격 신청 건�
 
 def transfer(valid=True):
     candidates = [{'candidate_id': f'candidate:{i}', 'candidate_type': kind, 'title': f'지역 시범 {i}',
-                   'mechanism': '운영 원리', 'local_fit': '2026-06 지역 관측값으로 가설 검토',
+                   'mechanism': '운영 원리', 'local_fit': ('2026-06 소비 관측값을 참고해 방문 후 재결제 행동을 검토' if i == 1 else '2026-06 방문 관측값을 참고해 예약 후 이용 완료 행동을 검토'),
                    'prerequisites': '가맹점 및 자료 제공 협약 전 지급 보류',
                    'budget_formula': '적격 신청 건수×지급 단가 + 운영일수×일 단가. 담당자가 견적 확인' if valid else '환급 지원금 + 운영비',
                    'measurement_plan': MEASUREMENT if valid else '상품권 결제 증가율',
@@ -55,6 +55,13 @@ def pack(valid=True):
 
 
 class PlanningRequirementsTest(unittest.TestCase):
+    def test_duplicate_candidate_explanations_reach_existing_repair_feedback(self):
+        value=transfer()
+        value['design_candidates'][1]['local_fit']=value['design_candidates'][0]['local_fit']
+        issues=candidate_delivery_issues(pack(),value)
+        self.assertTrue(any(row['field']=='planning_decision.design_candidates.comparison' for row in issues))
+        self.assertFalse(any(row['severity']=='critical' for row in issues))
+
     def test_regionwide_observations_cannot_become_pilot_refund_budget_or_effect(self):
         budget = '외지인 방문객 수 × 평균 지출액 × 환급률 + 운영비 10%'
         local_fit = '내비게이션 검색량을 바탕으로 교통 할인이 효과적일 수 있다.'
@@ -378,7 +385,7 @@ class PlanningRequirementsTest(unittest.TestCase):
         fetched = _prefetch_required_evidence(workspace, 'transferability')
         fetched_tools = {row['tool'] for row in fetched}
         self.assertNotIn('get_nationwide_bigdata_context', fetched_tools)
-        self.assertNotIn('get_case_comparison_matrix', fetched_tools)
+        self.assertIn('get_case_comparison_matrix', fetched_tools)
         self.assertTrue({'case:return', 'case:refund'} <= workspace.read_source_ids)
         self.assertNotIn('case:budget', workspace.read_source_ids)
         decision = workspace.execute('get_planning_decision', {})

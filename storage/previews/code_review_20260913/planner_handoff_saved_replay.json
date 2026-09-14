@@ -1,0 +1,194 @@
+{
+  "mode": "offline_input_replay",
+  "source_file": "storage\\previews\\case_research_diagnostics\\20260913_111923_030012_28237\\diagnostic.json",
+  "source_sha256": "e52fe59d1201889b147cce373d368a4101a42a5118d934db7e9e05d312fa3423",
+  "llm_calls": 0,
+  "paid_calls": 0,
+  "blocked_network_attempts": 0,
+  "report_approved": false,
+  "draft_regenerated": false,
+  "candidate_corrections": [
+    {
+      "field": "planning_decision.design_candidates[1].budget_formula",
+      "reason": "지역 전체 규모를 예산으로 쓰지 않고 시범 수량·비교견적 기반의 미확정 산식으로 교체했습니다."
+    },
+    {
+      "field": "planning_decision.design_candidates[1].measurement_plan",
+      "reason": "분자·분모·수집 원장·비교 기준을 서버 측정 계약으로 보완했습니다."
+    },
+    {
+      "field": "planning_decision.design_candidates[2].budget_formula",
+      "reason": "지역 전체 규모를 예산으로 쓰지 않고 시범 수량·비교견적 기반의 미확정 산식으로 교체했습니다."
+    },
+    {
+      "field": "planning_decision.design_candidates[2].measurement_plan",
+      "reason": "분자·분모·수집 원장·비교 기준을 서버 측정 계약으로 보완했습니다."
+    },
+    {
+      "field": "planning_decision.strategy_brief.budget_formula",
+      "reason": "보정된 선택 후보와 요약을 동기화했습니다."
+    }
+  ],
+  "candidate_handoff_findings": [
+    {
+      "severity": "major",
+      "field": "planning_decision.design_candidates[1].case_linkage",
+      "problem": "사례 인용을 함수로 보정했지만 후보의 비교 설명·규모·성과 해석은 재확인되지 않았습니다.",
+      "revision_instruction": "현재 연결 사례의 실제 운영·지역·측정기간을 읽고 local_fit·differentiation·selection_reason을 다시 비교하세요. 예산·운영량에 남은 다른 사례의 수치를 선택 지역 사실로 복사하지 말고, 선택 지역 근거 또는 명시한 기획 가정으로 분리하세요. 전후 증가율을 그 사업이 증가시킨 인과효과로 표현하지 마세요."
+    },
+    {
+      "severity": "major",
+      "field": "planning_decision.design_candidates[2].case_linkage",
+      "problem": "사례 인용을 함수로 보정했지만 후보의 비교 설명·규모·성과 해석은 재확인되지 않았습니다.",
+      "revision_instruction": "현재 연결 사례의 실제 운영·지역·측정기간을 읽고 local_fit·differentiation·selection_reason을 다시 비교하세요. 예산·운영량에 남은 다른 사례의 수치를 선택 지역 사실로 복사하지 말고, 선택 지역 근거 또는 명시한 기획 가정으로 분리하세요. 전후 증가율을 그 사업이 증가시킨 인과효과로 표현하지 마세요."
+    }
+  ],
+  "stabilized_candidates": [
+    {
+      "candidate_id": "spend_conversion_1",
+      "candidate_type": "spend_conversion",
+      "title": "부평구 전통시장 모바일 스탬프 투어",
+      "mechanism": "GPS 기반의 전통시장 모바일 스탬프 투어를 운영하고, 완주한 참여자에게 소비쿠폰을 제공하여 전통시장 방문 및 가맹점 결제를 유도한다.",
+      "local_fit": "공식 문서의 운영 방식이 일치하는 참고 사례: 서울특별시 동작구·관악구 보라매공원 및 인근 상권. 지역 환경의 유사성이 입증된 것은 아닙니다.",
+      "differentiation": "참고 사례의 지역 규모·성과율은 복사하지 않고 선택 지역의 참여처·운영량·지원 조건으로 설계합니다.",
+      "prerequisites": "부평구 내 전통시장과 상권의 참여를 확보하고, 쿠폰 지급 및 사용 조건을 명확히 하여 운영한다. 또한, GPS 기반의 스탬프 투어 시스템을 구축하고, 참여자 수와 쿠폰 사용률을 측정할 수 있는 데이터 수집 체계를 마련해야 한다.",
+      "budget_formula": "기획 가정/미확정 참고 견적: 쿠폰 지원 상한=중복 제외 적격 지급 건수×건별 쿠폰 액면가. 지급 건수는 점포 수가 아니며, 실제 정산은 유효 사용·취소 원장에 따른다. 총액=지원액+운영일수×일일 운영 단가+시스템 1식×구축 단가+홍보물 수량×단가. 사업 담당자가 착수 전 지급 단위·수량을 정하고 회계 담당자가 비교견적으로 단가·부가세·총액을 확정한다.",
+      "measurement_plan": "쿠폰 사용률은 분자=취소·중복 제외 사용 쿠폰 ID 수, 분모=적격 지급 쿠폰 ID 수로 계산한다. 발급·사용을 같은 지급 코호트와 유효기간으로 연결하며 참여 점포 수를 분모로 쓰지 않는다. 운영 전 4주를 기준기간으로 두고 운영 중 매주 원자료=신청·승인·취소·이용·결제 원장을 사업 담당자가 집계한다. 같은 콘텐츠·기간의 순차 도입 미운영 집단과 동일 분모로 비교한다. 발전 가능 범위는 시범 대상 수×관측 완료율×건별 측정값의 가정 시나리오로 제시하고 지역 전체 자연증감과 분리한다. 성공·중단 기준은 기준선·표본수 확인 뒤 착수 전에 확정한다.",
+      "stop_or_scale_rule": "쿠폰 사용률이 낮거나, 방문자 수가 감소하는 경우, 쿠폰 지급 조건을 조정하거나, 프로그램의 운영 방식을 재검토한다. 또한, 쿠폰 예산 소진 시 조기 종료하는 구조를 유지한다.",
+      "evidence_source_ids": [
+        "dataset:28237:1",
+        "dataset:28237:2",
+        "dataset:28237:3",
+        "dataset:28237:4",
+        "dataset:28237:5",
+        "dataset:28237:6",
+        "case:e4d3e4b6fd4903"
+      ],
+      "case_source_ids": [
+        "case:e4d3e4b6fd4903"
+      ],
+      "case_linkage": {
+        "method": "operation-document-v2",
+        "operation_family": "spend_conversion",
+        "original_case_source_ids": [
+          "case:2c54c6aaf2117a",
+          "case:e4d3e4b6fd4903",
+          "case:digital_tourism_resident_2024"
+        ],
+        "matched_source_ids": [
+          "case:e4d3e4b6fd4903"
+        ],
+        "regional_similarity_verified": false,
+        "basis": "같은 운영 방식의 유효한 인용을 유지. 인용 누락·오류일 때만 지역 검색 맥락·문서 등급으로 참고 사례 1건 연결. 지역 적합성 순위나 효과 확률이 아님.",
+        "original_local_fit": "부평구의 전통시장과 상권을 활용하여, 부평구 내 전통시장·상권, 부평로터리·부평문화의거리·부평종합시장 등 주요 관광지와 연계하여 운영한다. 이는 부평구의 관광객을 지역 내 상권으로 유도하고, 소비를 증진시키는 방향으로 설계되었다.",
+        "original_differentiation": "부평구의 특성에 맞춘 전통시장 중심의 스탬프 투어로, 기존의 야간관광 특화도시 운영과는 차별화된 접근 방식이다. 또한, 부평구의 기후와 일몰 시간에 맞춰 실내 프로그램 비중을 조정하고, 우천 대체편을 마련하여 운영의 유연성을 확보한다."
+      }
+    },
+    {
+      "candidate_id": "night_time_experience_1",
+      "candidate_type": "stay_conversion",
+      "title": "부평구 야간관광 특화도시 운영",
+      "mechanism": "야간 콘텐츠·야시장·공연·경관·교통·안전을 묶은 야간관광 특화도시 운영을 통해, 주간 중심 방문을 저녁 체류와 지역 내 소비로 확장하고, 구도심의 야간 콘텐츠 부족을 보완한다.",
+      "local_fit": "공식 문서의 운영 방식이 일치하는 참고 사례: 인천광역시 송도·월미도·개항장 중심. 지역 환경의 유사성이 입증된 것은 아닙니다.",
+      "differentiation": "참고 사례의 지역 규모·성과율은 복사하지 않고 선택 지역의 참여처·운영량·지원 조건으로 설계합니다.",
+      "prerequisites": "부평구 내 문화시설·공연장·시장·식음 상권의 참여를 확보하고, 야간 콘텐츠 운영을 위한 교통과 안전 환경을 마련해야 한다. 또한, 야간 콘텐츠 운영의 효과를 측정할 수 있는 데이터 수집 체계를 마련해야 한다.",
+      "budget_formula": "기획 가정/미확정 참고 견적: 운영 콘텐츠 수×콘텐츠별 비교견적 + 운영일수×일일 운영·안전 견적 + 참여업체 수×업체 준비비 견적 + 측정 원장 1식×구축 견적. 사업 담당자가 착수 전 수량을 정하고 회계 담당자가 같은 조건의 비교견적 2건 이상으로 단가·부가세·총액을 확정한다.",
+      "measurement_plan": "야간 프로그램 이용 완료율은 분자=야간 이용을 완료한 고유 참여 ID 수, 분모=승인한 고유 참여 ID 수로 계산한다. 야간 이용을 숙박으로 집계하지 않는다. 운영 전 4주를 기준기간으로 두고 운영 중 매주 원자료=신청·승인·취소·이용·결제 원장을 사업 담당자가 집계한다. 같은 콘텐츠·기간의 순차 도입 미운영 집단과 동일 분모로 비교한다. 발전 가능 범위는 시범 대상 수×관측 완료율×건별 측정값의 가정 시나리오로 제시하고 지역 전체 자연증감과 분리한다. 성공·중단 기준은 기준선·표본수 확인 뒤 착수 전에 확정한다.",
+      "stop_or_scale_rule": "야간 콘텐츠 운영 효과가 낮거나, 방문자 수가 감소하는 경우, 야간 콘텐츠 운영 방식을 재검토한다. 또한, 야간 콘텐츠 운영의 효과를 측정할 수 있는 데이터 수집 체계를 마련해야 한다.",
+      "evidence_source_ids": [
+        "dataset:28237:1",
+        "dataset:28237:2",
+        "dataset:28237:3",
+        "dataset:28237:4",
+        "dataset:28237:5",
+        "dataset:28237:6",
+        "case:2c54c6aaf2117a"
+      ],
+      "case_source_ids": [
+        "case:2c54c6aaf2117a"
+      ],
+      "case_linkage": {
+        "method": "operation-document-v2",
+        "operation_family": "night_time_experience",
+        "original_case_source_ids": [
+          "case:2c54c6aaf2117a",
+          "case:e4d3e4b6fd4903",
+          "case:digital_tourism_resident_2024"
+        ],
+        "matched_source_ids": [
+          "case:2c54c6aaf2117a"
+        ],
+        "regional_similarity_verified": false,
+        "basis": "같은 운영 방식의 유효한 인용을 유지. 인용 누락·오류일 때만 지역 검색 맥락·문서 등급으로 참고 사례 1건 연결. 지역 적합성 순위나 효과 확률이 아님.",
+        "original_local_fit": "부평구의 문화시설·공연장·시장·식음 상권을 중심으로 압축된 저녁 동선을 구성하여 운영한다. 이는 부평구의 기후와 일몰 시간에 맞춰 실내 프로그램 비중을 조정하고, 우천 대체편을 마련하여 운영의 유연성을 확보한다.",
+        "original_differentiation": "부평구의 특성에 맞춘 야간관광 특화도시 운영으로, 기존의 서울국제정원박람회와는 차별화된 접근 방식이다. 또한, 부평구의 기존 시설·민간공연·상점 프로그램을 조합하여 3개월 일정에 맞춤 운영한다."
+      }
+    }
+  ],
+  "unchanged_draft_findings": {
+    "checked": true,
+    "issues": [
+      {
+        "severity": "major",
+        "field": "planning_decision.selection_status",
+        "problem": "선택 후보의 지역 적용 조건이 미확인 상태입니다.",
+        "revision_instruction": "후보 수 부족과 구분하세요. prerequisites/selection_reason의 미확인 조건과 필요한 공식 문서를 명시하고, 확인 전 집행 승인이나 ready 변경을 하지 마세요."
+      },
+      {
+        "severity": "major",
+        "field": "planning_decision.design_candidates[1].case_linkage",
+        "problem": "사례 인용을 함수로 보정했지만 후보의 비교 설명·규모·성과 해석은 재확인되지 않았습니다.",
+        "revision_instruction": "현재 연결 사례의 실제 운영·지역·측정기간을 읽고 local_fit·differentiation·selection_reason을 다시 비교하세요. 예산·운영량에 남은 다른 사례의 수치를 선택 지역 사실로 복사하지 말고, 선택 지역 근거 또는 명시한 기획 가정으로 분리하세요. 전후 증가율을 그 사업이 증가시킨 인과효과로 표현하지 마세요."
+      },
+      {
+        "severity": "major",
+        "field": "planning_decision.design_candidates[2].case_linkage",
+        "problem": "사례 인용을 함수로 보정했지만 후보의 비교 설명·규모·성과 해석은 재확인되지 않았습니다.",
+        "revision_instruction": "현재 연결 사례의 실제 운영·지역·측정기간을 읽고 local_fit·differentiation·selection_reason을 다시 비교하세요. 예산·운영량에 남은 다른 사례의 수치를 선택 지역 사실로 복사하지 말고, 선택 지역 근거 또는 명시한 기획 가정으로 분리하세요. 전후 증가율을 그 사업이 증가시킨 인과효과로 표현하지 마세요."
+      },
+      {
+        "severity": "major",
+        "field": "strategies[1].budget.payout_quantity",
+        "problem": "방문객 지급 비용에 참여 점포 수를 곱했습니다.",
+        "revision_instruction": "쿠폰 지원 상한은 중복 제외 적격 지급 건수×건별 액면가로 계산하세요. 점포 준비비는 점포 수×점포당 준비 단가로 분리하고 수량·단가는 기획 가정으로 표시하세요."
+      },
+      {
+        "severity": "major",
+        "field": "strategies[1].kpi.placeholder",
+        "problem": "목표에 미완성 자리표시자 00%가 남았습니다.",
+        "revision_instruction": "00%를 임의 숫자로 치환하지 말고 삭제하세요. 분자·분모·집계 방법을 유지하고 별도 계획 목표 또는 착수 전 기준선 확인 후 목표 확정 절차를 쓰세요."
+      },
+      {
+        "severity": "major",
+        "field": "strategies[1].kpi",
+        "problem": "성과 측정 설계 누락: 분자·분모 또는 금액 합계 정의",
+        "revision_instruction": "누락 요소를 채우세요. 취소 제외 결제액/적격 참여자 등 대상 정의와 자료 수집 담당을 적고 전후 변화와 사업 효과를 구분하세요."
+      },
+      {
+        "severity": "major",
+        "field": "strategies[1].implementation_steps[2].task",
+        "problem": "실행 단계의 담당 역할이 없습니다.",
+        "revision_instruction": "누가 어떤 입력·확인 조건으로 실제 작업을 하는지 task에 적고 deliverable을 구체적으로 유지하세요."
+      },
+      {
+        "severity": "major",
+        "field": "strategies[1].implementation_steps[3].task",
+        "problem": "실행 단계의 담당 역할이 없습니다.",
+        "revision_instruction": "누가 어떤 입력·확인 조건으로 실제 작업을 하는지 task에 적고 deliverable을 구체적으로 유지하세요."
+      },
+      {
+        "severity": "major",
+        "field": "strategies[1].implementation_steps[5].task",
+        "problem": "실행 단계의 담당 역할이 없습니다.",
+        "revision_instruction": "누가 어떤 입력·확인 조건으로 실제 작업을 하는지 task에 적고 deliverable을 구체적으로 유지하세요."
+      }
+    ],
+    "issue_count": 9
+  },
+  "manual_remaining": [
+    "선정 후보의 서울 사례 인용과 인천 시장사업 운영 규모가 섞인 의미 문제를 실제 Qwen 재비교로 확인해야 한다.",
+    "기존 Gemma 초안의 업체 수×지급 단가, 00% 목표는 여전히 잘못된 본문이며 이번에는 재생성하지 않았다.",
+    "서울 개막 전후 1주 매출20%를 사업이 직접 증가시켰다고 쓴 인과 표현은 원문 기간·범위와 함께 수정해야 한다.",
+    "선택 지역 장소의 근거 연결과 실제 참여 조건은 별도 의미 검수가 필요하다."
+  ]
+}

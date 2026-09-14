@@ -1,0 +1,50 @@
+{
+  "original_period": "2026-09 ~ 2026-12, 4개월",
+  "aligned_period": "2026-10 ~ 2026-12, 3개월",
+  "forecasts": [
+    "202610",
+    "202611",
+    "202612"
+  ],
+  "preserved": [
+    "saved_database_report",
+    "ML",
+    "quality_review",
+    "target_rates",
+    "estimate",
+    "selected_candidate"
+  ],
+  "reference_roles": [
+    [
+      "case:gangjin_half_price_2024",
+      "핵심 운영 참고"
+    ],
+    [
+      "case:digital_tourism_resident_2024",
+      "후보 비교에 사용한 사례"
+    ],
+    [
+      "case:487a42ebccb906",
+      "추가 운영 참고"
+    ]
+  ],
+  "period_corrections": [
+    {
+      "field": "strategies[0].timeframe",
+      "original": "2026-09 ~ 2026-12, 4개월",
+      "updated": "2026-10 ~ 2026-12, 3개월"
+    },
+    {
+      "field": "strategies[0].step[1].schedule",
+      "original": "2026-09",
+      "updated": "2026-10"
+    },
+    {
+      "field": "strategies[0].step[2].schedule",
+      "original": "2026-09",
+      "updated": "2026-10"
+    }
+  ],
+  "estimate_total": 120450000,
+  "llm_replay": "not_run_connection_timeout"
+}

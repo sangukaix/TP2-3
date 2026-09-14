@@ -34,6 +34,17 @@ def sample_request(task: str, *, web: bool = False) -> LLMRequest:
 
 
 class LLMRouterTests(unittest.TestCase):
+    def test_model_context_overrides_preserve_shared_fallback_and_openai(self):
+        with TemporaryDirectory() as directory:
+            router = LLMRouter(project_root=Path(directory), env_values={
+                'LOCAL_LLM_CONTEXT_LENGTH': '40960', 'OLLAMA_GEMMA_CONTEXT_LENGTH': '65536',
+                'OLLAMA_QWEN_CONTEXT_LENGTH': '40960', 'OPENAI_MODEL': 'unchanged'})
+            self.assertEqual(router.providers['gemma'].context_length, 65536)
+            self.assertEqual(router.providers['qwen'].context_length, 40960)
+            self.assertEqual(router.providers['openai'].default_model, 'unchanged')
+            shared = LLMRouter(project_root=Path(directory), env_values={'LOCAL_LLM_CONTEXT_LENGTH': '32768'})
+            self.assertEqual(shared.providers['gemma'].context_length, 32768)
+
     def router(self, root: Path) -> LLMRouter:
         router = LLMRouter(project_root=root, env_values={'LLM_MODE': 'hybrid', 'OPENAI_MODEL': 'gpt-test'})
         router.providers = {'openai': FakeProvider('openai'), 'qwen': FakeProvider('qwen'), 'gemma': FakeProvider('gemma')}

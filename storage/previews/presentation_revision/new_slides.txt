@@ -1,0 +1,79 @@
+@@combined
+{
+ const s=slide('대시보드 통합');
+ await picture(s,path.join(MOTION,'dashboard_map.png'),56,190,246,390,'지역 선택 지도');
+ text(s,'01 지역',56,155,250,34,25,C.teal,true);
+ await picture(s,path.join(MOTION,'dashboard_metrics.png'),337,190,886,160,'실제 전망 지표 카드');
+ text(s,'02 기준월·전망 카드',337,155,880,34,25,C.teal,true);
+ await picture(s,path.join(MOTION,'dashboard_trend.png'),337,388,415,217,'월별 관측·전망 그래프');
+ await picture(s,path.join(MOTION,'dashboard_consumption.png'),798,388,425,217,'업종 소비 분포');
+ text(s,'03 월별 흐름',337,351,420,32,24,C.teal,true);
+ text(s,'04 참여 업종',798,351,425,32,24,C.teal,true);
+ foot(s,'지역 코드로 조회 → 전망의 기준월 확인 → 운영 시점과 참여 업종 검토 → 기획 조건 입력');
+ note(s,combinedNotes,['frontend/src/pages/TourismDashboardPage.jsx','frontend/src/api/dashboardApi.js','ai_server/app/main.py','ai_server/ml/planning_evidence.py']);
+}
+@@journey
+{
+ const s=slide('사용자 출력 흐름');
+ const labels=[['01 접속·지역 선택','지역선택에서 지표 확인'],['02 기획안 생성','조건 입력 후 생성 클릭'],['03 진행·결과 확인','현재 단계와 초안 확인'],['04 수정·저장','챗봇 조정 후 저장하기'],['05 파일 다운로드','저장된 기획서에서 선택']];
+ labels.forEach((e,i)=>{const x=56+i*239;text(s,e[0],x,177,229,35,23,C.teal,true);text(s,e[1],x,224,224,58,21,C.ink);if(i<4)arrow(s,x+212,299,18);});
+ await picture(s,path.join(DIR,'saved_modal.png'),56,335,665,277,'저장된 성동구 기획서와 실제 Word PowerPoint 다운로드 버튼');
+ text(s,'Word · PowerPoint',774,346,450,43,30,C.teal,true);
+ text(s,'저장 목록에서 제목을 열고\n원하는 파일 형식을 선택합니다.',774,407,450,82,25);
+ await picture(s,path.join(DIR,'download_buttons.png'),774,508,450,77,'실제 Word 및 PowerPoint 다운로드 버튼 확대');
+ text(s,'같은 수치·출처로 두 형식 출력',774,594,450,32,22,C.teal,true);
+ foot(s,'생성 결과를 검토한 뒤 저장합니다. 저장된 기획서는 나중에 다시 열어 파일로 받을 수 있습니다.');
+ note(s,'사용자는 홈페이지에 접속해 지역선택 대시보드에서 지역과 지표를 확인합니다. 사이드바 기획안 생성에서 사업 조건을 정하고 생성 버튼을 누르면 비동기 작업을 시작합니다. 서버의 데이터 분석, 공식 사례 확인, 기획안 생성, 품질 검토 단계가 화면에 표시됩니다. 완료 후 기획안 수정·출력 화면에서 본문을 확인하고 챗봇으로 허용된 내용을 조정한 뒤 기획안 저장하기를 누릅니다. 저장된 기획서 화면은 MySQL의 목록을 조회합니다. 제목을 누르면 원문을 불러와 모달에 보여 주고 Word 다운로드나 PowerPoint 다운로드를 누르면 해당 report ID의 파일 API를 요청합니다. downloadStoredStrategyDocument가 Blob을 받고 downloadBlob이 브라우저 다운로드를 시작합니다. 각 형식은 같은 보고서 JSON과 projection을 사용하며 캐시가 유효하지 않으면 서버가 다시 렌더링합니다. 화면 캡처는 기존 성동구 저장 보고서를 조회한 것이며 새로운 생성 실행을 보여 주는 것은 아닙니다.',['frontend/src/pages/TourismPlanningPage.jsx','frontend/src/pages/SavedStrategyPlansBoardPage.jsx','frontend/src/api/dashboardApi.js','ai_server/app/strategy_store.py']);
+}
+@@execution
+{
+ const s=slide('실행 가이드와 목표 근거');
+ text(s,'실행 가이드 · 누가 무엇을 하는가',56,170,566,40,26,C.teal,true);
+ text(s,'목표 근거 · 어떤 사례를 참고했는가',663,170,561,40,26,C.teal,true);
+ await picture(s,path.join(ROOT,'storage/previews/seongdong_final_render/슬라이드7.PNG'),56,228,560,315,'실제 성동구 문서 4단계 실행 가이드');
+ await picture(s,path.join(ROOT,'storage/previews/seongdong_final_render/슬라이드9.PNG'),664,228,560,315,'실제 성동구 문서의 사례 실적과 KPI 설정 근거');
+ text(s,'준비·협의 / 운영 절차 / 시범 운영 / 평가',56,573,564,46,23,C.ink,true);
+ text(s,'강진 발표 25% × 계획 계수 80% = 20%',664,573,560,46,23,C.ink,true);
+ foot(s,'실제 생성 문서 예시입니다. 실행 역할·단계는 제안이며, 목표 증가율은 사례를 참고한 계획 가정입니다.');
+ note(s,'왼쪽은 생성된 성동구 기획서의 4단계 실행 가이드 예시안입니다. LLM이 제안한 실행 내용을 공통 문서 구조로 정리해 준비와 협의, 운영 절차 점검, 시범 운영, 실적 확인과 평가 순서로 제공합니다. 실제 담당 조직과 지급 조건은 착수 전에 확정할 항목입니다. 오른쪽은 사례 실적과 목표 KPI 설정 근거입니다. 강진의 전년 대비 관광객 증가 25%를 참고하고 시범 운영을 고려한 계획 계수80%를 적용해 최종월20% 목표를 제안합니다. 이 계수는 인구나 지리로 학습한 효과 모델이 아닙니다. 사례의 전년 대비 실적과 우리 지역의 ML 전망 대비 목표는 비교 기준이 다르므로 동일한 효과가 재현된다고 설명하지 않습니다. 문서에 원문 출처와 역산 방식이 함께 들어가므로 담당자가 근거를 따라 확인할 수 있습니다.',['storage/previews/seongdong_updated_20260910.json','ai_server/app/proposal_layout_v10.py','ai_server/app/idea_proposal.py']);
+}
+@@estimate
+{
+ const s=slide('견적 문서');
+ await picture(s,path.join(ROOT,'storage/previews/seongdong_final_render/슬라이드10.PNG'),56,179,806,452,'성동구 실제 출력 견적 예시안과 산출근거');
+ text(s,'문서에서 확인할 내용',908,179,316,74,27,C.teal,true);
+ text(s,'항목과 예상 금액\n\n수량·단가의 계산\n\n운영 규모의 가정\n\n예비비와 총액',908,278,308,259,25);
+ foot(s,'견적 예시안: 추가 방문 목표와 시범 참여 비중에 따른 산정입니다. 실제 계약 금액과 다를 수 있습니다.');
+ note(s,'이 페이지는 앞에서 설명한 Python 견적 계산이 실제 출력 문서에 어떻게 표시되는지 보여 줍니다. 항목, 금액, 산출근거의 세 열로 구성하고 산출근거 머리글은 초록색으로 구분합니다. 환급 지원은 참여 건수에 단가를 곱하고, 현장 운영은 운영 인일에 일일 단가를 곱합니다. 시스템, 홍보, 집계는 계획 단가를 적용하고 예비비10%를 더해 총액을 만듭니다. 성동구 예시의 총액은1,641,420,000원입니다. 문서에 표시된 값은 공식 견적서나 시장 조사로 확정한 가격이 아니라 현재 코드의 시범 규모와 단가 가정을 적용한 결과입니다. 사용자가 참고 예산을 주면 같은 총액 안에서 항목 비중을 조정합니다. 이 페이지와 Word 표는 동일한 estimate 데이터를 사용합니다.',['ai_server/app/proposal_evidence.py','ai_server/app/proposal_layout_v10.py','ai_server/app/proposal_document.py','storage/previews/seongdong_updated_20260910.json']);
+}
+@@admin_ml
+{
+ const s=slide('어드민 ML');
+ text(s,'관리·학습 메뉴',56,166,1168,37,25,C.teal,true);
+ text(s,'머신러닝 결과   /   OpenAI   /   React   /   AI Router   /   전체 구조',56,212,1168,39,25,C.ink,true);
+ await picture(s,path.join(DIR,'ml_detail.png'),56,284,767,335,'어드민의 실제 ML 모듈 학습 정보 및 예측 차트');
+ text(s,'지역별 모델의 근거 확인',870,286,354,78,28,C.teal,true);
+ text(s,'학습 기간·입력 변수\n기준모델과 오차 비교\n월별 예측 결과\n\n파일·함수·전달 필드로\n기획안 사용 위치 추적',870,389,350,218,24);
+ note(s,'관리자 학습 영역에는 머신러닝 결과, OpenAI, React, AI Router, 전체 구조의 다섯 메뉴가 있습니다. ML 페이지는 getMlLearningCatalog를 호출해 등록 지역의 저장 모델 메타데이터와 전망을 읽습니다. 지역을 바꾸면 해당 지역의 원자료 기간, 시간순 분리,7개 결과 모듈을 표시합니다. 모듈에는 목적, 입력 변수, 모델, 학습 함수, MAE와 MAPE, 전년도 값과 전망 차트가 있습니다. module_usage의 설명은 실제 함수 경로와 출력 필드를 통해 ML 결과가 어느 snapshot에 들어가고 LLM이 무엇을 참고하며 문서 어디에 표시되는지 연결합니다. 관리자는 모델의 결과뿐 아니라 결과의 생성 과정과 활용 위치를 확인할 수 있습니다. 이 페이지 열람이 모델 재학습을 실행하지는 않습니다. 오른쪽 학습 챗봇은 별도의 OpenAI 설명 경로입니다.',['frontend/src/pages/MlTest/MlTestPage.jsx','frontend/src/pages/MlTest/LearningSectionNav.jsx','ai_server/ml/learning_catalog.py','ai_server/ml/module_usage.py']);
+}
+@@admin_agents
+{
+ const s=slide('어드민 Agent');
+ await picture(s,path.join(DIR,'agent_flow.png'),56,181,788,428,'OpenAI 학습 탭의 실제 5개 Agent 처리 흐름');
+ text(s,'업무 역할과 모델을 구분',887,186,337,77,27,C.teal,true);
+ text(s,'각 Agent의 담당 업무\n받는 데이터와 실행 함수\n허용 도구·JSON 출력\n프롬프트·설정 근거',887,286,335,179,24);
+ text(s,'입력 근거가 누구를 거쳐\n최종 본문이 되는지 확인',887,506,333,88,25,C.ink,true);
+ foot(s,'OpenAI 탭은 역할·호출 구조를 설명합니다. 실제 Provider와 모델 변경은 AI Router에서 관리합니다.');
+ note(s,'OpenAI 탭은 OpenAI API만 소개하는 화면이 아니라5개 Agent와 로컬 모델을 포함한 실제 생성 구조를 설명하는 학습 화면입니다. 상단에는 공식 관측, ML 전망, RAG와 공식 웹, 사용자 조건이 모여 병렬 조사와 후보 판단, 작성, 검토로 이어지는 흐름이 있습니다. 각 역할 상세에는 페르소나, 입력, 실행 함수, 허용 자료와 도구, 출력, 작동 설정을 표시합니다. Evidence와 CaseStudy는 근거를 준비하고 Transferability가 적용 조건을 판단하며 Planner가 본문을 씁니다. Reviewer는 코드 검사와 함께 내용을 검토하고 모드에 따라 독립 최종 검수로 이어집니다. 화면의 클래스8개 집계와 기획 Agent5개는 서로 다른 기준입니다. LearningArchitecturePage와 agent_learning_guide는 관련 코드·설명을 묶어 팀원이 파일과 함수까지 따라가도록 돕습니다. 이 탭의 설명을 읽는 동작은 보고서 생성이나 모델 설정 저장을 실행하지 않습니다.',['frontend/src/pages/MlTest/LearningArchitecturePage.jsx','ai_server/app/agent_learning_guide.py','ai_server/app/agents/report_orchestrator.py']);
+}
+@@admin_router
+{
+ const s=slide('어드민 Router');
+ await picture(s,path.join(DIR,'routing.png'),56,179,750,443,'실제 AI Router의 모드와 작업별 Provider 모델 폴백 설정');
+ text(s,'작업별 모델 설정',856,180,366,42,29,C.teal,true);
+ text(s,'실행 모드 선택\nOpenAI·Qwen·Gemma\n모델명과 대체 경로\n관리자 토큰으로 저장',856,246,357,164,25);
+ text(s,'저장 이후 확인',856,449,361,42,28,C.teal,true);
+ text(s,'다음 Agent 실행에 적용\n연결 상태·실행 기록 확인\n권한·기능 제한은 유지',856,508,361,117,24);
+ foot(s,'설정 화면의 모든 조합이 허용되는 것은 아닙니다. 모드별 기능 잠금과 유료 호출 정책을 함께 적용합니다.');
+ note(s,'AI Router는 GET /llm/status, /llm/config, /llm/trace를 읽어 연결 상태, 저장 설정, 실제 실행 경로를 표시합니다. 모드는 student_budget,local_first,hybrid,openai_only,local_only를 선택할 수 있습니다. 작업별 Provider와 모델명,폴백 설정을 입력하고 관리자 토큰을 포함한 PUT /llm/config 요청으로 저장합니다. 저장 후 다음 Agent 실행부터 설정을 사용하며 이미 실행 중인 작업의 모델을 즉시 바꾸는 기능으로 설명하지 않습니다. capability_locks에 해당하는 작업은 UI에서 잠기고 서버가 실제 경로를 강제합니다. 예를 들어 로컬 전용 모델에 웹검색 기능을 임의로 부여할 수 없습니다. local_first는 유료 자동 대체를 막고 생성당OpenAI요청최대3회,student_budget은 로컬 통과본 최종 검수1회를 허용합니다. 연결 ACTIVE는 추론 성공과 다르므로 실행 기록의 완료·실패·도구 조회·토큰을 확인합니다. 캡처를 위해 설정을 변경하거나 저장하지 않았습니다.',['frontend/src/pages/MlTest/LlmControlPage.jsx','frontend/src/api/llmControlApi.js','ai_server/app/llm/router.py','ai_server/app/llm/runtime_config.py']);
+}

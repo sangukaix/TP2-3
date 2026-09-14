@@ -63,7 +63,7 @@ def conflicts_between(primary: dict[str, str], secondary: dict[str, str]) -> lis
 
 
 def merge_staging(
-    primary_path: Path, secondary_path: Path, output_dir: Path
+    primary_path: Path, secondary_path: Path, output_dir: Path, *, fill_missing: bool = False
 ) -> dict[str, object]:
     """primary 우선 병합과 duplicate/conflict audit을 함께 생성한다."""
 
@@ -81,6 +81,7 @@ def merge_staging(
     merged = dict(primary_by_key)
     aliases: list[dict[str, object]] = []
     conflicts: list[dict[str, object]] = []
+    supplements: list[dict[str, object]] = []
     secondary_only = 0
 
     for row in secondary_rows:
@@ -92,6 +93,25 @@ def merge_staging(
             continue
         differences = conflicts_between(current, row)
         source_fields = [field for field in primary_fields if field.endswith("_source_id")]
+        # Only fill absent measurements with their matching source. Existing numbers
+        # and administrative identity must agree; a revised value remains a conflict.
+        metric_fields = [field.removesuffix("_source_id") for field in source_fields]
+        missing = [field for field in metric_fields if not current.get(field) and row.get(field)]
+        compatible = all(
+            current.get(field) == row.get(field) or field in missing
+            for field in OBSERVATION_COLUMNS if field not in {"missing_metrics", "data_status"}
+        )
+        if fill_missing and differences and missing and compatible and all(row.get(f"{field}_source_id") for field in missing):
+            supplemented = dict(current)
+            for field in missing:
+                supplemented[field] = row[field]
+                supplemented[f"{field}_source_id"] = row[f"{field}_source_id"]
+            remaining = [field for field in metric_fields if not supplemented.get(field)]
+            supplemented["missing_metrics"] = " | ".join(remaining)
+            supplemented["data_status"] = "partial" if remaining else "complete"
+            merged[key] = supplemented
+            supplements.append({"region_code": key[0], "year_month": key[1], "filled_metrics_json": json.dumps(missing), "source_ids_json": json.dumps({field: row[f"{field}_source_id"] for field in missing})})
+            continue
         if differences:
             conflicts.append(
                 {
@@ -124,6 +144,7 @@ def merge_staging(
 
     merged_rows = [merged[key] for key in sorted(merged)]
     write_csv(output_dir / "tourism_monthly_staging.csv", primary_fields, merged_rows)
+    write_csv(output_dir / "missing_metric_supplements.csv", ["region_code", "year_month", "filled_metrics_json", "source_ids_json"], supplements)
     write_csv(
         output_dir / "duplicate_snapshot_aliases.csv",
         [
@@ -153,6 +174,7 @@ def merge_staging(
         "secondary_only_row_count": secondary_only,
         "same_value_duplicate_count": len(aliases),
         "conflict_count": len(conflicts),
+        "supplemented_row_count": len(supplements),
         "merged_row_count": len(merged_rows),
         "merged_region_count": len({row["region_code"] for row in merged_rows}),
         "status": "validated" if not conflicts else "conflicts_require_review",
@@ -173,6 +195,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         "--secondary", default="data/processed/materialized_staging/tourism_monthly_staging.csv"
     )
     parser.add_argument("--output-dir", default="data/processed/merged_nationwide_staging")
+    parser.add_argument("--fill-missing", action="store_true", help="기존 수치를 유지하며 출처가 있는 누락 지표만 보완합니다.")
     return parser.parse_args(argv)
 
 
@@ -184,7 +207,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 2
     print(
         json.dumps(
-            merge_staging(primary, secondary, Path(args.output_dir)),
+            merge_staging(primary, secondary, Path(args.output_dir), fill_missing=args.fill_missing),
             ensure_ascii=False,
             indent=2,
         )

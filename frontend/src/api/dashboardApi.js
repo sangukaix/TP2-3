@@ -18,32 +18,6 @@ export async function getSidoBoundaries() {
   return response.json()
 }
 
-/** AI 서버에 전략 보고서를 요청합니다. OpenAI 키는 브라우저가 아닌 서버 .env에서만 사용합니다. */
-export async function getAiStrategyReport(regionCode, options) {
-  const response = await fetch(`/ai/v1/demo/${regionCode}/strategy-report`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(options),
-  })
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => null)
-    const message = error?.detail?.message || 'AI 전략 보고서를 생성하지 못했습니다.'
-    // 개발 중 API 크레딧이 소진되면 실제 원자료 기반 오프라인 샘플로 화면만 검증합니다.
-    // 응답의 generation_mode를 통해 실시간 AI 결과와 명확히 구분합니다.
-    if (/credit|quota|billing|크레딧|잔액/i.test(message)) {
-      const sampleResponse = await fetch(`/ai/v1/demo/${regionCode}/strategy-report/sample`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(options),
-      })
-      if (sampleResponse.ok) return sampleResponse.json()
-    }
-    throw new Error(message)
-  }
-  return response.json()
-}
-
 /**
  * 긴 AI 전략기획 작업을 서버 백그라운드에 등록합니다.
  * 응답을 기다리는 화면이 사라져도 서버 작업은 계속됩니다.

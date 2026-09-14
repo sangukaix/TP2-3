@@ -1,0 +1,82 @@
+[
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/learning/openai"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/learning/openai"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/llm/status"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/llm/config"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/llm/trace"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/ml/learning/catalog"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/ml/learning/catalog"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/learning/assistant-status"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/learning/assistant-status"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/strategy-reports"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/strategy-reports"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/learning/assistant-status"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/learning/assistant-status"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/strategy-reports/101c9de52d664800986c815fd5b66917"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/llm/status"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/llm/config"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/llm/trace"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/learning/assistant-status"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/learning/assistant-status"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:5176/ai/v1/learning/assistant-status"
+  }
+]

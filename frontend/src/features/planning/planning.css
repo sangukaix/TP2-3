@@ -124,3 +124,13 @@
 @keyframes strategy-stage-pulse{0%,100%{background:#eef6ff;box-shadow:0 0 0 0 #328ce300}50%{background:#d6eaff;box-shadow:0 0 0 5px #328ce318}}
 @media(max-width:520px){.strategy-job-flow{flex-wrap:wrap;row-gap:12px}.strategy-job-flow .strategy-job-stage{gap:4px}}
 @media(prefers-reduced-motion:reduce){.strategy-job-flow span.is-current{animation:none;background:#d6eaff;outline:2px solid #78b9f1}}
+
+.planning-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.planning-options .planning-check { margin: 0; padding: 10px; border: 1px solid #dbe4ee; border-radius: 8px; font-size: 13px; }
+.planning-options .planning-check:has(input:checked) { background: #edf5ff; border-color: #8dbaff; color: #155fc0; }
+.planning-options input { accent-color: #155fc0; }
+.planning-period { font-size: 15px; font-weight: 600; color: #174e83; }
+@media (max-width: 480px) { .planning-options { grid-template-columns: 1fr; } }
+
+.planning-choice[aria-label="사업 방향"] { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.planning-choice[aria-label="사업 방향"] button { word-break: keep-all; min-height: 48px; }

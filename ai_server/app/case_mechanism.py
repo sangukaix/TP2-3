@@ -14,6 +14,7 @@ def case_mechanism_family(case: dict[str, Any]) -> str:
             (('교통', 'ktx', '항공', '시티투어', '이동'), 'access_and_mobility'),
             (('예약', '재고', '시간대', '입장'), 'reservation_conversion'),
             (('할인', '쿠폰', '상품권', '결제'), 'spend_conversion'),
+            (('체험', '공예', '해설', '탐방'), 'experience_product'),
         ):
             if any(word in text for word in tokens):
                 return family

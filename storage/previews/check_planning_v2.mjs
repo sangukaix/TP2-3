@@ -1,0 +1,34 @@
+import { chromium } from 'file:///C:/Users/Admin/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
+import assert from 'node:assert/strict';
+const browser = await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
+const page=await browser.newPage({viewport:{width:1440,height:1080}});
+let payload; const errors=[]; page.on('pageerror',e=>errors.push(e.message));
+await page.route('**/ai/**',async route=>{
+ const req=route.request();
+ if(req.method()==='POST'){payload=req.postDataJSON();return route.fulfill({status:422,json:{detail:{message:'UI 검증: 생성 호출 차단'}}});}
+ const url=req.url();
+ return route.fulfill({json:url.includes('readiness')?{regions:[],data_freshness:{status:'ready',can_generate:true}}:url.includes('regions')?{regions:[{region_code:'11680',region_name:'서울특별시 강남구'}]}:{}});
+});
+await page.goto('http://localhost:5176/planning');
+await page.getByRole('heading',{name:'예측 기간',exact:true}).waitFor();
+assert.equal(await page.locator('textarea,input[type=month]').count(),0);
+assert.equal(await page.getByRole('heading',{name:'제외할 운영 방식'}).count(),0);
+assert.equal(await page.getByText('이 브라우저에 기획 조건을 저장했습니다.',{exact:true}).count(),0);
+await page.locator('input[type=checkbox]').nth(1).check();
+await page.locator('input[type=checkbox]').nth(6).check();
+await page.getByRole('button',{name:'참고 총액 입력',exact:true}).click();
+await page.getByRole('textbox',{name:'참고 예산 총액',exact:true}).fill('30000000');
+await page.getByRole('button',{name:'임시저장',exact:true}).click();
+await page.getByText('이 브라우저에 기획 조건을 저장했습니다.',{exact:true}).waitFor();
+await page.getByRole('button',{name:'기획안 생성',exact:true}).click();
+assert.equal(payload.planning_brief.input_profile,'guided_v2');
+assert.deepEqual(payload.planning_brief.resource_options,['merchants']);
+assert.deepEqual(payload.planning_brief.context_options,['families']);
+assert.deepEqual(payload.planning_brief.excluded_operations,[]);
+assert.equal(payload.planning_brief.budget_max_krw,30000000);
+await page.screenshot({path:'C:/Users/Admin/mbca/TP2-3/storage/previews/planning_v2_desktop.png',fullPage:true});
+await page.setViewportSize({width:390,height:844});
+assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+await page.screenshot({path:'C:/Users/Admin/mbca/TP2-3/storage/previews/planning_v2_mobile.png',fullPage:true});
+assert.deepEqual(errors,[]); console.log(JSON.stringify({status:'passed',request:payload.planning_brief,errors}));
+await browser.close();

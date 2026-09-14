@@ -86,6 +86,31 @@ def has_cost_formula(text: str) -> bool:
     return bool(re.search(r'\S\s*(?:×|\*|곱하기)\s*\S', text) or re.search(r'수량.+단가.+곱', text))
 
 
+def uses_merchant_count_for_visitor_payout(text: str) -> bool:
+    """점포 준비비와 달리 방문객 쿠폰 지급의 수량은 점포 수가 아니다."""
+    merchants = r'(?:참여\s*)?(?:업체|점포|가맹점|상점)\s*수'
+    payout = r'(?:건별\s*(?:지급|환급)\s*단가|쿠폰\s*(?:액면가|지급\s*단가))'
+    return bool(re.search(rf'{merchants}\s*[×*]\s*{payout}|{payout}\s*[×*]\s*{merchants}', str(text or '')))
+
+
+def has_placeholder_rate(text: str) -> bool:
+    return bool(re.search(r'(?<![\d.])0{2,}\s*%', str(text or '')))
+
+
+def payout_quantity_issues(text: str, field: str) -> list[dict[str, str]]:
+    if not uses_merchant_count_for_visitor_payout(text):
+        return []
+    return [issue(field + '.payout_quantity', '방문객 지급 비용에 참여 점포 수를 곱했습니다.',
+                  '쿠폰 지원 상한은 중복 제외 적격 지급 건수×건별 액면가로 계산하세요. 점포 준비비는 점포 수×점포당 준비 단가로 분리하고 수량·단가는 기획 가정으로 표시하세요.')]
+
+
+def placeholder_rate_issues(text: str, field: str) -> list[dict[str, str]]:
+    if not has_placeholder_rate(text):
+        return []
+    return [issue(field + '.placeholder', '목표에 미완성 자리표시자 00%가 남았습니다.',
+                  '00%를 임의 숫자로 치환하지 말고 삭제하세요. 분자·분모·집계 방법을 유지하고 별도 계획 목표 또는 착수 전 기준선 확인 후 목표 확정 절차를 쓰세요.')]
+
+
 def uses_region_wide_refund_budget(text: str) -> bool:
     """지역 전체 관측 규모를 시범 지원 예산으로 곱한 산식을 찾습니다."""
     return bool(_REGION_WIDE_REFUND_BUDGET_PATTERN.search(str(text or '')))
@@ -193,15 +218,44 @@ _SAFE_MEASUREMENT_PLAN = (
 )
 
 
-def _safe_measurement_plan(candidate_type: str) -> str:
+def _candidate_operation(candidate: dict[str, Any]) -> str:
+    from ..case_recommendation import operation_family
+    family = operation_family(candidate)
+    return family if family != 'other_operation' else str(candidate.get('candidate_type') or '')
+
+
+def _safe_estimate_formula(candidate: dict[str, Any]) -> str:
+    mechanism = str(candidate.get('mechanism') or '')
+    if '환급' in mechanism:
+        support = '환급 지원액=각 적격 신청의 min(증빙 인정 지출액×가정 환급률, 건별 상한)의 합계. '
+    elif '쿠폰' in mechanism:
+        support = ('쿠폰 지원 상한=중복 제외 적격 지급 건수×건별 쿠폰 액면가. '
+                   '지급 건수는 점포 수가 아니며, 실제 정산은 유효 사용·취소 원장에 따른다. ')
+    else:
+        return _SAFE_ESTIMATE_FORMULA
+    return ('기획 가정/미확정 참고 견적: ' + support
+            + '총액=지원액+운영일수×일일 운영 단가+시스템 1식×구축 단가+홍보물 수량×단가. '
+            '사업 담당자가 착수 전 지급 단위·수량을 정하고 회계 담당자가 비교견적으로 단가·부가세·총액을 확정한다.')
+
+
+def _safe_measurement_plan(candidate: dict[str, Any]) -> str:
+    candidate_type = _candidate_operation(candidate)
     definitions = {
-        'spend_conversion': '환급 후 재사용률은 분자=환급 뒤 선택 지역 내 적격 재결제액 합계, 분모=지급한 환급액 합계로 계산한다.',
         'stay_conversion': '숙박 전환율은 분자=숙박 증빙까지 완료한 고유 참여 ID 수, 분모=적격 참여 고유 ID 수로 계산한다.',
+        'night_time_experience': '야간 프로그램 이용 완료율은 분자=야간 이용을 완료한 고유 참여 ID 수, 분모=승인한 고유 참여 ID 수로 계산한다. 야간 이용을 숙박으로 집계하지 않는다.',
         'reservation_conversion': '예약 완료율은 분자=취소·중복을 제외한 이용 완료 ID 수, 분모=승인 예약 ID 수로 계산한다.',
         'return_visit': '재이용률은 분자=측정기간 안에 두 번째 이용을 완료한 고유 ID 수, 분모=첫 이용 완료 고유 ID 수로 계산한다.',
         'access_and_mobility': '혜택 이용률은 분자=교통·숙박 혜택을 한 번 이상 사용한 고유 ID 수, 분모=발급한 고유 ID 수로 계산한다.',
         'experience_product': '체험 완료율은 분자=취소·중복을 제외한 체험 완료 ID 수, 분모=승인 참여 ID 수로 계산한다.',
     }
+    # 같은 소비 전환 enum이어도 환급 재사용과 쿠폰 사용은 분모가 다르다.
+    mechanism = str(candidate.get('mechanism') or '')
+    if candidate_type == 'spend_conversion':
+        if '환급' in mechanism:
+            definitions[candidate_type] = '환급 후 재사용률은 분자=환급 뒤 선택 지역 내 적격 재결제액 합계, 분모=지급한 환급액 합계로 계산한다.'
+        elif '쿠폰' in mechanism:
+            definitions[candidate_type] = ('쿠폰 사용률은 분자=취소·중복 제외 사용 쿠폰 ID 수, 분모=적격 지급 쿠폰 ID 수로 계산한다. '
+                                           '발급·사용을 같은 지급 코호트와 유효기간으로 연결하며 참여 점포 수를 분모로 쓰지 않는다.')
     return (
         definitions.get(candidate_type, _SAFE_MEASUREMENT_PLAN.split(' 운영 전', 1)[0]) + ' '
         '운영 전 4주를 기준기간으로 두고 운영 중 매주 원자료=신청·승인·취소·이용·결제 원장을 사업 담당자가 집계한다. '
@@ -302,19 +356,27 @@ def stabilize_candidate_decision(pack: dict[str, Any], transfer: dict[str, Any])
             candidate['evidence_source_ids'] = valid_evidence_ids
             corrected(prefix + '.evidence_source_ids', '등록되지 않은 근거 ID를 제거했습니다.')
         budget = str(candidate.get('budget_formula') or '')
-        if not has_cost_formula(budget) or has_unlabeled_fixed_budget_total(budget) or uses_region_wide_refund_budget(budget):
-            candidate['budget_formula'] = _SAFE_ESTIMATE_FORMULA
+        if (not has_cost_formula(budget) or has_unlabeled_fixed_budget_total(budget)
+                or uses_region_wide_refund_budget(budget) or uses_merchant_count_for_visitor_payout(budget)):
+            candidate['budget_formula'] = _safe_estimate_formula(candidate)
             corrected(prefix + '.budget_formula', '지역 전체 규모를 예산으로 쓰지 않고 시범 수량·비교견적 기반의 미확정 산식으로 교체했습니다.')
         if measurement_missing(str(candidate.get('measurement_plan') or '')):
-            candidate['measurement_plan'] = _safe_measurement_plan(str(candidate.get('candidate_type') or ''))
+            candidate['measurement_plan'] = _safe_measurement_plan(candidate)
             corrected(prefix + '.measurement_plan', '분자·분모·수집 원장·비교 기준을 서버 측정 계약으로 보완했습니다.')
         elif re.search(r'전국\s*평균', str(candidate.get('measurement_plan') or '')):
-            candidate['measurement_plan'] = _safe_measurement_plan(str(candidate.get('candidate_type') or ''))
+            candidate['measurement_plan'] = _safe_measurement_plan(candidate)
             corrected(prefix + '.measurement_plan', '출처 없는 전국 평균 비교를 같은 범위의 순차 도입 비교로 교체했습니다.')
         if overclaims_local_fit(str(candidate.get('local_fit') or '')):
             candidate['local_fit'] = _SAFE_LOCAL_FIT
             corrected(prefix + '.local_fit', '관측 규모를 사업 효과로 해석한 문장을 기준선·시범 검증 설명으로 교체했습니다.')
         rule = str(candidate.get('stop_or_scale_rule') or '')
+        if spending_as_success(rule):
+            candidate['stop_or_scale_rule'] = (
+                '지원금 지급액은 예산 집행 관리에만 사용한다. 실제 이용·재이용·취소 제외 결제 결과를 '
+                '동일 대상·기간의 기준선과 비교하며, 확대·중단 목표는 착수 전 담당자가 확정한다.'
+            )
+            corrected(prefix + '.stop_or_scale_rule', '지원금 지급을 성공으로 판단한 기준을 실제 이용 성과의 비교 설계로 교체했습니다.')
+            rule = candidate['stop_or_scale_rule']
         if (re.search(r'\d+(?:\.\d+)?\s*%', rule) and re.search(r'성공|중단|확대', rule)
                 and not re.search(r'가정|잠정|목표안|착수\s*전|산출\s*근거|출처', rule)):
             candidate['stop_or_scale_rule'] = (
@@ -395,7 +457,7 @@ def candidate_delivery_issues(pack: dict[str, Any], transfer: dict[str, Any]) ->
                               '보유 사례의 운영 장치 중 적용·변경·제외할 내용을 비교하고 해당 source_id를 연결하세요.'))
     kinds = {row.get('candidate_type') for row in candidates if row.get('candidate_type')}
     required_kinds = 2
-    if (pack.get('planning_brief') or {}).get('input_profile') == 'guided_v1':
+    if (pack.get('planning_brief') or {}).get('input_profile') in ('guided_v1', 'guided_v2'):
         from ..case_recommendation import allowed_operation, budget_only
         from ..case_mechanism import case_mechanism_family
         available = {case_mechanism_family(row) for row in pack.get('benchmark_cases') or []
@@ -410,8 +472,21 @@ def candidate_delivery_issues(pack: dict[str, Any], transfer: dict[str, Any]) ->
     if len(candidates) < required_kinds:
         problems.append(issue('planning_decision.design_candidates', '서로 다른 사업 후보가 두 개 미만입니다.',
                               '보유 공식 사례에서 운영 원리가 다른 후보를 비교하세요. 없으면 필요한 사례의 운영 방식과 자료를 명시하세요.'))
+    fits = [str(row.get('local_fit') or '').strip() for row in candidates]
+    if len(fits) > 1 and len(set(fits)) == 1 and fits[0]:
+        problems.append(issue('planning_decision.design_candidates.comparison',
+                              '서로 다른 후보에 동일한 지역 적합성 설명이 반복되었습니다.',
+                              '후보별로 지역의 실제 관측 지표 하나와 바꿀 이용 행동을 연결하고, 선택 후보가 대안보다 유리한 점과 불리한 점을 각각 쓰세요.'))
     for index, candidate in enumerate(candidates, 1):
         prefix = f'planning_decision.design_candidates[{index}]'
+        linkage = candidate.get('case_linkage') or {}
+        if ('original_case_source_ids' in linkage
+                and set(linkage['original_case_source_ids'] or []) != set(candidate.get('case_source_ids') or [])):
+            problems.append(issue(prefix + '.case_linkage',
+                                  '사례 인용을 함수로 보정했지만 후보의 비교 설명·규모·성과 해석은 재확인되지 않았습니다.',
+                                  '현재 연결 사례의 실제 운영·지역·측정기간을 읽고 local_fit·differentiation·selection_reason을 다시 비교하세요. '
+                                  '예산·운영량에 남은 다른 사례의 수치를 선택 지역 사실로 복사하지 말고, 선택 지역 근거 또는 명시한 기획 가정으로 분리하세요. '
+                                  '전후 증가율을 그 사업이 증가시킨 인과효과로 표현하지 마세요.'))
         if candidate.get('candidate_type') not in CANDIDATE_TYPES:
             problems.append(issue(prefix + '.candidate_type', '허용된 사업 후보 유형이 아닙니다.',
                                   '사례 비교용 분류를 복사하지 말고 실제 운영 원리에 맞는 ' + ', '.join(CANDIDATE_TYPES) + ' 중 하나를 사용하세요.'))
@@ -419,6 +494,10 @@ def candidate_delivery_issues(pack: dict[str, Any], transfer: dict[str, Any]) ->
             problems.append(issue(prefix + '.case_source_ids', '후보의 운영 방식을 뒷받침하는 공식 사례가 연결되지 않았습니다.',
                                   '유사 사례에서 가져올 운영 장치와 선택 지역에서 바꿀 점을 쓰고 실제 case source_id를 연결하세요.'))
         rule = str(candidate.get('stop_or_scale_rule') or '')
+        problems.extend(placeholder_rate_issues(rule, prefix + '.stop_or_scale_rule'))
+        if spending_as_success(rule):
+            problems.append(issue(prefix + '.stop_or_scale_rule', '지원금 지급액 자체를 성공으로 판단했습니다.',
+                                  '지급액은 집행 관리에만 쓰고, 실제 이용·재이용·결제 결과의 기준선 비교로 성과를 판단하세요.', 'critical'))
         if (re.search(r'\d+(?:\.\d+)?\s*%', rule) and re.search(r'성공|중단|확대', rule)
                 and not re.search(r'가정|잠정|목표안|착수\s*전|산출\s*근거|출처', rule)):
             problems.append(issue(prefix + '.stop_or_scale_rule', '후보의 성공·중단 수치에 근거나 가정 표시가 없습니다.',
@@ -438,6 +517,7 @@ def candidate_delivery_issues(pack: dict[str, Any], transfer: dict[str, Any]) ->
         if not has_cost_formula(str(candidate.get('budget_formula') or '')):
             problems.append(issue(prefix + '.budget_formula', '후보 예산이 비용 항목 나열에 그칩니다.',
                                   '항목별 수량×단가 산식으로 쓰세요. 미확정 단가는 변수와 견적 확보 담당·시점을 적고 금액을 꾸미지 마세요.'))
+        problems.extend(payout_quantity_issues(str(candidate.get('budget_formula') or ''), prefix + '.budget_formula'))
         if has_unlabeled_fixed_budget_total(str(candidate.get('budget_formula') or '')):
             problems.append(issue(prefix + '.budget_formula.fixed_total',
                                   '후보에 출처·가정 표시 없는 확정 총예산이 제시됐습니다.',
@@ -461,6 +541,11 @@ def candidate_delivery_issues(pack: dict[str, Any], transfer: dict[str, Any]) ->
     return problems
 
 
+def spending_as_success(text: str) -> bool:
+    """Disbursing subsidy is an input, not a tourism outcome."""
+    return bool(re.search(r'(?:환급|지원|혜택|지급|보조금).{0,12}(?:액|금|예산).{0,45}(?:이상|초과|달성).{0,12}성공', text))
+
+
 def execution_delivery_issues(strategy: dict[str, Any], prefix: str) -> list[dict[str, str]]:
     problems = []
     if is_budget_only_title(str(strategy.get('title') or '')):
@@ -468,6 +553,7 @@ def execution_delivery_issues(strategy: dict[str, Any], prefix: str) -> list[dic
                               '예산은 실행을 위한 수단으로만 두고, 대상·참여 조건·이용 또는 결제 흐름이 드러나는 사업 제목으로 고치세요.'))
     problems.extend(timeframe_schedule_issues(strategy, prefix))
     budget = str(strategy.get('budget') or '')
+    problems.extend(payout_quantity_issues(budget, prefix + '.budget'))
     if has_unlabeled_fixed_budget_total(budget):
         problems.append(issue(prefix + '.budget.fixed_total', '선택 지역의 근거·가정 표시 없이 확정 총예산처럼 보이는 금액이 제시됐습니다.',
                               '타 지역 예산 총액을 복사하지 마세요. 항목별 수량×단가 식을 쓰고, 금액이 필요하면 모든 변수에 기획 가정/미확정 참고 견적과 확인 절차를 표시하세요.', 'critical'))
@@ -476,6 +562,10 @@ def execution_delivery_issues(strategy: dict[str, Any], prefix: str) -> list[dic
                               '지역 전체 방문객·평균 지출을 시범 사업비로 계산했습니다.',
                               '시범 승인 신청 건수×건별 지원 상한과 운영 항목별 수량×가정 단가로 임시 예산을 다시 계산하세요.', 'critical'))
     kpi = str(strategy.get('kpi') or '')
+    problems.extend(placeholder_rate_issues(kpi, prefix + '.kpi'))
+    if spending_as_success(kpi):
+        problems.append(issue(prefix + '.kpi.outcome', '지원금 지급액 자체를 관광사업 성공으로 판단했습니다.',
+                              '지급액은 집행 관리 지표로 분리하고, 실제 재이용·취소 제외 결제·체류 변화 등 사업 목적에 맞는 결과를 같은 범위 기준과 비교하세요.', 'critical'))
     missing = measurement_missing(kpi)
     if missing:
         problems.append(issue(prefix + '.kpi', '성과 측정 설계 누락: ' + ', '.join(missing),

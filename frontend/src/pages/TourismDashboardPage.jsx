@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { saveWorkspaceRegion } from './tourismWorkspace'
 import {
   ChevronDown,
   ChevronUp,
@@ -28,6 +29,8 @@ import {
 } from 'recharts'
 import { downloadAiStrategyPresentation, downloadAiStrategyProposal, getAiRegionDashboard, getAiRegionOpenApiInfo, getSidoBoundaries, getSigunguBoundaries, getRegionReadinessAudit } from '../api/dashboardApi'
 import TourismAssistant from '../components/TourismAssistant'
+import ConsumptionCategoryHelp from '../components/ConsumptionCategoryHelp'
+import { regionReadinessLabel } from '../features/planning/regionReadinessLabel'
 import WorkspaceShell from '../components/WorkspaceShell'
 import '../App.css'
 
@@ -274,19 +277,16 @@ function TourismConsumptionStayDiagnostic({ diagnostic, latestMonth }) {
         <section className="consumption-breakdown" aria-label="관광소비 업종 비중">
           <div className="diagnostic-subheading">
             <span>{isForecast ? '업종' : '관광소비 업종 비중'}</span>
-            <small>{isForecast ? `향후 3개월 소비패턴 예측 평균값 · ${formatAmount(diagnostic.forecast_average_spending_krw)}` : `기준: ${monthLabel}`}</small>
+            <small>{isForecast ? `향후 3개월 월평균 소비 전망 · ${formatAmount(diagnostic.forecast_average_spending_krw)}` : `기준: ${monthLabel}`}</small>
           </div>
           <div className="consumption-category-list">
             {diagnostic.consumption_categories.map((category, index) => (
-              <div className="consumption-category" key={category.name}>
-                <span><i>{index + 1}</i>{category.name}</span>
-                <b>{category.share.toFixed(1)}%</b>
-                <small>{formatAmount(category.amount_krw)}</small>
-              </div>
+              <ConsumptionCategoryHelp key={category.name} category={category} index={index} amountLabel={formatAmount(category.amount_krw)} />
             ))}
           </div>
         </section>
         <ConsumptionCompositionDonut categories={diagnostic.consumption_categories} />
+        <p className="consumption-method-note">%는 소비 비중이며 증가율이 아닙니다.{isForecast ? ' 업종별 금액 = 전체 소비액의 3개월 월평균 ML 전망 × 최신 관측 업종 비중.' : ' 같은 기준월 전체 관광소비 중 해당 업종이 차지하는 비중입니다.'} 업종 옆 ?를 눌러 소비 예시를 확인하세요.</p>
       </div>
     </article>
   )
@@ -706,7 +706,7 @@ function DashboardApp() {
   const [readinessAudit, setReadinessAudit] = useState({ regions: [] })
   useEffect(() => {
     let active = true
-    const refresh = () => getRegionReadinessAudit().then((data) => { if (active) setReadinessAudit(data) }).catch(() => { if (active) setReadinessAudit({ regions: [] }) })
+    const refresh = () => getRegionReadinessAudit().then((data) => { if (active) setReadinessAudit(data) }).catch(() => { if (active) setReadinessAudit((previous) => ({ ...previous, refreshFailed: true })) })
     refresh()
     const timer = window.setInterval(refresh, 60000)
     return () => { active = false; window.clearInterval(timer) }
@@ -763,7 +763,7 @@ function DashboardApp() {
   // 다른 업무 페이지에서도 같은 시군구를 이어서 검토할 수 있도록, 실제 시군구 선택만 저장합니다.
   useEffect(() => {
     if (selectedCode && selectedRegion.name) {
-      window.localStorage.setItem('tour-insight-selected-region', JSON.stringify({ code: selectedCode, name: selectedRegion.name }))
+      saveWorkspaceRegion({ code: selectedCode, name: selectedRegion.name })
     }
   }, [selectedCode, selectedRegion.name, dashboardRefreshTick])
 
@@ -1080,15 +1080,15 @@ function DashboardApp() {
                   <span>시군구</span>
                   <select
                     disabled={!selectedSidoCode}
-                    style={{ color: auditedRegion?.generation_ready ? '#15803d' : undefined }}
-                    title="초록색: 자료 점검과 현재 로컬 모델 연결 통과. 생성 중 응답 성공 보장은 아닙니다."
+                    style={{ color: auditedRegion?.data_ready ? '#15803d' : undefined }}
+                    title="초록색: 원자료·저장 모델·SQL 비교·공식 사례 준비됨. 모델 연결은 별도 확인합니다."
                     value={sigunguInSelectedSido.some((feature) => feature.properties.region_code === selectedCode) ? selectedCode : ''}
                     onChange={(event) => selectSigungu(event.target.value)}
                   >
                     <option value="">시군구 전체</option>
                     {sigunguInSelectedSido.map((feature) => (
-                      <option key={feature.properties.region_code} value={feature.properties.region_code} style={{ color: readinessAudit.regions.some((r) => r.region_code === feature.properties.region_code && r.generation_ready) ? '#15803d' : undefined }}>
-                        {feature.properties.display_name ?? feature.properties.region_name}{readinessAudit.regions.some((r) => r.region_code === feature.properties.region_code && r.generation_ready) ? ' · 준비됨' : ' · 확인 필요'}
+                      <option key={feature.properties.region_code} value={feature.properties.region_code} style={{ color: readinessAudit.regions.some((r) => r.region_code === feature.properties.region_code && r.data_ready) ? '#15803d' : undefined }}>
+                        {feature.properties.display_name ?? feature.properties.region_name} · {regionReadinessLabel(readinessAudit, feature.properties.region_code)}
                       </option>
                     ))}
                   </select>
@@ -1099,8 +1099,9 @@ function DashboardApp() {
                   {(sigunguBoundaries?.features ?? []).map((feature) => <option key={feature.properties.region_code} value={feature.properties.region_name} />)}
                 </datalist>
                 <p className="map-region-search-message" role="status">
-                  초록색: 자료 점검·로컬 연결 통과. 그 외: 미점검 또는 준비 확인 필요(조회 가능). 생성 중 연결·응답 실패는 발생할 수 있습니다.
-                  {auditedRegion ? ` 선택 지역: ${auditedRegion.generation_ready ? '자료 준비됨' : auditedRegion.data_ready ? '자료 준비됨 · 로컬 연결 확인 필요' : '자료 확인 필요'}` : ' 선택 지역: 미점검 또는 점검 결과 만료'} {readinessAudit.local_model_message || ''}
+                  초록색: 원자료·저장 모델·SQL 비교·공식 사례 준비됨. 모델 연결 상태는 별도로 표시합니다.
+                  {` 선택 지역: ${regionReadinessLabel(readinessAudit, selectedCode)}. `}
+                  {readinessAudit.refreshFailed ? '상태 조회 연결 끊김 · 마지막 확인 결과 표시' : readinessAudit.local_model_message}
                 </p>
                 {regionSearchMessage && <p className="map-region-search-message" role="status">{regionSearchMessage}</p>}
               </div>

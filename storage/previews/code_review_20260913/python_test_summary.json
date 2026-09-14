@@ -1,0 +1,11 @@
+{
+  "tests": 462,
+  "failures": [
+    "test_generates_twelve_slide_strategy_deck (ai_server.test_proposal_presentation.ProposalPresentationTest.test_generates_twelve_slide_strategy_deck)",
+    "test_generates_twelve_editable_slides_with_native_charts (ai_server.test_proposal_presentation_v3_contract.ProposalPresentationV4ContractTest.test_generates_twelve_editable_slides_with_native_charts)",
+    "test_public_entrypoint_uses_approved_template_renderer (ai_server.test_proposal_presentation_v3_contract.ProposalPresentationV4ContractTest.test_public_entrypoint_uses_approved_template_renderer)"
+  ],
+  "errors": [],
+  "skipped": [],
+  "blocked_network_attempts": 10
+}

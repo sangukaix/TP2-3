@@ -107,7 +107,11 @@ def select_report_forecast(report: dict[str, Any]) -> dict[str, Any]:
         duration = None
     start = end = ''
     basis = 'strategy_timeframe'
-    if len(months) >= 2:
+    brief = report.get('planning_brief') or {}
+    if brief.get('input_profile') == 'guided_v2':
+        start, end = _month(str(brief.get('start_date') or '')[:7]), _month(str(brief.get('end_date') or '')[:7])
+        basis = 'next_three_months_at_generation'
+    elif len(months) >= 2:
         start, end = months[0], months[-1]
     elif len(months) == 1 and duration:
         start, end = months[0], _add_months(months[0], duration - 1)

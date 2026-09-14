@@ -328,7 +328,7 @@ def _validate_document_structure(content: bytes) -> None:
         raise ValueError('집행 방법은 머리글과 정확히 5개 실행 단계로 구성해야 합니다.')
 
 
-def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
+def _create_legacy_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
     """최대 5쪽 안에서 빠르게 검토할 수 있는 도표 중심 Word 기획서를 생성합니다."""
     from .idea_proposal import prepare_idea_report
     report = prepare_idea_report(report)
@@ -426,12 +426,11 @@ def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
         _add_text(cells[1], step.get('schedule', ''), bold=True, size=8.5)
         _add_text(cells[2], _compact_text(step.get('task', ''), 90), size=8.5)
         _add_text(cells[3], _compact_text(step.get('deliverable', ''), 48), size=8.5)
-    document.add_paragraph().paragraph_format.space_after = Pt(1)
-    document.add_picture(_create_execution_timeline_chart(strategy.get('implementation_steps') or []), width=Inches(6.45))
-    timeline_caption = document.add_paragraph()
-    timeline_caption.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    _set_run_font(timeline_caption.add_run('그림 2. 5단계 실행 일정과 단계별 결과물'), size=8.3, color=MUTED)
-
+    for row in execution_table.rows:
+        for cell in row.cells:
+            for paragraph in cell.paragraphs:
+                paragraph.paragraph_format.space_after = Pt(0)
+                paragraph.paragraph_format.line_spacing = 1.05
     _add_heading(document, '6. ML 자연추세와 사업 목표')
     document.paragraphs[-1].paragraph_format.page_break_before = True
     forecasts = _ml_forecast_rows(report)
@@ -488,21 +487,37 @@ def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
     document.add_paragraph(report['target_proposal_basis']['explanation'])
     if report['target_proposal_basis']['source_url']:
         document.add_paragraph(report['target_proposal_basis']['source_url'])
-    _add_heading(document, '예상 견적')
+    _add_heading(document, '견적 예시안')
     document.paragraphs[-1].paragraph_format.page_break_before = True
     estimate = report['reference_estimate']
     estimate_table = document.add_table(rows=1, cols=3)
-    _set_table_geometry(estimate_table, [2300, 4660, 2400])
-    for cell, label in zip(estimate_table.rows[0].cells, ['항목', '수량·단가 가정', '예상 금액']):
+    _set_table_geometry(estimate_table, [2100, 2000, 5260])
+    for cell, label in zip(estimate_table.rows[0].cells, ['항목', '예상 금액', '산출근거']):
         _shade(cell, PALE_BLUE)
         _add_text(cell, label, bold=True)
+    _shade(estimate_table.rows[0].cells[2], 'D9EFE3')
     for item in estimate['items']:
-        for cell, value in zip(estimate_table.add_row().cells, [item['name'], item['basis'], f"{item['amount']:,}원"]):
+        for cell, value in zip(estimate_table.add_row().cells, [item['name'], f"{item['amount']:,}원", item['basis']]):
             _add_text(cell, value, size=9)
     document.add_paragraph(f"예상 총액 {estimate['total_krw']:,}원. 수량·단가를 가정한 참고 견적으로 실제 금액과 다를 수 있습니다.")
+    document.add_paragraph(estimate.get('scale_basis') or '입력한 참고 예산을 항목별로 배분한 견적 예시입니다.')
+    from .proposal_calculation_basis import methodology_sections
+    sections = methodology_sections(report)
+    for page_index in range(2):
+        _add_heading(document, f'산출 근거 {page_index + 1} · '+('전망과 목표 계산' if page_index == 0 else '사례 선정과 운영 예산'))
+        document.paragraphs[-1].paragraph_format.page_break_before = True
+        for title, body in sections[page_index*2:page_index*2+2]:
+            panel = document.add_table(rows=2, cols=1)
+            _set_table_geometry(panel, [9360])
+            _shade(panel.cell(0, 0), PALE_AQUA)
+            _add_text(panel.cell(0, 0), title, bold=True, size=12, color=BLUE)
+            _add_text(panel.cell(1, 0), body, size=10)
+            document.add_paragraph()
     _add_heading(document, '7. 참고한 공식 사례·데이터')
+    document.paragraphs[-1].paragraph_format.page_break_before = True
     all_sources = report.get('evidence_sources') or []
-    benchmark_sources = [source for source in all_sources if source.get('source_type') == 'benchmark_case'][:3]
+    from .case_recommendation import report_cases, case_reference_role
+    benchmark_sources, _ = report_cases(report)
     if benchmark_sources:
         case_table = document.add_table(rows=1, cols=2)
         _set_table_geometry(case_table, [3100, 6260])
@@ -511,7 +526,7 @@ def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
             _add_text(cell, header, bold=True, size=8.2)
         for source in benchmark_sources:
             cells = case_table.add_row().cells
-            _add_text(cells[0], _compact_text(source.get('title', ''), 55), bold=True, size=7.9)
+            _add_text(cells[0], case_reference_role(report, source) + '\n' + _compact_text(source.get('title', ''), 55), bold=True, size=7.9)
             _add_text(cells[1], _compact_text(source.get('summary', ''), 115), size=7.9)
 
     source_type_names = {
@@ -537,3 +552,9 @@ def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
     content = output.getvalue()
     _validate_document_structure(content)
     return BytesIO(content)
+
+
+def create_strategy_proposal_document(report: dict[str, Any]) -> BytesIO:
+    """Public export uses the shared PPT projection and the A4 Word layout."""
+    from .proposal_document_v2 import create_strategy_proposal_document as render
+    return render(report)

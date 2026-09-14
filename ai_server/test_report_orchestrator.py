@@ -352,8 +352,9 @@ class ReportOrchestratorTest(unittest.IsolatedAsyncioTestCase):
         proposal = Document(create_strategy_proposal_document(report))
         table_text = '\n'.join(cell.text for table in proposal.tables for row in table.rows for cell in row.cells)
 
-        self.assertIn('공식 사례', table_text)
-        self.assertIn('강진 반값여행', table_text)
+        document_text = '\n'.join(p.text for p in proposal.paragraphs) + table_text
+        self.assertIn('공식 사례', document_text)
+        self.assertIn('강진 반값여행', document_text)
         self.assertNotIn('미실행', table_text)
 
     def test_word_proposal_uses_ml_natural_trend_without_default_policy_effect(self) -> None:
@@ -390,8 +391,8 @@ class ReportOrchestratorTest(unittest.IsolatedAsyncioTestCase):
         text = '\n'.join(paragraph.text for paragraph in proposal.paragraphs)
         table_text = '\n'.join(cell.text for table in proposal.tables for row in table.rows for cell in row.cells)
 
-        self.assertIn('ML 자연추세와 사업 목표', text)
-        self.assertIn('+5%', table_text)
+        self.assertIn('머신러닝 전망과 목표 KPI', text)
+        self.assertIn('5.00%', table_text)
         self.assertIn('기획 가정', text)
         self.assertNotIn('추가 관광소비', table_text)
 

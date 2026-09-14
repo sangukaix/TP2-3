@@ -1,0 +1,1349 @@
+분석 업무
+
+지역선택
+기획안 생성
+기획안 수정 · 출력
+
+기획서 관리
+
+저장된 기획서
+
+머신러닝 결과
+
+머신러닝 결과
+OpenAI
+React
+AI Router
+전체 구조
+
+STUDY PAGE
+
+머신러닝 결과
+현재 서비스가 어떤 데이터를 학습하고, 어떤 함수와 기법으로 결과를 만드는지 확인합니다.
+분석 지역
+서울특별시 강남구
+인천광역시 계양구
+서울특별시 종로구
+서울특별시 중구
+서울특별시 용산구
+서울특별시 성동구
+서울특별시 광진구
+서울특별시 동대문구
+서울특별시 중랑구
+서울특별시 성북구
+서울특별시 강북구
+서울특별시 도봉구
+서울특별시 노원구
+서울특별시 은평구
+서울특별시 서대문구
+서울특별시 마포구
+서울특별시 양천구
+서울특별시 강서구
+서울특별시 구로구
+서울특별시 금천구
+서울특별시 영등포구
+서울특별시 동작구
+서울특별시 관악구
+서울특별시 서초구
+서울특별시 송파구
+서울특별시 강동구
+강원특별자치도 춘천시
+강원특별자치도 원주시
+강원특별자치도 강릉시
+강원특별자치도 동해시
+강원특별자치도 태백시
+강원특별자치도 속초시
+강원특별자치도 삼척시
+강원특별자치도 홍천군
+강원특별자치도 횡성군
+강원특별자치도 영월군
+강원특별자치도 평창군
+강원특별자치도 정선군
+강원특별자치도 철원군
+강원특별자치도 화천군
+강원특별자치도 양구군
+강원특별자치도 인제군
+강원특별자치도 고성군
+경기도 수원시 장안구
+경기도 수원시 권선구
+경기도 수원시 팔달구
+경기도 수원시 영통구
+경기도 성남시 수정구
+경기도 성남시 중원구
+경기도 성남시 분당구
+경기도 의정부시
+경기도 안양시 만안구
+경기도 안양시 동안구
+경기도 부천시 원미구
+경기도 부천시 소사구
+경기도 부천시 오정구
+경기도 광명시
+경기도 평택시
+경기도 동두천시
+경기도 안산시 상록구
+경기도 안산시 단원구
+경기도 고양시 덕양구
+경기도 고양시 일산동구
+경기도 고양시 일산서구
+경기도 과천시
+경기도 구리시
+경기도 남양주시
+경기도 오산시
+경기도 시흥시
+경기도 군포시
+경기도 의왕시
+경기도 하남시
+경기도 용인시 처인구
+경기도 용인시 기흥구
+경기도 용인시 수지구
+경기도 파주시
+경기도 이천시
+경기도 안성시
+경기도 김포시
+경기도 광주시
+경기도 양주시
+경기도 포천시
+경기도 여주시
+경기도 연천군
+경기도 가평군
+경기도 양평군
+경상남도 거제시
+경상남도 고성군
+경상남도 거창군
+학습 지역
+서울특별시 강남구
+11680
+원자료 기간
+202401~202607
+31개월
+데이터 분리
+Train → Validation → Test
+202501~202512 / 202601~202603 / 202604~202607
+현재 결과 모듈
+7개
+demand-v3.0
+학습과 예측은 분리됩니다
+
+웹페이지를 열 때마다 모델을 다시 학습하지 않습니다.
+
+TRAINING ≠ PREDICTION
+오프라인 · 개발자가 실행
+공식 데이터
+data/raw
+전처리·EDA
+Pandas
+시간순 학습
+scikit-learn
+기준선 평가
+MAE·RMSE·MAPE
+모델 저장
+Joblib
+온라인 · 사용자가 요청
+지역 선택
+React
+예측 요청
+/ai
+저장 모델 추론
+재학습 안 함
+화면·기획 근거
+예측값 전달
+전체 처리 흐름
+1
+공식 ZIP 읽기
+2
+데이터 검사
+3
+Feature·Target 생성
+4
+시간순 학습·선택
+5
+최종 Test
+6
+3개월 예측
+7
+AI 기획 근거 전달
+01
+
+예측 Target
+
+향후 3개월 방문자 수 예측
+RandomForestRegressor
+
+과거 방문·소비 흐름과 월별 계절성을 이용해 다음 3개월의 외지인 순 방문자 수를 추정합니다.
+
+사용 데이터
+한국관광 데이터랩 공식 다운로드 ZIP
+학습 표: 순 방문자 수 및 숙박 비율
+학습에는 Open API를 사용하지 않습니다. 공식 다운로드 원자료만 사용합니다.
+사용 모델
+RandomForestRegressor
+
+여러 결정트리의 예측을 평균내 비선형적인 관광수요 변화를 학습하는 회귀 모델입니다.
+
+입력 Feature
+방문자 수 1개월 전
+방문자 수 3개월 전
+방문자 수 12개월 전
+소비액 1개월 전
+소비액 3개월 전
+소비액 12개월 전
+월 계절성 sin
+월 계절성 cos
+3개월 예측 결과
+전년 같은 달 관측값과 비교
+모델 예측전년 동월 실제
+2026.08
+2026.09
+2026.10
+1680만
+1740만
+1800만
+1860만
+1920만
+사용 함수
+load_gangnam_monthly_demand()
+공식 ZIP에서 월별 방문자·소비·숙박 데이터를 읽어 하나의 표로 만듭니다.
+validate_monthly_data()
+월 누락, 지역코드 혼입, 결측·음수 등 학습 불가능한 데이터를 검사합니다.
+make_supervised_frame()
+과거 값을 Feature로, 다음 달 값을 Target으로 갖는 지도학습 표를 만듭니다.
+select_and_evaluate()
+Validation MAE로 후보 모델과 전년 동월 기준모델 중 하나를 선택합니다.
+error_metrics()
+MAE·RMSE·MAPE를 계산해 예측 오차를 수치로 확인합니다.
+predict_region_future_months()
+지역별 저장 모델을 읽어 재귀 예측합니다. 기준선이 선택된 지표는 전년 동월 값을 사용합니다.
+사용 기법
+지도학습 회귀
+시차 변수(Lag 1·3·12개월)
+월 계절성 sin·cos 변환
+시간순 Train·Validation·Test 분리
+전년 동월 기준모델 비교
+1~3개월 재귀 예측
+평가 결과
+Test MAE
+537,514명
+Test MAPE
+3.05%
+기준 MAPE
+3.78%
+
+최종 Test에서도 선택 모델의 오차가 기준모델보다 낮았습니다.
+
+그래서 얻은 답
+
+2026년 8월 18,027,844명에서 2026년 10월 17,767,384명으로 예측했습니다. 이는 기존 이력의 자연 추세이며 정책 효과 예측은 아닙니다.
+
+예측에서 전략까지 · 구현 경로
+
+이 결과를 누가, 어떻게 사용하는가
+방문 규모
+
+검색 관심과 방문 전망을 함께 보고 방문으로 연결하는 운영 사례를 조사합니다. 방문 감소만으로 환급사업을 자동 선택하지 않습니다.
+
+1
+공식 월별 표
+2
+저장 모델 추론
+3
+기간 비교·조사 질문
+4
+공식 사례 확보
+5
+Qwen 비교·Gemma 작성
+6
+검수·화면·문서
+이 수치가 표시되는 곳
+
+PPT 사업 설계 차트·목표 KPI 표 / Word ML 자연추세와 사업 목표. report_projection.select_report_forecast가 최종 사업 기간의 저장 행을 선택합니다.
+
+파일·함수·전달 필드를 단계별로 보기
+01
+원자료 → 월별 학습 표
+ai_server/ml/standard_region_pipeline.py
+build_standard_pipeline_functions → load_history
+
+표준 등록 지역은 regional_datalab_data.load_standard_datalab_monthly_demand로 공식 CSV/ZIP을 읽습니다. region_registry가 지역별 어댑터를 선택하고 validation.validate_monthly_data가 지역코드·연속월·값을 확인합니다. 강남 등 전용 어댑터도 같은 예측 계약에 연결됩니다.
+
+전달 결과
+월별 DataFrame: region_code + year_month + visitors
+02
+관리 CLI에서 모델 학습·선택
+ai_server/ml/gangnam_forecast.py
+train_region_models → _training_frame → make_supervised_frame → _feature_row
+
+방문·소비 각각 1·3·12개월 시차와 예측월 sin/cos를 함께 입력합니다. 후보는 RandomForestRegressor입니다. evaluation.select_and_evaluate가 Validation 3개월 MAE로 전년 동월 기준선과 비교하고 마지막 Test 4개월은 평가에만 씁니다. 후보가 선택되면 전체 관측 이력으로 최종 모델을 fit하고, 기준선 선택 시 별도 회귀모델을 저장하지 않습니다. 웹 생성마다 재학습하지 않습니다.
+
+전달 결과
+지역별 demand_model.joblib + demand_model.metadata.json (선택 모델·Feature·기간·오차·데이터 hash)
+03
+기획 요청 → 저장 모델 추론
+ai_server/app/agents/report_orchestrator.py
+orchestrate_strategy_report → build_planning_ml_evidence
+
+planning_evidence.py가 get_region_pipeline으로 지역을 찾고 horizon_policy.resolve_planning_horizon으로 필요한 월 수를 정합니다. pipeline.predict → gangnam_forecast.predict_region_future_months → _load_region_artifact → _recursive_forecasts 순서로 실행합니다. 모델이 선택되지 않은 Target은 전년 동월 값을 사용합니다. 앞 달 예측은 다음 달 입력 이력에 추가합니다.
+
+전달 결과
+snapshot.ml_analysis.forecasts[].visitors (관리자 차트는 pipeline.predict(3); 기획은 사업 일정 기준)
+04
+예측 숫자 → 비교 가능한 진단 신호
+ai_server/ml/planning_evidence.py
+build_planning_ml_evidence → _change_percent / _compact_evaluation
+
+사업 기간의 합계를 전년 같은 기간과 비교합니다. 증감률=(전망÷전년값−1)×100이며 전년값 0은 null입니다. source_id·기간·단위·모델 신뢰도를 함께 붙입니다. 숙박 비율 변화의 %는 상대 증감률이며 %p 차이가 아닙니다. decision_facts.build_decision_facts가 집계 신호를 forecast_windows로 복사합니다.
+
+전달 결과
+signals[metric=visitors] → snapshot.decision_facts.forecast_windows; research_questions의 「방문·내비게이션 검색」 조사 묶음
+05
+조사 질문 → 공식 사례 확보
+ai_server/app/agents/case_study_agent.py
+CaseStudyAgent.collect / EvidenceAgent.collect
+
+CaseStudyAgent는 research_questions를 RAG 검색어에 넣고 공식 사례 후보를 찾습니다. 허용된 웹 조사 경로에서는 ml_analysis와 조사 질문을 구조화 입력으로 전달합니다. EvidenceAgent는 지역 자료와 ML 출처를 연결합니다. 질문은 세 묶음의 코드 템플릿이며 수치 부호가 자동으로 특정 사업명을 결정하지 않습니다. 실제 웹 호출·근거 재사용은 모드와 캐시에 따라 달라집니다.
+
+전달 결과
+evidence_pack.snapshot + benchmark_cases + source_id/공식 URL/운영 방식/적용 조건
+06
+Qwen 비교 → Gemma 본문 → 검수
+ai_server/app/llm/local_agent.py
+_prefetch_required_evidence → EvidenceTools._forecast → evidence_json
+
+로컬 우선 경로에서 서버가 get_ml_forecast를 먼저 실행합니다. evidence_tools.py는 월별 수치·평가·주의사항을 반환하고 signals/research_questions는 별도 조회 경로를 남깁니다. local_agent는 도구 결과를 JSON/무손실 표의 user 메시지로 넣습니다. Qwen TransferabilityAgent.assess가 관측·사례와 함께 후보를 비교하고, Gemma PlannerAgent.write가 선택 판단과 같은 ML 근거로 실행안을 씁니다. 코드·모델 검수가 뒤따르며 실제 공급자는 Router/agent_trace로 확인합니다.
+
+전달 결과
+planning_decision.design_candidates / selected_candidate_id → strategies의 제안·실행 단계·KPI
+07
+저장 보고서 → 화면·문서
+ai_server/app/report_projection.py
+select_report_forecast
+
+PPT 사업 설계 차트·목표 KPI 표 / Word ML 자연추세와 사업 목표. report_projection.select_report_forecast가 최종 사업 기간의 저장 행을 선택합니다. 목표선은 idea_proposal의 기획 목표와 target_series 등의 산식으로 따로 계산합니다. ML이 사업 효과를 학습한 결과가 아닙니다.
+
+전달 결과
+report.ml_analysis.forecasts[].visitors; 원래 관측값·예측값·계획 목표를 구분
+발표용 호출 트리 보기
+해석 예시 · 실제 지역 사실과 구분
+
+검색은 늘고 방문 전망은 약하다는 조건이라면, 이동·예약·현장 이용 연결을 개선한 사례의 운영 방법을 비교할 수 있습니다.
+
+입력 전달 경로를 설명한 것이며, LLM 내부에서 이 지표가 답변에 기여한 비중을 측정한 결과는 아닙니다. 개별 보고서의 실제 사용은 저장 ml_analysis·planning_decision·인용 출처·agent_trace와 본문을 대조해야 합니다. 해석 예시는 현재 지역의 관측 사실이나 자동 선택 규칙이 아닙니다.
+
+02
+
+예측 Target
+
+향후 3개월 관광소비액 예측
+계절 기준모델
+
+과거 외지인 관광소비 흐름을 이용해 다음 3개월의 관광소비 총액을 추정합니다.
+
+사용 데이터
+한국관광 데이터랩 공식 다운로드 ZIP
+학습 표: 관광소비 추이_외지인
+학습에는 Open API를 사용하지 않습니다. 공식 다운로드 원자료만 사용합니다.
+사용 모델
+seasonal_naive_previous_year_same_month
+
+검증 구간에서 후보 모델보다 안정적이어서 작년 같은 달 값을 사용하는 계절 기준모델입니다.
+
+입력 Feature
+방문자 수 1개월 전
+방문자 수 3개월 전
+방문자 수 12개월 전
+소비액 1개월 전
+소비액 3개월 전
+소비액 12개월 전
+월 계절성 sin
+월 계절성 cos
+3개월 예측 결과
+전년 같은 달 관측값과 비교
+모델 예측전년 동월 실제
+2026.08
+2026.09
+2026.10
+4550억
+4600억
+4650억
+4700억
+4750억
+사용 함수
+load_gangnam_monthly_demand()
+공식 ZIP에서 월별 방문자·소비·숙박 데이터를 읽어 하나의 표로 만듭니다.
+validate_monthly_data()
+월 누락, 지역코드 혼입, 결측·음수 등 학습 불가능한 데이터를 검사합니다.
+make_supervised_frame()
+과거 값을 Feature로, 다음 달 값을 Target으로 갖는 지도학습 표를 만듭니다.
+select_and_evaluate()
+Validation MAE로 후보 모델과 전년 동월 기준모델 중 하나를 선택합니다.
+error_metrics()
+MAE·RMSE·MAPE를 계산해 예측 오차를 수치로 확인합니다.
+predict_region_future_months()
+지역별 저장 모델을 읽어 재귀 예측합니다. 기준선이 선택된 지표는 전년 동월 값을 사용합니다.
+사용 기법
+지도학습 회귀
+시차 변수(Lag 1·3·12개월)
+월 계절성 sin·cos 변환
+시간순 Train·Validation·Test 분리
+전년 동월 기준모델 비교
+1~3개월 재귀 예측
+평가 결과
+Test MAE
+24,906,220,750원
+Test MAPE
+5.21%
+기준 MAPE
+5.21%
+
+Validation에서 복잡한 후보보다 전년 동월 기준모델이 안정적이어서 기준모델을 선택했습니다.
+
+그래서 얻은 답
+
+2026년 8월 4,748.5억 원에서 2026년 10월 4,595.5억 원으로 예측했습니다. 이는 기존 이력의 자연 추세이며 정책 효과 예측은 아닙니다.
+
+예측에서 전략까지 · 구현 경로
+
+이 결과를 누가, 어떻게 사용하는가
+소비 규모
+
+소비 전망을 쿠폰·환급·숙박 연계 사례 조사에 전달합니다. 관광소비 총액은 사업자 순이익이나 환급사업의 추가 매출이 아닙니다.
+
+1
+공식 월별 표
+2
+저장 모델 추론
+3
+기간 비교·조사 질문
+4
+공식 사례 확보
+5
+Qwen 비교·Gemma 작성
+6
+검수·화면·문서
+이 수치가 표시되는 곳
+
+PPT 사업 설계 차트·목표 KPI 표 / Word ML 자연추세와 사업 목표. report_projection.select_report_forecast가 최종 사업 기간의 저장 행을 선택합니다.
+
+파일·함수·전달 필드를 단계별로 보기
+01
+원자료 → 월별 학습 표
+ai_server/ml/standard_region_pipeline.py
+build_standard_pipeline_functions → load_history
+
+표준 등록 지역은 regional_datalab_data.load_standard_datalab_monthly_demand로 공식 CSV/ZIP을 읽습니다. region_registry가 지역별 어댑터를 선택하고 validation.validate_monthly_data가 지역코드·연속월·값을 확인합니다. 강남 등 전용 어댑터도 같은 예측 계약에 연결됩니다.
+
+전달 결과
+월별 DataFrame: region_code + year_month + spending_krw
+02
+관리 CLI에서 모델 학습·선택
+ai_server/ml/gangnam_forecast.py
+train_region_models → _training_frame → make_supervised_frame → _feature_row
+
+방문·소비 각각 1·3·12개월 시차와 예측월 sin/cos를 함께 입력합니다. 후보는 LinearRegression입니다. evaluation.select_and_evaluate가 Validation 3개월 MAE로 전년 동월 기준선과 비교하고 마지막 Test 4개월은 평가에만 씁니다. 후보가 선택되면 전체 관측 이력으로 최종 모델을 fit하고, 기준선 선택 시 별도 회귀모델을 저장하지 않습니다. 웹 생성마다 재학습하지 않습니다.
+
+전달 결과
+지역별 demand_model.joblib + demand_model.metadata.json (선택 모델·Feature·기간·오차·데이터 hash)
+03
+기획 요청 → 저장 모델 추론
+ai_server/app/agents/report_orchestrator.py
+orchestrate_strategy_report → build_planning_ml_evidence
+
+planning_evidence.py가 get_region_pipeline으로 지역을 찾고 horizon_policy.resolve_planning_horizon으로 필요한 월 수를 정합니다. pipeline.predict → gangnam_forecast.predict_region_future_months → _load_region_artifact → _recursive_forecasts 순서로 실행합니다. 모델이 선택되지 않은 Target은 전년 동월 값을 사용합니다. 앞 달 예측은 다음 달 입력 이력에 추가합니다.
+
+전달 결과
+snapshot.ml_analysis.forecasts[].spending_krw (관리자 차트는 pipeline.predict(3); 기획은 사업 일정 기준)
+04
+예측 숫자 → 비교 가능한 진단 신호
+ai_server/ml/planning_evidence.py
+build_planning_ml_evidence → _change_percent / _compact_evaluation
+
+사업 기간의 합계를 전년 같은 기간과 비교합니다. 증감률=(전망÷전년값−1)×100이며 전년값 0은 null입니다. source_id·기간·단위·모델 신뢰도를 함께 붙입니다. 숙박 비율 변화의 %는 상대 증감률이며 %p 차이가 아닙니다. decision_facts.build_decision_facts가 집계 신호를 forecast_windows로 복사합니다.
+
+전달 결과
+signals[metric=spending_krw] → snapshot.decision_facts.forecast_windows; research_questions의 「소비·계절 조건」 조사 묶음
+05
+조사 질문 → 공식 사례 확보
+ai_server/app/agents/case_study_agent.py
+CaseStudyAgent.collect / EvidenceAgent.collect
+
+CaseStudyAgent는 research_questions를 RAG 검색어에 넣고 공식 사례 후보를 찾습니다. 허용된 웹 조사 경로에서는 ml_analysis와 조사 질문을 구조화 입력으로 전달합니다. EvidenceAgent는 지역 자료와 ML 출처를 연결합니다. 질문은 세 묶음의 코드 템플릿이며 수치 부호가 자동으로 특정 사업명을 결정하지 않습니다. 실제 웹 호출·근거 재사용은 모드와 캐시에 따라 달라집니다.
+
+전달 결과
+evidence_pack.snapshot + benchmark_cases + source_id/공식 URL/운영 방식/적용 조건
+06
+Qwen 비교 → Gemma 본문 → 검수
+ai_server/app/llm/local_agent.py
+_prefetch_required_evidence → EvidenceTools._forecast → evidence_json
+
+로컬 우선 경로에서 서버가 get_ml_forecast를 먼저 실행합니다. evidence_tools.py는 월별 수치·평가·주의사항을 반환하고 signals/research_questions는 별도 조회 경로를 남깁니다. local_agent는 도구 결과를 JSON/무손실 표의 user 메시지로 넣습니다. Qwen TransferabilityAgent.assess가 관측·사례와 함께 후보를 비교하고, Gemma PlannerAgent.write가 선택 판단과 같은 ML 근거로 실행안을 씁니다. 코드·모델 검수가 뒤따르며 실제 공급자는 Router/agent_trace로 확인합니다.
+
+전달 결과
+planning_decision.design_candidates / selected_candidate_id → strategies의 제안·실행 단계·KPI
+07
+저장 보고서 → 화면·문서
+ai_server/app/report_projection.py
+select_report_forecast
+
+PPT 사업 설계 차트·목표 KPI 표 / Word ML 자연추세와 사업 목표. report_projection.select_report_forecast가 최종 사업 기간의 저장 행을 선택합니다. 목표선은 idea_proposal의 기획 목표와 target_series 등의 산식으로 따로 계산합니다. ML이 사업 효과를 학습한 결과가 아닙니다.
+
+전달 결과
+report.ml_analysis.forecasts[].spending_krw; 원래 관측값·예측값·계획 목표를 구분
+발표용 호출 트리 보기
+해석 예시 · 실제 지역 사실과 구분
+
+방문 규모에 비해 소비 흐름이 약하다는 조건이라면, 지역 가맹점 이용과 재소비를 유도하는 사례를 검토할 수 있습니다.
+
+입력 전달 경로를 설명한 것이며, LLM 내부에서 이 지표가 답변에 기여한 비중을 측정한 결과는 아닙니다. 개별 보고서의 실제 사용은 저장 ml_analysis·planning_decision·인용 출처·agent_trace와 본문을 대조해야 합니다. 해석 예시는 현재 지역의 관측 사실이나 자동 선택 규칙이 아닙니다.
+
+03
+
+예측 Target
+
+향후 3개월 평균 숙박일수 예측
+계절 기준모델
+
+과거 평균 숙박일수와 계절성을 이용해 다음 3개월의 평균 숙박일수를 추정합니다.
+
+사용 데이터
+한국관광 데이터랩 공식 다운로드 ZIP
+학습 표: 평균 숙박일
+학습에는 Open API를 사용하지 않습니다. 공식 다운로드 원자료만 사용합니다.
+사용 모델
+seasonal_naive_previous_year_same_month
+
+검증 구간에서 후보 모델보다 안정적이어서 작년 같은 달 값을 사용하는 계절 기준모델입니다.
+
+입력 Feature
+평균 숙박일수 1개월 전
+평균 숙박일수 3개월 전
+평균 숙박일수 12개월 전
+월 계절성 sin
+월 계절성 cos
+3개월 예측 결과
+전년 같은 달 관측값과 비교
+모델 예측전년 동월 실제
+2026.08
+2026.09
+2026.10
+2.85일
+2.85일
+2.86일
+2.87일
+2.87일
+사용 함수
+load_gangnam_monthly_demand()
+공식 ZIP에서 월별 방문자·소비·숙박 데이터를 읽어 하나의 표로 만듭니다.
+validate_monthly_data()
+월 누락, 지역코드 혼입, 결측·음수 등 학습 불가능한 데이터를 검사합니다.
+make_univariate_supervised_frame()
+지표별 1·3·12개월 전 값으로 공통 지도학습 표를 만듭니다.
+select_and_evaluate()
+Validation MAE로 후보 모델과 전년 동월 기준모델 중 하나를 선택합니다.
+error_metrics()
+MAE·RMSE·MAPE를 계산해 예측 오차를 수치로 확인합니다.
+predict_region_future_months()
+지역별 저장 모델을 읽어 재귀 예측합니다. 기준선이 선택된 지표는 전년 동월 값을 사용합니다.
+사용 기법
+지도학습 회귀
+시차 변수(Lag 1·3·12개월)
+월 계절성 sin·cos 변환
+시간순 Train·Validation·Test 분리
+전년 동월 기준모델 비교
+1~3개월 재귀 예측
+평가 결과
+Test MAE
+0.05일
+Test MAPE
+1.75%
+기준 MAPE
+1.75%
+
+Validation에서 복잡한 후보보다 전년 동월 기준모델이 안정적이어서 기준모델을 선택했습니다.
+
+그래서 얻은 답
+
+2026년 8월 2.85일에서 2026년 10월 2.87일으로 예측했습니다. 이는 기존 이력의 자연 추세이며 정책 효과 예측은 아닙니다.
+
+예측에서 전략까지 · 구현 경로
+
+이 결과를 누가, 어떻게 사용하는가
+숙박의 길이
+
+숙박 비율·숙박검색과 함께 전달해 숙박을 하는 사람의 체류 연장 방안을 조사합니다. 숙박일수가 곧 숙박 방문자 비율은 아닙니다.
+
+1
+공식 월별 표
+2
+저장 모델 추론
+3
+기간 비교·조사 질문
+4
+공식 사례 확보
+5
+Qwen 비교·Gemma 작성
+6
+검수·화면·문서
+이 수치가 표시되는 곳
+
+이 관리자 화면의 개별 예측 차트와 보고서 ml_analysis에 보존됩니다. 최종 PPT의 방문·소비 전망 그래프에는 직접 그리지 않으며, 본문 반영은 선택된 사업과 LLM 작성 결과에 따라 달라집니다.
+
+파일·함수·전달 필드를 단계별로 보기
+01
+원자료 → 월별 학습 표
+ai_server/ml/standard_region_pipeline.py
+build_standard_pipeline_functions → load_history
+
+표준 등록 지역은 regional_datalab_data.load_standard_datalab_monthly_demand로 공식 CSV/ZIP을 읽습니다. region_registry가 지역별 어댑터를 선택하고 validation.validate_monthly_data가 지역코드·연속월·값을 확인합니다. 강남 등 전용 어댑터도 같은 예측 계약에 연결됩니다.
+
+전달 결과
+월별 DataFrame: region_code + year_month + lodging_nights
+02
+관리 CLI에서 모델 학습·선택
+ai_server/ml/gangnam_forecast.py
+train_region_models → _training_frame → make_univariate_supervised_frame → _univariate_feature_row
+
+해당 지표 자체의 1·3·12개월 시차와 예측월 sin/cos만 입력합니다. 후보는 LinearRegression입니다. evaluation.select_and_evaluate가 Validation 3개월 MAE로 전년 동월 기준선과 비교하고 마지막 Test 4개월은 평가에만 씁니다. 후보가 선택되면 전체 관측 이력으로 최종 모델을 fit하고, 기준선 선택 시 별도 회귀모델을 저장하지 않습니다. 웹 생성마다 재학습하지 않습니다.
+
+전달 결과
+지역별 demand_model.joblib + demand_model.metadata.json (선택 모델·Feature·기간·오차·데이터 hash)
+03
+기획 요청 → 저장 모델 추론
+ai_server/app/agents/report_orchestrator.py
+orchestrate_strategy_report → build_planning_ml_evidence
+
+planning_evidence.py가 get_region_pipeline으로 지역을 찾고 horizon_policy.resolve_planning_horizon으로 필요한 월 수를 정합니다. pipeline.predict → gangnam_forecast.predict_region_future_months → _load_region_artifact → _recursive_forecasts 순서로 실행합니다. 모델이 선택되지 않은 Target은 전년 동월 값을 사용합니다. 앞 달 예측은 다음 달 입력 이력에 추가합니다.
+
+전달 결과
+snapshot.ml_analysis.forecasts[].lodging_nights (관리자 차트는 pipeline.predict(3); 기획은 사업 일정 기준)
+04
+예측 숫자 → 비교 가능한 진단 신호
+ai_server/ml/planning_evidence.py
+build_planning_ml_evidence → _change_percent / _compact_evaluation
+
+사업 기간의 월별 값의 산술평균를 전년 같은 기간과 비교합니다. 증감률=(전망÷전년값−1)×100이며 전년값 0은 null입니다. source_id·기간·단위·모델 신뢰도를 함께 붙입니다. 숙박 비율 변화의 %는 상대 증감률이며 %p 차이가 아닙니다. decision_facts.build_decision_facts가 집계 신호를 forecast_windows로 복사합니다.
+
+전달 결과
+signals[metric=lodging_nights] → snapshot.decision_facts.forecast_windows; research_questions의 「숙박·체류」 조사 묶음
+05
+조사 질문 → 공식 사례 확보
+ai_server/app/agents/case_study_agent.py
+CaseStudyAgent.collect / EvidenceAgent.collect
+
+CaseStudyAgent는 research_questions를 RAG 검색어에 넣고 공식 사례 후보를 찾습니다. 허용된 웹 조사 경로에서는 ml_analysis와 조사 질문을 구조화 입력으로 전달합니다. EvidenceAgent는 지역 자료와 ML 출처를 연결합니다. 질문은 세 묶음의 코드 템플릿이며 수치 부호가 자동으로 특정 사업명을 결정하지 않습니다. 실제 웹 호출·근거 재사용은 모드와 캐시에 따라 달라집니다.
+
+전달 결과
+evidence_pack.snapshot + benchmark_cases + source_id/공식 URL/운영 방식/적용 조건
+06
+Qwen 비교 → Gemma 본문 → 검수
+ai_server/app/llm/local_agent.py
+_prefetch_required_evidence → EvidenceTools._forecast → evidence_json
+
+로컬 우선 경로에서 서버가 get_ml_forecast를 먼저 실행합니다. evidence_tools.py는 월별 수치·평가·주의사항을 반환하고 signals/research_questions는 별도 조회 경로를 남깁니다. local_agent는 도구 결과를 JSON/무손실 표의 user 메시지로 넣습니다. Qwen TransferabilityAgent.assess가 관측·사례와 함께 후보를 비교하고, Gemma PlannerAgent.write가 선택 판단과 같은 ML 근거로 실행안을 씁니다. 코드·모델 검수가 뒤따르며 실제 공급자는 Router/agent_trace로 확인합니다.
+
+전달 결과
+planning_decision.design_candidates / selected_candidate_id → strategies의 제안·실행 단계·KPI
+07
+저장 보고서 → 화면·문서
+ai_server/app/agents/report_orchestrator.py
+orchestrate_strategy_report (ml_analysis 반환)
+
+이 관리자 화면의 개별 예측 차트와 보고서 ml_analysis에 보존됩니다. 최종 PPT의 방문·소비 전망 그래프에는 직접 그리지 않으며, 본문 반영은 선택된 사업과 LLM 작성 결과에 따라 달라집니다.
+
+전달 결과
+report.ml_analysis.forecasts[].lodging_nights; 원래 관측값·예측값·계획 목표를 구분
+발표용 호출 트리 보기
+해석 예시 · 실제 지역 사실과 구분
+
+숙박 전환은 있지만 숙박일수 전망이 짧다는 조건이라면, 다음 날 체험·연박 콘텐츠를 운영한 사례를 비교할 수 있습니다.
+
+입력 전달 경로를 설명한 것이며, LLM 내부에서 이 지표가 답변에 기여한 비중을 측정한 결과는 아닙니다. 개별 보고서의 실제 사용은 저장 ml_analysis·planning_decision·인용 출처·agent_trace와 본문을 대조해야 합니다. 해석 예시는 현재 지역의 관측 사실이나 자동 선택 규칙이 아닙니다.
+
+04
+
+예측 Target
+
+향후 3개월 숙박방문자 비율 예측
+LinearRegression
+
+방문자 가운데 숙박으로 이어지는 비율의 다음 3개월 흐름을 추정합니다.
+
+사용 데이터
+한국관광 데이터랩 공식 다운로드 ZIP
+학습 표: 숙박방문자 비율 추이
+학습에는 Open API를 사용하지 않습니다. 공식 다운로드 원자료만 사용합니다.
+사용 모델
+LinearRegression
+
+입력 변수와 목표값 사이의 선형 관계를 학습하는 회귀 모델입니다.
+
+입력 Feature
+숙박방문 비율 1개월 전
+숙박방문 비율 3개월 전
+숙박방문 비율 12개월 전
+월 계절성 sin
+월 계절성 cos
+3개월 예측 결과
+전년 같은 달 관측값과 비교
+모델 예측전년 동월 실제
+2026.08
+2026.09
+2026.10
+2.80%
+3.00%
+3.20%
+3.40%
+3.60%
+사용 함수
+load_gangnam_monthly_demand()
+공식 ZIP에서 월별 방문자·소비·숙박 데이터를 읽어 하나의 표로 만듭니다.
+validate_monthly_data()
+월 누락, 지역코드 혼입, 결측·음수 등 학습 불가능한 데이터를 검사합니다.
+make_univariate_supervised_frame()
+지표별 1·3·12개월 전 값으로 공통 지도학습 표를 만듭니다.
+select_and_evaluate()
+Validation MAE로 후보 모델과 전년 동월 기준모델 중 하나를 선택합니다.
+error_metrics()
+MAE·RMSE·MAPE를 계산해 예측 오차를 수치로 확인합니다.
+predict_region_future_months()
+지역별 저장 모델을 읽어 재귀 예측합니다. 기준선이 선택된 지표는 전년 동월 값을 사용합니다.
+사용 기법
+지도학습 회귀
+시차 변수(Lag 1·3·12개월)
+월 계절성 sin·cos 변환
+시간순 Train·Validation·Test 분리
+전년 동월 기준모델 비교
+1~3개월 재귀 예측
+평가 결과
+Test MAE
+0.17%
+Test MAPE
+5.77%
+기준 MAPE
+3.43%
+
+최종 Test에서는 기준모델보다 개선되지 않았으므로 성능 우수성을 주장하지 않습니다.
+
+그래서 얻은 답
+
+2026년 8월 2.96%에서 2026년 10월 3.18%으로 예측했습니다. 이는 기존 이력의 자연 추세이며 정책 효과 예측은 아닙니다.
+
+예측에서 전략까지 · 구현 경로
+
+이 결과를 누가, 어떻게 사용하는가
+숙박 전환 비중
+
+방문 가운데 숙박으로 이어지는 비중의 전망을 숙박검색·숙박일수와 함께 조사에 사용합니다. 기간 집계는 월별 비율의 단순 평균이며 방문자 수로 가중한 전체 숙박률이 아닙니다.
+
+1
+공식 월별 표
+2
+저장 모델 추론
+3
+기간 비교·조사 질문
+4
+공식 사례 확보
+5
+Qwen 비교·Gemma 작성
+6
+검수·화면·문서
+이 수치가 표시되는 곳
+
+이 관리자 화면의 개별 예측 차트와 보고서 ml_analysis에 보존됩니다. 최종 PPT의 방문·소비 전망 그래프에는 직접 그리지 않으며, 본문 반영은 선택된 사업과 LLM 작성 결과에 따라 달라집니다.
+
+파일·함수·전달 필드를 단계별로 보기
+01
+원자료 → 월별 학습 표
+ai_server/ml/standard_region_pipeline.py
+build_standard_pipeline_functions → load_history
+
+표준 등록 지역은 regional_datalab_data.load_standard_datalab_monthly_demand로 공식 CSV/ZIP을 읽습니다. region_registry가 지역별 어댑터를 선택하고 validation.validate_monthly_data가 지역코드·연속월·값을 확인합니다. 강남 등 전용 어댑터도 같은 예측 계약에 연결됩니다.
+
+전달 결과
+월별 DataFrame: region_code + year_month + lodging_rate_pct
+02
+관리 CLI에서 모델 학습·선택
+ai_server/ml/gangnam_forecast.py
+train_region_models → _training_frame → make_univariate_supervised_frame → _univariate_feature_row
+
+해당 지표 자체의 1·3·12개월 시차와 예측월 sin/cos만 입력합니다. 후보는 LinearRegression입니다. evaluation.select_and_evaluate가 Validation 3개월 MAE로 전년 동월 기준선과 비교하고 마지막 Test 4개월은 평가에만 씁니다. 후보가 선택되면 전체 관측 이력으로 최종 모델을 fit하고, 기준선 선택 시 별도 회귀모델을 저장하지 않습니다. 웹 생성마다 재학습하지 않습니다.
+
+전달 결과
+지역별 demand_model.joblib + demand_model.metadata.json (선택 모델·Feature·기간·오차·데이터 hash)
+03
+기획 요청 → 저장 모델 추론
+ai_server/app/agents/report_orchestrator.py
+orchestrate_strategy_report → build_planning_ml_evidence
+
+planning_evidence.py가 get_region_pipeline으로 지역을 찾고 horizon_policy.resolve_planning_horizon으로 필요한 월 수를 정합니다. pipeline.predict → gangnam_forecast.predict_region_future_months → _load_region_artifact → _recursive_forecasts 순서로 실행합니다. 모델이 선택되지 않은 Target은 전년 동월 값을 사용합니다. 앞 달 예측은 다음 달 입력 이력에 추가합니다.
+
+전달 결과
+snapshot.ml_analysis.forecasts[].lodging_rate_pct (관리자 차트는 pipeline.predict(3); 기획은 사업 일정 기준)
+04
+예측 숫자 → 비교 가능한 진단 신호
+ai_server/ml/planning_evidence.py
+build_planning_ml_evidence → _change_percent / _compact_evaluation
+
+사업 기간의 월별 값의 산술평균를 전년 같은 기간과 비교합니다. 증감률=(전망÷전년값−1)×100이며 전년값 0은 null입니다. source_id·기간·단위·모델 신뢰도를 함께 붙입니다. 숙박 비율 변화의 %는 상대 증감률이며 %p 차이가 아닙니다. decision_facts.build_decision_facts가 집계 신호를 forecast_windows로 복사합니다.
+
+전달 결과
+signals[metric=lodging_rate_pct] → snapshot.decision_facts.forecast_windows; research_questions의 「숙박·체류」 조사 묶음
+05
+조사 질문 → 공식 사례 확보
+ai_server/app/agents/case_study_agent.py
+CaseStudyAgent.collect / EvidenceAgent.collect
+
+CaseStudyAgent는 research_questions를 RAG 검색어에 넣고 공식 사례 후보를 찾습니다. 허용된 웹 조사 경로에서는 ml_analysis와 조사 질문을 구조화 입력으로 전달합니다. EvidenceAgent는 지역 자료와 ML 출처를 연결합니다. 질문은 세 묶음의 코드 템플릿이며 수치 부호가 자동으로 특정 사업명을 결정하지 않습니다. 실제 웹 호출·근거 재사용은 모드와 캐시에 따라 달라집니다.
+
+전달 결과
+evidence_pack.snapshot + benchmark_cases + source_id/공식 URL/운영 방식/적용 조건
+06
+Qwen 비교 → Gemma 본문 → 검수
+ai_server/app/llm/local_agent.py
+_prefetch_required_evidence → EvidenceTools._forecast → evidence_json
+
+로컬 우선 경로에서 서버가 get_ml_forecast를 먼저 실행합니다. evidence_tools.py는 월별 수치·평가·주의사항을 반환하고 signals/research_questions는 별도 조회 경로를 남깁니다. local_agent는 도구 결과를 JSON/무손실 표의 user 메시지로 넣습니다. Qwen TransferabilityAgent.assess가 관측·사례와 함께 후보를 비교하고, Gemma PlannerAgent.write가 선택 판단과 같은 ML 근거로 실행안을 씁니다. 코드·모델 검수가 뒤따르며 실제 공급자는 Router/agent_trace로 확인합니다.
+
+전달 결과
+planning_decision.design_candidates / selected_candidate_id → strategies의 제안·실행 단계·KPI
+07
+저장 보고서 → 화면·문서
+ai_server/app/agents/report_orchestrator.py
+orchestrate_strategy_report (ml_analysis 반환)
+
+이 관리자 화면의 개별 예측 차트와 보고서 ml_analysis에 보존됩니다. 최종 PPT의 방문·소비 전망 그래프에는 직접 그리지 않으며, 본문 반영은 선택된 사업과 LLM 작성 결과에 따라 달라집니다.
+
+전달 결과
+report.ml_analysis.forecasts[].lodging_rate_pct; 원래 관측값·예측값·계획 목표를 구분
+발표용 호출 트리 보기
+해석 예시 · 실제 지역 사실과 구분
+
+숙박 관심은 있으나 숙박 비율 전망이 낮다는 조건이라면, 예약·숙박 연계 혜택의 대상과 이용 절차를 조사할 수 있습니다.
+
+입력 전달 경로를 설명한 것이며, LLM 내부에서 이 지표가 답변에 기여한 비중을 측정한 결과는 아닙니다. 개별 보고서의 실제 사용은 저장 ml_analysis·planning_decision·인용 출처·agent_trace와 본문을 대조해야 합니다. 해석 예시는 현재 지역의 관측 사실이나 자동 선택 규칙이 아닙니다.
+
+05
+
+예측 Target
+
+향후 3개월 평균 체류시간 예측
+LinearRegression
+
+지역 안에서 머무르는 평균 시간의 다음 3개월 흐름을 추정합니다.
+
+사용 데이터
+한국관광 데이터랩 공식 다운로드 ZIP
+학습 표: 평균 체류시간 추이
+학습에는 Open API를 사용하지 않습니다. 공식 다운로드 원자료만 사용합니다.
+사용 모델
+LinearRegression
+
+입력 변수와 목표값 사이의 선형 관계를 학습하는 회귀 모델입니다.
+
+입력 Feature
+평균 체류시간 1개월 전
+평균 체류시간 3개월 전
+평균 체류시간 12개월 전
+월 계절성 sin
+월 계절성 cos
+3개월 예측 결과
+전년 같은 달 관측값과 비교
+모델 예측전년 동월 실제
+2026.08
+2026.09
+2026.10
+540분
+550분
+560분
+570분
+580분
+사용 함수
+load_gangnam_monthly_demand()
+공식 ZIP에서 월별 방문자·소비·숙박 데이터를 읽어 하나의 표로 만듭니다.
+validate_monthly_data()
+월 누락, 지역코드 혼입, 결측·음수 등 학습 불가능한 데이터를 검사합니다.
+make_univariate_supervised_frame()
+지표별 1·3·12개월 전 값으로 공통 지도학습 표를 만듭니다.
+select_and_evaluate()
+Validation MAE로 후보 모델과 전년 동월 기준모델 중 하나를 선택합니다.
+error_metrics()
+MAE·RMSE·MAPE를 계산해 예측 오차를 수치로 확인합니다.
+predict_region_future_months()
+지역별 저장 모델을 읽어 재귀 예측합니다. 기준선이 선택된 지표는 전년 동월 값을 사용합니다.
+사용 기법
+지도학습 회귀
+시차 변수(Lag 1·3·12개월)
+월 계절성 sin·cos 변환
+시간순 Train·Validation·Test 분리
+전년 동월 기준모델 비교
+1~3개월 재귀 예측
+평가 결과
+Test MAE
+92분
+Test MAPE
+15.98%
+기준 MAPE
+7.77%
+
+최종 Test에서는 기준모델보다 개선되지 않았으므로 성능 우수성을 주장하지 않습니다.
+
+그래서 얻은 답
+
+2026년 8월 564분에서 2026년 10월 559분으로 예측했습니다. 이는 기존 이력의 자연 추세이며 정책 효과 예측은 아닙니다.
+
+예측에서 전략까지 · 구현 경로
+
+이 결과를 누가, 어떻게 사용하는가
+지역 내 체류 시간
+
+지역에 머무는 시간 전망을 숙박 지표와 함께 전달합니다. 체류시간이 짧다는 것만으로 야간 콘텐츠 부족을 입증하지 않습니다.
+
+1
+공식 월별 표
+2
+저장 모델 추론
+3
+기간 비교·조사 질문
+4
+공식 사례 확보
+5
+Qwen 비교·Gemma 작성
+6
+검수·화면·문서
+이 수치가 표시되는 곳
+
+이 관리자 화면의 개별 예측 차트와 보고서 ml_analysis에 보존됩니다. 최종 PPT의 방문·소비 전망 그래프에는 직접 그리지 않으며, 본문 반영은 선택된 사업과 LLM 작성 결과에 따라 달라집니다.
+
+파일·함수·전달 필드를 단계별로 보기
+01
+원자료 → 월별 학습 표
+ai_server/ml/standard_region_pipeline.py
+build_standard_pipeline_functions → load_history
+
+표준 등록 지역은 regional_datalab_data.load_standard_datalab_monthly_demand로 공식 CSV/ZIP을 읽습니다. region_registry가 지역별 어댑터를 선택하고 validation.validate_monthly_data가 지역코드·연속월·값을 확인합니다. 강남 등 전용 어댑터도 같은 예측 계약에 연결됩니다.
+
+전달 결과
+월별 DataFrame: region_code + year_month + stay_minutes
+02
+관리 CLI에서 모델 학습·선택
+ai_server/ml/gangnam_forecast.py
+train_region_models → _training_frame → make_univariate_supervised_frame → _univariate_feature_row
+
+해당 지표 자체의 1·3·12개월 시차와 예측월 sin/cos만 입력합니다. 후보는 LinearRegression입니다. evaluation.select_and_evaluate가 Validation 3개월 MAE로 전년 동월 기준선과 비교하고 마지막 Test 4개월은 평가에만 씁니다. 후보가 선택되면 전체 관측 이력으로 최종 모델을 fit하고, 기준선 선택 시 별도 회귀모델을 저장하지 않습니다. 웹 생성마다 재학습하지 않습니다.
+
+전달 결과
+지역별 demand_model.joblib + demand_model.metadata.json (선택 모델·Feature·기간·오차·데이터 hash)
+03
+기획 요청 → 저장 모델 추론
+ai_server/app/agents/report_orchestrator.py
+orchestrate_strategy_report → build_planning_ml_evidence
+
+planning_evidence.py가 get_region_pipeline으로 지역을 찾고 horizon_policy.resolve_planning_horizon으로 필요한 월 수를 정합니다. pipeline.predict → gangnam_forecast.predict_region_future_months → _load_region_artifact → _recursive_forecasts 순서로 실행합니다. 모델이 선택되지 않은 Target은 전년 동월 값을 사용합니다. 앞 달 예측은 다음 달 입력 이력에 추가합니다.
+
+전달 결과
+snapshot.ml_analysis.forecasts[].stay_minutes (관리자 차트는 pipeline.predict(3); 기획은 사업 일정 기준)
+04
+예측 숫자 → 비교 가능한 진단 신호
+ai_server/ml/planning_evidence.py
+build_planning_ml_evidence → _change_percent / _compact_evaluation
+
+사업 기간의 월별 값의 산술평균를 전년 같은 기간과 비교합니다. 증감률=(전망÷전년값−1)×100이며 전년값 0은 null입니다. source_id·기간·단위·모델 신뢰도를 함께 붙입니다. 숙박 비율 변화의 %는 상대 증감률이며 %p 차이가 아닙니다. decision_facts.build_decision_facts가 집계 신호를 forecast_windows로 복사합니다.
+
+전달 결과
+signals[metric=stay_minutes] → snapshot.decision_facts.forecast_windows; research_questions의 「숙박·체류」 조사 묶음
+05
+조사 질문 → 공식 사례 확보
+ai_server/app/agents/case_study_agent.py
+CaseStudyAgent.collect / EvidenceAgent.collect
+
+CaseStudyAgent는 research_questions를 RAG 검색어에 넣고 공식 사례 후보를 찾습니다. 허용된 웹 조사 경로에서는 ml_analysis와 조사 질문을 구조화 입력으로 전달합니다. EvidenceAgent는 지역 자료와 ML 출처를 연결합니다. 질문은 세 묶음의 코드 템플릿이며 수치 부호가 자동으로 특정 사업명을 결정하지 않습니다. 실제 웹 호출·근거 재사용은 모드와 캐시에 따라 달라집니다.
+
+전달 결과
+evidence_pack.snapshot + benchmark_cases + source_id/공식 URL/운영 방식/적용 조건
+06
+Qwen 비교 → Gemma 본문 → 검수
+ai_server/app/llm/local_agent.py
+_prefetch_required_evidence → EvidenceTools._forecast → evidence_json
+
+로컬 우선 경로에서 서버가 get_ml_forecast를 먼저 실행합니다. evidence_tools.py는 월별 수치·평가·주의사항을 반환하고 signals/research_questions는 별도 조회 경로를 남깁니다. local_agent는 도구 결과를 JSON/무손실 표의 user 메시지로 넣습니다. Qwen TransferabilityAgent.assess가 관측·사례와 함께 후보를 비교하고, Gemma PlannerAgent.write가 선택 판단과 같은 ML 근거로 실행안을 씁니다. 코드·모델 검수가 뒤따르며 실제 공급자는 Router/agent_trace로 확인합니다.
+
+전달 결과
+planning_decision.design_candidates / selected_candidate_id → strategies의 제안·실행 단계·KPI
+07
+저장 보고서 → 화면·문서
+ai_server/app/agents/report_orchestrator.py
+orchestrate_strategy_report (ml_analysis 반환)
+
+이 관리자 화면의 개별 예측 차트와 보고서 ml_analysis에 보존됩니다. 최종 PPT의 방문·소비 전망 그래프에는 직접 그리지 않으며, 본문 반영은 선택된 사업과 LLM 작성 결과에 따라 달라집니다.
+
+전달 결과
+report.ml_analysis.forecasts[].stay_minutes; 원래 관측값·예측값·계획 목표를 구분
+발표용 호출 트리 보기
+해석 예시 · 실제 지역 사실과 구분
+
+체류시간 전망이 약하다는 조건이라면, 지역 장소 자료를 대조해 여러 거점을 연결하는 체험·야간 프로그램의 운영 조건을 비교할 수 있습니다.
+
+입력 전달 경로를 설명한 것이며, LLM 내부에서 이 지표가 답변에 기여한 비중을 측정한 결과는 아닙니다. 개별 보고서의 실제 사용은 저장 ml_analysis·planning_decision·인용 출처·agent_trace와 본문을 대조해야 합니다. 해석 예시는 현재 지역의 관측 사실이나 자동 선택 규칙이 아닙니다.
+
+06
+
+예측 Target
+
+향후 3개월 내비게이션 검색량 예측
+계절 기준모델
+
+실제 방문 전 단계의 목적지 관심 수요가 다음 3개월 동안 어떻게 움직일지 추정합니다.
+
+사용 데이터
+한국관광 데이터랩 공식 다운로드 ZIP
+학습 표: 내비게이션 목적지 유형별 검색량
+학습에는 Open API를 사용하지 않습니다. 공식 다운로드 원자료만 사용합니다.
+사용 모델
+seasonal_naive_previous_year_same_month
+
+검증 구간에서 후보 모델보다 안정적이어서 작년 같은 달 값을 사용하는 계절 기준모델입니다.
+
+입력 Feature
+내비검색 1개월 전
+내비검색 3개월 전
+내비검색 12개월 전
+월 계절성 sin
+월 계절성 cos
+3개월 예측 결과
+전년 같은 달 관측값과 비교
+모델 예측전년 동월 실제
+2026.08
+2026.09
+2026.10
+77만
+88만
+99만
+110만
+121만
+사용 함수
+load_gangnam_monthly_demand()
+공식 ZIP에서 월별 방문자·소비·숙박 데이터를 읽어 하나의 표로 만듭니다.
+validate_monthly_data()
+월 누락, 지역코드 혼입, 결측·음수 등 학습 불가능한 데이터를 검사합니다.
+make_univariate_supervised_frame()
+지표별 1·3·12개월 전 값으로 공통 지도학습 표를 만듭니다.
+select_and_evaluate()
+Validation MAE로 후보 모델과 전년 동월 기준모델 중 하나를 선택합니다.
+error_metrics()
+MAE·RMSE·MAPE를 계산해 예측 오차를 수치로 확인합니다.
+predict_region_future_months()
+지역별 저장 모델을 읽어 재귀 예측합니다. 기준선이 선택된 지표는 전년 동월 값을 사용합니다.
+사용 기법
+지도학습 회귀
+시차 변수(Lag 1·3·12개월)
+월 계절성 sin·cos 변환
+시간순 Train·Validation·Test 분리
+전년 동월 기준모델 비교
+1~3개월 재귀 예측
+평가 결과
+Test MAE
+62,522건
+Test MAPE
+8.37%
+기준 MAPE
+8.37%
+
+Validation에서 복잡한 후보보다 전년 동월 기준모델이 안정적이어서 기준모델을 선택했습니다.
+
+그래서 얻은 답
+
+2026년 8월 851,148건에서 2026년 10월 1,161,087건으로 예측했습니다. 이는 기존 이력의 자연 추세이며 정책 효과 예측은 아닙니다.
+
+예측에서 전략까지 · 구현 경로
+
+이 결과를 누가, 어떻게 사용하는가
+목적지 관심
+
+방문 전망과 함께 관심을 실제 이용으로 연결한 사례를 조사합니다. 검색 건수는 방문 인원이나 실제 전환율이 아닙니다.
+
+1
+공식 월별 표
+2
+저장 모델 추론
+3
+기간 비교·조사 질문
+4
+공식 사례 확보
+5
+Qwen 비교·Gemma 작성
+6
+검수·화면·문서
+이 수치가 표시되는 곳
+
+이 관리자 화면의 개별 예측 차트와 보고서 ml_analysis에 보존됩니다. 최종 PPT의 방문·소비 전망 그래프에는 직접 그리지 않으며, 본문 반영은 선택된 사업과 LLM 작성 결과에 따라 달라집니다.
+
+파일·함수·전달 필드를 단계별로 보기
+01
+원자료 → 월별 학습 표
+ai_server/ml/standard_region_pipeline.py
+build_standard_pipeline_functions → load_history
+
+표준 등록 지역은 regional_datalab_data.load_standard_datalab_monthly_demand로 공식 CSV/ZIP을 읽습니다. region_registry가 지역별 어댑터를 선택하고 validation.validate_monthly_data가 지역코드·연속월·값을 확인합니다. 강남 등 전용 어댑터도 같은 예측 계약에 연결됩니다.
+
+전달 결과
+월별 DataFrame: region_code + year_month + navigation_searches
+02
+관리 CLI에서 모델 학습·선택
+ai_server/ml/gangnam_forecast.py
+train_region_models → _training_frame → make_univariate_supervised_frame → _univariate_feature_row
+
+해당 지표 자체의 1·3·12개월 시차와 예측월 sin/cos만 입력합니다. 후보는 RandomForestRegressor입니다. evaluation.select_and_evaluate가 Validation 3개월 MAE로 전년 동월 기준선과 비교하고 마지막 Test 4개월은 평가에만 씁니다. 후보가 선택되면 전체 관측 이력으로 최종 모델을 fit하고, 기준선 선택 시 별도 회귀모델을 저장하지 않습니다. 웹 생성마다 재학습하지 않습니다.
+
+전달 결과
+지역별 demand_model.joblib + demand_model.metadata.json (선택 모델·Feature·기간·오차·데이터 hash)
+03
+기획 요청 → 저장 모델 추론
+ai_server/app/agents/report_orchestrator.py
+orchestrate_strategy_report → build_planning_ml_evidence
+
+planning_evidence.py가 get_region_pipeline으로 지역을 찾고 horizon_policy.resolve_planning_horizon으로 필요한 월 수를 정합니다. pipeline.predict → gangnam_forecast.predict_region_future_months → _load_region_artifact → _recursive_forecasts 순서로 실행합니다. 모델이 선택되지 않은 Target은 전년 동월 값을 사용합니다. 앞 달 예측은 다음 달 입력 이력에 추가합니다.
+
+전달 결과
+snapshot.ml_analysis.forecasts[].navigation_searches (관리자 차트는 pipeline.predict(3); 기획은 사업 일정 기준)
+04
+예측 숫자 → 비교 가능한 진단 신호
+ai_server/ml/planning_evidence.py
+build_planning_ml_evidence → _change_percent / _compact_evaluation
+
+사업 기간의 합계를 전년 같은 기간과 비교합니다. 증감률=(전망÷전년값−1)×100이며 전년값 0은 null입니다. source_id·기간·단위·모델 신뢰도를 함께 붙입니다. 숙박 비율 변화의 %는 상대 증감률이며 %p 차이가 아닙니다. decision_facts.build_decision_facts가 집계 신호를 forecast_windows로 복사합니다.
+
+전달 결과
+signals[metric=navigation_searches] → snapshot.decision_facts.forecast_windows; research_questions의 「방문·내비게이션 검색」 조사 묶음
+05
+조사 질문 → 공식 사례 확보
+ai_server/app/agents/case_study_agent.py
+CaseStudyAgent.collect / EvidenceAgent.collect
+
+CaseStudyAgent는 research_questions를 RAG 검색어에 넣고 공식 사례 후보를 찾습니다. 허용된 웹 조사 경로에서는 ml_analysis와 조사 질문을 구조화 입력으로 전달합니다. EvidenceAgent는 지역 자료와 ML 출처를 연결합니다. 질문은 세 묶음의 코드 템플릿이며 수치 부호가 자동으로 특정 사업명을 결정하지 않습니다. 실제 웹 호출·근거 재사용은 모드와 캐시에 따라 달라집니다.
+
+전달 결과
+evidence_pack.snapshot + benchmark_cases + source_id/공식 URL/운영 방식/적용 조건
+06
+Qwen 비교 → Gemma 본문 → 검수
+ai_server/app/llm/local_agent.py
+_prefetch_required_evidence → EvidenceTools._forecast → evidence_json
+
+로컬 우선 경로에서 서버가 get_ml_forecast를 먼저 실행합니다. evidence_tools.py는 월별 수치·평가·주의사항을 반환하고 signals/research_questions는 별도 조회 경로를 남깁니다. local_agent는 도구 결과를 JSON/무손실 표의 user 메시지로 넣습니다. Qwen TransferabilityAgent.assess가 관측·사례와 함께 후보를 비교하고, Gemma PlannerAgent.write가 선택 판단과 같은 ML 근거로 실행안을 씁니다. 코드·모델 검수가 뒤따르며 실제 공급자는 Router/agent_trace로 확인합니다.
+
+전달 결과
+planning_decision.design_candidates / selected_candidate_id → strategies의 제안·실행 단계·KPI
+07
+저장 보고서 → 화면·문서
+ai_server/app/agents/report_orchestrator.py
+orchestrate_strategy_report (ml_analysis 반환)
+
+이 관리자 화면의 개별 예측 차트와 보고서 ml_analysis에 보존됩니다. 최종 PPT의 방문·소비 전망 그래프에는 직접 그리지 않으며, 본문 반영은 선택된 사업과 LLM 작성 결과에 따라 달라집니다.
+
+전달 결과
+report.ml_analysis.forecasts[].navigation_searches; 원래 관측값·예측값·계획 목표를 구분
+발표용 호출 트리 보기
+해석 예시 · 실제 지역 사실과 구분
+
+검색 관심이 유지되는 조건이라면, 안내·교통·쿠폰 연결 사례를 조사할 수 있습니다. 검색 대비 방문 비율을 실제 전환율로 계산하지 않습니다.
+
+입력 전달 경로를 설명한 것이며, LLM 내부에서 이 지표가 답변에 기여한 비중을 측정한 결과는 아닙니다. 개별 보고서의 실제 사용은 저장 ml_analysis·planning_decision·인용 출처·agent_trace와 본문을 대조해야 합니다. 해석 예시는 현재 지역의 관측 사실이나 자동 선택 규칙이 아닙니다.
+
+07
+
+예측 Target
+
+향후 3개월 숙박 목적지 검색량 예측
+계절 기준모델
+
+숙박시설을 찾는 관심 수요의 다음 3개월 흐름을 추정합니다.
+
+사용 데이터
+한국관광 데이터랩 공식 다운로드 ZIP
+학습 표: 숙박 목적지 검색건수
+학습에는 Open API를 사용하지 않습니다. 공식 다운로드 원자료만 사용합니다.
+사용 모델
+seasonal_naive_previous_year_same_month
+
+검증 구간에서 후보 모델보다 안정적이어서 작년 같은 달 값을 사용하는 계절 기준모델입니다.
+
+입력 Feature
+숙박검색 1개월 전
+숙박검색 3개월 전
+숙박검색 12개월 전
+월 계절성 sin
+월 계절성 cos
+3개월 예측 결과
+전년 같은 달 관측값과 비교
+모델 예측전년 동월 실제
+2026.08
+2026.09
+2026.10
+11만
+12만
+14만
+15만
+17만
+사용 함수
+load_gangnam_monthly_demand()
+공식 ZIP에서 월별 방문자·소비·숙박 데이터를 읽어 하나의 표로 만듭니다.
+validate_monthly_data()
+월 누락, 지역코드 혼입, 결측·음수 등 학습 불가능한 데이터를 검사합니다.
+make_univariate_supervised_frame()
+지표별 1·3·12개월 전 값으로 공통 지도학습 표를 만듭니다.
+select_and_evaluate()
+Validation MAE로 후보 모델과 전년 동월 기준모델 중 하나를 선택합니다.
+error_metrics()
+MAE·RMSE·MAPE를 계산해 예측 오차를 수치로 확인합니다.
+predict_region_future_months()
+지역별 저장 모델을 읽어 재귀 예측합니다. 기준선이 선택된 지표는 전년 동월 값을 사용합니다.
+사용 기법
+지도학습 회귀
+시차 변수(Lag 1·3·12개월)
+월 계절성 sin·cos 변환
+시간순 Train·Validation·Test 분리
+전년 동월 기준모델 비교
+1~3개월 재귀 예측
+평가 결과
+Test MAE
+3,331건
+Test MAPE
+3.05%
+기준 MAPE
+3.05%
+
+Validation에서 복잡한 후보보다 전년 동월 기준모델이 안정적이어서 기준모델을 선택했습니다.
+
+그래서 얻은 답
+
+2026년 8월 108,645건에서 2026년 10월 164,782건으로 예측했습니다. 이는 기존 이력의 자연 추세이며 정책 효과 예측은 아닙니다.
+
+예측에서 전략까지 · 구현 경로
+
+이 결과를 누가, 어떻게 사용하는가
+숙박 목적지 관심
+
+숙박 방문 비율·숙박일수·체류시간과 함께 숙박 전환 사례 조사에 사용합니다. 숙박 목적지 검색은 예약 완료 건수가 아닙니다.
+
+1
+공식 월별 표
+2
+저장 모델 추론
+3
+기간 비교·조사 질문
+4
+공식 사례 확보
+5
+Qwen 비교·Gemma 작성
+6
+검수·화면·문서
+이 수치가 표시되는 곳
+
+이 관리자 화면의 개별 예측 차트와 보고서 ml_analysis에 보존됩니다. 최종 PPT의 방문·소비 전망 그래프에는 직접 그리지 않으며, 본문 반영은 선택된 사업과 LLM 작성 결과에 따라 달라집니다.
+
+파일·함수·전달 필드를 단계별로 보기
+01
+원자료 → 월별 학습 표
+ai_server/ml/standard_region_pipeline.py
+build_standard_pipeline_functions → load_history
+
+표준 등록 지역은 regional_datalab_data.load_standard_datalab_monthly_demand로 공식 CSV/ZIP을 읽습니다. region_registry가 지역별 어댑터를 선택하고 validation.validate_monthly_data가 지역코드·연속월·값을 확인합니다. 강남 등 전용 어댑터도 같은 예측 계약에 연결됩니다.
+
+전달 결과
+월별 DataFrame: region_code + year_month + lodging_searches
+02
+관리 CLI에서 모델 학습·선택
+ai_server/ml/gangnam_forecast.py
+train_region_models → _training_frame → make_univariate_supervised_frame → _univariate_feature_row
+
+해당 지표 자체의 1·3·12개월 시차와 예측월 sin/cos만 입력합니다. 후보는 RandomForestRegressor입니다. evaluation.select_and_evaluate가 Validation 3개월 MAE로 전년 동월 기준선과 비교하고 마지막 Test 4개월은 평가에만 씁니다. 후보가 선택되면 전체 관측 이력으로 최종 모델을 fit하고, 기준선 선택 시 별도 회귀모델을 저장하지 않습니다. 웹 생성마다 재학습하지 않습니다.
+
+전달 결과
+지역별 demand_model.joblib + demand_model.metadata.json (선택 모델·Feature·기간·오차·데이터 hash)
+03
+기획 요청 → 저장 모델 추론
+ai_server/app/agents/report_orchestrator.py
+orchestrate_strategy_report → build_planning_ml_evidence
+
+planning_evidence.py가 get_region_pipeline으로 지역을 찾고 horizon_policy.resolve_planning_horizon으로 필요한 월 수를 정합니다. pipeline.predict → gangnam_forecast.predict_region_future_months → _load_region_artifact → _recursive_forecasts 순서로 실행합니다. 모델이 선택되지 않은 Target은 전년 동월 값을 사용합니다. 앞 달 예측은 다음 달 입력 이력에 추가합니다.
+
+전달 결과
+snapshot.ml_analysis.forecasts[].lodging_searches (관리자 차트는 pipeline.predict(3); 기획은 사업 일정 기준)
+04
+예측 숫자 → 비교 가능한 진단 신호
+ai_server/ml/planning_evidence.py
+build_planning_ml_evidence → _change_percent / _compact_evaluation
+
+사업 기간의 합계를 전년 같은 기간과 비교합니다. 증감률=(전망÷전년값−1)×100이며 전년값 0은 null입니다. source_id·기간·단위·모델 신뢰도를 함께 붙입니다. 숙박 비율 변화의 %는 상대 증감률이며 %p 차이가 아닙니다. decision_facts.build_decision_facts가 집계 신호를 forecast_windows로 복사합니다.
+
+전달 결과
+signals[metric=lodging_searches] → snapshot.decision_facts.forecast_windows; research_questions의 「숙박·체류」 조사 묶음
+05
+조사 질문 → 공식 사례 확보
+ai_server/app/agents/case_study_agent.py
+CaseStudyAgent.collect / EvidenceAgent.collect
+
+CaseStudyAgent는 research_questions를 RAG 검색어에 넣고 공식 사례 후보를 찾습니다. 허용된 웹 조사 경로에서는 ml_analysis와 조사 질문을 구조화 입력으로 전달합니다. EvidenceAgent는 지역 자료와 ML 출처를 연결합니다. 질문은 세 묶음의 코드 템플릿이며 수치 부호가 자동으로 특정 사업명을 결정하지 않습니다. 실제 웹 호출·근거 재사용은 모드와 캐시에 따라 달라집니다.
+
+전달 결과
+evidence_pack.snapshot + benchmark_cases + source_id/공식 URL/운영 방식/적용 조건
+06
+Qwen 비교 → Gemma 본문 → 검수
+ai_server/app/llm/local_agent.py
+_prefetch_required_evidence → EvidenceTools._forecast → evidence_json
+
+로컬 우선 경로에서 서버가 get_ml_forecast를 먼저 실행합니다. evidence_tools.py는 월별 수치·평가·주의사항을 반환하고 signals/research_questions는 별도 조회 경로를 남깁니다. local_agent는 도구 결과를 JSON/무손실 표의 user 메시지로 넣습니다. Qwen TransferabilityAgent.assess가 관측·사례와 함께 후보를 비교하고, Gemma PlannerAgent.write가 선택 판단과 같은 ML 근거로 실행안을 씁니다. 코드·모델 검수가 뒤따르며 실제 공급자는 Router/agent_trace로 확인합니다.
+
+전달 결과
+planning_decision.design_candidates / selected_candidate_id → strategies의 제안·실행 단계·KPI
+07
+저장 보고서 → 화면·문서
+ai_server/app/agents/report_orchestrator.py
+orchestrate_strategy_report (ml_analysis 반환)
+
+이 관리자 화면의 개별 예측 차트와 보고서 ml_analysis에 보존됩니다. 최종 PPT의 방문·소비 전망 그래프에는 직접 그리지 않으며, 본문 반영은 선택된 사업과 LLM 작성 결과에 따라 달라집니다.
+
+전달 결과
+report.ml_analysis.forecasts[].lodging_searches; 원래 관측값·예측값·계획 목표를 구분
+발표용 호출 트리 보기
+해석 예시 · 실제 지역 사실과 구분
+
+숙박검색 전망과 숙박 비율 전망이 엇갈리는 조건이라면, 예약 접근성과 숙박 연계 프로그램 사례를 비교할 수 있습니다.
+
+입력 전달 경로를 설명한 것이며, LLM 내부에서 이 지표가 답변에 기여한 비중을 측정한 결과는 아닙니다. 개별 보고서의 실제 사용은 저장 ml_analysis·planning_decision·인용 출처·agent_trace와 본문을 대조해야 합니다. 해석 예시는 현재 지역의 관측 사실이나 자동 선택 규칙이 아닙니다.
+
+수업 용어 정리
+
+이 페이지에서 사용한 핵심 머신러닝 용어입니다.
+
+Feature
+모델이 예측에 참고하는 입력값
+Target
+모델이 맞히려는 결과값
+Lag
+1·3·12개월 전처럼 과거 시점의 값
+Baseline
+복잡한 모델과 비교하는 단순 기준모델
+MAE
+실제값과 예측값의 평균 절대 차이
+RMSE
+큰 오차에 더 큰 불이익을 주는 지표
+MAPE
+실제값 대비 평균 오차 비율
+재귀 예측
+앞 달 예측값을 다음 달 입력으로 다시 사용하는 방법
+
+새 지역이나 예측 Target이 ML 등록정보에 추가되면 이 페이지의 지역 목록과 결과 카드도 자동으로 추가됩니다.
+
+ML 챗봇
+
+서울특별시 강남구 모델 학습 도우미
+
+Active
+현재 페이지의 데이터·모델·함수·평가 결과를 근거로 답합니다.
+무엇이든 물어보세요
+
+모델을 선택한 이유, Feature, MAE, 재귀 예측, 기획안 연결 방식까지 설명할 수 있습니다.
+
+왜 방문자 수에는 RandomForest를 사용했어?
+Train·Validation·Test는 어떻게 나눴어?
+3개월과 6개월 예측은 정확도가 어떻게 달라?
+OpenAI가 답변하며, RAG와 웹 검색은 사용하지 않습니다.
+11만

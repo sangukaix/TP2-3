@@ -144,7 +144,7 @@ def _build_openai_catalog() -> ProjectLearningCatalog:
             if line.strip().startswith('OPENAI_') and '=' in line
         ]
     pipeline = [
-        LearningNode(id='input', title='사용자 조건', role='선택 지역·예산·기간·시설·필수 조건', file='frontend/src/pages/TourismPlanningPage.jsx', kind='input'),
+        LearningNode(id='input', title='사용자 조건', role='지역·사업 방향·참고 예산·자원·현장 선호 선택. 서버가 다음 달부터 3개월 확정', file='frontend/src/pages/TourismPlanningPage.jsx', kind='input'),
         LearningNode(id='snapshot', title='공식 데이터 Snapshot', role='관측값과 사용자 조건을 분리해 고정', file='ai_server/app/main.py', kind='data'),
         LearningNode(id='ml', title='ML 전망 근거', role='저장 모델의 기간별 전망·오차·조사 질문 생성', file='ai_server/ml/planning_evidence.py', kind='ml'),
         *[LearningNode(id=row['name'], title=row['name'], role=row['role'], file=row['file'], kind='agent') for row in core_agents],
@@ -164,6 +164,10 @@ def _build_openai_catalog() -> ProjectLearningCatalog:
         LearningFile(path='ai_server/app/agents/prompts.py', role='Agent 페르소나·근거 규칙·환각 방지 프롬프트', group='Prompt'),
         LearningFile(path='ai_server/app/openai_responses.py', role='Responses API·Structured Outputs·오류 처리 공통 함수', group='OpenAI API'),
         LearningFile(path='ai_server/ml/planning_evidence.py', role='ML 결과를 Agent 공통 근거로 변환', group='ML bridge'),
+        LearningFile(path='ai_server/ml/region_registry.py', role='카탈로그 변경 반영·지역별 저장 모델 연결. 생성 요청 중 학습하지 않음', group='ML bridge'),
+        LearningFile(path='ai_server/app/llm/router.py', role='작업별 실제 Provider·모드·유료 호출 제한 결정', group='Orchestration'),
+        LearningFile(path='ai_server/app/llm/local_prompts.py', role='Qwen·Gemma 역할별 작성 지침과 JSON 계약', group='Prompt'),
+        LearningFile(path='ai_server/app/case_scope.py', role='지역 비교와 운영 방식으로 공식 사례 후보 구성. 사업 성공 학습 모델은 아님', group='Orchestration'),
     ]
     return ProjectLearningCatalog(
         topic='openai', title='OpenAI · Agent AI 구조',
@@ -347,8 +351,8 @@ def _build_react_catalog() -> ProjectLearningCatalog:
                 'resources': [
                     {'id': 'mysql', 'title': 'MySQL', 'tech': f":{ports['mysql']}", 'owner': 'backend', 'role': '정확한 지표·기획서 저장'},
                     {'id': 'joblib', 'title': 'ML Model', 'tech': 'Joblib', 'owner': 'ai', 'role': '학습 완료 모델 추론'},
-                    {'id': 'chroma', 'title': 'Vector DB', 'tech': 'ChromaDB', 'owner': 'ai', 'role': '공식 문서 의미 검색'},
-                    {'id': 'openai', 'title': 'OpenAI API', 'tech': 'Responses API', 'owner': 'ai', 'role': '설명·전략·구조화 JSON'},
+                    {'id': 'chroma', 'title': '공식 문서 근거', 'tech': '검수 JSONL · RAG', 'owner': 'ai', 'role': '현재 절약 경로는 키워드 조회. 의미 검색은 색인·설정에 따라 별도 확인'},
+                    {'id': 'openai', 'title': 'LLM Router', 'tech': 'Ollama · OpenAI', 'owner': 'ai', 'role': 'Qwen 비교·Gemma 작성·모드별 OpenAI 검수. 실제 연결은 Router 상태에서 확인'},
                 ],
             },
             'deployment': {

@@ -1,0 +1,12 @@
+[
+  {
+    "tag": "HEADER",
+    "cls": "ml-test-hero",
+    "text": "STUDY PAGE\n\n머신러닝 결과\n현재 서비스가 어떤 데이터를 학습하고, 어떤 함수와 기법으로 결과를 만드는지 확인합니다."
+  },
+  {
+    "tag": "HEADER",
+    "cls": "",
+    "text": "ML 챗봇\n\n선택 지역 모델 학습 도우미\n\nActive"
+  }
+]

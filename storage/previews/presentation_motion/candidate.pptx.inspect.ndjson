@@ -1,0 +1,602 @@
+{"kind":"deck","id":"pr/grrq37","name":"Deck"}
+{"kind":"layout","layoutId":"06a04085-ca8d-4609-be31-c94e5041cf63","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"26beae02-0c89-44a3-a171-21b2fd285d89","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/ny12hz","slide":1,"title":"OLIGO-K","textShapes":8}
+{"kind":"textbox","id":"sh/q9gfm5gn","slide":1,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"shape","id":"sh/dcryh0fy","slide":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/cbixofyt","slide":1,"text":"FINAL PROJECT  /  2026.09","textPreview":"FINAL PROJECT  /  2026.09","textChars":25,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/ze9gjax4","slide":1,"text":"01 / 38","textPreview":"01 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/1grylkfa","slide":1,"text":"4조  2차 프로젝트","textPreview":"4조  2차 프로젝트","textChars":11,"textLines":1,"bbox":[56,55,340,32]}
+{"kind":"textbox","id":"sh/0fixsfyp","slide":1,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,178,480,100]}
+{"kind":"textbox","id":"sh/fi5w7qh0","slide":1,"text":"지역 관광사업\n기획서 생성\n웹서비스","textPreview":"지역 관광사업 | 기획서 생성 | 웹서비스","textChars":19,"textLines":3,"bbox":[56,285,420,178]}
+{"kind":"textbox","id":"sh/uhwfelgf","slide":1,"text":"공식 데이터와 사례 기반\n지자체 관광 기획 지원","textPreview":"공식 데이터와 사례 기반 | 지자체 관광 기획 지원","textChars":26,"textLines":2,"bbox":[56,490,368,90]}
+{"kind":"textbox","id":"sh/kbyls7y9","slide":1,"text":"서비스 · 데이터 · ML · AI · 구현 결과","textPreview":"서비스 · 데이터 · ML · AI · 구현 결과","textChars":27,"textLines":1,"bbox":[56,635,680,35]}
+{"kind":"image","id":"im/3618bu5s","slide":1,"name":"","alt":"사용자 제공 초안의 관광도시 콘셉트 이미지","bbox":[0,0,1280,720]}
+{"kind":"notes","id":"nt/ny12hz","slide":1,"text":"OLIGO-K는 관광 담당자가 지역 현황과 타지역 운영 사례를 함께 검토하고 관광사업 아이디어를 문서로 만드는 웹서비스입니다. 오늘은 사용자 흐름, 실제 코드 구조, 숫자 예측, 근거 조사, 기획 생성, 결과물과 남은 검증을 설명합니다. 초기 기획 문서의 STAY-UP AI는 같은 프로젝트의 초기 명칭이며 현재 발표와 서비스는 OLIGO-K 표기를 사용합니다. 표지 이미지는 사용자 제공 초안의 콘셉트 일러스트이며 실제 관광지 사진으로 제시하지 않습니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/docs/PROJECT_BRIEF.md\nC:/Users/Admin/mbca/TP2-3/frontend/src/components/WorkspaceShell.jsx"}
+{"kind":"slide","id":"sl/whty6r","slide":2,"title":"OLIGO-K","textShapes":25}
+{"kind":"textbox","id":"sh/ut0vatwj","slide":2,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/hwbel8fu","slide":2,"text":"목차","textPreview":"목차","textChars":2,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/wv2dc3e9","slide":2,"text":"SYSTEM","textPreview":"SYSTEM","textChars":6,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/3ytwnyx0","slide":2,"text":"02 / 38","textPreview":"02 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/ixkvedwf","slide":2,"text":"1. 서비스 개요","textPreview":"1. 서비스 개요","textChars":9,"textLines":1,"bbox":[56,177,470,37]}
+{"kind":"textbox","id":"sh/50bep8f6","slide":2,"text":"기획 목적 · 메인 4단계 모션","textPreview":"기획 목적 · 메인 4단계 모션","textChars":17,"textLines":1,"bbox":[508,179,598,35]}
+{"kind":"textbox","id":"sh/4z2dg3el","slide":2,"text":"03–04","textPreview":"03–04","textChars":5,"textLines":1,"bbox":[1130,178,96,34]}
+{"kind":"shape","id":"sh/r2dwrixw","slide":2,"bbox":[56,224,1168,1]}
+{"kind":"textbox","id":"sh/q1kvidwr","slide":2,"text":"2. 실제 화면과 이용 흐름","textPreview":"2. 실제 화면과 이용 흐름","textChars":15,"textLines":1,"bbox":[56,239,470,37]}
+{"kind":"textbox","id":"sh/8japwni5","slide":2,"text":"대시보드 · 지역/지표/소비 · 기획 입력","textPreview":"대시보드 · 지역/지표/소비 · 기획 입력","textChars":23,"textLines":1,"bbox":[508,241,598,35]}
+{"kind":"textbox","id":"sh/94jqpsjq","slide":2,"text":"05–11","textPreview":"05–11","textChars":5,"textLines":1,"bbox":[1130,240,96,34]}
+{"kind":"shape","id":"sh/mh87ud0z","slide":2,"bbox":[56,286,1168,1]}
+{"kind":"textbox","id":"sh/7i1oni1k","slide":2,"text":"3. 시스템 구조","textPreview":"3. 시스템 구조","textChars":9,"textLines":1,"bbox":[56,301,470,37]}
+{"kind":"textbox","id":"sh/g7ap07i1","slide":2,"text":"React · API · 비동기 생성 작업","textPreview":"React · API · 비동기 생성 작업","textChars":23,"textLines":1,"bbox":[508,303,598,35]}
+{"kind":"textbox","id":"sh/h8jqtczm","slide":2,"text":"12–14","textPreview":"12–14","textChars":5,"textLines":1,"bbox":[1130,302,96,34]}
+{"kind":"shape","id":"sh/u5s7yx0b","slide":2,"bbox":[56,348,1168,1]}
+{"kind":"textbox","id":"sh/v618r2hw","slide":2,"text":"4. 데이터와 머신러닝","textPreview":"4. 데이터와 머신러닝","textChars":12,"textLines":1,"bbox":[56,363,470,37]}
+{"kind":"textbox","id":"sh/4bupo7id","slide":2,"text":"원자료 · MySQL · 7개 ML · 평가","textPreview":"원자료 · MySQL · 7개 ML · 평가","textChars":24,"textLines":1,"bbox":[508,365,598,35]}
+{"kind":"textbox","id":"sh/5c3qxczy","slide":2,"text":"15–20","textPreview":"15–20","textChars":5,"textLines":1,"bbox":[1130,364,96,34]}
+{"kind":"shape","id":"sh/dsz6hcr2","slide":2,"bbox":[56,410,1168,1]}
+{"kind":"textbox","id":"sh/crqp87ah","slide":2,"text":"5. 공식 근거와 AI Agent","textPreview":"5. 공식 근거와 AI Agent","textChars":18,"textLines":1,"bbox":[56,425,470,37]}
+{"kind":"textbox","id":"sh/rqhof29w","slide":2,"text":"유사지역 · RAG · 5개 역할 · 모델 라우팅","textPreview":"유사지역 · RAG · 5개 역할 · 모델 라우팅","textChars":27,"textLines":1,"bbox":[508,427,598,35]}
+{"kind":"textbox","id":"sh/qp876xsb","slide":2,"text":"21–28","textPreview":"21–28","textChars":5,"textLines":1,"bbox":[1130,426,96,34]}
+{"kind":"shape","id":"sh/1wjqlcry","slide":2,"bbox":[56,472,1168,1]}
+{"kind":"textbox","id":"sh/0vqpcrad","slide":2,"text":"6. 기획안과 문서 출력","textPreview":"6. 기획안과 문서 출력","textChars":13,"textLines":1,"bbox":[56,487,470,37]}
+{"kind":"textbox","id":"sh/zuh8jm98","slide":2,"text":"KPI · 견적 · 사례 · Word/PPT · 챗봇","textPreview":"KPI · 견적 · 사례 · Word/PPT · 챗봇","textChars":29,"textLines":1,"bbox":[508,489,598,35]}
+{"kind":"textbox","id":"sh/et87ahsn","slide":2,"text":"29–33","textPreview":"29–33","textChars":5,"textLines":1,"bbox":[1130,488,96,34]}
+{"kind":"shape","id":"sh/h0f69sru","slide":2,"bbox":[56,534,1168,1]}
+{"kind":"textbox","id":"sh/gz6p0na9","slide":2,"text":"7. 검증·운영·시연","textPreview":"7. 검증·운영·시연","textChars":11,"textLines":1,"bbox":[56,549,470,37]}
+{"kind":"textbox","id":"sh/6543at87","slide":2,"text":"오류 보완 · 운영 · 향후 검증 · Q&A","textPreview":"오류 보완 · 운영 · 향후 검증 · Q&A","textChars":24,"textLines":1,"bbox":[508,551,598,35]}
+{"kind":"textbox","id":"sh/76d4jyps","slide":2,"text":"34–38","textPreview":"34–38","textChars":5,"textLines":1,"bbox":[1130,550,96,34]}
+{"kind":"shape","id":"sh/87m5c3qd","slide":2,"bbox":[56,596,1168,1]}
+{"kind":"notes","id":"nt/whty6r","slide":2,"text":"발표는 서비스 목적을 소개한 뒤 실제 화면을 먼저 보여 주고, 그 화면을 만드는 React·API·데이터·머신러닝·AI의 내부 구조를 설명합니다. 각 슬라이드 제목의 첫 번호는 이 목차의 섹션과 대응하며 소수점 뒤 번호는 해당 섹션의 상세 주제입니다. 예를 들어 2.4는 실제 화면 섹션의 네 번째 설명, 5.3은 AI 섹션의 세 번째 설명입니다. 하단에는 섹션 이름과 전체 슬라이드 번호가 있습니다. 상세 코드 질문은 각 페이지의 발표자 노트를 참고합니다.\n\n[구현 근거]\n"}
+{"kind":"slide","id":"sl/qmtvdb","slide":3,"title":"OLIGO-K","textShapes":10}
+{"kind":"textbox","id":"sh/wzqlcvyp","slide":3,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/byx4jqhk","slide":3,"text":"1.1 관광사업 기획에서 연결이 필요한 업무","textPreview":"1.1 관광사업 기획에서 연결이 필요한 업무","textChars":24,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/axo3algz","slide":3,"text":"1. 서비스 개요","textPreview":"1. 서비스 개요","textChars":9,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/l4zmp0zm","slide":3,"text":"03 / 38","textPreview":"03 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/k3qlgvy1","slide":3,"text":"지역에서 무엇을 더 운영하면\n관광 경험과 소비가 나아질까?","textPreview":"지역에서 무엇을 더 운영하면 | 관광 경험과 소비가 나아질까?","textChars":32,"textLines":2,"bbox":[56,182,690,150]}
+{"kind":"textbox","id":"sh/j2h4nahg","slide":3,"text":"시군구 관광 담당자와 지역 관광사업자를 위한\n사례 기반 아이디어와 실행 초안","textPreview":"시군구 관광 담당자와 지역 관광사업자를 위한 | 사례 기반 아이디어와 실행 초안","textChars":42,"textLines":2,"bbox":[56,358,690,100]}
+{"kind":"textbox","id":"sh/y183e5gv","slide":3,"text":"현재 업무","textPreview":"현재 업무","textChars":5,"textLines":1,"bbox":[840,181,340,42]}
+{"kind":"textbox","id":"sh/18f2dgz2","slide":3,"text":"통계 확인\n타지역 사례 조사\n우리 지역에 맞게 기획\n목표·견적·문서 작성","textPreview":"통계 확인 | 타지역 사례 조사 | 우리 지역에 맞게 기획 | 목표·견적·문서 작성","textChars":40,"textLines":4,"bbox":[840,246,355,255]}
+{"kind":"shape","id":"sh/076l4byx","slide":3,"bbox":[56,543,1168,1]}
+{"kind":"textbox","id":"sh/a1oz6hs3","slide":3,"text":"기대효과","textPreview":"기대효과","textChars":4,"textLines":1,"bbox":[56,569,170,39]}
+{"kind":"textbox","id":"sh/bmxgfmto","slide":3,"text":"조사 근거와 작성 과정을 한 화면에서 확인하고 재사용","textPreview":"조사 근거와 작성 과정을 한 화면에서 확인하고 재사용","textChars":29,"textLines":1,"bbox":[252,569,930,45]}
+{"kind":"notes","id":"nt/qmtvdb","slide":3,"text":"서비스의 중심은 부족하다는 진단을 반복하는 것이 아니라, 공식 사례의 운영 방식을 참고해 우리 지역에서 실행할 아이디어를 제시하는 것입니다. 방문·숙박 지표가 낮다고 바로 특정 사업의 필요성이 입증되지는 않습니다. 담당자는 사례와 조건을 검토하고 시범 범위를 결정합니다. 업무 시간 단축이나 방문객 증가의 실제 성과는 아직 사용자 실험으로 측정하지 않았으므로 기대효과로 소개합니다. 초기 인구감소지역 문제의식에서 현재 등록된 도시·군·구의 관광 기획 지원으로 범위를 넓혔습니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/docs/PROJECT_BRIEF.md\nC:/Users/Admin/mbca/TP2-3/docs/CONTEST_EVIDENCE.md\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/prompts.py"}
+{"kind":"slide","id":"sl/wv1dsj","slide":4,"title":"OLIGO-K","textShapes":6}
+{"kind":"textbox","id":"sh/1kjatw7q","slide":4,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/exsryhof","slide":4,"text":"1.2 메인 화면의 4단계 이용 모션","textPreview":"1.2 메인 화면의 4단계 이용 모션","textChars":20,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/fy1srmpk","slide":4,"text":"1. 서비스 개요","textPreview":"1. 서비스 개요","textChars":9,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/ona94b6h","slide":4,"text":"04 / 38","textPreview":"04 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/2lsr21ob","slide":4,"text":"지역 선택 → 데이터 진단 → AI 챗봇 → 기획서 출력","textPreview":"지역 선택 → 데이터 진단 → AI 챗봇 → 기획서 출력","textChars":31,"textLines":1,"bbox":[56,151,1168,33]}
+{"kind":"textbox","id":"sh/nm1sv6pw","slide":4,"text":"실제 홈페이지 모션 · 장면당 4초 순환 · 화면 안 수치는 이용 안내용 예시입니다.","textPreview":"실제 홈페이지 모션 · 장면당 4초 순환 · 화면 안 수치는 이용 안내용 예시입니다.","textChars":47,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"image","id":"im/wzm54ri5","slide":4,"name":"","alt":"HOME_WORKFLOW_ANIMATED","bbox":[56,192,1168,420]}
+{"kind":"notes","id":"nt/wv1dsj","slide":4,"text":"이 화면은 TourismHomePage.jsx의 실제 home-workflow-layout을 브라우저에서 캡처한 반복 GIF입니다. STEPS와 INTERACTION_DEMOS가 네 장면을 정의하고 CARD_ROTATION_MS=4000과 setInterval이 활성 번호를 바꿉니다. CSS가 지도·차트·대화·문서의 등장과 포인터를 움직입니다. 홈에 표시된 방문자 수·목표율·공식 자료 4건 등은 하드코딩된 소개용 데모이므로 실제 API 조회 결과나 방금 생성한 보고서 성과로 설명하지 않습니다. 실제 값은 다음 대시보드 캡처에서 설명합니다. 데스크톱 PowerPoint의 슬라이드 쇼에서 반복 재생되며 편집 화면이나 일부 웹 뷰어는 정지 화면만 보일 수 있습니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/frontend/src/pages/TourismHomePage.jsx\nC:/Users/Admin/mbca/TP2-3/frontend/src/App.css\nhttps://support.microsoft.com/en-us/PowerPoint/add-an-animated-gif-to-a-slide"}
+{"kind":"slide","id":"sl/5281w3","slide":5,"title":"OLIGO-K","textShapes":13}
+{"kind":"textbox","id":"sh/cfe9kr6t","slide":5,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/be5sbmp8","slide":5,"text":"2.1 대시보드에서 시작하는 이용 흐름","textPreview":"2.1 대시보드에서 시작하는 이용 흐름","textChars":21,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/atwrihon","slide":5,"text":"2. 실제 화면과 이용 흐름","textPreview":"2. 실제 화면과 이용 흐름","textChars":15,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/lk7ahw7a","slide":5,"text":"05 / 38","textPreview":"05 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/zi5sf6p4","slide":5,"text":"읽는 순서","textPreview":"읽는 순서","textChars":5,"textLines":1,"bbox":[859,179,345,42]}
+{"kind":"textbox","id":"sh/yhwrm1oz","slide":5,"text":"① 지역","textPreview":"① 지역","textChars":4,"textLines":1,"bbox":[859,242,350,32]}
+{"kind":"textbox","id":"sh/9o7alg7m","slide":5,"text":"검색·시도·시군구로 선택","textPreview":"검색·시도·시군구로 선택","textChars":13,"textLines":1,"bbox":[859,278,350,42]}
+{"kind":"textbox","id":"sh/8ny9sb61","slide":5,"text":"② 규모와 방향","textPreview":"② 규모와 방향","textChars":8,"textLines":1,"bbox":[859,329,350,32]}
+{"kind":"textbox","id":"sh/6hgnips7","slide":5,"text":"방문·소비·숙박 카드 확인","textPreview":"방문·소비·숙박 카드 확인","textChars":14,"textLines":1,"bbox":[859,365,350,42]}
+{"kind":"textbox","id":"sh/7i94butc","slide":5,"text":"③ 추세와 구성","textPreview":"③ 추세와 구성","textChars":8,"textLines":1,"bbox":[859,416,350,32]}
+{"kind":"textbox","id":"sh/8ji5kzax","slide":5,"text":"월별 그래프와 업종 분포","textPreview":"월별 그래프와 업종 분포","textChars":13,"textLines":1,"bbox":[859,452,350,42]}
+{"kind":"textbox","id":"sh/tkr6d4bi","slide":5,"text":"④ 다음 업무","textPreview":"④ 다음 업무","textChars":7,"textLines":1,"bbox":[859,503,350,32]}
+{"kind":"textbox","id":"sh/u50nm9s3","slide":5,"text":"기획안 생성 화면으로 이동","textPreview":"기획안 생성 화면으로 이동","textChars":14,"textLines":1,"bbox":[859,539,350,42]}
+{"kind":"image","id":"im/lk7a90ri","slide":5,"name":"","alt":"실제 강남구 대시보드 전체 화면","bbox":[56,175,750,455]}
+{"kind":"notes","id":"nt/5281w3","slide":5,"text":"2026-09-10 실제 localhost:5176/dashboard를 조회한 서울특별시 강남구 화면입니다. 전체 화면의 왼쪽은 지역과 지도, 오른쪽은 예측 카드·월별 추세·소비 분포입니다. 사이드바로 기획안 생성, 기획안 수정·출력, 저장된 기획서로 이동합니다. 슬라이드의 번호는 설명을 위한 읽는 순서이며 프로그램이 사용자의 분석 결론을 자동 확정하는 순서라는 뜻은 아닙니다. 데이터 확인만으로 OpenAI 보고서 생성 요청이 실행되지 않습니다. 발표에서는 먼저 왼쪽 지도에서 지역 범위를 지정한 뒤 오른쪽에서 기준월과 전망을 읽고, 사업 방향을 정할 질문으로 연결한다는 점을 설명합니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/frontend/src/pages/TourismDashboardPage.jsx\nC:/Users/Admin/mbca/TP2-3/frontend/src/components/WorkspaceShell.jsx\nC:/Users/Admin/mbca/TP2-3/frontend/src/api/dashboardApi.js"}
+{"kind":"slide","id":"sl/1bh95p","slide":6,"title":"OLIGO-K","textShapes":9}
+{"kind":"textbox","id":"sh/dsnm1gfy","slide":6,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/qpcn61wn","slide":6,"text":"2.2 지역 선택과 데이터 조회","textPreview":"2.2 지역 선택과 데이터 조회","textChars":17,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/rql4z6xs","slide":6,"text":"2. 실제 화면과 이용 흐름","textPreview":"2. 실제 화면과 이용 흐름","textChars":15,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/0fe5cvep","slide":6,"text":"06 / 38","textPreview":"06 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/edwnalwj","slide":6,"text":"선택한 지역 코드가 조회 기준","textPreview":"선택한 지역 코드가 조회 기준","textChars":16,"textLines":1,"bbox":[666,183,560,40]}
+{"kind":"textbox","id":"sh/ze543qx4","slide":6,"text":"검색 또는 시도·시군구 선택\n→ selectedCode 변경\n→ 지도 강조 + 지역 API 조회\n→ 카드·차트·소비 분포 갱신","textPreview":"검색 또는 시도·시군구 선택 | → selectedCode 변경 | → 지도 강조 + 지역 API 조회 | → 카드·차트·소비 분포 갱신","textChars":70,"textLines":4,"bbox":[666,255,548,172]}
+{"kind":"shape","id":"sh/gja50re5","slide":6,"bbox":[666,451,550,1]}
+{"kind":"textbox","id":"sh/hkjmtwfq","slide":6,"text":"같은 지역을 다음 화면에서도 사용","textPreview":"같은 지역을 다음 화면에서도 사용","textChars":18,"textLines":1,"bbox":[666,482,550,36]}
+{"kind":"textbox","id":"sh/x4ze1sry","slide":6,"text":"브라우저에 코드·지역명을 저장하고\n기획 입력 화면이 다시 읽습니다.","textPreview":"브라우저에 코드·지역명을 저장하고 | 기획 입력 화면이 다시 읽습니다.","textChars":37,"textLines":2,"bbox":[666,529,550,76]}
+{"kind":"textbox","id":"sh/c3qdsnqd","slide":6,"text":"초록색은 자료·로컬 연결 준비 상태입니다. 실제 생성 성공과 기획 품질은 별도로 확인합니다.","textPreview":"초록색은 자료·로컬 연결 준비 상태입니다. 실제 생성 성공과 기획 품질은 별도로 확인합니다.","textChars":51,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"image","id":"im/gjatkrex","slide":6,"name":"","alt":"실제 지역 선택과 지도 화면 확대","bbox":[56,170,552,444]}
+{"kind":"notes","id":"nt/1bh95p","slide":6,"text":"RegionMap은 Leaflet로 Backend의 시도/시군구 GeoJSON을 그립니다. 선택 이벤트가 selectedCode를 바꾸면 getAiRegionDashboard(selectedCode,selectedRegion.name)가 AI Server GET /ai/v1/demo/{region_code}/dashboard를 요청합니다. React useEffect는 이전 요청의 결과가 다른 지역 선택 뒤에 적용되지 않도록 isActive를 검사합니다. 선택 코드와 이름은 tour-insight-selected-region 키로 localStorage에 저장합니다. 다음 기획 화면은 이 값을 초기 선택으로 읽습니다. 원자료는 지역 이름을 추측해서 결합하지 않고 등록 지역 코드로 조회합니다. 초록색 여부는 readiness-audit 결과이며 미래 응답 시간이나 문서 품질을 보증하는 색상은 아닙니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/frontend/src/pages/TourismDashboardPage.jsx\nC:/Users/Admin/mbca/TP2-3/frontend/src/api/dashboardApi.js\nC:/Users/Admin/mbca/TP2-3/frontend/src/components/RegionWorkspacePicker.jsx"}
+{"kind":"slide","id":"sl/298oy4","slide":7,"title":"OLIGO-K","textShapes":9}
+{"kind":"textbox","id":"sh/5wr6psze","slide":7,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/itg7ud03","slide":7,"text":"2.3 핵심 지표 카드의 읽는 순서","textPreview":"2.3 핵심 지표 카드의 읽는 순서","textChars":19,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/juponiho","slide":7,"text":"2. 실제 화면과 이용 흐름","textPreview":"2. 실제 화면과 이용 흐름","textChars":15,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/szip07i5","slide":7,"text":"07 / 38","textPreview":"07 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/6x07yx0z","slide":7,"text":"먼저 기준월과 비교 대상을 확인","textPreview":"먼저 기준월과 비교 대상을 확인","textChars":17,"textLines":1,"bbox":[56,460,566,41]}
+{"kind":"textbox","id":"sh/ry9or2hk","slide":7,"text":"10월 예상 방문자 17,767,384명\n9월 예상 대비 −2.6%","textPreview":"10월 예상 방문자 17,767,384명 | 9월 예상 대비 −2.6%","textChars":37,"textLines":2,"bbox":[56,515,552,81]}
+{"kind":"textbox","id":"sh/83y5o3i1","slide":7,"text":"서버가 계산한 전망과 변화량","textPreview":"서버가 계산한 전망과 변화량","textChars":15,"textLines":1,"bbox":[666,460,559,41]}
+{"kind":"textbox","id":"sh/9o76h8zm","slide":7,"text":"방문·소비는 증감률(%)\n숙박은 평균 일수 차이(일)","textPreview":"방문·소비는 증감률(%) | 숙박은 평균 일수 차이(일)","textChars":29,"textLines":2,"bbox":[666,515,550,81]}
+{"kind":"textbox","id":"sh/9kr6x87a","slide":7,"text":"대시보드의 다음 달 전망은 조회 날짜에 따라 이동합니다. 사업 목표 KPI는 기획안에서 별도로 계산합니다.","textPreview":"대시보드의 다음 달 전망은 조회 날짜에 따라 이동합니다. 사업 목표 KPI는 기획안에서 별도로 계산합니다.","textChars":59,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"image","id":"im/4ryp8f2t","slide":7,"name":"","alt":"강남구 2026년 10월 예상 지표 카드","bbox":[104,176,1072,268]}
+{"kind":"notes","id":"nt/298oy4","slide":7,"text":"실제 API metrics에 10월 방문자17,767,384명, 관광소비액 약4,595억원, 평균 숙박2.87일이 있습니다. 비교 문구는 9월 예상 대비이며 최근 관측값 대비라는 뜻이 아닙니다. _build_registered_ml_dashboard는 현재 날짜의 다음 달 target_month를 정하고 저장 모델로 필요한 전망 구간을 만든 뒤 _select_display_forecasts로 표시 월을 선택합니다. 방문·소비 변화율은 (다음 월 값/비교 월 값-1)×100이며 숙박은 일수 차이입니다. 서버가 생성한 metrics의 snake_case 필드를 프론트의 카드 props로 바꿔 표시합니다. 카드는 ML 기준 흐름이고 관광사업을 실행한 추가 효과나 사용자의 목표율이 아닙니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/ai_server/app/main.py\nC:/Users/Admin/mbca/TP2-3/ai_server/ml/region_registry.py\nC:/Users/Admin/mbca/TP2-3/frontend/src/pages/TourismDashboardPage.jsx"}
+{"kind":"slide","id":"sl/6vwg60","slide":8,"title":"OLIGO-K","textShapes":10}
+{"kind":"textbox","id":"sh/2xwjih4j","slide":8,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/pkn2tcna","slide":8,"text":"2.4 관측값과 전망 그래프의 해석","textPreview":"2.4 관측값과 전망 그래프의 해석","textChars":19,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/4jelkrmp","slide":8,"text":"2. 실제 화면과 이용 흐름","textPreview":"2. 실제 화면과 이용 흐름","textChars":15,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/fulkn258","slide":8,"text":"08 / 38","textPreview":"08 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/hwn2pcne","slide":8,"text":"관측 구간","textPreview":"관측 구간","textChars":5,"textLines":1,"bbox":[796,180,410,38]}
+{"kind":"textbox","id":"sh/gve1g7mt","slide":8,"text":"2026.05–07\n공식 원자료의 최근 확정값","textPreview":"2026.05–07 | 공식 원자료의 최근 확정값","textChars":25,"textLines":2,"bbox":[796,231,410,85]}
+{"kind":"textbox","id":"sh/7qlkj25w","slide":8,"text":"전망 구간","textPreview":"전망 구간","textChars":5,"textLines":1,"bbox":[796,340,410,38]}
+{"kind":"textbox","id":"sh/6pcjax4b","slide":8,"text":"2026.09–11\n저장 모델로 계산한 전망","textPreview":"2026.09–11 | 저장 모델로 계산한 전망","textChars":24,"textLines":2,"bbox":[796,391,410,85]}
+{"kind":"textbox","id":"sh/wjupwjmh","slide":8,"text":"계절 흐름과 규모를 읽고\n기획의 운영 시점을 검토","textPreview":"계절 흐름과 규모를 읽고 | 기획의 운영 시점을 검토","textChars":27,"textLines":2,"bbox":[796,516,410,88]}
+{"kind":"textbox","id":"sh/hk3qpo32","slide":8,"text":"방문자 수는 왼쪽 축(만 명), 관광소비액은 오른쪽 축(억 원)을 사용합니다.","textPreview":"방문자 수는 왼쪽 축(만 명), 관광소비액은 오른쪽 축(억 원)을 사용합니다.","textChars":43,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"image","id":"im/ry1kfqd8","slide":8,"name":"","alt":"관측 및 전망을 구분한 실제 방문자·소비 그래프","bbox":[56,177,677,425]}
+{"kind":"notes","id":"nt/6vwg60","slide":8,"text":"2026-09-10 강남구 실제 monthly_trend 응답을 확인했습니다. recent_actuals의 마지막3개월2026.05·06·07과 직전 전망2026.09 및 표시 전망2026.10·11을 조합합니다. 따라서 모든 달이 연속된 선 그래프처럼 설명하지 않고 실제 x축 월을 읽습니다. is_forecast=false/true가 관측/전망 색 구분을 결정합니다. MonthlyActualTrendChart는 방문자는 막대, 소비는 선으로 Recharts ComposedChart에 표시하고 좌우 축 단위를 분리합니다. 높은 방문 전망은 프로그램의 효과를 입증하지 않으며, 운영 시점과 수요 규모를 검토할 입력입니다. 기획서의 사업 월 그래프는 별도 report_projection이 기간을 맞추므로 대시보드와 항상 동일한 월 구간이 아닙니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/ai_server/app/main.py\nC:/Users/Admin/mbca/TP2-3/frontend/src/pages/TourismDashboardPage.jsx\nC:/Users/Admin/mbca/TP2-3/ai_server/app/report_projection.py"}
+{"kind":"slide","id":"sl/qs74a1","slide":9,"title":"OLIGO-K","textShapes":10}
+{"kind":"textbox","id":"sh/loji90zm","slide":9,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/ylszylgb","slide":9,"text":"2.5 업종별 소비 분포와 기획 질문","textPreview":"2.5 업종별 소비 분포와 기획 질문","textChars":20,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/zm107qhw","slide":9,"text":"2. 실제 화면과 이용 흐름","textPreview":"2. 실제 화면과 이용 흐름","textChars":15,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/8bu14fyd","slide":9,"text":"09 / 38","textPreview":"09 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/mpcj25g7","slide":9,"text":"예상 업종 금액의 계산","textPreview":"예상 업종 금액의 계산","textChars":12,"textLines":1,"bbox":[794,183,422,44]}
+{"kind":"textbox","id":"sh/nql0baxs","slide":9,"text":"3개월 전체 소비 전망 평균\n× 최신 관측 업종 비중","textPreview":"3개월 전체 소비 전망 평균 | × 최신 관측 업종 비중","textChars":29,"textLines":2,"bbox":[794,242,422,88]}
+{"kind":"textbox","id":"sh/wfu18fy9","slide":9,"text":"식음료업 예시","textPreview":"식음료업 예시","textChars":7,"textLines":1,"bbox":[794,361,422,35]}
+{"kind":"textbox","id":"sh/xgnihkfu","slide":9,"text":"약 4,953억 원 × 49.1%\n≈ 2,432억 원","textPreview":"약 4,953억 원 × 49.1% | ≈ 2,432억 원","textChars":29,"textLines":2,"bbox":[794,409,422,80]}
+{"kind":"textbox","id":"sh/xk3adkzy","slide":9,"text":"“어느 업종과 참여처를\n연결할 것인가?”로 구체화","textPreview":"“어느 업종과 참여처를 | 연결할 것인가?”로 구체화","textChars":27,"textLines":2,"bbox":[794,527,422,77]}
+{"kind":"textbox","id":"sh/cja94fyd","slide":9,"text":"업종별 별도 ML 모델이 아니라 전체 소비 전망에 현재 업종 구성비를 적용한 표시용 가정입니다.","textPreview":"업종별 별도 ML 모델이 아니라 전체 소비 전망에 현재 업종 구성비를 적용한 표시용 가정입니다.","textChars":53,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"image","id":"im/gr6tsnu9","slide":9,"name":"","alt":"실제 소비패턴 예상 분포 화면","bbox":[56,185,685,403]}
+{"kind":"notes","id":"nt/qs74a1","slide":9,"text":"API diagnostic.forecast_average_spending_krw=495317450667원이며 식음료업 비중은49.1%, amount_krw는 이를 곱하고 원 단위 반올림한 값입니다. 화면은 금액을 억 원으로 반올림해2,432억원으로 표시합니다. 쇼핑35.1%, 의료웰니스6.5%, 운송3.9%, 기타5.4%도 같은 관측 구성입니다. 기타는 표시 상위4개 업종 이외의 잔여 비중입니다. TourismConsumptionStayDiagnostic은 이 값을 표와 도넛으로 보여 줍니다. 이 구성은 예를 들어 식음·쇼핑 참여처를 어떤 묶음으로 연결할지 질문을 구체화하는 자료지만 높은 비중 자체가 정책 필요성이나 신규 사업 성공의 증명은 아닙니다. LLM은 같은 계열의 지역 원자료를 snapshot과 읽기 전용 도구로 받으며 대시보드 이미지를 보고 계산하지 않습니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/ai_server/app/main.py\nC:/Users/Admin/mbca/TP2-3/frontend/src/pages/TourismDashboardPage.jsx\nC:/Users/Admin/mbca/TP2-3/ai_server/ml/planning_evidence.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/llm/evidence_tools.py"}
+{"kind":"slide","id":"sl/vyrtfd","slide":10,"title":"OLIGO-K","textShapes":14}
+{"kind":"textbox","id":"sh/lgbahw7q","slide":10,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/yt0rmh8z","slide":10,"text":"2.6 사업 조건 입력과 초안 생성","textPreview":"2.6 사업 조건 입력과 초안 생성","textChars":19,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/zu98fmpk","slide":10,"text":"2. 실제 화면과 이용 흐름","textPreview":"2. 실제 화면과 이용 흐름","textChars":15,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/8j29sbq1","slide":10,"text":"10 / 38","textPreview":"10 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"shape","id":"sh/9kbalw7m","slide":10,"bbox":[56,190,269,126]}
+{"kind":"textbox","id":"sh/mhkrq18v","slide":10,"text":"01 지역 선택","textPreview":"01 지역 선택","textChars":8,"textLines":1,"bbox":[74,205,233,38]}
+{"kind":"textbox","id":"sh/nitsj6pg","slide":10,"text":"지역 현황\n자료 준비 확인","textPreview":"지역 현황 | 자료 준비 확인","textChars":14,"textLines":2,"bbox":[74,244,233,67]}
+{"kind":"shape","id":"sh/wnm9wbqd","slide":10,"bbox":[330,243,20,18]}
+{"kind":"shape","id":"sh/xovapg7i","slide":10,"bbox":[355,190,269,126]}
+{"kind":"textbox","id":"sh/1grq5gby","slide":10,"text":"02 조건 입력","textPreview":"02 조건 입력","textChars":8,"textLines":1,"bbox":[373,205,233,38]}
+{"kind":"textbox","id":"sh/0fipwbad","slide":10,"text":"사업 방향·예산\n시작 월","textPreview":"사업 방향·예산 | 시작 월","textChars":13,"textLines":2,"bbox":[373,244,233,67]}
+{"kind":"shape","id":"sh/ze9836ts","slide":10,"bbox":[629,243,20,18]}
+{"kind":"shape","id":"sh/edg7u1c7","slide":10,"bbox":[654,190,269,126]}
+{"kind":"textbox","id":"sh/9krq90bu","slide":10,"text":"03 생성·검토","textPreview":"03 생성·검토","textChars":8,"textLines":1,"bbox":[672,205,233,38]}
+{"kind":"textbox","id":"sh/ojip0va9","slide":10,"text":"공식 사례 비교\n기획안 작성","textPreview":"공식 사례 비교 | 기획안 작성","textChars":15,"textLines":2,"bbox":[672,244,233,67]}
+{"kind":"shape","id":"sh/ni987qto","slide":10,"bbox":[928,243,20,18]}
+{"kind":"shape","id":"sh/mh07yls3","slide":10,"bbox":[953,190,269,126]}
+{"kind":"textbox","id":"sh/po76xwbq","slide":10,"text":"04 수정·출력","textPreview":"04 수정·출력","textChars":8,"textLines":1,"bbox":[971,205,233,38]}
+{"kind":"textbox","id":"sh/4nyporu5","slide":10,"text":"챗봇 조정·저장\nPPTX / DOCX","textPreview":"챗봇 조정·저장 | PPTX / DOCX","textChars":20,"textLines":2,"bbox":[971,244,233,67]}
+{"kind":"textbox","id":"sh/hsbqdwjm","slide":10,"text":"감당할 수 있는 입력만 받기","textPreview":"감당할 수 있는 입력만 받기","textChars":15,"textLines":1,"bbox":[703,350,505,42]}
+{"kind":"textbox","id":"sh/up07i1kv","slide":10,"text":"사업 방향 4종과 사례 기반 추천\n참고 예산은 총액 배분에 반영\n자원 300자 · 현장 메모 500자\n시작 월부터 3개월 시범 운영","textPreview":"사업 방향 4종과 사례 기반 추천 | 참고 예산은 총액 배분에 반영 | 자원 300자 · 현장 메모 500자 | 시작 월부터 3개월 시범 운영","textChars":73,"textLines":4,"bbox":[703,410,500,188]}
+{"kind":"image","id":"im/nmhofa9o","slide":10,"name":"","alt":"2026-09-10 실제 기획 조건 입력 화면","bbox":[56,349,594,252]}
+{"kind":"notes","id":"nt/vyrtfd","slide":10,"text":"현재 입력은 guided_v1입니다. 네 가지 사업 방향은 소비·환급, 숙박·체류, 야간 관광, 재방문·관광주민증입니다. 사례 기반 추천을 선택할 수도 있습니다. 참고 예산은 입력 총액에 맞춘 견적 배분이지 그 금액으로 KPI를 달성한다는 보장이 아닙니다. 제외 조건은 야간 또는 환급 방식입니다. Pydantic이 값·길이·충돌을 검증하고 해당 조건에 맞는 공식 사례와 후보만 남깁니다. 실제 연결된 후보 수는 보고서마다 다르며 항상 4개를 생성하지 않습니다. 스크린샷은 2026-09-10 실행 중인 React 화면입니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/frontend/src/pages/TourismPlanningPage.jsx\nC:/Users/Admin/mbca/TP2-3/frontend/src/features/planning/planningBrief.js\nC:/Users/Admin/mbca/TP2-3/ai_server/app/planning_brief.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/case_recommendation.py"}
+{"kind":"slide","id":"sl/26sd8y","slide":11,"title":"OLIGO-K","textShapes":17}
+{"kind":"textbox","id":"sh/yhgvep4z","slide":11,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/lk7ep43q","slide":11,"text":"2.7 화면의 선택이 기획 근거로 이어지는 과정","textPreview":"2.7 화면의 선택이 기획 근거로 이어지는 과정","textChars":26,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/0jydgz25","slide":11,"text":"2. 실제 화면과 이용 흐름","textPreview":"2. 실제 화면과 이용 흐름","textChars":15,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/bepwjalo","slide":11,"text":"11 / 38","textPreview":"11 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"shape","id":"sh/qdwvap43","slide":11,"bbox":[56,192,274,160]}
+{"kind":"textbox","id":"sh/dg7elk3e","slide":11,"text":"대시보드","textPreview":"대시보드","textChars":4,"textLines":1,"bbox":[74,207,238,38]}
+{"kind":"textbox","id":"sh/cfydcfmt","slide":11,"text":"지역 코드 선택\n지표·월별 흐름 확인","textPreview":"지역 코드 선택 | 지표·월별 흐름 확인","textChars":20,"textLines":2,"bbox":[74,246,238,101]}
+{"kind":"shape","id":"sh/3a5wfalc","slide":11,"bbox":[333,263,18,18]}
+{"kind":"shape","id":"sh/29wv654r","slide":11,"bbox":[354,192,274,160]}
+{"kind":"textbox","id":"sh/grqtwb6h","slide":11,"text":"기획 입력","textPreview":"기획 입력","textChars":5,"textLines":1,"bbox":[372,207,238,38]}
+{"kind":"textbox","id":"sh/hczu5g72","slide":11,"text":"사업 방향·참고 예산\n시범 월·제외 조건","textPreview":"사업 방향·참고 예산 | 시범 월·제외 조건","textChars":22,"textLines":2,"bbox":[372,246,238,101]}
+{"kind":"shape","id":"sh/up8bulor","slide":11,"bbox":[631,263,18,18]}
+{"kind":"shape","id":"sh/fqhs36pc","slide":11,"bbox":[652,192,274,160]}
+{"kind":"textbox","id":"sh/sn6tsb6l","slide":11,"text":"서버 근거 구성","textPreview":"서버 근거 구성","textChars":8,"textLines":1,"bbox":[670,207,238,38]}
+{"kind":"textbox","id":"sh/toza1g76","slide":11,"text":"관측·ML·공식 사례\n사용자 조건 결합","textPreview":"관측·ML·공식 사례 | 사용자 조건 결합","textChars":21,"textLines":2,"bbox":[670,246,238,101]}
+{"kind":"shape","id":"sh/6lobq1of","slide":11,"bbox":[929,263,18,18]}
+{"kind":"shape","id":"sh/7mxsz6p0","slide":11,"bbox":[950,192,274,160]}
+{"kind":"textbox","id":"sh/cjat4v6p","slide":11,"text":"기획안·문서","textPreview":"기획안·문서","textChars":6,"textLines":1,"bbox":[968,207,238,38]}
+{"kind":"textbox","id":"sh/dkjud07a","slide":11,"text":"후보 비교·본문 작성\n검토·수정·출력","textPreview":"후보 비교·본문 작성 | 검토·수정·출력","textChars":20,"textLines":2,"bbox":[968,246,238,101]}
+{"kind":"textbox","id":"sh/l0fax0fe","slide":11,"text":"화면 사이에 유지하는 정보","textPreview":"화면 사이에 유지하는 정보","textChars":14,"textLines":1,"bbox":[56,411,520,43]}
+{"kind":"textbox","id":"sh/kz6tovyt","slide":11,"text":"선택 지역 코드·이름\n사용자가 정한 사업 조건","textPreview":"선택 지역 코드·이름 | 사용자가 정한 사업 조건","textChars":25,"textLines":2,"bbox":[56,474,538,91]}
+{"kind":"textbox","id":"sh/zyxsvqho","slide":11,"text":"서버가 다시 확인하는 정보","textPreview":"서버가 다시 확인하는 정보","textChars":14,"textLines":1,"bbox":[666,411,558,43]}
+{"kind":"textbox","id":"sh/yxobmlg3","slide":11,"text":"해당 지역의 원자료·저장 ML\n공식 출처·모델 연결·입력 조건","textPreview":"해당 지역의 원자료·저장 ML | 공식 출처·모델 연결·입력 조건","textChars":34,"textLines":2,"bbox":[666,474,558,91]}
+{"kind":"textbox","id":"sh/xcfat0zi","slide":11,"text":"LLM은 화면 캡처를 해석해 기획하지 않습니다. 서버가 구조화한 사실·전망·사례를 전달받습니다.","textPreview":"LLM은 화면 캡처를 해석해 기획하지 않습니다. 서버가 구조화한 사실·전망·사례를 전달받습니다.","textChars":53,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"notes","id":"nt/26sd8y","slide":11,"text":"대시보드에서 선택한 지역 코드는 다음 기획 폼의 초기값으로 이어집니다. TourismPlanningPage의 guided 입력은 planning_brief로 생성 작업 API에 전달됩니다. 서버는 browser에 그려진 숫자나 스크린샷을 신뢰해 재사용하지 않고 해당 지역 원자료 snapshot과 저장 ML의 planning evidence를 요청에 맞춰 구성합니다. 실제 입력 묶음은 관측 사실, ml_analysis, planning_brief, 공식 근거로 분리됩니다. Evidence/CaseStudy가 준비한 자료를 Qwen 후보 비교와 Gemma 작성에 전달하고 코드/모델 검토를 거쳐 사용자에게 보여 줍니다. 사람은 입력과 수정·저장을 선택하고 Python은 조회·계산·허용 도구 실행을 담당합니다. 이 구분이 UI의 흐름과 AI의 내부 흐름이 연결되는 지점입니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/frontend/src/pages/TourismPlanningPage.jsx\nC:/Users/Admin/mbca/TP2-3/frontend/src/api/dashboardApi.js\nC:/Users/Admin/mbca/TP2-3/ai_server/app/main.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/report_orchestrator.py\nC:/Users/Admin/mbca/TP2-3/ai_server/ml/planning_evidence.py"}
+{"kind":"slide","id":"sl/3opyqs","slide":12,"title":"OLIGO-K","textShapes":19}
+{"kind":"textbox","id":"sh/dsrixonq","slide":12,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/qpgj294f","slide":12,"text":"3.1 전체 서비스 구조","textPreview":"3.1 전체 서비스 구조","textChars":13,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/bqp0ve50","slide":12,"text":"3. 시스템 구조","textPreview":"3. 시스템 구조","textChars":9,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/0vi18jmh","slide":12,"text":"12 / 38","textPreview":"12 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"shape","id":"sh/lgri1on2","slide":12,"bbox":[56,295,280,145]}
+{"kind":"textbox","id":"sh/yt0j6t4b","slide":12,"text":"React + Vite","textPreview":"React + Vite","textChars":12,"textLines":1,"bbox":[74,310,244,38]}
+{"kind":"textbox","id":"sh/zu90zy5w","slide":12,"text":"지역 선택·분석\n기획·문서 화면","textPreview":"지역 선택·분석 | 기획·문서 화면","textChars":17,"textLines":2,"bbox":[74,349,244,86]}
+{"kind":"shape","id":"sh/gzyhwzmd","slide":12,"bbox":[427,180,345,125]}
+{"kind":"textbox","id":"sh/hk7ip4ny","slide":12,"text":"일반 Backend","textPreview":"일반 Backend","textChars":10,"textLines":1,"bbox":[445,195,309,38]}
+{"kind":"textbox","id":"sh/tsb6hofy","slide":12,"text":"FastAPI\n지도 경계 조회·캐시","textPreview":"FastAPI | 지도 경계 조회·캐시","textChars":19,"textLines":2,"bbox":[445,234,309,66]}
+{"kind":"shape","id":"sh/sr2pojyd","slide":12,"bbox":[427,397,345,125]}
+{"kind":"textbox","id":"sh/rqtofexs","slide":12,"text":"AI Server","textPreview":"AI Server","textChars":9,"textLines":1,"bbox":[445,412,309,38]}
+{"kind":"textbox","id":"sh/6p0nm9g7","slide":12,"text":"FastAPI\n관광 데이터·생성 작업","textPreview":"FastAPI | 관광 데이터·생성 작업","textChars":20,"textLines":2,"bbox":[445,451,309,66]}
+{"kind":"shape","id":"sh/1wb6lofu","slide":12,"bbox":[354,244,50,18]}
+{"kind":"shape","id":"sh/gv2psjy9","slide":12,"bbox":[354,446,50,18]}
+{"kind":"textbox","id":"sh/futojexo","slide":12,"text":"/api","textPreview":"/api","textChars":4,"textLines":1,"bbox":[357,206,80,30]}
+{"kind":"textbox","id":"sh/etk7qtg3","slide":12,"text":"/ai","textPreview":"/ai","textChars":3,"textLines":1,"bbox":[359,409,75,30]}
+{"kind":"shape","id":"sh/pkv6p8fq","slide":12,"bbox":[866,180,358,106]}
+{"kind":"textbox","id":"sh/ojmpw3yl","slide":12,"text":"VWorld","textPreview":"VWorld","textChars":6,"textLines":1,"bbox":[884,195,322,38]}
+{"kind":"textbox","id":"sh/8zeh8bat","slide":12,"text":"행정구역 경계","textPreview":"행정구역 경계","textChars":7,"textLines":1,"bbox":[884,234,322,47]}
+{"kind":"shape","id":"sh/90nihwre","slide":12,"bbox":[792,223,53,18]}
+{"kind":"shape","id":"sh/mdcz61sn","slide":12,"bbox":[866,336,358,106]}
+{"kind":"textbox","id":"sh/7el0f698","slide":12,"text":"데이터와 모델","textPreview":"데이터와 모델","textChars":7,"textLines":1,"bbox":[884,351,322,38]}
+{"kind":"textbox","id":"sh/w3ehcbqp","slide":12,"text":"MySQL · 원자료 · Joblib","textPreview":"MySQL · 원자료 · Joblib","textChars":20,"textLines":1,"bbox":[884,390,322,47]}
+{"kind":"shape","id":"sh/h4nilgra","slide":12,"bbox":[792,376,53,18]}
+{"kind":"shape","id":"sh/u1wza18z","slide":12,"bbox":[866,480,358,121]}
+{"kind":"textbox","id":"sh/v250j69k","slide":12,"text":"근거와 생성","textPreview":"근거와 생성","textChars":6,"textLines":1,"bbox":[884,495,322,38]}
+{"kind":"textbox","id":"sh/c7ah0ral","slide":12,"text":"공식 문서 · Qwen · Gemma\nOpenAI API","textPreview":"공식 문서 · Qwen · Gemma | OpenAI API","textChars":31,"textLines":2,"bbox":[884,534,322,62]}
+{"kind":"shape","id":"sh/d83y9cr6","slide":12,"bbox":[792,529,53,18]}
+{"kind":"textbox","id":"sh/f29kfuto","slide":12,"text":"현재 개발 포트: React 5176 · Backend 8100 · AI 8112 · Streamlit 8501","textPreview":"현재 개발 포트: React 5176 · Backend 8100 · AI 8112 · Streamlit 8501","textChars":62,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"notes","id":"nt/3opyqs","slide":12,"text":"현재 일반 Backend는 주로 VWorld 지도 경계를 제공하고 관광 데이터 조회·MySQL·ML·LLM·저장·출력은 AI Server에 있습니다. React는 /api와 /ai를 각각 호출하며 Vite 개발 프록시가 두 서버에 전달합니다. 일반 Backend를 거쳐서만 AI Server에 가는 구조로 설명하면 틀립니다. start-dev.ps1과 vite.config.js의 현재 기본 포트는 8100, 8112입니다. 초기 설계의 8000/8001과 구분합니다. Streamlit 구조 탐색기는 별도 보조 서비스입니다. 운영 설계에서는 Nginx가 정적 React와 두 API를 라우팅하며 AWS 배포 완료는 아직 확인되지 않았습니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/frontend/vite.config.js\nC:/Users/Admin/mbca/TP2-3/backend/app/main.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/main.py\nC:/Users/Admin/mbca/TP2-3/start-dev.ps1\nC:/Users/Admin/mbca/TP2-3/docs/ARCHITECTURE.md"}
+{"kind":"slide","id":"sl/12to24","slide":13,"title":"OLIGO-K","textShapes":10}
+{"kind":"textbox","id":"sh/qlgr6lwj","slide":13,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/do7a10fu","slide":13,"text":"3.2 React 페이지와 공통 컴포넌트","textPreview":"3.2 React 페이지와 공통 컴포넌트","textChars":22,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/sny98ve9","slide":13,"text":"3. 시스템 구조","textPreview":"3. 시스템 구조","textChars":9,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/fqps3ax0","slide":13,"text":"13 / 38","textPreview":"13 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/epgra5wf","slide":13,"text":"src/main.jsx\n└─ App.jsx\n   ├─ routes.js\n   └─ lazy + Suspense\n      ├─ TourismDashboardPage\n      ├─ TourismPlanningPage\n      ├─ TourismStrategyPage\n      └─ SavedStrategyPlansBoardPage","textPreview":"src/main.jsx | └─ App.jsx |    ├─ routes.js |    └─ lazy + Suspense |       ├─ TourismDashboardPage |       ├─ TourismPlanningPage |     ...","textChars":186,"textLines":8,"bbox":[56,188,635,377]}
+{"kind":"textbox","id":"sh/1s7a5kf6","slide":13,"text":"공통 화면","textPreview":"공통 화면","textChars":5,"textLines":1,"bbox":[771,185,415,43]}
+{"kind":"textbox","id":"sh/0ry9cfel","slide":13,"text":"WorkspaceShell\nRegionWorkspacePicker\nWorkspaceAssistantPanel","textPreview":"WorkspaceShell | RegionWorkspacePicker | WorkspaceAssistantPanel","textChars":60,"textLines":3,"bbox":[771,240,450,125]}
+{"kind":"shape","id":"sh/ne9s7axc","slide":13,"bbox":[771,391,453,1]}
+{"kind":"textbox","id":"sh/2t0be5wr","slide":13,"text":"데이터 표시","textPreview":"데이터 표시","textChars":6,"textLines":1,"bbox":[771,419,420,40]}
+{"kind":"textbox","id":"sh/07ixgfy9","slide":13,"text":"Leaflet 지도 · Recharts 차트\nAPI 모듈과 입력 상태 관리","textPreview":"Leaflet 지도 · Recharts 차트 | API 모듈과 입력 상태 관리","textChars":41,"textLines":2,"bbox":[771,478,440,90]}
+{"kind":"textbox","id":"sh/18repkfu","slide":13,"text":"별도 React Router 패키지 없이 pathname을 해석하며, 페이지를 지연 로딩합니다.","textPreview":"별도 React Router 패키지 없이 pathname을 해석하며, 페이지를 지연 로딩합니다.","textChars":53,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"notes","id":"nt/12to24","slide":13,"text":"프런트엔드는 React 19와 Vite를 사용합니다. App.jsx는 window.location.pathname을 routes.resolveAppRoute에 넘겨 pageId를 찾고 해당 페이지를 lazy import합니다. Suspense가 대기 화면을 제공합니다. routes.js는 정규 경로, /diagnosis와 /proposal 같은 이전 주소 별칭, 알 수 없는 경로 처리를 담당합니다. 일반적인 React Router 구성으로 소개하지 않습니다. 공통 shell과 region picker가 지역 상태 및 페이지 이동을 묶고 assistant panel이 챗봇을 제공합니다. 입력 조건은 지역별로 브라우저 localStorage에 보관합니다. 지도는 Leaflet, 차트는 Recharts이며 서버의 숫자를 화면에 렌더링합니다. 팀 학습용 /ml-test, /openai-test, /react-test, /llm-control, /project-tree도 별도 lazy 페이지입니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/frontend/src/main.jsx\nC:/Users/Admin/mbca/TP2-3/frontend/src/App.jsx\nC:/Users/Admin/mbca/TP2-3/frontend/src/routes.js\nC:/Users/Admin/mbca/TP2-3/frontend/src/components/WorkspaceShell.jsx\nC:/Users/Admin/mbca/TP2-3/frontend/src/components/RegionWorkspacePicker.jsx\nC:/Users/Admin/mbca/TP2-3/frontend/src/components/WorkspaceAssistantPanel.jsx\nC:/Users/Admin/mbca/TP2-3/frontend/package.json"}
+{"kind":"slide","id":"sl/fbik27","slide":14,"title":"OLIGO-K","textShapes":5}
+{"kind":"textbox","id":"sh/zulcb6lc","slide":14,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/0vut4b2x","slide":14,"text":"3.3 오래 걸리는 생성 요청의 처리","textPreview":"3.3 오래 걸리는 생성 요청의 처리","textChars":20,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/lw3udg3i","slide":14,"text":"3. 시스템 구조","textPreview":"3. 시스템 구조","textChars":9,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/qpsby1kv","slide":14,"text":"14 / 38","textPreview":"14 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/crat0r21","slide":14,"text":"데이터 분석 / 공식사례 확인 / 기획안 생성 / 품질검토는 실제 실행 지점에서 갱신됩니다.","textPreview":"데이터 분석 / 공식사례 확인 / 기획안 생성 / 품질검토는 실제 실행 지점에서 갱신됩니다.","textChars":51,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"table","id":"tb/axo3ehgj","slide":14,"name":"","rows":6,"cols":3,"preview":"순서 | React / API | 서버에서 처리하는 일","bbox":[56,185,1168,379]}
+{"kind":"notes","id":"nt/fbik27","slide":14,"text":"긴 모델 작업을 하나의 브라우저 요청이 끝날 때까지 기다리게 하지 않습니다. 생성 API가 작업 ID를 반환하고 서버의 _run_strategy_report_job이 작업합니다. 화면은 3초 간격으로 상태를 조회합니다. generation_progress.py의 ContextVar 콜백이 orchestrator 실제 단계에서 진행 번호와 설명을 전달합니다. 완료된 파트는 채운 색, 진행 파트는 애니메이션으로 구분합니다. 다른 화면에 갔다 돌아오면 서버의 상태를 다시 읽습니다. 서버가 재시작되면 동일 생성이 자동으로 이어지는 분산 작업 큐는 아니며 중단 상태를 처리합니다. 명시적 저장과 자동 작업 상태 보관의 차이를 설명합니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/ai_server/app/main.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/generation_progress.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/strategy_store.py\nC:/Users/Admin/mbca/TP2-3/frontend/src/pages/TourismStrategyPage.jsx"}
+{"kind":"slide","id":"sl/s5a803","slide":15,"title":"OLIGO-K","textShapes":18}
+{"kind":"textbox","id":"sh/ytszu9oj","slide":15,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/lw3iponu","slide":15,"text":"4.1 공식 원자료의 수집과 전처리","textPreview":"4.1 공식 원자료의 수집과 전처리","textChars":19,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/kvuhwj69","slide":15,"text":"4. 데이터와 머신러닝","textPreview":"4. 데이터와 머신러닝","textChars":12,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/b61gju5s","slide":15,"text":"15 / 38","textPreview":"15 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"shape","id":"sh/a5szqpo7","slide":15,"bbox":[56,187,269,124]}
+{"kind":"textbox","id":"sh/xsjyl4ny","slide":15,"text":"공식 다운로드","textPreview":"공식 다운로드","textChars":7,"textLines":1,"bbox":[74,202,233,38]}
+{"kind":"textbox","id":"sh/w7ahsz6d","slide":15,"text":"데이터랩 CSV · Excel · ZIP","textPreview":"데이터랩 CSV · Excel · ZIP","textChars":22,"textLines":1,"bbox":[74,241,233,65]}
+{"kind":"shape","id":"sh/n2hgvu5w","slide":15,"bbox":[331,240,18,18]}
+{"kind":"shape","id":"sh/m18zmpob","slide":15,"bbox":[355,187,269,124]}
+{"kind":"textbox","id":"sh/wzi9oz21","slide":15,"text":"표준 월별 표","textPreview":"표준 월별 표","textChars":7,"textLines":1,"bbox":[373,202,233,38]}
+{"kind":"textbox","id":"sh/x0rah43m","slide":15,"text":"지역코드 + 기준월 + 단위","textPreview":"지역코드 + 기준월 + 단위","textChars":15,"textLines":1,"bbox":[373,241,233,65]}
+{"kind":"shape","id":"sh/ax0rmpkv","slide":15,"bbox":[630,240,18,18]}
+{"kind":"shape","id":"sh/by9sfulg","slide":15,"bbox":[654,187,269,124]}
+{"kind":"textbox","id":"sh/obi9kf2p","slide":15,"text":"검증·저장","textPreview":"검증·저장","textChars":5,"textLines":1,"bbox":[672,202,233,38]}
+{"kind":"textbox","id":"sh/9wradk3a","slide":15,"text":"processed · MySQL · 출처","textPreview":"processed · MySQL · 출처","textChars":22,"textLines":1,"bbox":[672,241,233,65]}
+{"kind":"shape","id":"sh/m9gripkz","slide":15,"bbox":[929,240,18,18]}
+{"kind":"shape","id":"sh/na9sbal4","slide":15,"bbox":[953,187,269,124]}
+{"kind":"textbox","id":"sh/872twj29","slide":15,"text":"학습·조회","textPreview":"학습·조회","textChars":5,"textLines":1,"bbox":[971,202,233,38]}
+{"kind":"textbox","id":"sh/tsbapoje","slide":15,"text":"지역별 ML · 대시보드","textPreview":"지역별 ML · 대시보드","textChars":13,"textLines":1,"bbox":[971,241,233,65]}
+{"kind":"textbox","id":"sh/hora9oby","slide":15,"text":"원자료 보존","textPreview":"원자료 보존","textChars":6,"textLines":1,"bbox":[56,367,357.33,55]}
+{"kind":"shape","id":"sh/gny9gjud","slide":15,"bbox":[56,431,357.33,1]}
+{"kind":"textbox","id":"sh/fmps7ets","slide":15,"text":"data/raw는 수정하지 않음\n코드로 변환 과정 재현\n결측·0·미집계 구분","textPreview":"data/raw는 수정하지 않음 | 코드로 변환 과정 재현 | 결측·0·미집계 구분","textChars":42,"textLines":3,"bbox":[56,457,357.33,240]}
+{"kind":"textbox","id":"sh/ulgre9c7","slide":15,"text":"서로 다른 외부 API","textPreview":"서로 다른 외부 API","textChars":12,"textLines":1,"bbox":[461.33,367,357.33,55]}
+{"kind":"shape","id":"sh/tk7a54bm","slide":15,"bbox":[461.33,431,357.33,1]}
+{"kind":"textbox","id":"sh/sjy9czu1","slide":15,"text":"TourAPI: 관광지·주소·이미지\nVWorld: 지도 경계\nOpenAI: 조사·생성·검토","textPreview":"TourAPI: 관광지·주소·이미지 | VWorld: 지도 경계 | OpenAI: 조사·생성·검토","textChars":50,"textLines":3,"bbox":[461.33,457,357.33,240]}
+{"kind":"textbox","id":"sh/7ips3utg","slide":15,"text":"활용 범위","textPreview":"활용 범위","textChars":5,"textLines":1,"bbox":[866.67,367,357.33,55]}
+{"kind":"shape","id":"sh/6hgrapcb","slide":15,"bbox":[866.67,431,357.33,1]}
+{"kind":"textbox","id":"sh/5g7q14vq","slide":15,"text":"등록 지역 89개\n지역별 7개 예측 지표\n원자료와 MySQL을 함께 조회","textPreview":"등록 지역 89개 | 지역별 7개 예측 지표 | 원자료와 MySQL을 함께 조회","textChars":40,"textLines":3,"bbox":[866.67,457,357.33,240]}
+{"kind":"notes","id":"nt/s5a803","slide":15,"text":"한국관광 데이터랩은 공식 다운로드나 허용 API로 수집하며 사이트를 크롤링하지 않습니다. regional_datalab_data.py가 표준 CSV 또는 ZIP을 읽고 지역별 어댑터가 같은 월별 표 계약을 제공합니다. 지역명만으로 결합하지 않고 검증된 region_code와 year_month를 사용합니다. 단위가 천원인 원자료는 원 단위로 변환하고 방문·외지인·숙박 정의를 구분합니다. 원본은 보존하고 파생 파일과 SQL 적재를 재현합니다. 원자료 최신월은 대부분 2026-06, 강남은 2026-07입니다. 2026-09-10 준비도 기록의 89개는 등록·자료 점검 대상 수이며 전국 모든 시군구나 모두 우수한 예측이라는 뜻은 아닙니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/ai_server/ml/regional_datalab_data.py\nC:/Users/Admin/mbca/TP2-3/ai_server/ml/standard_region_pipeline.py\nC:/Users/Admin/mbca/TP2-3/ai_server/ml/validation.py\nC:/Users/Admin/mbca/TP2-3/data_pipeline/tools/import_mysql_bundle.py\nC:/Users/Admin/mbca/TP2-3/storage/region_readiness_audit.json"}
+{"kind":"slide","id":"sl/m4uuyb","slide":16,"title":"OLIGO-K","textShapes":18}
+{"kind":"textbox","id":"sh/2x07i1gb","slide":16,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/pkbqtwf2","slide":16,"text":"4.2 MySQL의 핵심 데이터 관계","textPreview":"4.2 MySQL의 핵심 데이터 관계","textChars":20,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/4j2pkryh","slide":16,"text":"4. 데이터와 머신러닝","textPreview":"4. 데이터와 머신러닝","textChars":12,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/fu98nmx0","slide":16,"text":"16 / 38","textPreview":"16 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"shape","id":"sh/ut07ehgf","slide":16,"bbox":[56,182,305,101]}
+{"kind":"textbox","id":"sh/hwrqpwfq","slide":16,"text":"dim_region","textPreview":"dim_region","textChars":10,"textLines":1,"bbox":[74,197,269,38]}
+{"kind":"textbox","id":"sh/gvipgryl","slide":16,"text":"PK region_code","textPreview":"PK region_code","textChars":14,"textLines":1,"bbox":[74,236,269,42]}
+{"kind":"shape","id":"sh/zqt8z6x4","slide":16,"bbox":[450,182,420,101]}
+{"kind":"textbox","id":"sh/epkrqlgj","slide":16,"text":"fact_tourism_monthly","textPreview":"fact_tourism_monthly","textChars":20,"textLines":1,"bbox":[468,197,384,38]}
+{"kind":"textbox","id":"sh/k7qdkbyl","slide":16,"text":"PK region_code + year_month","textPreview":"PK region_code + year_month","textChars":27,"textLines":1,"bbox":[468,236,384,42]}
+{"kind":"shape","id":"sh/58zetgz6","slide":16,"bbox":[379,223,50,18]}
+{"kind":"textbox","id":"sh/yl8vi1gv","slide":16,"text":"1 : N","textPreview":"1 : N","textChars":5,"textLines":1,"bbox":[381,188,70,30]}
+{"kind":"shape","id":"sh/jmhwr6h0","slide":16,"bbox":[941,182,283,155]}
+{"kind":"textbox","id":"sh/wjqdgrip","slide":16,"text":"출처 추적","textPreview":"출처 추적","textChars":5,"textLines":1,"bbox":[959,197,247,38]}
+{"kind":"textbox","id":"sh/xkzepwza","slide":16,"text":"지표별 원자료 연결\ndata_source","textPreview":"지표별 원자료 연결 | data_source","textChars":22,"textLines":2,"bbox":[959,236,247,96]}
+{"kind":"shape","id":"sh/ahove10j","slide":16,"bbox":[884,222,38,18]}
+{"kind":"shape","id":"sh/bixwn6h4","slide":16,"bbox":[56,386,389,145]}
+{"kind":"textbox","id":"sh/of6dcrid","slide":16,"text":"비교 맥락","textPreview":"비교 맥락","textChars":5,"textLines":1,"bbox":[74,401,353,38]}
+{"kind":"textbox","id":"sh/9gfelwzy","slide":16,"text":"regional_planning_context\nregional_peer_comparison","textPreview":"regional_planning_context | regional_peer_comparison","textChars":50,"textLines":2,"bbox":[74,440,353,86]}
+{"kind":"shape","id":"sh/p0n2tonq","slide":16,"bbox":[478,386,361,145]}
+{"kind":"textbox","id":"sh/4zel0j65","slide":16,"text":"기획 결과","textPreview":"기획 결과","textChars":5,"textLines":1,"bbox":[496,401,325,38]}
+{"kind":"textbox","id":"sh/3y5kre5k","slide":16,"text":"strategy_reports\n본문 JSON · 지역 · 파일 경로","textPreview":"strategy_reports | 본문 JSON · 지역 · 파일 경로","textChars":37,"textLines":2,"bbox":[496,440,325,86]}
+{"kind":"shape","id":"sh/2xw3y9oz","slide":16,"bbox":[873,386,351,145]}
+{"kind":"textbox","id":"sh/hwn2p4ne","slide":16,"text":"생성·성과 기록","textPreview":"생성·성과 기록","textChars":8,"textLines":1,"bbox":[891,401,315,38]}
+{"kind":"textbox","id":"sh/gve1wj69","slide":16,"text":"strategy_report_jobs\n사업 전후 측정 테이블","textPreview":"strategy_report_jobs | 사업 전후 측정 테이블","textChars":33,"textLines":2,"bbox":[891,440,315,86]}
+{"kind":"textbox","id":"sh/fulkne5o","slide":16,"text":"관측 수치·출처·기획 기록은 MySQL, 저장 모델은 Joblib, 생성 문서는 파일로 관리합니다.","textPreview":"관측 수치·출처·기획 기록은 MySQL, 저장 모델은 Joblib, 생성 문서는 파일로 관리합니다.","textChars":55,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"notes","id":"nt/m4uuyb","slide":16,"text":"상단은 스키마의 주요 FK 관계를 단순화한 ERD입니다. 지역 한 개에 여러 월별 지표가 연결되고 지표별 출처 테이블에서 원자료를 추적합니다. 하단은 관광기획 맥락, peer 비교, 보고서, 작업 상태, 전후 측정 기록의 역할 묶음입니다. 하단의 모든 테이블이 물리적 FK로 직접 연결됐다는 뜻은 아닙니다. 전체 SQL에는 추가 적재·관광지·ML·전국보조지표 테이블이 있으나 발표에서는 생성 경로에 필요한 구조를 제시합니다. Joblib 메타데이터와 실제 서비스 예측 경로가 있으므로 DB의 ml_prediction 테이블을 모든 예측의 유일한 저장소라고 설명하지 않습니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/database/mysql/001_nationwide_tourism_data.sql\nC:/Users/Admin/mbca/TP2-3/ai_server/app/strategy_store.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/nationwide_context_store.py"}
+{"kind":"slide","id":"sl/q08kcc","slide":17,"title":"OLIGO-K","textShapes":5}
+{"kind":"textbox","id":"sh/gna9gfa9","slide":17,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/vm187a9o","slide":17,"text":"4.3 7개 ML 결과를 사용하는 위치","textPreview":"4.3 7개 ML 결과를 사용하는 위치","textChars":21,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/ulsre5sj","slide":17,"text":"4. 데이터와 머신러닝","textPreview":"4. 데이터와 머신러닝","textChars":12,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/5c3qd4r6","slide":17,"text":"17 / 38","textPreview":"17 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/3q18bu90","slide":17,"text":"검색 ≠ 방문·예약 완료. 나머지 5개 지표의 본문 반영은 선택 사업과 LLM의 작성 결과에 따라 달라집니다.","textPreview":"검색 ≠ 방문·예약 완료. 나머지 5개 지표의 본문 반영은 선택 사업과 LLM의 작성 결과에 따라 달라집니다.","textChars":61,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"table","id":"tb/1ozydkfa","slide":17,"name":"","rows":8,"cols":3,"preview":"예측 지표 | 비교·조사에 사용하는 의미 | 사용 위치","bbox":[56,178,1168,407]}
+{"kind":"notes","id":"nt/q08kcc","slide":17,"text":"7개 지표는 같은 모델 하나의 출력 7개라고만 설명하기보다 지역별로 각 Target의 모델 또는 기준선을 선택한다고 설명합니다. 방문자와 소비액은 서로의 시차 feature를 함께 쓰고 나머지 지표는 해당 지표 자체 시차와 계절성을 씁니다. 방문·소비는 최종 문서의 ML 그래프와 KPI 계산에 직접 들어갑니다. 5개 보조 지표는 관리자 차트와 저장 ml_analysis에 보존되며 조사 질문과 후보 설계 입력에 사용합니다. 모두가 최종 본문에 반드시 인용되는 것은 아닙니다. 예측을 LLM에 공급했다는 사실과 실제 답변의 인과적 기여도는 다릅니다. 프롬프트 입력, planning_decision, 출처, 본문을 함께 보아야 실제 반영을 설명할 수 있습니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/ai_server/ml/module_usage.py\nC:/Users/Admin/mbca/TP2-3/ai_server/ml/gangnam_forecast.py\nC:/Users/Admin/mbca/TP2-3/ai_server/ml/planning_evidence.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/report_projection.py"}
+{"kind":"slide","id":"sl/5bvw6j","slide":18,"title":"OLIGO-K","textShapes":14}
+{"kind":"textbox","id":"sh/mpon2xsr","slide":18,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/9sf6dcb2","slide":18,"text":"4.4 예측 모델의 학습과 평가 절차","textPreview":"4.4 예측 모델의 학습과 평가 절차","textChars":20,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/8r6547ah","slide":18,"text":"4. 데이터와 머신러닝","textPreview":"4. 데이터와 머신러닝","textChars":12,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/z2x472t0","slide":18,"text":"18 / 38","textPreview":"18 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/y14nyxsf","slide":18,"text":"입력: 1·3·12개월 전 값 + 예측월의 계절 정보","textPreview":"입력: 1·3·12개월 전 값 + 예측월의 계절 정보","textChars":29,"textLines":1,"bbox":[56,176,1168,49]}
+{"kind":"shape","id":"sh/lofm9cb6","slide":18,"bbox":[56,267,371,152]}
+{"kind":"textbox","id":"sh/036507al","slide":18,"text":"학습","textPreview":"학습","textChars":2,"textLines":1,"bbox":[74,282,335,38]}
+{"kind":"textbox","id":"sh/byd43it4","slide":18,"text":"2025.01–11\n과거 Target 11개월","textPreview":"2025.01–11 | 과거 Target 11개월","textChars":25,"textLines":2,"bbox":[74,321,335,93]}
+{"kind":"shape","id":"sh/qx4nudsj","slide":18,"bbox":[432,334,18,18]}
+{"kind":"shape","id":"sh/cjm94rep","slide":18,"bbox":[453,267,371,152]}
+{"kind":"textbox","id":"sh/dkvqdwva","slide":18,"text":"모델 선택","textPreview":"모델 선택","textChars":5,"textLines":1,"bbox":[471,282,335,38]}
+{"kind":"textbox","id":"sh/qh4r21wz","slide":18,"text":"2025.12–2026.02\nValidation MAE 비교","textPreview":"2025.12–2026.02 | Validation MAE 비교","textChars":33,"textLines":2,"bbox":[471,321,335,93]}
+{"kind":"shape","id":"sh/bid8b6d4","slide":18,"bbox":[829,334,18,18]}
+{"kind":"shape","id":"sh/ofm90ret","slide":18,"bbox":[850,267,371,152]}
+{"kind":"textbox","id":"sh/pgvq9wve","slide":18,"text":"최종 평가","textPreview":"최종 평가","textChars":5,"textLines":1,"bbox":[868,282,335,38]}
+{"kind":"textbox","id":"sh/2tkryhwn","slide":18,"text":"2026.03–06\n선택에 쓰지 않은 Test","textPreview":"2026.03–06 | 선택에 쓰지 않은 Test","textChars":25,"textLines":2,"bbox":[868,321,335,93]}
+{"kind":"textbox","id":"sh/3ud87md8","slide":18,"text":"후보","textPreview":"후보","textChars":2,"textLines":1,"bbox":[56,468,160,40]}
+{"kind":"textbox","id":"sh/8b69cvex","slide":18,"text":"RandomForestRegressor / LinearRegression\n각 지표의 후보와 전년 동월 기준선을 비교","textPreview":"RandomForestRegressor / LinearRegression | 각 지표의 후보와 전년 동월 기준선을 비교","textChars":64,"textLines":2,"bbox":[243,465,958,94]}
+{"kind":"textbox","id":"sh/9cfalgvi","slide":18,"text":"원주시 저장 모델 기준. 평가 이후 전체 관측 이력으로 최종 fit하고 Joblib·메타데이터를 저장합니다.","textPreview":"원주시 저장 모델 기준. 평가 이후 전체 관측 이력으로 최종 fit하고 Joblib·메타데이터를 저장합니다.","textChars":60,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"notes","id":"nt/5bvw6j","slide":18,"text":"원주 원자료는 2024-01부터 2026-06까지 30개월입니다. 12개월 시차가 필요해 지도학습 Target은 2025-01부터 시작합니다. evaluation.select_and_evaluate는 Validation 3개월 MAE로 후보와 계절 기준선을 선택하고 최근 4개월 Test로 선택 모델 성능을 평가합니다. Test를 보고 사후에 모델을 바꾸지 않습니다. 방문자·내비·숙박검색 후보는 RandomForestRegressor(n_estimators=300,max_depth=3,min_samples_leaf=2,random_state=42), 소비·숙박일수·숙박률·체류시간 후보는 LinearRegression입니다. 모든 Target에 두 회귀모델을 경쟁시키는 구조는 아닙니다. 월은 sin/cos로 계절성을 표현합니다. 기준선이 선택되면 회귀모델을 저장하지 않고 전년 동월 값을 사용합니다. 웹에서 생성할 때마다 재학습하지 않습니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/ai_server/ml/gangnam_forecast.py\nC:/Users/Admin/mbca/TP2-3/ai_server/ml/evaluation.py\nC:/Users/Admin/mbca/TP2-3/artifacts/ml/51130/demand_model.metadata.json\nC:/Users/Admin/mbca/TP2-3/ai_server/ml/scripts/train_regions.py"}
+{"kind":"slide","id":"sl/ezd2ui","slide":19,"title":"OLIGO-K","textShapes":8}
+{"kind":"textbox","id":"sh/r2t87ytc","slide":19,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/c32pg3ux","slide":19,"text":"4.5 지역별 방문자 예측 성능 비교","textPreview":"4.5 지역별 방문자 예측 성능 비교","textChars":20,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/d4bq98bi","slide":19,"text":"4. 데이터와 머신러닝","textPreview":"4. 데이터와 머신러닝","textChars":12,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/e5k7idc3","slide":19,"text":"19 / 38","textPreview":"19 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/0r2pk3ut","slide":19,"text":"Test MAPE","textPreview":"Test MAPE","textChars":9,"textLines":1,"bbox":[844,180,348,49]}
+{"kind":"textbox","id":"sh/1svqd8be","slide":19,"text":"강남구 3.05%\n기준선보다 낮은 오차","textPreview":"강남구 3.05% | 기준선보다 낮은 오차","textChars":21,"textLines":2,"bbox":[844,257,350,106]}
+{"kind":"textbox","id":"sh/mt47mdsz","slide":19,"text":"원주시 4.37%\n기준선 3.99%보다 높음","textPreview":"원주시 4.37% | 기준선 3.99%보다 높음","textChars":24,"textLines":2,"bbox":[844,399,355,105]}
+{"kind":"textbox","id":"sh/nud8fitk","slide":19,"text":"강남 2026.04–07 / 원주 2026.03–06, 각각 4개월. 서로 다른 기간의 사례 비교이며 전국 평균이 아닙니다.","textPreview":"강남 2026.04–07 / 원주 2026.03–06, 각각 4개월. 서로 다른 기간의 사례 비교이며 전국 평균이 아닙니다.","textChars":69,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"chart","id":"ch/vapo32h0","slide":19,"name":"","chartType":"bar","bbox":[56,190,732,400]}
+{"kind":"notes","id":"nt/ezd2ui","slide":19,"text":"수치는 활성 지역별 artifacts/ml/11680 및 51130의 demand_model.metadata.json에서 읽었습니다. 강남 방문자 선택 모델 Test MAE는 537,513.50명, 기준은 673,789명이며 MAPE는 3.05%, 3.78%입니다. 원주는 103,646.64명 대 92,238.25명, MAPE 4.37% 대 3.99%입니다. 원주 모델은 Validation에서는 우수했지만 Test에서는 기준선보다 나빴습니다. 이 결과를 숨기거나 모든 지역에서 모델이 우수하다고 발표하지 않습니다. MAPE는 100에서 빼서 정확도라고 표현하지 않습니다. Test가 4개월로 짧다는 점과 지역별 기간이 다르다는 점을 함께 설명합니다. 1~3개월 재귀 예측의 별도 평가도 metadata에 있으며 4~12개월은 탐색 전망입니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/artifacts/ml/11680/demand_model.metadata.json\nC:/Users/Admin/mbca/TP2-3/artifacts/ml/51130/demand_model.metadata.json\nC:/Users/Admin/mbca/TP2-3/ai_server/ml/evaluation.py\nC:/Users/Admin/mbca/TP2-3/ai_server/ml/planning_evidence.py"}
+{"kind":"slide","id":"sl/lj364e","slide":20,"title":"OLIGO-K","textShapes":19}
+{"kind":"textbox","id":"sh/y98za1cz","slide":20,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/lczilgba","slide":20,"text":"4.6 예측값이 기획안까지 전달되는 과정","textPreview":"4.6 예측값이 기획안까지 전달되는 과정","textChars":22,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/kbqhcbu5","slide":20,"text":"4. 데이터와 머신러닝","textPreview":"4. 데이터와 머신러닝","textChars":12,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/bmx0f6t8","slide":20,"text":"20 / 38","textPreview":"20 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"shape","id":"sh/aloz61cn","slide":20,"bbox":[56,202,269,120]}
+{"kind":"textbox","id":"sh/x8fihgbe","slide":20,"text":"저장 모델 추론","textPreview":"저장 모델 추론","textChars":8,"textLines":1,"bbox":[74,217,233,38]}
+{"kind":"textbox","id":"sh/w76h8but","slide":20,"text":"pipeline.predict","textPreview":"pipeline.predict","textChars":16,"textLines":1,"bbox":[74,256,233,61]}
+{"kind":"shape","id":"sh/v210rqts","slide":20,"bbox":[331,253,18,18]}
+{"kind":"shape","id":"sh/uhsji5c7","slide":20,"bbox":[355,202,269,120]}
+{"kind":"textbox","id":"sh/c7y1gr6p","slide":20,"text":"수치·신호 묶음","textPreview":"수치·신호 묶음","textChars":8,"textLines":1,"bbox":[373,217,233,38]}
+{"kind":"textbox","id":"sh/d8729cna","slide":20,"text":"planning_evidence.py","textPreview":"planning_evidence.py","textChars":20,"textLines":1,"bbox":[373,256,233,61]}
+{"kind":"shape","id":"sh/q5gjehoj","slide":20,"bbox":[630,253,18,18]}
+{"kind":"shape","id":"sh/r6pk7m54","slide":20,"bbox":[654,202,269,120]}
+{"kind":"textbox","id":"sh/43e1c76d","slide":20,"text":"공식 사례 조사","textPreview":"공식 사례 조사","textChars":8,"textLines":1,"bbox":[672,217,233,38]}
+{"kind":"textbox","id":"sh/p4n25cny","slide":20,"text":"research_questions","textPreview":"research_questions","textChars":18,"textLines":1,"bbox":[672,256,233,61]}
+{"kind":"shape","id":"sh/2hwjaxon","slide":20,"bbox":[929,253,18,18]}
+{"kind":"shape","id":"sh/325k3258","slide":20,"bbox":[953,202,269,120]}
+{"kind":"textbox","id":"sh/gfe1876h","slide":20,"text":"후보·본문 작성","textPreview":"후보·본문 작성","textChars":8,"textLines":1,"bbox":[971,217,233,38]}
+{"kind":"textbox","id":"sh/hgn21sn2","slide":20,"text":"Qwen 비교 / Gemma 작성","textPreview":"Qwen 비교 / Gemma 작성","textChars":18,"textLines":1,"bbox":[971,256,233,61]}
+{"kind":"textbox","id":"sh/xkvqp4be","slide":20,"text":"forecasts","textPreview":"forecasts","textChars":9,"textLines":1,"bbox":[56,381,320,40]}
+{"kind":"textbox","id":"sh/wzm9gzu9","slide":20,"text":"월별 예측값·단위·기간\nget_ml_forecast로 조회","textPreview":"월별 예측값·단위·기간 | get_ml_forecast로 조회","textChars":32,"textLines":2,"bbox":[56,442,345,120]}
+{"kind":"textbox","id":"sh/vyd8nuto","slide":20,"text":"signals","textPreview":"signals","textChars":7,"textLines":1,"bbox":[454,381,320,40]}
+{"kind":"textbox","id":"sh/ax4repc3","slide":20,"text":"기간 합계·평균과 전년 비교\n모델 평가·신뢰도 전달","textPreview":"기간 합계·평균과 전년 비교 | 모델 평가·신뢰도 전달","textChars":28,"textLines":2,"bbox":[454,442,348,120]}
+{"kind":"textbox","id":"sh/9wvqlkbi","slide":20,"text":"research_questions","textPreview":"research_questions","textChars":18,"textLines":1,"bbox":[852,381,365,40]}
+{"kind":"textbox","id":"sh/8v2pcfux","slide":20,"text":"방문·검색 / 소비 / 숙박·체류\n세 묶음의 공식 조사 질문","textPreview":"방문·검색 / 소비 / 숙박·체류 | 세 묶음의 공식 조사 질문","textChars":33,"textLines":2,"bbox":[852,442,358,120]}
+{"kind":"textbox","id":"sh/nut8jatc","slide":20,"text":"예: 숙박검색과 숙박률의 흐름을 함께 보고 예약·숙박 연계 사례를 조사합니다. 사업 자동 확정 규칙은 아닙니다.","textPreview":"예: 숙박검색과 숙박률의 흐름을 함께 보고 예약·숙박 연계 사례를 조사합니다. 사업 자동 확정 규칙은 아닙니다.","textChars":62,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"notes","id":"nt/lj364e","slide":20,"text":"report_orchestrator.orchestrate_strategy_report가 먼저 build_planning_ml_evidence를 호출합니다. 지역 registry에서 pipeline을 찾아 저장 모델을 로드하고 사업 기간에 필요한 월을 재귀 예측합니다. planning_evidence는 forecasts, signals, model_evaluations, research_questions를 만들고 snapshot.ml_analysis에 넣습니다. decision_facts가 집계 신호를 forecast_windows에 복사합니다. CaseStudyAgent는 세 묶음 질문을 RAG 검색어 및 허용된 웹 조사 입력에 반영합니다. 로컬 Agent에서는 local_agent._prefetch_required_evidence가 get_ml_forecast 등을 실행하고 도구 결과를 JSON 또는 무손실 표로 모델 메시지에 붙입니다. Qwen은 이 숫자와 사례를 비교하고 Gemma는 선정 판단을 받아 실행안을 씁니다. 숙박검색과 숙박률 예시는 해석 방법을 보여 주는 조건부 예시이지 실제 성동구의 확정 원인 분석이 아닙니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/ai_server/ml/planning_evidence.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/decision_facts.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/report_orchestrator.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/case_study_agent.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/llm/local_agent.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/llm/evidence_tools.py"}
+{"kind":"slide","id":"sl/atrifo","slide":21,"title":"OLIGO-K","textShapes":9}
+{"kind":"textbox","id":"sh/n61g7u1w","slide":21,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/o7ah0z2h","slide":21,"text":"5.1 유사 지표 지역과 참고 사업의 선정","textPreview":"5.1 유사 지표 지역과 참고 사업의 선정","textChars":23,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/p8jy94jm","slide":21,"text":"5. 공식 근거와 AI Agent","textPreview":"5. 공식 근거와 AI Agent","textChars":18,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/e18zupkz","slide":21,"text":"21 / 38","textPreview":"21 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/f2hg3u1k","slide":21,"text":"① 관광지표로 비교 지역 탐색","textPreview":"① 관광지표로 비교 지역 탐색","textChars":16,"textLines":1,"bbox":[56,180,560,55]}
+{"kind":"shape","id":"sh/03qhwz25","slide":21,"bbox":[56,244,560,1]}
+{"kind":"textbox","id":"sh/14jy54jq","slide":21,"text":"최근 12개월 방문 규모의 로그값\n소비/방문 비율 · 숙박 비율\n평균 숙박일수\n\n표준화 후 유클리드 거리\n가까운 5개 지역 저장","textPreview":"최근 12개월 방문 규모의 로그값 | 소비/방문 비율 · 숙박 비율 | 평균 숙박일수 |  | 표준화 후 유클리드 거리 | 가까운 5개 지역 저장","textChars":71,"textLines":6,"bbox":[56,270,560,240]}
+{"kind":"textbox","id":"sh/qd8fqpk3","slide":21,"text":"② 공식 문서로 사업 연결","textPreview":"② 공식 문서로 사업 연결","textChars":14,"textLines":1,"bbox":[664,180,560,55]}
+{"kind":"shape","id":"sh/ryhgza1o","slide":21,"bbox":[664,244,560,1]}
+{"kind":"textbox","id":"sh/fulwbitg","slide":21,"text":"같은 시도·타시도·전국 사례 탐색\n운영 방식이 같은 사례 연결\n문서 등급과 source_id로 정렬\n\n예산서만 있는 후보 제외\n선택 조건과 제외 조건 적용","textPreview":"같은 시도·타시도·전국 사례 탐색 | 운영 방식이 같은 사례 연결 | 문서 등급과 source_id로 정렬 |  | 예산서만 있는 후보 제외 | 선택 조건과 제외 조건 적용","textChars":86,"textLines":6,"bbox":[664,270,560,240]}
+{"kind":"shape","id":"sh/utcv2dsv","slide":21,"bbox":[56,581,1168,1]}
+{"kind":"textbox","id":"sh/hgnedsrm","slide":21,"text":"지리·교통·주민 인구 유사성은 이 거리식에 없습니다. 7개 예측값으로 학습한 사업 추천 모델도 아닙니다.","textPreview":"지리·교통·주민 인구 유사성은 이 거리식에 없습니다. 7개 예측값으로 학습한 사업 추천 모델도 아닙니다.","textChars":58,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"notes","id":"nt/atrifo","slide":21,"text":"지역 peer와 기획 사례 연결은 서로 다른 단계입니다. data_pipeline/tools/build_planning_context.py의 build_peer_rows는 log1p(visitors_12m), spend_per_visitor_krw, overnight_ratio_avg_pct, avg_stay_days 네 값으로 z=(x-평균)/표준편차(ddof=0)를 계산합니다. 표준편차 0은 1로 대체하고 sqrt(sum((z_a-z_b)^2)) 거리로 자신을 뺀 상위 5지역을 저장합니다. 이는 관측 관광지표의 거리이며 감독학습 추천 모델이 아닙니다. 소비/방문 값도 동일 개인의 실제 객단가로 검증되지 않았습니다. case_scope는 같은 시도, 타시도 peer, 전국 운영 원리를 섞어 최대 8개 사례 카드를 구성합니다. case_recommendation.match_cases는 공식 URL과 operating_model이 있는 문서를 사업 방식에 맞추어 연결하고 예산 편성 문서를 제외합니다. 지리·교통·관광자원·인구의 유사성을 증명하는 알고리즘은 현재 없습니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/data_pipeline/tools/build_planning_context.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/nationwide_context_store.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/case_scope.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/case_recommendation.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/case_mechanism.py"}
+{"kind":"slide","id":"sl/3chy41","slide":22,"title":"OLIGO-K","textShapes":5}
+{"kind":"textbox","id":"sh/ofihkj2d","slide":22,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/ne9gbels","slide":22,"text":"5.2 공식 근거 검색과 출처 추적","textPreview":"5.2 공식 근거 검색과 출처 추적","textChars":19,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/md0zi9k7","slide":22,"text":"5. 공식 근거와 AI Agent","textPreview":"5. 공식 근거와 AI Agent","textChars":18,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/1sry943m","slide":22,"text":"22 / 38","textPreview":"22 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/zqpg7ulw","slide":22,"text":"source_id + URL + 페이지 + 원문 + 조회 기록","textPreview":"source_id + URL + 페이지 + 원문 + 조회 기록","textChars":34,"textLines":1,"bbox":[56,575,1168,45]}
+{"kind":"table","id":"tb/1ormlgje","slide":22,"name":"","rows":5,"cols":3,"preview":"근거 경로 | 실제로 하는 일 | 현재 범위","bbox":[56,185,1168,345]}
+{"kind":"notes","id":"nt/3chy41","slide":22,"text":"2026-09-10 로컬 파일과 Chroma 저장소를 읽어 확인한 수량입니다. 6개 사례 카드, 24개 페이지 청크, 3개 요약을 합쳐 서로 다른 공식 문서 33개라고 말하면 안 됩니다. 동일 문서의 여러 페이지가 포함돼 있습니다. OfficialTourismRagStore.search의 local_only 경로는 유료 임베딩 없이 키워드로 검색합니다. Chroma 검색·임베딩 코드는 구현돼 있으나 저장 임베딩은 0개이므로 의미 검색이 운영 중이거나 평가 완료됐다고 발표하지 않습니다. Evidence/CaseStudy의 OpenAI 공식 웹 조사와 문서 검색은 서로 다른 근거 취득 경로입니다. source_id와 chunk_id로 같은 문서 여러 페이지를 보존하고 read_collected_source 조회 여부를 확인합니다. 월별 수치표 전체는 RAG에서 계산하지 않습니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/ai_server/app/rag_store.py\nC:/Users/Admin/mbca/TP2-3/data/rag/official_case_studies.jsonl\nC:/Users/Admin/mbca/TP2-3/data/rag/official_reference_chunks.jsonl\nC:/Users/Admin/mbca/TP2-3/data/rag/official_reference_documents.jsonl\nC:/Users/Admin/mbca/TP2-3/ai_server/app/llm/evidence_tools.py"}
+{"kind":"slide","id":"sl/bje9oa","slide":23,"title":"OLIGO-K","textShapes":17}
+{"kind":"textbox","id":"sh/w7qd4zmp","slide":23,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/b6hcbul4","slide":23,"text":"5.3 5개 Agent의 고정 작업 흐름","textPreview":"5.3 5개 Agent의 고정 작업 흐름","textChars":22,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/a58v2p4j","slide":23,"text":"5. 공식 근거와 AI Agent","textPreview":"5. 공식 근거와 AI Agent","textChars":18,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/lcjeh436","slide":23,"text":"23 / 38","textPreview":"23 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"shape","id":"sh/kbad8zm1","slide":23,"bbox":[56,211,297,111]}
+{"kind":"textbox","id":"sh/ja1wfulg","slide":23,"text":"Evidence","textPreview":"Evidence","textChars":8,"textLines":1,"bbox":[74,226,261,38]}
+{"kind":"textbox","id":"sh/y9sv6p4v","slide":23,"text":"선택 지역의 관측·자원\n공식 근거","textPreview":"선택 지역의 관측·자원 | 공식 근거","textChars":18,"textLines":2,"bbox":[74,265,261,52]}
+{"kind":"shape","id":"sh/1gfu5032","slide":23,"bbox":[56,375,297,111]}
+{"kind":"textbox","id":"sh/0f6dwfmh","slide":23,"text":"CaseStudy","textPreview":"CaseStudy","textChars":9,"textLines":1,"bbox":[74,390,261,38]}
+{"kind":"textbox","id":"sh/uhcja9o7","slide":23,"text":"타지역의 운영 방식\n출처·성과 조건","textPreview":"타지역의 운영 방식 | 출처·성과 조건","textChars":19,"textLines":2,"bbox":[74,429,261,52]}
+{"kind":"shape","id":"sh/vil0je5s","slide":23,"bbox":[371,284,37,18]}
+{"kind":"shape","id":"sh/wju1cj6d","slide":23,"bbox":[371,411,37,18]}
+{"kind":"shape","id":"sh/h432loni","slide":23,"bbox":[428,282,252,156]}
+{"kind":"textbox","id":"sh/i5cje9o3","slide":23,"text":"Transferability","textPreview":"Transferability","textChars":15,"textLines":1,"bbox":[446,297,216,38]}
+{"kind":"textbox","id":"sh/j65kne5o","slide":23,"text":"Qwen\n후보 비교·선정","textPreview":"Qwen | 후보 비교·선정","textChars":13,"textLines":2,"bbox":[446,336,216,97]}
+{"kind":"shape","id":"sh/47e1gj69","slide":23,"bbox":[706,282,244,156]}
+{"kind":"textbox","id":"sh/58n2ponu","slide":23,"text":"Planner","textPreview":"Planner","textChars":7,"textLines":1,"bbox":[724,297,208,38]}
+{"kind":"textbox","id":"sh/69wjitof","slide":23,"text":"Gemma\n실행 기획안 작성","textPreview":"Gemma | 실행 기획안 작성","textChars":15,"textLines":2,"bbox":[724,336,208,97]}
+{"kind":"shape","id":"sh/ra5kry50","slide":23,"bbox":[976,282,248,156]}
+{"kind":"textbox","id":"sh/nep0zyls","slide":23,"text":"Reviewer","textPreview":"Reviewer","textChars":8,"textLines":1,"bbox":[994,297,212,38]}
+{"kind":"textbox","id":"sh/2dwj6tkn","slide":23,"text":"코드 + Qwen\n통과본 OpenAI 검수","textPreview":"코드 + Qwen | 통과본 OpenAI 검수","textChars":23,"textLines":2,"bbox":[994,336,212,97]}
+{"kind":"shape","id":"sh/pg7i183y","slide":23,"bbox":[685,343,16,18]}
+{"kind":"shape","id":"sh/ofy1832d","slide":23,"bbox":[955,343,16,18]}
+{"kind":"textbox","id":"sh/fa50vylw","slide":23,"text":"자료 조사는 병행","textPreview":"자료 조사는 병행","textChars":9,"textLines":1,"bbox":[56,526,313,40]}
+{"kind":"textbox","id":"sh/e9wz2t4b","slide":23,"text":"후보 보완 1회 / 본문 수정 1회 후 재검수","textPreview":"후보 보완 1회 / 본문 수정 1회 후 재검수","textChars":25,"textLines":1,"bbox":[429,526,777,40]}
+{"kind":"textbox","id":"sh/1cnixo32","slide":23,"text":"Agent는 역할·입력·출력 계약을 가진 코드 모듈입니다. 임의로 행동하는 5명의 자율 실행자는 아닙니다.","textPreview":"Agent는 역할·입력·출력 계약을 가진 코드 모듈입니다. 임의로 행동하는 5명의 자율 실행자는 아닙니다.","textChars":59,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"notes","id":"nt/bje9oa","slide":23,"text":"report_orchestrator.py가 전체 순서를 정합니다. 먼저 로컬 연결과 ML 기간을 확인한 뒤 asyncio.gather로 Evidence와 CaseStudy를 병행합니다. 두 결과를 evidence_pack으로 합쳐 Transferability에 전달하고, 선택 후보를 Planner에 전달합니다. 코드 검사와 Reviewer가 초안을 평가합니다. 필요한 경우 로컬 후보 보완과 본문 재작성 범위를 제한하고 재검수합니다. 로컬 검수 통과본만 기존 정책의 OpenAI 독립 최종 검수를 받습니다. Agent마다 항상 새 API 호출이 일어나는 것은 아니며 근거 캐시와 서버 도구의 재사용 경로가 있습니다. 코드의 Agent 3 같은 과거 주석 번호보다 실제 class와 orchestrator 호출을 기준으로 설명합니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/report_orchestrator.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/evidence_agent.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/case_study_agent.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/transferability_agent.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/planner_agent.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/reviewer_agent.py"}
+{"kind":"slide","id":"sl/5gcucd","slide":24,"title":"OLIGO-K","textShapes":5}
+{"kind":"textbox","id":"sh/n6p0rulo","slide":24,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/o7y1kz29","slide":24,"text":"5.4 조사 Agent의 입력·도구·결과","textPreview":"5.4 조사 Agent의 입력·도구·결과","textChars":22,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/987itk3u","slide":24,"text":"5. 공식 근거와 AI Agent","textPreview":"5. 공식 근거와 AI Agent","textChars":18,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/ehwze547","slide":24,"text":"24 / 38","textPreview":"24 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/0jehgfmd","slide":24,"text":"프롬프트: EVIDENCE_RESEARCH_INSTRUCTIONS / CASE_STUDY_RESEARCH_INSTRUCTIONS","textPreview":"프롬프트: EVIDENCE_RESEARCH_INSTRUCTIONS / CASE_STUDY_RESEARCH_INSTRUCTIONS","textChars":71,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"table","id":"tb/mhofalc7","slide":24,"name":"","rows":6,"cols":3,"preview":"계약 | EvidenceAgent.collect | CaseStudyAgent.collect","bbox":[56,178,1168,394]}
+{"kind":"notes","id":"nt/5gcucd","slide":24,"text":"페르소나는 역할을 정하는 시스템 지시문입니다. Evidence는 지역의 공식 관측과 관광자원을 검토하고 CaseStudy는 다른 곳에서 집행한 사업의 운영 방법, 비용, 대상, 성과 정의를 조사합니다. prompts.py에 두 역할의 지시가 있으며 collect가 서버 도구와 Router를 호출합니다. snapshot에는 관측값과 이미 계산한 ml_analysis가 분리돼 있습니다. planning_brief는 사용자 정보이므로 공식 관측값으로 취급하지 않습니다. CaseStudy는 기존 검수 사례를 재사용하고 research_questions로 검색 범위를 좁힙니다. 웹 검색 요약을 즉시 확정 성과로 인정하지 않고 공식 출처·수치 승인 상태를 확인합니다. Open API와 OpenAI API는 이름은 비슷하지만 역할이 다릅니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/evidence_agent.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/case_study_agent.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/prompts.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agent_learning_guide.py"}
+{"kind":"slide","id":"sl/orbnl2","slide":25,"title":"OLIGO-K","textShapes":9}
+{"kind":"textbox","id":"sh/72t8jmdk","slide":25,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/8329cre5","slide":25,"text":"5.5 Qwen 후보 비교와 Gemma 본문 작성","textPreview":"5.5 Qwen 후보 비교와 Gemma 본문 작성","textChars":27,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/94balwvq","slide":25,"text":"5. 공식 근거와 AI Agent","textPreview":"5. 공식 근거와 AI Agent","textChars":18,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/u5krehwb","slide":25,"text":"25 / 38","textPreview":"25 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/v6tsnmdw","slide":25,"text":"Qwen · 관광전략 기획자","textPreview":"Qwen · 관광전략 기획자","textChars":15,"textLines":1,"bbox":[56,180,560,55]}
+{"kind":"shape","id":"sh/w729greh","slide":25,"bbox":[56,244,560,1]}
+{"kind":"textbox","id":"sh/h8bapwv2","slide":25,"text":"TransferabilityAgent.assess\n\n지역 사실 + ML + 공식 사례\n사용자 조건으로 후보 비교\n\ndesign_candidates\nselected_candidate_id\n선정 사유·적용 조건","textPreview":"TransferabilityAgent.assess |  | 지역 사실 + ML + 공식 사례 | 사용자 조건으로 후보 비교 |  | design_candidates | selected_candidate_id | 선정 사유·적용 조건","textChars":115,"textLines":8,"bbox":[56,270,560,240]}
+{"kind":"textbox","id":"sh/i9kri1w7","slide":25,"text":"Gemma · 실행안 작성 담당자","textPreview":"Gemma · 실행안 작성 담당자","textChars":18,"textLines":1,"bbox":[664,180,560,55]}
+{"kind":"shape","id":"sh/jadsr6ds","slide":25,"bbox":[664,244,560,1]}
+{"kind":"textbox","id":"sh/ji5gfqp8","slide":25,"text":"PlannerAgent.write\n\n동일 근거 + 선택 후보를 받아\n하나의 실행 기획안 작성\n\n핵심 제안·이용 절차\n실행 단계·측정 계획\n본문과 연결 출처","textPreview":"PlannerAgent.write |  | 동일 근거 + 선택 후보를 받아 | 하나의 실행 기획안 작성 |  | 핵심 제안·이용 절차 | 실행 단계·측정 계획 | 본문과 연결 출처","textChars":86,"textLines":8,"bbox":[664,270,560,240]}
+{"kind":"textbox","id":"sh/ihwfml8n","slide":25,"text":"TRANSFERABILITY_SCHEMA와 report_schema로 JSON 형식을 고정하고, 후보·본문 사이의 출처 연결을 검사합니다.","textPreview":"TRANSFERABILITY_SCHEMA와 report_schema로 JSON 형식을 고정하고, 후보·본문 사이의 출처 연결을 검사합니다.","textChars":77,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"notes","id":"nt/orbnl2","slide":25,"text":"Qwen3:14b는 근거 묶음을 읽고 후보를 비교합니다. TRANSFERABILITY_SCHEMA에 후보 ID, 유형, 사례 ID, 실행 방식 등이 정의돼 있습니다. 이후 case_recommendation.constrain_decision이 입력 조건과 공식 운영 문서 연결을 다시 제한합니다. Qwen의 fit_score는 모델이 산출한 평가 서술용 점수이며 학습한 성공 확률로 제시하지 않습니다. Gemma4:26b는 _compact_evidence_for_planner가 선택 판단과 필요한 원문을 보존한 입력을 받아 본문 JSON을 씁니다. 수정 시에는 previous_draft와 quality_review_feedback을 같이 넘깁니다. 지원 사업 유형과 검수 사례 풀이 제한돼 있어 비슷한 환급·야간 기획이 반복될 수 있습니다. 다양한 공식 사례 확장과 실제 응답 비교가 후속 과제입니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/transferability_agent.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/planner_agent.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/prompts.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/llm/local_prompts.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/case_recommendation.py"}
+{"kind":"slide","id":"sl/9c89mj","slide":26,"title":"OLIGO-K","textShapes":11}
+{"kind":"textbox","id":"sh/axsrixwz","slide":26,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/x0jadcvq","slide":26,"text":"5.6 코드 검사와 모델 검토의 역할","textPreview":"5.6 코드 검사와 모델 검토의 역할","textChars":20,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/cza9k7e5","slide":26,"text":"5. 공식 근거와 AI Agent","textPreview":"5. 공식 근거와 AI Agent","textChars":18,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/z21sfmdg","slide":26,"text":"26 / 38","textPreview":"26 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/y1srmhwv","slide":26,"text":"코드 검사","textPreview":"코드 검사","textChars":5,"textLines":1,"bbox":[56,183,560,55]}
+{"kind":"shape","id":"sh/l43ahwvm","slide":26,"bbox":[56,247,560,1]}
+{"kind":"textbox","id":"sh/k3u9ore1","slide":26,"text":"필수 항목·유형·기간\n출처 ID 연결·원문 조회\n예산 산식·목표 계산\n지원 조건·응답 Schema","textPreview":"필수 항목·유형·기간 | 출처 ID 연결·원문 조회 | 예산 산식·목표 계산 | 지원 조건·응답 Schema","textChars":54,"textLines":4,"bbox":[56,273,560,240]}
+{"kind":"textbox","id":"sh/f6h83idc","slide":26,"text":"Reviewer 검토","textPreview":"Reviewer 검토","textChars":11,"textLines":1,"bbox":[664,183,560,55]}
+{"kind":"shape","id":"sh/e58radwr","slide":26,"bbox":[664,247,560,1]}
+{"kind":"textbox","id":"sh/0bels36t","slide":26,"text":"근거와 주장 대조\n사례 적용의 타당성\n실제 이용 절차·역할\n비용·측정 설계의 내용","textPreview":"근거와 주장 대조 | 사례 적용의 타당성 | 실제 이용 절차·역할 | 비용·측정 설계의 내용","textChars":45,"textLines":4,"bbox":[664,273,560,240]}
+{"kind":"shape","id":"sh/1wn2l8ne","slide":26,"bbox":[56,478,1168,1]}
+{"kind":"textbox","id":"sh/e9w3qdon","slide":26,"text":"issues + revision_instruction","textPreview":"issues + revision_instruction","textChars":29,"textLines":1,"bbox":[56,510,558,42]}
+{"kind":"textbox","id":"sh/za5kji58","slide":26,"text":"Gemma 수정 · Qwen 재검수\n로컬 통과본의 OpenAI 최종 검수","textPreview":"Gemma 수정 · Qwen 재검수 | 로컬 통과본의 OpenAI 최종 검수","textChars":40,"textLines":2,"bbox":[679,504,530,100]}
+{"kind":"textbox","id":"sh/ozylwn6p","slide":26,"text":"JSON 성공·검사 통과·파일 저장·사업 타당성은 서로 다른 확인 결과입니다.","textPreview":"JSON 성공·검사 통과·파일 저장·사업 타당성은 서로 다른 확인 결과입니다.","textChars":43,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"notes","id":"nt/9c89mj","slide":26,"text":"ReviewerAgent.review는 evidence_pack, draft_report, deterministic_precheck를 받습니다. REVIEW_SCHEMA는 approved, overall_score, dimension_scores, severity를 포함한 issues, revision_instruction을 정의합니다. 점수가 높다는 이유만으로 주요 오류를 무시하지 않습니다. 로컬 모드의 Reviewer는 Qwen이고 final_pass=True일 때 OpenAI final_reviewer 경로를 사용합니다. 사실·인과·현장 계약 조건은 단순 문자열 검사로 보증할 수 없습니다. 과거 원주 실험에서 필수 도구 조회와 JSON은 완료했지만 예산 편성 자체를 관광사업으로 제안하거나 타지역 조건을 복사하는 문제가 남았습니다. 이런 실측을 바탕으로 후보 계약·출처 전달·본문 재검수·문서 계산을 보완했습니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/reviewer_agent.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/report_orchestrator.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/planning_requirements.py\nC:/Users/Admin/mbca/TP2-3/docs/LOCAL_CANDIDATE_REPLAY_20260908.md"}
+{"kind":"slide","id":"sl/i1pb7m","slide":27,"title":"OLIGO-K","textShapes":11}
+{"kind":"textbox","id":"sh/ihwralov","slide":27,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/5k7a5g76","slide":27,"text":"5.7 프롬프트와 읽기 전용 도구","textPreview":"5.7 프롬프트와 읽기 전용 도구","textChars":18,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/kjytcb61","slide":27,"text":"5. 공식 근거와 AI Agent","textPreview":"5. 공식 근거와 AI Agent","textChars":18,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/7mps7qpc","slide":27,"text":"27 / 38","textPreview":"27 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"shape","id":"sh/6lgbelor","slide":27,"bbox":[56,195,365,115]}
+{"kind":"textbox","id":"sh/to7a907i","slide":27,"text":"역할과 규칙","textPreview":"역할과 규칙","textChars":6,"textLines":1,"bbox":[74,210,329,38]}
+{"kind":"textbox","id":"sh/snytgv6x","slide":27,"text":"prompts.py / local_prompts.py","textPreview":"prompts.py / local_prompts.py","textChars":29,"textLines":1,"bbox":[74,249,329,56]}
+{"kind":"shape","id":"sh/nqlsv6p8","slide":27,"bbox":[457,195,365,115]}
+{"kind":"textbox","id":"sh/mpcr21on","slide":27,"text":"요청 안의 근거 도구","textPreview":"요청 안의 근거 도구","textChars":11,"textLines":1,"bbox":[475,210,329,38]}
+{"kind":"textbox","id":"sh/8n6hw7a5","slide":27,"text":"EvidenceTools · 고정 함수 목록","textPreview":"EvidenceTools · 고정 함수 목록","textChars":24,"textLines":1,"bbox":[475,249,329,56]}
+{"kind":"shape","id":"sh/9ofy5sbq","slide":27,"bbox":[858,195,366,115]}
+{"kind":"textbox","id":"sh/mlozuxsf","slide":27,"text":"구조화 응답","textPreview":"구조화 응답","textChars":6,"textLines":1,"bbox":[876,210,330,38]}
+{"kind":"textbox","id":"sh/nmxg32t0","slide":27,"text":"JSON Schema / Pydantic","textPreview":"JSON Schema / Pydantic","textChars":22,"textLines":1,"bbox":[876,249,330,56]}
+{"kind":"shape","id":"sh/wrqh07ah","slide":27,"bbox":[430,244,20,18]}
+{"kind":"shape","id":"sh/xszy9cb2","slide":27,"bbox":[831,244,20,18]}
+{"kind":"textbox","id":"sh/vqxg72tw","slide":27,"text":"모델이 임의 SQL·파일·웹 명령을 실행하지 않습니다. 서버가 허용된 근거를 조회해 메시지로 전달합니다.","textPreview":"모델이 임의 SQL·파일·웹 명령을 실행하지 않습니다. 서버가 허용된 근거를 조회해 메시지로 전달합니다.","textChars":58,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"table","id":"tb/94ry14ze","slide":27,"name":"","rows":5,"cols":2,"preview":"도구 이름 | 반환하는 근거","bbox":[56,355,1168,236]}
+{"kind":"notes","id":"nt/i1pb7m","slide":27,"text":"local_agent는 고정된 TOOL_DEFINITIONS만 모델에 제공합니다. 도구 호출도 서버가 수행하며 read_task_section의 path는 파일 경로가 아니라 요청 JSON Pointer입니다. _prefetch_required_evidence가 필수 근거를 먼저 읽고, read_collected_source는 실제 source_id와 모든 관련 페이지 조회를 추적합니다. 수집 목록만 보고 원문을 읽었다고 간주하지 않습니다. LLMRequest는 task, instructions, input_payload, schema, max_output_tokens를 묶고 Router가 Provider를 결정합니다. Qwen과 Gemma의 Ollama 호출은 현재 think=False이며 별도의 fine-tuning을 실행하지 않았습니다. 문맥은 반복 JSON을 무손실 표로 압축하지만 원수치를 잘라내어 근거를 숨기지 않습니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/ai_server/app/llm/evidence_tools.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/llm/local_agent.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/llm/models.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/llm/local_prompts.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/llm/context_tables.py"}
+{"kind":"slide","id":"sl/bihq8x","slide":28,"title":"OLIGO-K","textShapes":12}
+{"kind":"textbox","id":"sh/cfyl8nax","slide":28,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/be5kzi9c","slide":28,"text":"5.8 로컬 모델 우선 라우팅과 비용 관리","textPreview":"5.8 로컬 모델 우선 라우팅과 비용 관리","textChars":23,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/adw36dsr","slide":28,"text":"5. 공식 근거와 AI Agent","textPreview":"5. 공식 근거와 AI Agent","textChars":18,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/psn2x8r6","slide":28,"text":"28 / 38","textPreview":"28 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/orel43a1","slide":28,"text":"LOCAL FIRST","textPreview":"LOCAL FIRST","textChars":11,"textLines":1,"bbox":[56,178,770,70]}
+{"kind":"textbox","id":"sh/nq5kvy9g","slide":28,"text":"Qwen3:14b","textPreview":"Qwen3:14b","textChars":9,"textLines":1,"bbox":[56,292,560,49]}
+{"kind":"textbox","id":"sh/2pw32tsv","slide":28,"text":"후보 비교 · 설명 · 검토","textPreview":"후보 비교 · 설명 · 검토","textChars":15,"textLines":1,"bbox":[56,354,560,50]}
+{"kind":"textbox","id":"sh/9orm9crq","slide":28,"text":"Gemma4:26b","textPreview":"Gemma4:26b","textChars":10,"textLines":1,"bbox":[56,456,560,49]}
+{"kind":"textbox","id":"sh/8nilg7a5","slide":28,"text":"본문 작성 · 수정","textPreview":"본문 작성 · 수정","textChars":10,"textLines":1,"bbox":[56,518,560,50]}
+{"kind":"textbox","id":"sh/ahkvutcf","slide":28,"text":"OpenAI API","textPreview":"OpenAI API","textChars":10,"textLines":1,"bbox":[751,294,442,49]}
+{"kind":"textbox","id":"sh/b2tcnyt0","slide":28,"text":"필요한 공식 조사와 최종 검수\n생성 1건당 최대 3회\n로컬 실패 시 자동 유료 전환 차단","textPreview":"필요한 공식 조사와 최종 검수 | 생성 1건당 최대 3회 | 로컬 실패 시 자동 유료 전환 차단","textChars":49,"textLines":3,"bbox":[751,356,455,165]}
+{"kind":"textbox","id":"sh/w3mdw3ul","slide":28,"text":"Router의 실제 적용 경로를 agent_trace에 기록합니다. 호출 수 제한은 계정 전체 청구 상한과 다릅니다.","textPreview":"Router의 실제 적용 경로를 agent_trace에 기록합니다. 호출 수 제한은 계정 전체 청구 상한과 다릅니다.","textChars":65,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"notes","id":"nt/bihq8x","slide":28,"text":"2026-09-10 GET /ai/v1/llm/status의 mode는 local_first이고 Qwen과 Gemma의 Ollama 연결·태그는 active입니다. 이는 이번 발표 작업에서 새 장문 생성의 품질을 확인한 것은 아닙니다. effective_routes 기준으로 Qwen은 transferability와 reviewer, Gemma는 planner와 planner_revision을 담당합니다. OpenAI는 evidence, case_study, final_reviewer 등 허용 경로에 사용합니다. 실제 OpenAI 모델은 환경 설정으로 바뀌므로 발표 본문에 고정 모델명을 단정하지 않습니다. status의 active는 설정 확인과 연결 상태 수준이며 각 유료 모델 호출 성공을 뜻하지 않습니다. local_first 생성의 유료 호출 상한은 3회, student_budget은 최종 검수 1회입니다. 기본 로컬 요청 timeout은 1800초로 충분히 두되 출력·문맥·재시도 예산은 별도입니다. 실제 비용 절감률은 측정하지 않았습니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/ai_server/app/llm/router.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/llm/ollama_provider.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/llm/openai_provider.py\nC:/Users/Admin/mbca/TP2-3/storage/llm_runtime_config.json"}
+{"kind":"slide","id":"sl/rhm718","slide":29,"title":"OLIGO-K","textShapes":7}
+{"kind":"textbox","id":"sh/3udorels","slide":29,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/4vm50jmd","slide":29,"text":"6.1 ML 기준 전망과 계획 KPI의 계산","textPreview":"6.1 ML 기준 전망과 계획 KPI의 계산","textChars":24,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/5gv6to3i","slide":29,"text":"6. 기획안과 문서 출력","textPreview":"6. 기획안과 문서 출력","textChars":13,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/qh4n2t43","slide":29,"text":"29 / 38","textPreview":"29 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/cj654jm9","slide":29,"text":"월별 방문 목표 = ML 방문 전망 × (1 + 단계별 목표율)","textPreview":"월별 방문 목표 = ML 방문 전망 × (1 + 단계별 목표율)","textChars":35,"textLines":1,"bbox":[56,447,1168,46]}
+{"kind":"textbox","id":"sh/dkf6xo3u","slide":29,"text":"추가 소비 목표 = 추가 방문 목표 × (ML 소비액 ÷ ML 방문자 수)","textPreview":"추가 소비 목표 = 추가 방문 목표 × (ML 소비액 ÷ ML 방문자 수)","textChars":41,"textLines":1,"bbox":[56,504,1168,46]}
+{"kind":"textbox","id":"sh/6lknqp4z","slide":29,"text":"강진 참고 환급안 기본 목표: 25% × 80% = 최종월 20%. 80%는 계획 가정이며 인구 보정 계수가 아닙니다.","textPreview":"강진 참고 환급안 기본 목표: 25% × 80% = 최종월 20%. 80%는 계획 가정이며 인구 보정 계수가 아닙니다.","textChars":66,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"table","id":"tb/2xszi5sv","slide":29,"name":"","rows":4,"cols":3,"preview":"구분 | 수치를 만드는 주체 | 표현","bbox":[56,178,1168,226]}
+{"kind":"notes","id":"nt/rhm718","slide":29,"text":"idea_proposal.target_basis는 강진 환급 연결안의 기본 목표를 최종월 20%로 제안하고 다른 안은 초기 5%를 제안합니다. 사용자가 지정한 목표가 우선합니다. 강진군의회 2024-11-20 시정연설의 10월 말 관광객 약 248만명, 전년 대비 25%를 참고합니다. 248만/1.25=198.4만과 차이49.6만은 역산이며 별도 관측값이 아닙니다. 발표 실적은 반값여행과 축제의 동시기 성과여서 사업 단독 효과나 ML 전망 대비 증가율은 아닙니다. 80%는 단계 운영을 고려한 계획 계수로 통계적으로 학습하거나 인구로 계산하지 않았습니다. 3개월이면 최종율의 1/3,2/3,3/3을 적용합니다. 소비/방문 비율을 추가 방문에 그대로 곱하면 같은 월의 방문·소비 증가율이 같아지는 것이 수학적으로 맞습니다. 이 비율은 동일 개인 표본의 실제 객단가가 아닙니다. 별도 소비 목표를 지정하면 독립 목표율을 사용합니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/ai_server/app/idea_proposal.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/report_projection.py\nhttps://clik.nanet.go.kr/minutes/viewer.do?DOCID=CLIKC3524169218564260&collection=minutes"}
+{"kind":"slide","id":"sl/oe9dyn","slide":30,"title":"OLIGO-K","textShapes":7}
+{"kind":"textbox","id":"sh/8fi5gvml","slide":30,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/7up47ql0","slide":30,"text":"6.2 견적 예시의 규모와 금액 산식","textPreview":"6.2 견적 예시의 규모와 금액 산식","textChars":20,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/mtgnel4f","slide":30,"text":"6. 기획안과 문서 출력","textPreview":"6. 기획안과 문서 출력","textChars":13,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/hkr6dk32","slide":30,"text":"30 / 38","textPreview":"30 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/wji5kfmh","slide":30,"text":"성동구 3개월 예시","textPreview":"성동구 3개월 예시","textChars":10,"textLines":1,"bbox":[56,176,690,42]}
+{"kind":"textbox","id":"sh/vi9obalw","slide":30,"text":"추가 방문 목표 2,635,826 × 시범 담당 비중 1%\n운영 수량 26,359건으로 올림","textPreview":"추가 방문 목표 2,635,826 × 시범 담당 비중 1% | 운영 수량 26,359건으로 올림","textChars":51,"textLines":2,"bbox":[56,229,1168,85]}
+{"kind":"textbox","id":"sh/5ob6hk3y","slide":30,"text":"1%·단가·인일은 계획 가정입니다. 참고 예산을 입력하면 총액 안에서 항목 비중을 재배분합니다.","textPreview":"1%·단가·인일은 계획 가정입니다. 참고 예산을 입력하면 총액 안에서 항목 비중을 재배분합니다.","textChars":53,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"table","id":"tb/nip4na9o","slide":30,"name":"","rows":5,"cols":3,"preview":"항목 | 계산 방법 | 예상 금액","bbox":[56,345,1168,252]}
+{"kind":"notes","id":"nt/oe9dyn","slide":30,"text":"예시 숫자는 storage/previews/seongdong_updated_20260910.json의 출력용 검토본에서 가져왔습니다. build_reference_estimate는 사업기간의 목표와 기준 전망 차이 합계를 계산하고 1%의 시범 담당 비중을 적용해 수량을 올림합니다. 운영 인일=max(월20인일×3, ceil(26,359/25))=1,055입니다. 환급 건당5만원, 인일15만원, 기존 시스템 설정800만원, 홍보500만원, 성과집계300만원은 공식 견적서의 관측 단가가 아니라 운영 예산 가정입니다. 1%는 직접 관리할 참여량 배분이며 전환율 예측이 아닙니다. 이 시범 수량이 지역 전체20% 증가를 달성한다는 인과모형은 없습니다. 참고 총액이 입력되면 scale_estimate가 비중 재배분을 하고 수량·단가 확정으로 보이지 않게 분리합니다. 예산은 실제 계약 금액과 다를 수 있습니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/ai_server/app/proposal_evidence.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/idea_proposal.py\nC:/Users/Admin/mbca/TP2-3/storage/previews/seongdong_updated_20260910.json"}
+{"kind":"slide","id":"sl/lb03ie","slide":31,"title":"OLIGO-K","textShapes":9}
+{"kind":"textbox","id":"sh/1sn29wzq","slide":31,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/epwjehgz","slide":31,"text":"6.3 성동구 기획안의 근거와 적용 예시","textPreview":"6.3 성동구 기획안의 근거와 적용 예시","textChars":22,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/fq5k7mhk","slide":31,"text":"6. 기획안과 문서 출력","textPreview":"6. 기획안과 문서 출력","textChars":13,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/ovylkby1","slide":31,"text":"31 / 38","textPreview":"31 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/2twji1gb","slide":31,"text":"공식 사례","textPreview":"공식 사례","textChars":5,"textLines":1,"bbox":[757,185,440,42]}
+{"kind":"textbox","id":"sh/3u5kb6hw","slide":31,"text":"강진 반값여행\n지출 증빙 확인 후 지원\n지역 내 혜택 재사용 구조","textPreview":"강진 반값여행 | 지출 증빙 확인 후 지원 | 지역 내 혜택 재사용 구조","textChars":36,"textLines":3,"bbox":[757,244,448,126]}
+{"kind":"textbox","id":"sh/cjylobyd","slide":31,"text":"성동구 초안에 적용","textPreview":"성동구 초안에 적용","textChars":10,"textLines":1,"bbox":[757,416,451,42]}
+{"kind":"textbox","id":"sh/xk72hgfy","slide":31,"text":"참여 상점·대상·지급 조건 설계\n신청·승인·지급·사용 기록으로\n시범 운영 결과 확인","textPreview":"참여 상점·대상·지급 조건 설계 | 신청·승인·지급·사용 기록으로 | 시범 운영 결과 확인","textChars":46,"textLines":3,"bbox":[757,473,449,118]}
+{"kind":"textbox","id":"sh/98bapojy","slide":31,"text":"사례의 운영 원리를 가져온 기획 예시입니다. 사진은 해당 사례 또는 명시된 유사 사업 참고 이미지입니다.","textPreview":"사례의 운영 원리를 가져온 기획 예시입니다. 사진은 해당 사례 또는 명시된 유사 사업 참고 이미지입니다.","textChars":58,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"image","id":"im/wbupk7ut","slide":31,"name":"","alt":"성동구 생성 문서의 공식 지역 참고 사례 슬라이드","bbox":[56,186,648,378]}
+{"kind":"notes","id":"nt/lb03ie","slide":31,"text":"사용자가 실제로 생성한 성동구 보고서를 기반으로 만든 문서 예시입니다. 원본 저장 보고서 ID는 101c9de52d664800986c815fd5b66917입니다. 기존 공식 관측과 ML 전망을 보존하고 승인된 공통 문서 규칙을 적용한 출력용 검토본을 보여 줍니다. 새로운 LLM이 이번 발표를 위해 사업을 다시 설계한 것은 아닙니다. 강진 사례의 사업 운영 방식과 성동구 기획의 실행 방식 연결을 함수로 확인합니다. 성동구와 강진의 지리·인구가 같다는 증명은 없습니다. 상품권 발행과 지급 시점, 참여처 조건은 담당자의 현장 검토가 필요한 실행 요소입니다. 참고 사례 슬라이드에 있는 실제 사진·포스터와 출처 캡션은 생성 문서의 규칙을 유지합니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/storage/previews/seongdong_updated_20260910.json\nC:/Users/Admin/mbca/TP2-3/ai_server/app/case_recommendation.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/proposal_layout_v10.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/case_images.py"}
+{"kind":"slide","id":"sl/h8nlob","slide":32,"title":"OLIGO-K","textShapes":6}
+{"kind":"textbox","id":"sh/bedonex0","slide":32,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/cfmpwjyl","slide":32,"text":"6.4 같은 데이터로 만드는 PPTX와 Word","textPreview":"6.4 같은 데이터로 만드는 PPTX와 Word","textChars":26,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/xgv6pofq","slide":32,"text":"6. 기획안과 문서 출력","textPreview":"6. 기획안과 문서 출력","textChars":13,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/yh47y9gb","slide":32,"text":"32 / 38","textPreview":"32 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/lkfqtof2","slide":32,"text":"PPTX  /  시각 중심의 발표 자료","textPreview":"PPTX  /  시각 중심의 발표 자료","textChars":21,"textLines":1,"bbox":[56,170,743,39]}
+{"kind":"textbox","id":"sh/elk7mpg7","slide":32,"text":"prepare_idea_report와 report_projection의 공통 수치·목표·견적을 두 문서에 반영합니다.","textPreview":"prepare_idea_report와 report_projection의 공통 수치·목표·견적을 두 문서에 반영합니다.","textChars":65,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"image","id":"im/ipsri5s3","slide":32,"name":"","alt":"성동구 출력 문서의 ML 전망과 목표 KPI","bbox":[56,212,729,407]}
+{"kind":"image","id":"im/5s3atkbu","slide":32,"name":"","alt":"성동구 Word 기획서 첫 페이지","bbox":[858,170,366,465]}
+{"kind":"notes","id":"nt/h8nlob","slide":32,"text":"Word와 PowerPoint를 LLM이 각자 임의로 만드는 구조가 아닙니다. 생성 JSON을 prepare_idea_report로 정리하고 report_projection이 사업 기간에 맞는 저장 전망과 목표 시리즈를 선택합니다. proposal_document가 Word를, proposal_presentation_v4 및 연결된 layout 버전이 PPTX를 렌더링합니다. PPT는 3개 참고 사례, 선택 근거, 실행 가이드, ML/KPI, 목표 근거, 견적과 출처를 포함합니다. Word는 상세 실행 내용과 표를 제공합니다. strategy_store는 보고서 입력 지문과 render_version으로 캐시 유효성을 확인하므로 템플릿이 바뀌면 출력도 갱신합니다. 화면은 실제 2026-09-10 검토 출력본에서 가져왔습니다. 보고서 저장 여부와 품질 승인 여부는 분리합니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/ai_server/app/idea_proposal.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/report_projection.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/proposal_document.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/proposal_presentation_v4.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/strategy_store.py"}
+{"kind":"slide","id":"sl/ybdmzl","slide":33,"title":"OLIGO-K","textShapes":11}
+{"kind":"textbox","id":"sh/03ex8fqh","slide":33,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/fi5gzapw","slide":33,"text":"6.5 챗봇의 기획안 조정 범위","textPreview":"6.5 챗봇의 기획안 조정 범위","textChars":17,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/ehwf658b","slide":33,"text":"6. 기획안과 문서 출력","textPreview":"6. 기획안과 문서 출력","textChars":13,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/p87y547y","slide":33,"text":"33 / 38","textPreview":"33 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/o7yhczqd","slide":33,"text":"조정할 수 있는 내용","textPreview":"조정할 수 있는 내용","textChars":11,"textLines":1,"bbox":[56,183,560,55]}
+{"kind":"shape","id":"sh/n6pg3up8","slide":33,"bbox":[56,247,560,1]}
+{"kind":"textbox","id":"sh/25gzap8n","slide":33,"text":"목표 KPI 증가율\n예상 견적 총액\n소개·홍보 문장\n참여 범위와 실행 단계","textPreview":"목표 KPI 증가율 | 예상 견적 총액 | 소개·홍보 문장 | 참여 범위와 실행 단계","textChars":41,"textLines":4,"bbox":[56,273,560,240]}
+{"kind":"textbox","id":"sh/xcry947a","slide":33,"text":"보존하는 근거","textPreview":"보존하는 근거","textChars":7,"textLines":1,"bbox":[664,183,560,55]}
+{"kind":"shape","id":"sh/cbihgzqp","slide":33,"bbox":[664,247,560,1]}
+{"kind":"textbox","id":"sh/upw7a1k7","slide":33,"text":"공식 관측값\n저장 ML 전망\n공식 사례의 발표 수치\n원래 출처와 검수 기록","textPreview":"공식 관측값 | 저장 ML 전망 | 공식 사례의 발표 수치 | 원래 출처와 검수 기록","textChars":41,"textLines":4,"bbox":[664,273,560,240]}
+{"kind":"shape","id":"sh/va58j6ls","slide":33,"bbox":[56,473,1168,1]}
+{"kind":"textbox","id":"sh/wbepcb2d","slide":33,"text":"“방문 목표 10%로 수정해줘”","textPreview":"“방문 목표 10%로 수정해줘”","textChars":17,"textLines":1,"bbox":[56,510,650,47]}
+{"kind":"textbox","id":"sh/hcnqlg3i","slide":33,"text":"허용된 report_patch\n미리보기 적용 후 저장","textPreview":"허용된 report_patch | 미리보기 적용 후 저장","textChars":29,"textLines":2,"bbox":[815,499,409,89]}
+{"kind":"textbox","id":"sh/idg7elk3","slide":33,"text":"신축 빌딩·공원 요청은 범위를 안내하고 실제로 근거가 연결된 후보 목록을 보여 줍니다.","textPreview":"신축 빌딩·공원 요청은 범위를 안내하고 실제로 근거가 연결된 후보 목록을 보여 줍니다.","textChars":48,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"notes","id":"nt/ybdmzl","slide":33,"text":"idea_proposal.bounded_chat_reply가 명시적 수치 수정과 범위 밖 신축 요청을 로컬 규칙으로 우선 처리합니다. 방문 목표는0~20%, 소비 목표는0~30% 범위이며 견적은 현재 계약과 상한을 검사합니다. 숫자 수정에 항상 LLM을 호출할 필요는 없습니다. 나머지 설명·문장 수정은 Qwen/Gemma의 제한된 JSON 경로를 사용합니다. 프런트의 applyReportPatch는 허용된 부분만 반영하며 관측과 ML을 사용자 지시로 바꾸지 않습니다. 현재 연결된 후보 수를 계산해 안내하므로 모든 보고서에 총4개라고 하드코딩하지 않습니다. 기획안 수정이 완료된 후 사용자에게 저장을 요청하고 원래 근거와 변경된 계획 가정을 구분합니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/ai_server/app/idea_proposal.py\nC:/Users/Admin/mbca/TP2-3/frontend/src/features/planning/applyReportPatch.js\nC:/Users/Admin/mbca/TP2-3/frontend/src/components/TourismAssistant.jsx\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agents/chat_assistant_agent.py"}
+{"kind":"slide","id":"sl/68m8bd","slide":34,"title":"OLIGO-K","textShapes":5}
+{"kind":"textbox","id":"sh/x4rqdcby","slide":34,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/ahg72xc7","slide":34,"text":"7.1 실제 오류를 바탕으로 보완한 부분","textPreview":"7.1 실제 오류를 바탕으로 보완한 부분","textChars":22,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/b2p8b2ts","slide":34,"text":"7. 검증·운영·시연","textPreview":"7. 검증·운영·시연","textChars":11,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/k7ip8ru9","slide":34,"text":"34 / 38","textPreview":"34 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/y5076hcj","slide":34,"text":"관련 문서·목표·견적 회귀 39개와 프런트 lint/build의 기존 통과 기록이 있습니다. 기획 품질 승인의 대체는 아닙니다.","textPreview":"관련 문서·목표·견적 회귀 39개와 프런트 lint/build의 기존 통과 기록이 있습니다. 기획 품질 승인의 대체는 아닙니다.","textChars":71,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"table","id":"tb/w3ap0fy5","slide":34,"name":"","rows":6,"cols":3,"preview":"발견한 문제 | 시스템에서 보완한 방법 | 확인 범위","bbox":[56,185,1168,380]}
+{"kind":"notes","id":"nt/68m8bd","slide":34,"text":"2026-09-08 원주 실제 Qwen 보완에서는 검사 건수가 감소했어도 이용 절차와 사례 해석 오류가 남아 품질 미달로 기록했습니다. 이를 테스트 통과로 덮지 않았습니다. 2026-09-10에는 공통 문서·견적·목표 수정 관련 선택 회귀39개, 프런트 lint와 production build 통과를 기록했습니다. 이는 해당 변경 범위의 기존 실행 결과이며 이번 발표 제작에서 전체 테스트를 다시 실행했다는 주장은 아닙니다. 실제 생성은 지역·근거·모델응답에 따라 달라지므로 모든89지역의 기획 품질이 검증 완료된 것으로 발표하지 않습니다. 로컬 응답 안정성, 연결, 출처 전달, 수치 계산, 디자인은 서로 다른 검증 대상입니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/docs/DECISIONS.md\nC:/Users/Admin/mbca/TP2-3/docs/LOCAL_CANDIDATE_REPLAY_20260908.md\nC:/Users/Admin/mbca/TP2-3/ai_server/test_proposal_evidence.py\nC:/Users/Admin/mbca/TP2-3/ai_server/test_visitor_linked_spending.py\nC:/Users/Admin/mbca/TP2-3/ai_server/test_idea_proposal.py\nC:/Users/Admin/mbca/TP2-3/frontend/package.json"}
+{"kind":"slide","id":"sl/2e1uza","slide":35,"title":"OLIGO-K","textShapes":9}
+{"kind":"textbox","id":"sh/0r294f6h","slide":35,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/zqt8bu5w","slide":35,"text":"7.2 개발 실행과 운영 보안","textPreview":"7.2 개발 실행과 운영 보안","textChars":16,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/epkr2pob","slide":35,"text":"7. 검증·운영·시연","textPreview":"7. 검증·운영·시연","textChars":11,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/dobq9kn6","slide":35,"text":"35 / 38","textPreview":"35 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/cn290f6l","slide":35,"text":"현재 개발 환경","textPreview":"현재 개발 환경","textChars":8,"textLines":1,"bbox":[56,180,560,55]}
+{"kind":"shape","id":"sh/rmt87a50","slide":35,"bbox":[56,244,560,1]}
+{"kind":"textbox","id":"sh/qlkry5of","slide":35,"text":"start-dev.ps1로 서비스 실행\nReact 5176 / Backend 8100\nAI 8112 / Streamlit 8501\n\n모델 연결과 자료 준비 확인\n관리 화면에서 trace 확인","textPreview":"start-dev.ps1로 서비스 실행 | React 5176 / Backend 8100 | AI 8112 / Streamlit 8501 |  | 모델 연결과 자료 준비 확인 | 관리 화면에서 trace 확인","textChars":106,"textLines":6,"bbox":[56,270,560,240]}
+{"kind":"textbox","id":"sh/pkbq50nu","slide":35,"text":"운영 전 점검","textPreview":"운영 전 점검","textChars":7,"textLines":1,"bbox":[664,180,560,55]}
+{"kind":"shape","id":"sh/4ji9wv69","slide":35,"bbox":[664,244,560,1]}
+{"kind":"textbox","id":"sh/6p83650f","slide":35,"text":"서버에서만 API 키 사용\nLLM 설정 변경 관리자 토큰\n허용 도메인·도구·입력 길이 제한\n\nNginx·HTTPS·접근 제어\n백업·로그·사용량·재시작 점검","textPreview":"서버에서만 API 키 사용 | LLM 설정 변경 관리자 토큰 | 허용 도메인·도구·입력 길이 제한 |  | Nginx·HTTPS·접근 제어 | 백업·로그·사용량·재시작 점검","textChars":86,"textLines":6,"bbox":[664,270,560,240]}
+{"kind":"textbox","id":"sh/rah4fah0","slide":35,"text":"AWS EC2 + Nginx는 배포 설계입니다. 외부 운영 URL의 배포·부하 검증 완료를 주장하지 않습니다.","textPreview":"AWS EC2 + Nginx는 배포 설계입니다. 외부 운영 URL의 배포·부하 검증 완료를 주장하지 않습니다.","textChars":61,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"notes","id":"nt/2e1uza","slide":35,"text":"프런트에 OpenAI 키나 DB 비밀번호를 보내지 않고 .env에서 서버가 읽습니다. LLM 설정 변경 API는 관리자 토큰을 요구합니다. 제한된 도구와 공식 URL 검사가 있지만 모든 공격이 차단된다는 보안 인증은 아닙니다. 운영 전에는 보고서 API의 접근 통제, 사용자 정보 최소 수집, CORS·HTTPS·환경별 설정, 파일·DB 백업, 작업 재시작과 로그 보관을 점검해야 합니다. 로컬 모델은 노트북의 Ollama 서비스에 연결되며 네트워크와 모델 가동 상태가 필요합니다. 현재 API health가 응답하고 등록 태그가 active인 것은 실행 준비 증거이지 응답 시간 SLA가 아닙니다. start-dev 스크립트를 사용하며 매번 수동으로 다른 임시 포트를 켜는 방식으로 설명하지 않습니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/start-dev.ps1\nC:/Users/Admin/mbca/TP2-3/frontend/vite.config.js\nC:/Users/Admin/mbca/TP2-3/backend/app/config.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/main.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/llm/router.py\nC:/Users/Admin/mbca/TP2-3/docs/ARCHITECTURE.md"}
+{"kind":"slide","id":"sl/zyo6ig","slide":36,"title":"OLIGO-K","textShapes":14}
+{"kind":"textbox","id":"sh/mlo3mp0z","slide":36,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/9ofmh4zq","slide":36,"text":"7.3 구현 결과와 팀의 설명 자료","textPreview":"7.3 구현 결과와 팀의 설명 자료","textChars":19,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/8n6lozi5","slide":36,"text":"7. 검증·운영·시연","textPreview":"7. 검증·운영·시연","textChars":11,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/zid4buh8","slide":36,"text":"36 / 38","textPreview":"36 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/yh43ip03","slide":36,"text":"89","textPreview":"89","textChars":2,"textLines":1,"bbox":[56,189,370,110]}
+{"kind":"textbox","id":"sh/lkfmdkze","slide":36,"text":"등록·자료 점검 지역","textPreview":"등록·자료 점검 지역","textChars":11,"textLines":1,"bbox":[56,317,370,43]}
+{"kind":"textbox","id":"sh/kjmlkfit","slide":36,"text":"7","textPreview":"7","textChars":1,"textLines":1,"bbox":[470,189,320,110]}
+{"kind":"textbox","id":"sh/jeh4nehs","slide":36,"text":"예측 지표","textPreview":"예측 지표","textChars":5,"textLines":1,"bbox":[470,317,320,43]}
+{"kind":"textbox","id":"sh/id8nu907","slide":36,"text":"5","textPreview":"5","textChars":1,"textLines":1,"bbox":[882,189,320,110]}
+{"kind":"textbox","id":"sh/sjil0r6h","slide":36,"text":"고정 역할 Agent","textPreview":"고정 역할 Agent","textChars":11,"textLines":1,"bbox":[882,317,340,43]}
+{"kind":"shape","id":"sh/tkrm9wn2","slide":36,"bbox":[56,398,1168,1]}
+{"kind":"textbox","id":"sh/6h03yhob","slide":36,"text":"서비스 산출물","textPreview":"서비스 산출물","textChars":7,"textLines":1,"bbox":[56,438,528,43]}
+{"kind":"textbox","id":"sh/ri9k7m5w","slide":36,"text":"지역 대시보드 · 기획·저장·챗봇\nPPTX·DOCX · 모델·평가 메타데이터","textPreview":"지역 대시보드 · 기획·저장·챗봇 | PPTX·DOCX · 모델·평가 메타데이터","textChars":42,"textLines":2,"bbox":[56,499,579,96]}
+{"kind":"textbox","id":"sh/4vylwr65","slide":36,"text":"팀 학습·유지보수","textPreview":"팀 학습·유지보수","textChars":9,"textLines":1,"bbox":[686,438,526,43]}
+{"kind":"textbox","id":"sh/5g725wnq","slide":36,"text":"ML·Agent·React 설명 화면\nStreamlit 전체 구조 · API·결정 기록","textPreview":"ML·Agent·React 설명 화면 | Streamlit 전체 구조 · API·결정 기록","textChars":48,"textLines":2,"bbox":[686,499,539,96]}
+{"kind":"notes","id":"nt/zyo6ig","slide":36,"text":"89는 storage/region_readiness_audit.json의2026-09-10 등록지역 점검 기록입니다. 89개 모두 data_ready지만 전체 실생성·품질 승인 완료 지역이라는 수치는 아닙니다. 7은 Target 수이고5는 고정 역할 모듈 수입니다. 저장 기록은 이번 조회8건이었지만 개발 중 계속 바뀌는 값이고 사용자 성과지표가 아니므로 주요 성과 숫자에서 제외했습니다. 관리자 /ml-test는 모델별 feature·평가·호출 경로를 metadata에서 읽고 module_usage.py가 설명을 연결합니다. /openai-test와 /react-test는 Agent와 React 구조 설명을 제공합니다. /project-tree는 Streamlit 전체 구조 탐색기를 연결합니다. 발표 산출물로 코드·설계·ERD·API·모델 평가·프롬프트·문서 출력·시연 흐름을 제시하고 미실행 Fine-tuning 결과를 만들어 넣지 않습니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/storage/region_readiness_audit.json\nC:/Users/Admin/mbca/TP2-3/ai_server/ml/module_usage.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agent_learning_guide.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/project_learning_catalog.py\nC:/Users/Admin/mbca/TP2-3/project_tree_explorer/app.py\nC:/Users/Admin/mbca/TP2-3/docs/API_DRAFT.md\nC:/Users/Admin/mbca/TP2-3/docs/DECISIONS.md"}
+{"kind":"slide","id":"sl/89n6ma","slide":37,"title":"OLIGO-K","textShapes":5}
+{"kind":"textbox","id":"sh/9szmlwve","slide":37,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/mp83qhc3","slide":37,"text":"7.4 다음 단계의 검증과 개발 계획","textPreview":"7.4 다음 단계의 검증과 개발 계획","textChars":20,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/7qh4jmdo","slide":37,"text":"7. 검증·운영·시연","textPreview":"7. 검증·운영·시연","textChars":11,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/knqlo7ex","slide":37,"text":"37 / 38","textPreview":"37 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/y1o3mhwr","slide":37,"text":"Fine-tuning은 검토 가능한 후속 선택지입니다. 현재 자체 LLM 학습이나 정책 인과효과 모델은 적용하지 않았습니다.","textPreview":"Fine-tuning은 검토 가능한 후속 선택지입니다. 현재 자체 LLM 학습이나 정책 인과효과 모델은 적용하지 않았습니다.","textChars":69,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"table","id":"tb/crelwv61","slide":37,"name":"","rows":6,"cols":3,"preview":"우선순위 | 진행할 작업 | 확인할 결과","bbox":[56,185,1168,382]}
+{"kind":"notes","id":"nt/89n6ma","slide":37,"text":"현재 구현의 장점과 개선 과제를 구체적으로 연결합니다. 첫째는 검사 건수만이 아니라 실제 응답의 이용 절차와 사례 해석을 여러 지역에서 평가하는 것입니다. 둘째는 지리·접근성·관광자원·사업 강도·예산·성과 정의를 같은 기준으로 비교할 공식 데이터와 다양한 운영 사례를 확보하는 것입니다. 셋째는 시간순 평가와 기준선 비교를 유지하며 새로운 원자료로 모델을 갱신하는 것입니다. 사용자 평가에서는 실제 참여자 수·질문·척도와 수정 시간을 기록해야 합니다. Fine-tuning을 하려면 원자료 PDF만 넣는 것이 아니라 근거·조건 입력과 사람이 검토한 좋은 답변 쌍이 필요하며 아직 실행·설치·비용을 승인받아 적용한 단계가 아닙니다. 교사의26번 항목이 요구한 개발 및 운영 계획, 기대효과, 피드백 반영을 이 페이지에 연결합니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/docs/IMPLEMENTATION_PLAN.md\nC:/Users/Admin/mbca/TP2-3/docs/CONTEST_EVIDENCE.md\nC:/Users/Admin/mbca/TP2-3/docs/LOCAL_FIRST_QUALITY_PLAN.md\nC:/Users/Admin/mbca/TP2-3/docs/DATA_AND_AI_RULES.md"}
+{"kind":"slide","id":"sl/zzybx0","slide":38,"title":"OLIGO-K","textShapes":9}
+{"kind":"textbox","id":"sh/3ydwfi9c","slide":38,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,24,150,26]}
+{"kind":"textbox","id":"sh/4zmx83qx","slide":38,"text":"7.5 시연과 질의응답","textPreview":"7.5 시연과 질의응답","textChars":12,"textLines":1,"bbox":[56,78,1168,65]}
+{"kind":"textbox","id":"sh/p0veh8ri","slide":38,"text":"7. 검증·운영·시연","textPreview":"7. 검증·운영·시연","textChars":11,"textLines":1,"bbox":[56,678,800,22]}
+{"kind":"textbox","id":"sh/q14fad83","slide":38,"text":"38 / 38","textPreview":"38 / 38","textChars":7,"textLines":1,"bbox":[1138,678,90,22]}
+{"kind":"textbox","id":"sh/r2dwji9o","slide":38,"text":"OLIGO-K","textPreview":"OLIGO-K","textChars":7,"textLines":1,"bbox":[56,191,800,95]}
+{"kind":"textbox","id":"sh/c3mxcnqt","slide":38,"text":"공식 데이터와 사례로\n관광사업 아이디어를 구체화합니다","textPreview":"공식 데이터와 사례로 | 관광사업 아이디어를 구체화합니다","textChars":29,"textLines":2,"bbox":[56,321,1125,125]}
+{"kind":"textbox","id":"sh/d4velsre","slide":38,"text":"시연 순서","textPreview":"시연 순서","textChars":5,"textLines":1,"bbox":[56,523,204,43]}
+{"kind":"textbox","id":"sh/650vyt8j","slide":38,"text":"지역 현황  /  입력 조건  /  저장 기획안  /  PPTX·Word","textPreview":"지역 현황  /  입력 조건  /  저장 기획안  /  PPTX·Word","textChars":40,"textLines":1,"bbox":[286,522,924,48]}
+{"kind":"textbox","id":"sh/769w7y94","slide":38,"text":"장문 생성 대기 중에는 저장된 성동구 결과와 관리자 ML·Agent 설명 화면을 함께 보여 줍니다.","textPreview":"장문 생성 대기 중에는 저장된 성동구 결과와 관리자 ML·Agent 설명 화면을 함께 보여 줍니다.","textChars":55,"textLines":1,"bbox":[56,626,1168,40]}
+{"kind":"notes","id":"nt/zzybx0","slide":38,"text":"권장 시연은 약3~4분입니다. 1) /dashboard에서 지역을 선택하고 방문·소비 및 숙박 지표를 확인합니다. 2) /planning에서4종 사업 방향과 참고 예산,3개월 시범,제외 조건을 설명합니다. 3) 새 생성은 모델 연결과 데이터 준비가 확인된 경우만 시작하고 실제 단계가 움직이는 것을 보여 줍니다. 4) 긴 대기 중에는 /saved-plans의 성동구 저장 보고서를 열어 근거·목표·견적을 보여 줍니다. 5) 생성된 PPTX/Word를 열고 ML 기준과 계획 KPI, 출처를 대조합니다. 6) /ml-test 또는 /openai-test의 코드 경로를 보여 줍니다. 연결 장애가 나면 준비된 저장 문서로 시연하고 이를 방금 새로 생성한 결과라고 설명하지 않습니다. 예상 질문: LLM 자체 학습인가? 사전학습 모델을 사용하며 지역 ML만 별도 학습합니다. 유사지역은 어떻게 찾는가? 관측4지표 거리와 공식 운영 문서 매칭입니다. KPI는 예측 효과인가? 목표 가정입니다. 완전 무료인가? 제한된 OpenAI 호출이 있습니다. 품질이 모두 승인됐는가? 기능 구현과 실제 업무 타당성을 분리해 평가 중입니다.\n\n[구현 근거]\nC:/Users/Admin/mbca/TP2-3/frontend/src/routes.js\nC:/Users/Admin/mbca/TP2-3/docs/presentation_source.md\nC:/Users/Admin/mbca/TP2-3/ai_server/ml/module_usage.py\nC:/Users/Admin/mbca/TP2-3/ai_server/app/agent_learning_guide.py"}

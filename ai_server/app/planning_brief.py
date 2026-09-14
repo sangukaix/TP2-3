@@ -1,7 +1,8 @@
 """사업 여건 계약. 사용자 입력은 관측 사실/공용 RAG와 분리해 보관합니다."""
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
+import calendar
 from hashlib import sha256
 from io import BytesIO
 import json
@@ -29,6 +30,26 @@ def planning_context_char_count(brief: 'PlanningBrief | dict | None') -> int:
     return field_chars + reference_chars
 
 
+RESOURCE_OPTIONS = {'information_center': '관광안내소', 'merchants': '상인회·지역 상점', 'lodging': '숙박업체', 'events': '기존 행사', 'cultural_spaces': '문화·체험 공간', 'promotion': '지역 홍보 채널'}
+CONTEXT_OPTIONS = {'families': '가족 방문객 중심', 'young_adults': '청년 방문객 중심', 'weekend': '주말 방문 연계', 'weekdays': '평일 방문 확대', 'event_link': '기존 행사 연계', 'experience': '지역 체험 연계'}
+
+
+def next_three_months(as_of_date: date | None = None) -> tuple[date, date]:
+    """한국 시간의 요청 월 다음 달부터 세 달. 관측 자료의 마지막 월과 구분합니다."""
+    today = as_of_date or datetime.now(timezone(timedelta(hours=9))).date()
+    year, month = divmod(today.year * 12 + today.month, 12)
+    end_year, end_month = divmod(today.year * 12 + today.month + 2, 12)
+    return date(year, month + 1, 1), date(end_year, end_month + 1, calendar.monthrange(end_year, end_month + 1)[1])
+
+
+def resolve_new_planning_brief(brief: 'PlanningBrief | None', *, as_of_date: date | None = None) -> 'PlanningBrief | None':
+    # 신규 요청에만 호출합니다. 저장 보고서/재시작 작업을 읽을 때 날짜를 바꾸지 않습니다.
+    if brief is None or brief.input_profile != 'guided_v2':
+        return brief
+    start, end = next_three_months(as_of_date)
+    return PlanningBrief.model_validate({**brief.model_dump(), 'schedule_status': 'fixed', 'start_date': start, 'end_date': end})
+
+
 class BriefReference(BaseModel):
     model_config = ConfigDict(extra='forbid', str_strip_whitespace=True)
     name: str = Field(min_length=1, max_length=150)
@@ -39,8 +60,10 @@ class PlanningBrief(BaseModel):
     """정해지지 않은 값은 null/unknown으로 유지합니다. 0원이나 확정으로 바꾸지 않습니다."""
     model_config = ConfigDict(extra='forbid', str_strip_whitespace=True)
     version: Literal[1] = 1
-    input_profile: Literal['legacy', 'guided_v1'] = 'legacy'
+    input_profile: Literal['legacy', 'guided_v1', 'guided_v2'] = 'legacy'
     business_direction: Literal['auto', 'spend_conversion', 'stay_conversion', 'night_time_experience', 'return_visit'] = 'auto'
+    resource_options: list[Literal['information_center', 'merchants', 'lodging', 'events', 'cultural_spaces', 'promotion']] = Field(default_factory=list, max_length=6)
+    context_options: list[Literal['families', 'young_adults', 'weekend', 'weekdays', 'event_link', 'experience']] = Field(default_factory=list, max_length=6)
     excluded_operations: list[Literal['night_time_experience', 'spend_conversion']] = Field(default_factory=list, max_length=2)
     region_code: str = Field(pattern=r'^\d{2,5}$')
     budget_status: Literal['unknown', 'indicative', 'confirmed'] = 'unknown'
@@ -77,6 +100,20 @@ class PlanningBrief(BaseModel):
 
     @model_validator(mode='after')
     def check_conditions(self):
+        if self.input_profile == 'guided_v2':
+            if self.excluded_operations or self.hard_constraints or self.preferences or self.resources_possible or self.references:
+                raise ValueError('선택형 기획은 제공된 자원·현장 항목만 지원합니다.')
+            if self.budget_hard_limit or self.budget_min_krw is not None or self.budget_status == 'confirmed':
+                raise ValueError('선택형 기획은 참고 예산 총액만 지원합니다.')
+            if self.visitor_target_pct is not None or self.spending_target_pct is not None:
+                raise ValueError('목표 KPI는 생성 후 조정해 주세요.')
+            self.resource_options = list(dict.fromkeys(self.resource_options))
+            self.context_options = list(dict.fromkeys(self.context_options))
+            # 자유 문구가 함께 전송되어도 선택 코드에서만 LLM 참고 문장을 구성합니다.
+            self.resources_confirmed = ' · '.join(RESOURCE_OPTIONS[key] for key in self.resource_options)
+            self.field_context = ' · '.join(CONTEXT_OPTIONS[key] for key in self.context_options)
+            self.resources_status = 'known' if self.resource_options else 'unknown'
+            self.constraints_status = 'unknown'
         if self.input_profile == 'guided_v1':
             import calendar
             if self.schedule_status == 'unknown':

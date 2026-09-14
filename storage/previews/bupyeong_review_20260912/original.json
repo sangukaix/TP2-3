@@ -1,0 +1,3035 @@
+{
+  "period": "2025-07 ~ 2026-06",
+  "summary": "부평구 내 외지인 소비를 지역 내 재결제로 연결하기 위해 지출액 일부를 지역상품권으로 환급하는 사업입니다. 강진군 사례의 운영 방식을 참고하여 쇼핑 및 식음료업 비중이 높은 부평구의 소비 특성에 맞춘 환급 체계를 설계합니다.",
+  "strategies": [
+    {
+      "kpi": "환급 후 재사용률(분자: 환급 후 선택 지역 내 적격 재결제액 합계 / 분모: 지급한 환급액 합계), 기준기간: 사업 기간, 측정 주기: 매주, 수집 방법: 신청·결제 원장 집계, 비교 집단: 미운영 기간 또는 유사 규모 미운영 권역, 성공 기준: 환급 지원액 1,000만 원 이상 달성 시 성공, 중단 기준: 환급 지원액 500만 원 미만 시 중단",
+      "title": "부평구 지역상품권 환급 프로그램",
+      "budget": "환급 지원액 = 각 적격 신청의 min(증빙 인정 지출액 × 10%, 10,000원)의 합계. (기획 가정: 참여 10,000명, 총 예산 10,000,000원)",
+      "evidence": "dataset:28237:1, dataset:28237:3, case:gangjin_half_price_2024",
+      "priority": 1,
+      "solution": "부평구 내 지정 상점에서 일정 금액 이상 결제한 외지인에게 결제 금액의 일부를 부평사랑상품권으로 즉시 또는 사후 환급",
+      "timeframe": "2026-10 ~ 2026-12, 3개월",
+      "expected_effect": "계획 목표: 최종월 ML 기준 전망 대비 방문 +20%, 소비 +20%. 월별 목표는 단계 적용하며 참여·이용 실적은 별도 집계합니다.",
+      "problem_to_solve": "외지인 방문객의 일회성 소비를 지역 내 상권에서의 재결제로 유도하여 관광소비 총액 증대",
+      "comparison_analysis": "강진군 반값여행 사례(case:gangjin_half_price_2024)는 여행자 지출 일부를 상품권으로 환급하여 재사용을 유도함. 부평구는 숙박 비율이 낮으므로 숙박 패키지보다는 쇼핑·식음료 중심의 즉시 환급형 모델이 적합함",
+      "implementation_steps": [
+        {
+          "step": 1,
+          "task": "관광과 담당자가 참여 점포 모집 및 환급 기준(최소 결제액 등) 확정",
+          "schedule": "2026-10",
+          "deliverable": "참여 업체 명단 및 운영 지침(안) (확보 실패 시 기존 시장 상인회 중심 모집으로 축소)"
+        },
+        {
+          "step": 2,
+          "task": "운영팀이 영수증 인증 방식 또는 상품권 지급 절차 매뉴얼 점검",
+          "schedule": "2026-10",
+          "deliverable": "증빙 및 환급 시스템 운영 매뉴얼"
+        },
+        {
+          "step": 3,
+          "task": "홍보 담당자가 현장 안내물 제작 및 참여 점포 대상 사업 안내 실시",
+          "schedule": "2026-11",
+          "deliverable": "현장 안내물 및 참여 점포 안내 완료"
+        },
+        {
+          "step": 4,
+          "task": "운영팀이 주간 단위로 환급 신청 건수 및 승인 현황 관리",
+          "schedule": "2026-11 ~ 2026-12",
+          "deliverable": "주간 환급 신청/승인 현황 보고서"
+        },
+        {
+          "step": 5,
+          "task": "데이터 분석 담당자가 최종 환급액 및 재사용 결제 데이터를 수집하여 분석",
+          "schedule": "2026-12",
+          "deliverable": "최종 환급액 및 재사용 결제 데이터 보고서"
+        }
+      ],
+      "visual_asset_source_ids": [
+        "case:gangjin_half_price_2024"
+      ]
+    }
+  ],
+  "agent_trace": [
+    {
+      "agent": "llm_router",
+      "stage": "routing_snapshot",
+      "status": "completed",
+      "routing": {
+        "mode": "local_first",
+        "routes": {
+          "planner": {
+            "fallback": "openai",
+            "provider": "gemma",
+            "model_env": "OLLAMA_GEMMA_MODEL"
+          },
+          "evidence": {
+            "fallback": "none",
+            "provider": "openai",
+            "model_env": "OPENAI_RESEARCH_MODEL"
+          },
+          "reviewer": {
+            "fallback": "none",
+            "provider": "openai",
+            "model_env": "OPENAI_REVIEW_MODEL"
+          },
+          "case_study": {
+            "fallback": "none",
+            "provider": "openai",
+            "model_env": "OPENAI_CASE_RESEARCH_MODEL"
+          },
+          "chat_revise": {
+            "fallback": "openai",
+            "provider": "gemma",
+            "model_env": "OLLAMA_GEMMA_MODEL"
+          },
+          "chat_explain": {
+            "fallback": "openai",
+            "provider": "qwen",
+            "model_env": "OLLAMA_QWEN_MODEL"
+          },
+          "chat_research": {
+            "fallback": "none",
+            "provider": "openai",
+            "model_env": "OPENAI_CHAT_MODEL"
+          },
+          "final_reviewer": {
+            "fallback": "none",
+            "provider": "openai",
+            "model_env": "OPENAI_REVIEW_MODEL"
+          },
+          "transferability": {
+            "fallback": "openai",
+            "provider": "qwen",
+            "model_env": "OLLAMA_QWEN_MODEL"
+          },
+          "planner_revision": {
+            "fallback": "openai",
+            "provider": "gemma",
+            "model_env": "OLLAMA_GEMMA_MODEL"
+          },
+          "local_web_query_planner": {
+            "fallback": "none",
+            "provider": "qwen",
+            "model_env": "OLLAMA_QWEN_MODEL"
+          }
+        }
+      },
+      "effective_routes": {
+        "planner": {
+          "model": "gemma4:26b",
+          "fallback": "none",
+          "provider": "gemma",
+          "model_env": "OLLAMA_GEMMA_MODEL",
+          "locked_reason": "로컬 우선 비용 정책"
+        },
+        "evidence": {
+          "model": "gpt-5.6-terra",
+          "fallback": "none",
+          "provider": "openai",
+          "model_env": "OPENAI_RESEARCH_MODEL",
+          "locked_reason": "Web Search 필수 작업"
+        },
+        "reviewer": {
+          "model": "qwen3:14b",
+          "fallback": "none",
+          "provider": "qwen",
+          "model_env": "OPENAI_REVIEW_MODEL",
+          "locked_reason": "로컬 우선 비용 정책"
+        },
+        "case_study": {
+          "model": "gpt-5.6-sol",
+          "fallback": "none",
+          "provider": "openai",
+          "model_env": "OPENAI_CASE_RESEARCH_MODEL",
+          "locked_reason": "Web Search 필수 작업"
+        },
+        "chat_revise": {
+          "model": "gemma4:26b",
+          "fallback": "none",
+          "provider": "gemma",
+          "model_env": "OLLAMA_GEMMA_MODEL",
+          "locked_reason": "로컬 우선 비용 정책"
+        },
+        "chat_explain": {
+          "model": "qwen3:14b",
+          "fallback": "none",
+          "provider": "qwen",
+          "model_env": "OLLAMA_QWEN_MODEL",
+          "locked_reason": "로컬 우선 비용 정책"
+        },
+        "chat_research": {
+          "model": "gpt-5.6-sol",
+          "fallback": "none",
+          "provider": "openai",
+          "model_env": "OPENAI_CHAT_MODEL",
+          "locked_reason": "Web Search 필수 작업"
+        },
+        "final_reviewer": {
+          "model": "gpt-5.6-sol",
+          "fallback": "none",
+          "provider": "openai",
+          "model_env": "OPENAI_REVIEW_MODEL",
+          "locked_reason": "로컬 우선 비용 정책"
+        },
+        "transferability": {
+          "model": "qwen3:14b",
+          "fallback": "none",
+          "provider": "qwen",
+          "model_env": "OLLAMA_QWEN_MODEL",
+          "locked_reason": "로컬 우선 비용 정책"
+        },
+        "planner_revision": {
+          "model": "gemma4:26b",
+          "fallback": "none",
+          "provider": "gemma",
+          "model_env": "OLLAMA_GEMMA_MODEL",
+          "locked_reason": "로컬 우선 비용 정책"
+        },
+        "local_web_query_planner": {
+          "model": "qwen3:14b",
+          "fallback": "none",
+          "provider": "qwen",
+          "model_env": "OLLAMA_QWEN_MODEL",
+          "locked_reason": "로컬 우선 비용 정책"
+        }
+      }
+    },
+    {
+      "agent": "ml",
+      "stage": "forecast_evidence",
+      "status": "available",
+      "reason_code": "",
+      "selection_basis": "user_schedule_dates",
+      "forecast_horizon_months": 6
+    },
+    {
+      "agent": "evidence",
+      "items": 7,
+      "stage": "dataset",
+      "status": "completed"
+    },
+    {
+      "agent": "evidence",
+      "items": 6,
+      "stage": "nationwide_comparison",
+      "status": "completed"
+    },
+    {
+      "agent": "evidence",
+      "items": 12,
+      "stage": "nationwide_bigdata_context",
+      "status": "completed"
+    },
+    {
+      "agent": "evidence",
+      "items": 3,
+      "stage": "regional_tourism_status",
+      "status": "completed"
+    },
+    {
+      "agent": "evidence",
+      "items": 20,
+      "stage": "open_api",
+      "status": "completed"
+    },
+    {
+      "agent": "evidence",
+      "items": 5,
+      "stage": "rag",
+      "status": "completed"
+    },
+    {
+      "agent": "evidence",
+      "items": 5,
+      "stage": "official_web",
+      "status": "completed"
+    },
+    {
+      "agent": "case_scout",
+      "items": 5,
+      "stage": "curated_registry",
+      "status": "completed"
+    },
+    {
+      "agent": "case_scout",
+      "items": 8,
+      "stage": "case_rag",
+      "status": "completed"
+    },
+    {
+      "agent": "case_scout",
+      "items": 0,
+      "stage": "official_case_web",
+      "status": "failed",
+      "error_code": "OPENAI_UNVERIFIED_WEB_SOURCE"
+    },
+    {
+      "agent": "case_scout",
+      "items": 5,
+      "stage": "national_case_selection",
+      "status": "completed",
+      "scope_counts": {
+        "cross_province": 1,
+        "national_or_unresolved": 4
+      },
+      "registry_excluded": 0,
+      "catalog_candidates": 5,
+      "excluded_candidates": 0,
+      "registry_candidates": 5,
+      "selected_candidates": 5,
+      "selected_source_ids": [
+        "case:gangjin_half_price_2024",
+        "case:digital_tourism_resident_2024",
+        "case:kto_stay_discount_2022",
+        "case:night_festival_2025",
+        "case:night_tourism_cities_2024"
+      ]
+    },
+    {
+      "agent": "evidence",
+      "model": "gpt-5.6-terra",
+      "stage": "evidence",
+      "usage": {
+        "input_tokens": 34786,
+        "total_tokens": 37668,
+        "cached_tokens": 0,
+        "output_tokens": 2882,
+        "reasoning_tokens": 830
+      },
+      "status": "completed",
+      "attempts": [
+        {
+          "usage": {
+            "input_tokens": 34786,
+            "total_tokens": 37668,
+            "cached_tokens": 0,
+            "output_tokens": 2882,
+            "reasoning_tokens": 830
+          },
+          "reason": null,
+          "status": "completed",
+          "attempt": 1,
+          "duration_ms": 32486,
+          "usage_reported": true,
+          "max_output_tokens": 10000
+        }
+      ],
+      "fallback": false,
+      "provider": "openai",
+      "tool_trace": [],
+      "duration_ms": 32487,
+      "paid_reason": "부족한 공식 근거의 웹 조사",
+      "retry_count": 0,
+      "fallback_reason": "",
+      "web_search_used": true,
+      "input_preparation": {},
+      "max_output_tokens": 10000,
+      "requested_provider": "openai"
+    },
+    {
+      "agent": "case_scout",
+      "model": "gpt-5.6-sol",
+      "stage": "case_study",
+      "usage": {
+        "input_tokens": 71978,
+        "total_tokens": 78982,
+        "cached_tokens": 0,
+        "output_tokens": 7004,
+        "reasoning_tokens": 2442
+      },
+      "status": "failed",
+      "attempts": [
+        {
+          "usage": {
+            "input_tokens": 71978,
+            "total_tokens": 78982,
+            "cached_tokens": 0,
+            "output_tokens": 7004,
+            "reasoning_tokens": 2442
+          },
+          "reason": null,
+          "status": "completed",
+          "attempt": 1,
+          "duration_ms": 136685,
+          "usage_reported": true,
+          "max_output_tokens": 16000
+        }
+      ],
+      "fallback": false,
+      "provider": "openai",
+      "error_code": "OPENAI_UNVERIFIED_WEB_SOURCE",
+      "tool_trace": [],
+      "duration_ms": 136687,
+      "paid_reason": "부족한 공식 근거의 웹 조사",
+      "retry_count": 0,
+      "fallback_reason": "OPENAI_UNVERIFIED_WEB_SOURCE",
+      "web_search_used": false,
+      "max_output_tokens": 16000,
+      "requested_provider": "openai"
+    },
+    {
+      "agent": "evidence",
+      "stage": "complete",
+      "status": "completed",
+      "duration_ms": 138781
+    },
+    {
+      "agent": "case_scout",
+      "stage": "complete",
+      "status": "completed",
+      "duration_ms": 138781
+    },
+    {
+      "agent": "transferability",
+      "model": "qwen3:14b",
+      "stage": "transferability",
+      "usage": {
+        "input_tokens": 43030,
+        "total_tokens": 46467,
+        "output_tokens": 3437
+      },
+      "status": "completed",
+      "attempts": [
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 21843,
+            "total_tokens": 22355,
+            "output_tokens": 512
+          },
+          "status": "continued_without_optional_tools",
+          "error_code": "OLLAMA_INCOMPLETE_RESPONSE",
+          "usage_reported": true
+        },
+        {
+          "phase": "final_json",
+          "usage": {
+            "input_tokens": 21187,
+            "total_tokens": 24112,
+            "output_tokens": 2925
+          },
+          "status": "completed",
+          "usage_reported": true
+        }
+      ],
+      "fallback": false,
+      "provider": "qwen",
+      "tool_trace": [
+        {
+          "tool": "get_region_metrics",
+          "status": "completed"
+        },
+        {
+          "tool": "get_regional_tourism_status",
+          "status": "completed"
+        },
+        {
+          "tool": "compare_regions",
+          "status": "completed"
+        },
+        {
+          "tool": "get_nationwide_bigdata_context",
+          "status": "completed"
+        },
+        {
+          "tool": "get_ml_forecast",
+          "status": "completed"
+        },
+        {
+          "tool": "get_case_comparison_matrix",
+          "status": "completed"
+        },
+        {
+          "tool": "read_collected_source",
+          "status": "completed"
+        },
+        {
+          "tool": "read_collected_source",
+          "status": "completed"
+        }
+      ],
+      "duration_ms": 263793,
+      "paid_reason": "",
+      "retry_count": 0,
+      "fallback_reason": "",
+      "web_search_used": false,
+      "input_preparation": {
+        "mode": "request_scoped_evidence_tools",
+        "sources_read": 2,
+        "original_bytes": 127140,
+        "overview_bytes": 7068,
+        "sources_available": 60
+      },
+      "max_output_tokens": 8000,
+      "requested_provider": "qwen"
+    },
+    {
+      "agent": "transferability",
+      "stage": "candidate_repair",
+      "status": "completed",
+      "remaining_issues": 2,
+      "selection_status": "needs_evidence"
+    },
+    {
+      "agent": "transferability",
+      "model": "qwen3:14b",
+      "stage": "transferability",
+      "usage": {
+        "input_tokens": 20038,
+        "total_tokens": 23018,
+        "output_tokens": 2980
+      },
+      "status": "completed",
+      "attempts": [
+        {
+          "phase": "final_json",
+          "usage": {
+            "input_tokens": 20038,
+            "total_tokens": 23018,
+            "output_tokens": 2980
+          },
+          "status": "completed",
+          "usage_reported": true
+        }
+      ],
+      "fallback": false,
+      "provider": "qwen",
+      "tool_trace": [
+        {
+          "tool": "get_region_metrics",
+          "status": "completed"
+        },
+        {
+          "tool": "get_regional_tourism_status",
+          "status": "completed"
+        },
+        {
+          "tool": "compare_regions",
+          "status": "completed"
+        },
+        {
+          "tool": "get_ml_forecast",
+          "status": "completed"
+        },
+        {
+          "tool": "get_planning_decision",
+          "status": "completed"
+        },
+        {
+          "tool": "read_collected_source",
+          "status": "completed"
+        },
+        {
+          "tool": "read_collected_source",
+          "status": "completed"
+        },
+        {
+          "tool": "read_task_section",
+          "status": "completed"
+        }
+      ],
+      "duration_ms": 200863,
+      "paid_reason": "",
+      "retry_count": 0,
+      "fallback_reason": "",
+      "web_search_used": false,
+      "input_preparation": {
+        "mode": "request_scoped_evidence_tools",
+        "sources_read": 2,
+        "original_bytes": 139650,
+        "overview_bytes": 7089,
+        "sources_available": 60
+      },
+      "max_output_tokens": 8000,
+      "requested_provider": "qwen"
+    },
+    {
+      "agent": "transferability",
+      "stage": "assessment",
+      "status": "completed",
+      "duration_ms": 464662,
+      "recommended_cases": 1
+    },
+    {
+      "agent": "transferability",
+      "stage": "candidate_stabilization",
+      "status": "completed",
+      "corrections": 2
+    },
+    {
+      "agent": "planner",
+      "stage": "draft",
+      "status": "completed",
+      "duration_ms": 83889
+    },
+    {
+      "agent": "planner",
+      "model": "gemma4:26b",
+      "stage": "planner",
+      "usage": {
+        "input_tokens": 35389,
+        "total_tokens": 37201,
+        "output_tokens": 1812
+      },
+      "status": "completed",
+      "attempts": [
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 17982,
+            "total_tokens": 18494,
+            "output_tokens": 512
+          },
+          "status": "continued_without_optional_tools",
+          "error_code": "OLLAMA_INCOMPLETE_RESPONSE",
+          "usage_reported": true
+        },
+        {
+          "phase": "final_json",
+          "usage": {
+            "input_tokens": 17407,
+            "total_tokens": 18707,
+            "output_tokens": 1300
+          },
+          "status": "completed",
+          "usage_reported": true
+        }
+      ],
+      "fallback": false,
+      "provider": "gemma",
+      "tool_trace": [
+        {
+          "tool": "get_region_metrics",
+          "status": "completed"
+        },
+        {
+          "tool": "get_regional_tourism_status",
+          "status": "completed"
+        },
+        {
+          "tool": "compare_regions",
+          "status": "completed"
+        },
+        {
+          "tool": "get_ml_forecast",
+          "status": "completed"
+        },
+        {
+          "tool": "get_planning_decision",
+          "status": "completed"
+        },
+        {
+          "tool": "read_collected_source",
+          "status": "completed"
+        },
+        {
+          "tool": "read_task_section",
+          "status": "completed"
+        }
+      ],
+      "duration_ms": 83889,
+      "paid_reason": "",
+      "retry_count": 0,
+      "fallback_reason": "",
+      "web_search_used": false,
+      "input_preparation": {
+        "mode": "request_scoped_evidence_tools",
+        "sources_read": 1,
+        "original_bytes": 141212,
+        "overview_bytes": 7041,
+        "sources_available": 60
+      },
+      "max_output_tokens": 10000,
+      "requested_provider": "gemma"
+    },
+    {
+      "agent": "reviewer",
+      "score": 81,
+      "stage": "first_review",
+      "status": "completed",
+      "duration_ms": 107374
+    },
+    {
+      "agent": "reviewer",
+      "model": "qwen3:14b",
+      "stage": "reviewer",
+      "usage": {
+        "input_tokens": 92292,
+        "total_tokens": 93321,
+        "output_tokens": 1029
+      },
+      "status": "completed",
+      "attempts": [
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 23028,
+            "total_tokens": 23090,
+            "output_tokens": 62
+          },
+          "status": "completed",
+          "usage_reported": true
+        },
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 23156,
+            "total_tokens": 23193,
+            "output_tokens": 37
+          },
+          "status": "completed",
+          "usage_reported": true
+        },
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 23323,
+            "total_tokens": 23379,
+            "output_tokens": 56
+          },
+          "status": "completed",
+          "usage_reported": true
+        },
+        {
+          "phase": "final_json",
+          "usage": {
+            "input_tokens": 22785,
+            "total_tokens": 23659,
+            "output_tokens": 874
+          },
+          "status": "completed",
+          "usage_reported": true
+        }
+      ],
+      "fallback": false,
+      "provider": "qwen",
+      "tool_trace": [
+        {
+          "tool": "get_region_metrics",
+          "status": "completed"
+        },
+        {
+          "tool": "get_regional_tourism_status",
+          "status": "completed"
+        },
+        {
+          "tool": "compare_regions",
+          "status": "completed"
+        },
+        {
+          "tool": "get_nationwide_bigdata_context",
+          "status": "completed"
+        },
+        {
+          "tool": "get_ml_forecast",
+          "status": "completed"
+        },
+        {
+          "tool": "get_planning_decision",
+          "status": "completed"
+        },
+        {
+          "tool": "read_collected_source",
+          "status": "completed"
+        },
+        {
+          "tool": "read_task_section",
+          "status": "completed"
+        },
+        {
+          "tool": "read_task_section",
+          "status": "completed"
+        },
+        {
+          "tool": "get_planning_decision",
+          "status": "invalid_arguments"
+        },
+        {
+          "tool": "get_ml_forecast",
+          "status": "invalid_arguments"
+        },
+        {
+          "tool": "get_region_metrics",
+          "status": "invalid_arguments"
+        }
+      ],
+      "duration_ms": 107367,
+      "paid_reason": "",
+      "retry_count": 0,
+      "fallback_reason": "",
+      "web_search_used": false,
+      "input_preparation": {
+        "mode": "request_scoped_evidence_tools",
+        "sources_read": 1,
+        "original_bytes": 146709,
+        "overview_bytes": 8975,
+        "sources_available": 60
+      },
+      "max_output_tokens": 5500,
+      "requested_provider": "qwen"
+    },
+    {
+      "agent": "planner",
+      "stage": "revision",
+      "status": "completed",
+      "duration_ms": 43930
+    },
+    {
+      "agent": "planner",
+      "model": "gemma4:26b",
+      "stage": "planner_revision",
+      "usage": {
+        "input_tokens": 18827,
+        "total_tokens": 20167,
+        "output_tokens": 1340
+      },
+      "status": "completed",
+      "attempts": [
+        {
+          "phase": "final_json",
+          "usage": {
+            "input_tokens": 18827,
+            "total_tokens": 20167,
+            "output_tokens": 1340
+          },
+          "status": "completed",
+          "usage_reported": true
+        }
+      ],
+      "fallback": false,
+      "provider": "gemma",
+      "tool_trace": [
+        {
+          "tool": "get_region_metrics",
+          "status": "completed"
+        },
+        {
+          "tool": "get_regional_tourism_status",
+          "status": "completed"
+        },
+        {
+          "tool": "compare_regions",
+          "status": "completed"
+        },
+        {
+          "tool": "get_ml_forecast",
+          "status": "completed"
+        },
+        {
+          "tool": "get_planning_decision",
+          "status": "completed"
+        },
+        {
+          "tool": "read_collected_source",
+          "status": "completed"
+        },
+        {
+          "tool": "read_task_section",
+          "status": "completed"
+        },
+        {
+          "tool": "read_task_section",
+          "status": "completed"
+        }
+      ],
+      "duration_ms": 43924,
+      "paid_reason": "",
+      "retry_count": 0,
+      "fallback_reason": "",
+      "web_search_used": false,
+      "input_preparation": {
+        "mode": "request_scoped_evidence_tools",
+        "sources_read": 1,
+        "original_bytes": 91177,
+        "overview_bytes": 6639,
+        "sources_available": 17
+      },
+      "max_output_tokens": 10000,
+      "requested_provider": "gemma"
+    },
+    {
+      "agent": "reviewer",
+      "score": 81,
+      "stage": "local_recheck",
+      "status": "completed",
+      "duration_ms": 114398
+    },
+    {
+      "agent": "reviewer",
+      "model": "qwen3:14b",
+      "stage": "reviewer",
+      "usage": {
+        "input_tokens": 92497,
+        "total_tokens": 93583,
+        "output_tokens": 1086
+      },
+      "status": "completed",
+      "attempts": [
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 22803,
+            "total_tokens": 22865,
+            "output_tokens": 62
+          },
+          "status": "completed",
+          "usage_reported": true
+        },
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 22931,
+            "total_tokens": 22971,
+            "output_tokens": 40
+          },
+          "status": "completed",
+          "usage_reported": true
+        },
+        {
+          "phase": "tool_selection",
+          "usage": {
+            "input_tokens": 23098,
+            "total_tokens": 23116,
+            "output_tokens": 18
+          },
+          "status": "completed",
+          "usage_reported": true
+        },
+        {
+          "phase": "final_json",
+          "usage": {
+            "input_tokens": 23665,
+            "total_tokens": 24631,
+            "output_tokens": 966
+          },
+          "status": "completed",
+          "usage_reported": true
+        }
+      ],
+      "fallback": false,
+      "provider": "qwen",
+      "tool_trace": [
+        {
+          "tool": "get_region_metrics",
+          "status": "completed"
+        },
+        {
+          "tool": "get_regional_tourism_status",
+          "status": "completed"
+        },
+        {
+          "tool": "compare_regions",
+          "status": "completed"
+        },
+        {
+          "tool": "get_nationwide_bigdata_context",
+          "status": "completed"
+        },
+        {
+          "tool": "get_ml_forecast",
+          "status": "completed"
+        },
+        {
+          "tool": "get_planning_decision",
+          "status": "completed"
+        },
+        {
+          "tool": "read_collected_source",
+          "status": "completed"
+        },
+        {
+          "tool": "read_task_section",
+          "status": "completed"
+        },
+        {
+          "tool": "read_task_section",
+          "status": "completed"
+        },
+        {
+          "tool": "get_planning_decision",
+          "status": "invalid_arguments"
+        },
+        {
+          "tool": "get_ml_forecast",
+          "status": "invalid_arguments"
+        },
+        {
+          "tool": "get_case_comparison_matrix",
+          "status": "completed"
+        }
+      ],
+      "duration_ms": 114396,
+      "paid_reason": "",
+      "retry_count": 0,
+      "fallback_reason": "",
+      "web_search_used": false,
+      "input_preparation": {
+        "mode": "request_scoped_evidence_tools",
+        "sources_read": 1,
+        "original_bytes": 145513,
+        "overview_bytes": 7520,
+        "sources_available": 60
+      },
+      "max_output_tokens": 5500,
+      "requested_provider": "qwen"
+    },
+    {
+      "agent": "reviewer",
+      "stage": "cloud_final_audit",
+      "reason": "local_quality_gate_not_passed",
+      "status": "skipped"
+    }
+  ],
+  "limitations": [],
+  "ml_analysis": {
+    "status": "available",
+    "signals": [
+      {
+        "kind": "forecast_signal",
+        "unit": "명",
+        "metric": "visitors",
+        "period": "202610~202612",
+        "source_id": "ml:28237:regional-demand-v3.1:202606",
+        "aggregation": "3_month_sum",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "입력 일정 전망",
+        "window_months": 3,
+        "change_percent": -2.15,
+        "forecast_value": 11268139,
+        "interpretation": "입력 일정 전망에서 방문자 수의 전년 동기간 대비 감소 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "below_baseline_on_test",
+        "previous_year_same_months_value": 11515444
+      },
+      {
+        "kind": "forecast_signal",
+        "unit": "원",
+        "metric": "spending_krw",
+        "period": "202610~202612",
+        "source_id": "ml:28237:regional-demand-v3.1:202606",
+        "aggregation": "3_month_sum",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "입력 일정 전망",
+        "window_months": 3,
+        "change_percent": -3.24,
+        "forecast_value": 243545949020,
+        "interpretation": "입력 일정 전망에서 관광소비액의 전년 동기간 대비 감소 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "below_baseline_on_test",
+        "previous_year_same_months_value": 251691159000
+      },
+      {
+        "kind": "forecast_signal",
+        "unit": "일",
+        "metric": "lodging_nights",
+        "period": "202610~202612",
+        "source_id": "ml:28237:regional-demand-v3.1:202606",
+        "aggregation": "3_month_average",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "입력 일정 전망",
+        "window_months": 3,
+        "change_percent": 0.7,
+        "forecast_value": 2.8966666666666665,
+        "interpretation": "입력 일정 전망에서 평균 숙박일수의 전년 동기간 대비 증가 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "limited_backtest_support",
+        "previous_year_same_months_value": 2.8766666666666665
+      },
+      {
+        "kind": "forecast_signal",
+        "unit": "%",
+        "metric": "lodging_rate_pct",
+        "period": "202610~202612",
+        "source_id": "ml:28237:regional-demand-v3.1:202606",
+        "aggregation": "3_month_average",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "입력 일정 전망",
+        "window_months": 3,
+        "change_percent": 0,
+        "forecast_value": 7.466666666666666,
+        "interpretation": "입력 일정 전망에서 숙박방문자 비율의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "seasonal_baseline",
+        "previous_year_same_months_value": 7.466666666666666
+      },
+      {
+        "kind": "forecast_signal",
+        "unit": "분",
+        "metric": "stay_minutes",
+        "period": "202610~202612",
+        "source_id": "ml:28237:regional-demand-v3.1:202606",
+        "aggregation": "3_month_average",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "입력 일정 전망",
+        "window_months": 3,
+        "change_percent": 1.41,
+        "forecast_value": 1187.54,
+        "interpretation": "입력 일정 전망에서 평균 체류시간의 전년 동기간 대비 증가 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "below_baseline_on_test",
+        "previous_year_same_months_value": 1171
+      },
+      {
+        "kind": "forecast_signal",
+        "unit": "건",
+        "metric": "navigation_searches",
+        "period": "202610~202612",
+        "source_id": "ml:28237:regional-demand-v3.1:202606",
+        "aggregation": "3_month_sum",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "입력 일정 전망",
+        "window_months": 3,
+        "change_percent": 0,
+        "forecast_value": 487596,
+        "interpretation": "입력 일정 전망에서 내비게이션 검색량의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "seasonal_baseline",
+        "previous_year_same_months_value": 487596
+      },
+      {
+        "kind": "forecast_signal",
+        "unit": "건",
+        "metric": "lodging_searches",
+        "period": "202610~202612",
+        "source_id": "ml:28237:regional-demand-v3.1:202606",
+        "aggregation": "3_month_sum",
+        "reliability": "exploratory_longer_horizon",
+        "window_label": "입력 일정 전망",
+        "window_months": 3,
+        "change_percent": 0,
+        "forecast_value": 22241,
+        "interpretation": "입력 일정 전망에서 숙박 목적지 검색량의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다.",
+        "model_reliability": "seasonal_baseline",
+        "previous_year_same_months_value": 22241
+      }
+    ],
+    "cautions": [
+      "관측 사실·ML 전망·사업 목표를 분리합니다. 전망은 정책 미실행 결과나 인과효과가 아닙니다.",
+      "시험 표본이 적습니다. 지표·horizon별 기준선 대비 오차를 확인하고 우수성을 일반화하지 않습니다.",
+      "below_baseline_on_test 또는 mixed_recursive_performance 전망은 단독 선정 근거·성과 목표로 쓰지 않습니다. seasonal_baseline은 전년 동월 반복이며 고도화 모델의 개선 성과가 아닙니다.",
+      "관광소비액은 지역 사업자의 순이익이 아닙니다. 방문자와 소비 표본이 같다는 확인 없이 1인당 소비를 계산하지 않습니다.",
+      "업종별 비중 변화·SNS 언급량·쿠폰 지급 효과·사업의 추가 매출은 이 모델이 학습한 대상이 아닙니다.",
+      "내비게이션·숙박 검색량은 관심 신호이며 실제 방문·예약 건수로 해석하지 않습니다.",
+      "4개월 이후 전망은 탐색값이며 월이 멀어질수록 불확실성이 커집니다."
+    ],
+    "forecasts": [
+      {
+        "month": "202607",
+        "visitors": 3817303,
+        "is_forecast": true,
+        "spending_krw": 78887191546,
+        "stay_minutes": 1212.73,
+        "lodging_nights": 2.91,
+        "lodging_rate_pct": 7.1,
+        "lodging_searches": 7347,
+        "navigation_searches": 141607,
+        "visitor_yoy_percent": -1.21,
+        "spending_yoy_percent": 0.76,
+        "metric_changes_percent": {
+          "stay_minutes": -7.07,
+          "lodging_nights": -2.35,
+          "lodging_rate_pct": 0.0,
+          "lodging_searches": 0.0,
+          "navigation_searches": 0.0
+        },
+        "previous_year_visitors": 3863992,
+        "previous_year_spending_krw": 78295445000,
+        "previous_year_stay_minutes": 1305.0,
+        "previous_year_lodging_nights": 2.98,
+        "previous_year_lodging_rate_pct": 7.1,
+        "previous_year_lodging_searches": 7347,
+        "previous_year_navigation_searches": 141607
+      },
+      {
+        "month": "202608",
+        "visitors": 3749035,
+        "is_forecast": true,
+        "spending_krw": 80682185171,
+        "stay_minutes": 1150.71,
+        "lodging_nights": 2.93,
+        "lodging_rate_pct": 7.4,
+        "lodging_searches": 6953,
+        "navigation_searches": 142750,
+        "visitor_yoy_percent": -0.2,
+        "spending_yoy_percent": 0.35,
+        "metric_changes_percent": {
+          "stay_minutes": -4.98,
+          "lodging_nights": 1.03,
+          "lodging_rate_pct": 0.0,
+          "lodging_searches": 0.0,
+          "navigation_searches": 0.0
+        },
+        "previous_year_visitors": 3756696,
+        "previous_year_spending_krw": 80401710000,
+        "previous_year_stay_minutes": 1211.0,
+        "previous_year_lodging_nights": 2.9,
+        "previous_year_lodging_rate_pct": 7.4,
+        "previous_year_lodging_searches": 6953,
+        "previous_year_navigation_searches": 142750
+      },
+      {
+        "month": "202609",
+        "visitors": 3753359,
+        "is_forecast": true,
+        "spending_krw": 75157794156,
+        "stay_minutes": 1127.96,
+        "lodging_nights": 2.86,
+        "lodging_rate_pct": 6.4,
+        "lodging_searches": 6207,
+        "navigation_searches": 127671,
+        "visitor_yoy_percent": 0.83,
+        "spending_yoy_percent": -1.74,
+        "metric_changes_percent": {
+          "stay_minutes": -0.88,
+          "lodging_nights": -2.72,
+          "lodging_rate_pct": 0.0,
+          "lodging_searches": 0.0,
+          "navigation_searches": 0.0
+        },
+        "previous_year_visitors": 3722556,
+        "previous_year_spending_krw": 76492493000,
+        "previous_year_stay_minutes": 1138.0,
+        "previous_year_lodging_nights": 2.94,
+        "previous_year_lodging_rate_pct": 6.4,
+        "previous_year_lodging_searches": 6207,
+        "previous_year_navigation_searches": 127671
+      },
+      {
+        "month": "202610",
+        "visitors": 3778392,
+        "is_forecast": true,
+        "spending_krw": 78739302878,
+        "stay_minutes": 1189.22,
+        "lodging_nights": 2.9,
+        "lodging_rate_pct": 8.5,
+        "lodging_searches": 9560,
+        "navigation_searches": 211413,
+        "visitor_yoy_percent": -3.74,
+        "spending_yoy_percent": -6.27,
+        "metric_changes_percent": {
+          "stay_minutes": -3.55,
+          "lodging_nights": 0.69,
+          "lodging_rate_pct": 0.0,
+          "lodging_searches": 0.0,
+          "navigation_searches": 0.0
+        },
+        "previous_year_visitors": 3925237,
+        "previous_year_spending_krw": 84007025000,
+        "previous_year_stay_minutes": 1233.0,
+        "previous_year_lodging_nights": 2.88,
+        "previous_year_lodging_rate_pct": 8.5,
+        "previous_year_lodging_searches": 9560,
+        "previous_year_navigation_searches": 211413
+      },
+      {
+        "month": "202611",
+        "visitors": 3748084,
+        "is_forecast": true,
+        "spending_krw": 81104223698,
+        "stay_minutes": 1157.37,
+        "lodging_nights": 2.86,
+        "lodging_rate_pct": 6.5,
+        "lodging_searches": 6582,
+        "navigation_searches": 141791,
+        "visitor_yoy_percent": -1.44,
+        "spending_yoy_percent": -1.77,
+        "metric_changes_percent": {
+          "stay_minutes": 4.74,
+          "lodging_nights": -1.38,
+          "lodging_rate_pct": 0.0,
+          "lodging_searches": 0.0,
+          "navigation_searches": 0.0
+        },
+        "previous_year_visitors": 3802982,
+        "previous_year_spending_krw": 82569585000,
+        "previous_year_stay_minutes": 1105.0,
+        "previous_year_lodging_nights": 2.9,
+        "previous_year_lodging_rate_pct": 6.5,
+        "previous_year_lodging_searches": 6582,
+        "previous_year_navigation_searches": 141791
+      },
+      {
+        "month": "202612",
+        "visitors": 3741663,
+        "is_forecast": true,
+        "spending_krw": 83702422444,
+        "stay_minutes": 1216.03,
+        "lodging_nights": 2.93,
+        "lodging_rate_pct": 7.4,
+        "lodging_searches": 6099,
+        "navigation_searches": 134392,
+        "visitor_yoy_percent": -1.2,
+        "spending_yoy_percent": -1.66,
+        "metric_changes_percent": {
+          "stay_minutes": 3.49,
+          "lodging_nights": 2.81,
+          "lodging_rate_pct": 0.0,
+          "lodging_searches": 0.0,
+          "navigation_searches": 0.0
+        },
+        "previous_year_visitors": 3787225,
+        "previous_year_spending_krw": 85114549000,
+        "previous_year_stay_minutes": 1175.0,
+        "previous_year_lodging_nights": 2.85,
+        "previous_year_lodging_rate_pct": 7.4,
+        "previous_year_lodging_searches": 6099,
+        "previous_year_navigation_searches": 134392
+      }
+    ],
+    "source_id": "ml:28237:regional-demand-v3.1:202606",
+    "evaluation": {
+      "metrics": {
+        "visitors": {
+          "test_mae": 116276.26,
+          "recursive_mae": {
+            "1": {
+              "baseline": 107629,
+              "selected": 144586,
+              "sample_count": 2
+            },
+            "2": {
+              "baseline": 97982,
+              "selected": 42697.5,
+              "sample_count": 2
+            },
+            "3": {
+              "baseline": 117576.5,
+              "selected": 61978,
+              "sample_count": 2
+            }
+          },
+          "selected_model": "RandomForestRegressor",
+          "baseline_test_mae": 112602.75,
+          "model_reliability": "below_baseline_on_test",
+          "beats_baseline_on_test": false,
+          "recursive_horizons_worse_than_baseline": [
+            "1"
+          ]
+        },
+        "spending_krw": {
+          "test_mae": 8497417178.46,
+          "recursive_mae": {
+            "1": {
+              "baseline": 8544467500,
+              "selected": 9094829451,
+              "sample_count": 2
+            },
+            "2": {
+              "baseline": 7477646000,
+              "selected": 11843172152.5,
+              "sample_count": 2
+            },
+            "3": {
+              "baseline": 3820910500,
+              "selected": 11502063502,
+              "sample_count": 2
+            }
+          },
+          "selected_model": "LinearRegression",
+          "baseline_test_mae": 6182689000,
+          "model_reliability": "below_baseline_on_test",
+          "beats_baseline_on_test": false,
+          "recursive_horizons_worse_than_baseline": [
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        "stay_minutes": {
+          "test_mae": 251.99,
+          "recursive_mae": {
+            "1": {
+              "baseline": 54.5,
+              "selected": 117.74,
+              "sample_count": 2
+            },
+            "2": {
+              "baseline": 205.5,
+              "selected": 187.84,
+              "sample_count": 2
+            },
+            "3": {
+              "baseline": 208.5,
+              "selected": 234.17,
+              "sample_count": 2
+            }
+          },
+          "selected_model": "LinearRegression",
+          "baseline_test_mae": 131.5,
+          "model_reliability": "below_baseline_on_test",
+          "beats_baseline_on_test": false,
+          "recursive_horizons_worse_than_baseline": [
+            "1",
+            "3"
+          ]
+        },
+        "lodging_nights": {
+          "test_mae": 0.08,
+          "recursive_mae": {
+            "1": {
+              "baseline": 0.07,
+              "selected": 0.04,
+              "sample_count": 2
+            },
+            "2": {
+              "baseline": 0.11,
+              "selected": 0.09,
+              "sample_count": 2
+            },
+            "3": {
+              "baseline": 0.1,
+              "selected": 0.07,
+              "sample_count": 2
+            }
+          },
+          "selected_model": "LinearRegression",
+          "baseline_test_mae": 0.09,
+          "model_reliability": "limited_backtest_support",
+          "beats_baseline_on_test": true,
+          "recursive_horizons_worse_than_baseline": []
+        },
+        "lodging_rate_pct": {
+          "test_mae": 0.27,
+          "recursive_mae": {
+            "1": {
+              "baseline": 0.35,
+              "selected": 0.35,
+              "sample_count": 2
+            },
+            "2": {
+              "baseline": 0.1,
+              "selected": 0.1,
+              "sample_count": 2
+            },
+            "3": {
+              "baseline": 0.2,
+              "selected": 0.2,
+              "sample_count": 2
+            }
+          },
+          "selected_model": "seasonal_naive_previous_year_same_month",
+          "baseline_test_mae": 0.27,
+          "model_reliability": "seasonal_baseline",
+          "beats_baseline_on_test": false,
+          "recursive_horizons_worse_than_baseline": []
+        },
+        "lodging_searches": {
+          "test_mae": 414.25,
+          "recursive_mae": {
+            "1": {
+              "baseline": 527,
+              "selected": 527,
+              "sample_count": 2
+            },
+            "2": {
+              "baseline": 252.5,
+              "selected": 252.5,
+              "sample_count": 2
+            },
+            "3": {
+              "baseline": 301.5,
+              "selected": 301.5,
+              "sample_count": 2
+            }
+          },
+          "selected_model": "seasonal_naive_previous_year_same_month",
+          "baseline_test_mae": 414.25,
+          "model_reliability": "seasonal_baseline",
+          "beats_baseline_on_test": false,
+          "recursive_horizons_worse_than_baseline": []
+        },
+        "navigation_searches": {
+          "test_mae": 6613.5,
+          "recursive_mae": {
+            "1": {
+              "baseline": 7157.5,
+              "selected": 7157.5,
+              "sample_count": 2
+            },
+            "2": {
+              "baseline": 2837.5,
+              "selected": 2837.5,
+              "sample_count": 2
+            },
+            "3": {
+              "baseline": 6069.5,
+              "selected": 6069.5,
+              "sample_count": 2
+            }
+          },
+          "selected_model": "seasonal_naive_previous_year_same_month",
+          "baseline_test_mae": 6613.5,
+          "model_reliability": "seasonal_baseline",
+          "beats_baseline_on_test": false,
+          "recursive_horizons_worse_than_baseline": []
+        }
+      },
+      "test_period": "202603~202606",
+      "selection_basis": "validation_mae_only",
+      "validation_period": "202512~202602",
+      "longer_horizon_status": "exploratory_not_recursively_backtested",
+      "forecast_horizon_months": 6,
+      "recursive_backtest_horizon_months": [
+        1,
+        2,
+        3
+      ]
+    },
+    "reason_code": "",
+    "region_code": "28237",
+    "region_name": "인천광역시 부평구",
+    "forecast_type": "historical_trend_not_policy_counterfactual",
+    "model_version": "regional-demand-v3.1",
+    "source_period": "202401~202606",
+    "horizon_policy": {
+      "notes": [
+        "4개월 이후 전망은 탐색값이며 월이 멀어질수록 불확실성이 커집니다."
+      ],
+      "as_of_date": "2026-09-12",
+      "schedule_status": "fixed",
+      "selection_basis": "user_schedule_dates",
+      "decision_windows": [
+        {
+          "label": "입력 일정 전망",
+          "months": 3,
+          "end_month": "202612",
+          "reliability": "exploratory_longer_horizon",
+          "start_month": "202610",
+          "forecast_end_index": 5,
+          "forecast_start_index": 3
+        }
+      ],
+      "coverage_complete": true,
+      "forecast_end_month": "202612",
+      "requested_end_month": "202612",
+      "forecast_start_month": "202607",
+      "requested_start_month": "202610",
+      "forecast_horizon_months": 6,
+      "strategy_duration_max_months": 3,
+      "strategy_duration_min_months": 3,
+      "validated_recursive_horizon_months": 3
+    },
+    "data_fingerprint": "06231bffd046b8ec0625c675881feb25e51324ad265d5b5ecf0dc8d247440a7d",
+    "research_questions": [
+      "인천광역시 부평구의 입력 일정 전망(202610~202612) 방문자 수와 내비게이션 검색량 전망을 비교해 관심을 실제 방문으로 연결한 공식 사업의 운영방법·예산·성과·실패조건을 조사하세요.",
+      "인천광역시 부평구의 입력 일정 전망(202610~202612) 숙박검색·숙박방문 비율·평균 숙박일·체류시간 전망을 함께 보고 숙박 전환과 장시간 체류를 높인 공식 사업을 조사하세요.",
+      "인천광역시 부평구의 입력 일정 전망(202610~202612) 관광소비액 전망과 계절 조건이 비슷한 지역의 쿠폰·환급·숙박 연계 사업을 공식 성과자료 중심으로 조사하세요."
+    ],
+    "latest_observed_month": "202606"
+  },
+  "region_name": "인천광역시 부평구",
+  "metrics_count": 7,
+  "monthly_trend": [
+    {
+      "month": "2025.07",
+      "visitors": 3863992,
+      "is_forecast": false,
+      "spending_krw": 78295445000,
+      "visitor_index": 100.0,
+      "spending_index": 100.0,
+      "is_current_month": false
+    },
+    {
+      "month": "2025.08",
+      "visitors": 3756696,
+      "is_forecast": false,
+      "spending_krw": 80401710000,
+      "visitor_index": 97.2,
+      "spending_index": 102.7,
+      "is_current_month": false
+    },
+    {
+      "month": "2025.09",
+      "visitors": 3722556,
+      "is_forecast": false,
+      "spending_krw": 76492493000,
+      "visitor_index": 96.3,
+      "spending_index": 97.7,
+      "is_current_month": false
+    },
+    {
+      "month": "2025.10",
+      "visitors": 3925237,
+      "is_forecast": false,
+      "spending_krw": 84007025000,
+      "visitor_index": 101.6,
+      "spending_index": 107.3,
+      "is_current_month": false
+    },
+    {
+      "month": "2025.11",
+      "visitors": 3802982,
+      "is_forecast": false,
+      "spending_krw": 82569585000,
+      "visitor_index": 98.4,
+      "spending_index": 105.5,
+      "is_current_month": false
+    },
+    {
+      "month": "2025.12",
+      "visitors": 3787225,
+      "is_forecast": false,
+      "spending_krw": 85114549000,
+      "visitor_index": 98.0,
+      "spending_index": 108.7,
+      "is_current_month": false
+    },
+    {
+      "month": "2026.01",
+      "visitors": 3594516,
+      "is_forecast": false,
+      "spending_krw": 82650981000,
+      "visitor_index": 93.0,
+      "spending_index": 105.6,
+      "is_current_month": false
+    },
+    {
+      "month": "2026.02",
+      "visitors": 3548419,
+      "is_forecast": false,
+      "spending_krw": 80133778000,
+      "visitor_index": 91.8,
+      "spending_index": 102.3,
+      "is_current_month": false
+    },
+    {
+      "month": "2026.03",
+      "visitors": 3888963,
+      "is_forecast": false,
+      "spending_krw": 83985626000,
+      "visitor_index": 100.6,
+      "spending_index": 107.3,
+      "is_current_month": false
+    },
+    {
+      "month": "2026.04",
+      "visitors": 3443241,
+      "is_forecast": false,
+      "spending_krw": 82778406000,
+      "visitor_index": 89.1,
+      "spending_index": 105.7,
+      "is_current_month": false
+    },
+    {
+      "month": "2026.05",
+      "visitors": 3852827,
+      "is_forecast": false,
+      "spending_krw": 84482062000,
+      "visitor_index": 99.7,
+      "spending_index": 107.9,
+      "is_current_month": false
+    },
+    {
+      "month": "2026.06",
+      "visitors": 3514485,
+      "is_forecast": false,
+      "spending_krw": 77138204000,
+      "visitor_index": 91.0,
+      "spending_index": 98.5,
+      "is_current_month": false
+    }
+  ],
+  "research_gaps": [
+    "제공된 관광 데이터랩 관측치와 지역별 관광현황 자료는 공식 데이터랩 화면을 출처로 하나, 일부 regional_tourism_status 원본은 `needs_exact_download_url` 상태다. 따라서 인기 장소 순위·유입유출 비율·향후 30일 집중 신호는 후보 권역을 정하는 보조 신호로만 쓰고, 원문 다운로드 URL·정의·추출조건을 확인하기 전 성과 근거나 정량 목표로 사용하지 않는다.",
+    "2026-10~2026-12 내부 모델 전망은 입력 일정 전체를 포괄하지만 4개월 이후의 탐색 전망이다. 특히 방문자 수와 관광소비액 전망은 시험 MAE가 계절 기준선보다 높아 단독 선정 근거 또는 확정 성과목표로 사용할 수 없다.",
+    "예산 상태가 unknown이므로 시장 연계 쿠폰, 환급, 셔틀, 공연 제작, 홍보매체 구매 등 비용 구조가 큰 사업의 적정성은 아직 비교할 수 없다. 예산이 확정되기 전에는 축제 기존 운영과 겹치지 않는 안내·동선·참여점포 모집·간단한 검증 체계 중심의 단계안으로만 설계해야 한다.",
+    "부평풍물대축제와 시장 권역의 도로 통제, 부스 배치, 상인회·점포 참여 절차, 전기·안전·쓰레기 처리, 행사장과 시장 간 실제 보행 연결성 및 운영시간은 확인이 필요하다.",
+    "부평아트센터의 2026년 10~12월 대관 가능일·사용료·운영 담당부서와 시장권역 공동 프로그램의 협력 가능 여부가 공식 확인되지 않았다.",
+    "숙박시설의 객실 공급, 참여 의향, 숙박상품 판매·할인·환급의 법적·정산상 조건 및 기존 지원사업과의 중복 제한이 확인되지 않았다. 따라서 숙박 전환을 목표로 하는 패키지 또는 할인 사업은 후순위 검토가 필요하다.",
+    "공식 성공사례 웹 조사 실패: OPENAI_UNVERIFIED_WEB_SOURCE",
+    "같은 시도의 타 시군구 공식 사례 카드는 현재 후보에 없습니다. 전국 사례를 비교하되 인근 사업이 없다고 단정하지 않습니다."
+  ],
+  "planning_brief": {
+    "version": 1,
+    "end_date": "2026-12-31",
+    "references": [],
+    "start_date": "2026-10-01",
+    "preferences": "",
+    "region_code": "28237",
+    "budget_status": "unknown",
+    "field_context": "",
+    "input_profile": "guided_v2",
+    "budget_max_krw": null,
+    "budget_min_krw": null,
+    "context_options": [],
+    "schedule_status": "fixed",
+    "hard_constraints": "",
+    "resource_options": [],
+    "resources_status": "unknown",
+    "budget_hard_limit": false,
+    "business_direction": "auto",
+    "constraints_status": "unknown",
+    "resources_possible": "",
+    "visitor_target_pct": null,
+    "excluded_operations": [],
+    "resources_confirmed": "",
+    "spending_target_pct": null
+  },
+  "quality_review": {
+    "issues": [
+      {
+        "field": "planning_decision.selection_status",
+        "problem": "선택 후보의 지역 적용 조건이 미확인 상태입니다.",
+        "severity": "major",
+        "revision_instruction": "후보 수 부족과 구분하세요. prerequisites/selection_reason의 미확인 조건과 필요한 공식 문서를 명시하고, 확인 전 집행 승인이나 ready 변경을 하지 마세요."
+      },
+      {
+        "field": "planning_decision.selected_candidate_id",
+        "problem": "선택 후보의 지역 적용 조건이 미확인 상태입니다.",
+        "severity": "major",
+        "revision_instruction": "후보 수 부족과 구분하세요. prerequisites/selection_reason의 미확인 조건과 필요한 공식 문서를 명시하고, 확인 전 집행 승인이나 ready 변경을 하지 마세요."
+      },
+      {
+        "field": "planning_decision.selected_candidate.evidence_source_ids",
+        "problem": "선택 후보의 지역 적용 조건이 미확인 상태입니다.",
+        "severity": "major",
+        "revision_instruction": "후보 수 부족과 구분하세요. prerequisites/selection_reason의 미확인 조건과 필요한 공식 문서를 명시하고, 확인 전 집행 승인이나 ready 변경을 하지 마세요."
+      },
+      {
+        "field": "planning_decision.selected_candidate.measurement_plan",
+        "problem": "측정 계획이 미흡합니다.",
+        "severity": "major",
+        "revision_instruction": "측정 계획을 구체화하고, 성공·중단 기준을 기준선·표본수 확인 뒤 착수 전에 확정하세요."
+      },
+      {
+        "field": "planning_decision.selected_candidate.budget_formula",
+        "problem": "예산 계산식이 미흡합니다.",
+        "severity": "major",
+        "revision_instruction": "예산 계산식을 구체화하고, 확정 사용자 예산 상한을 넘거나 가정을 공식 단가라고 쓰지 마세요."
+      },
+      {
+        "field": "planning_decision.selected_candidate.local_fit",
+        "problem": "지역 적합성에 대한 설명이 미흡합니다.",
+        "severity": "major",
+        "revision_instruction": "지역 적합성에 대한 설명을 구체화하고, 부평구의 특성에 맞춘 지역상품권 환급 방식을 명확히 설정하세요."
+      },
+      {
+        "field": "quality_review.overall_score",
+        "problem": "최종 검수 점수가 82점 미만입니다.",
+        "severity": "major",
+        "revision_instruction": "근거 연결, 실행 단계, 예산 산식, KPI 측정 방법을 보완한 뒤 다시 검수하세요."
+      }
+    ],
+    "summary": "부평구 지역상품권 환급 프로그램은 강진 반값여행 지역환급 사례와 유사한 운영 방식을 채택하고 있어, 지역 내 소비 증대 효과를 극대화할 수 있다. 그러나, 선택 후보의 지역 적용 조건이 미확인 상태이며, 측정 계획과 예산 계산식이 미흡하다는 문제가 있다. 이에 따라, 후보 수 부족과 구분하여 prerequisites/selection_reason의 미확인 조건과 필요한 공식 문서를 명시하고, 확인 전 집행 승인이나 ready 변경을 하지 않아야 한다. · 코드 점검에서 실행·근거 보완 항목이 확인되었습니다.",
+    "approved": false,
+    "strengths": [
+      "부평구의 외지인 방문자 수와 관광소비액 증가를 목표로 한 지역상품권 환급 프로그램은 강진 반값여행 지역환급 사례와 유사한 운영 방식을 채택하고 있어, 지역 내 소비 증대 효과를 극대화할 수 있다.",
+      "환급 지원액이 10,000,000원 이상 달성 시 성공, 5,000,000원 미만 시 중단하는 성공·중단 기준을 설정할 수 있어, 사업의 성과를 명확히 측정할 수 있다."
+    ],
+    "revised_once": true,
+    "overall_score": 81,
+    "dimension_scores": {
+      "evidence_validity": 85,
+      "comparison_quality": 78,
+      "clarity_and_brevity": 83,
+      "implementation_detail": 80,
+      "visual_material_readiness": 81,
+      "public_official_usefulness": 79
+    },
+    "validation_findings": [
+      {
+        "field": "planning_decision.selection_status",
+        "problem": "선택 후보의 지역 적용 조건이 미확인 상태입니다.",
+        "severity": "major",
+        "revision_instruction": "후보 수 부족과 구분하세요. prerequisites/selection_reason의 미확인 조건과 필요한 공식 문서를 명시하고, 확인 전 집행 승인이나 ready 변경을 하지 마세요."
+      }
+    ],
+    "completion_checklist": [
+      {
+        "id": "case_fit",
+        "owner": "AI 재비교 + 담당자 공식 문서 확인",
+        "title": "지역 적합성·후보 선정",
+        "action": "이번 요청에는 사례 카드 5건이 있습니다. 먼저 보유 자료로 비교·선정 근거를 보완하고 확인되지 않은 운영 조건만 추가 확보합니다.",
+        "status": "보유 근거 재검토 / 적용 조건 확인",
+        "required_materials": [
+          "선택/비교 사업의 공식 운영지침·결과보고서(사업 지역, 시행기간, 대상, 비용, 성과 정의, URL/페이지)",
+          "선택 지역에서 동일 운영 방식이 가능한지 확인할 참여 조건·협약 자료"
+        ]
+      },
+      {
+        "id": "budget",
+        "owner": "AI 산식 보완 + 운영/회계 담당",
+        "title": "예산 산식·단가",
+        "action": "보유 근거로 수량×단가 식을 작성합니다. 금액의 확정이 필요할 때만 견적을 추가 받습니다.",
+        "status": "설계 보완 / 확정 단가 별도 확인",
+        "required_materials": [
+          "예산 상한(미정 가능), 적격 지급 건수/운영일수 가정",
+          "인력·운영대행·정산·홍보 견적서 또는 공식 계약 내역(수량, 단가, 부가세 포함 여부, 기준일)"
+        ]
+      },
+      {
+        "id": "measurement",
+        "owner": "AI 측정 설계 + 사업/정산 담당",
+        "title": "성과 측정·추가 효과",
+        "action": "자료가 있는데 본문에 빠진 것인지 먼저 확인합니다. 관광 월간 통계만으로 사업 참여·재사용·순증 소비를 계산하지 않습니다.",
+        "status": "집계 가능 여부 확인 / 사후 수집 계획",
+        "required_materials": [
+          "동일 범위 전년 동기/운영 전 기준기간과 사업 기간의 취소 제외 결제액·건수(가능한 집계표)",
+          "익명·집계된 신청/적격/지급/재사용 건수, 측정 주기, 비교집단 정의",
+          "사후 수집 항목은 사업 전에 존재할 수 없으므로 수집 담당·방법·예정일만 먼저 확정"
+        ]
+      },
+      {
+        "id": "voucher_rules",
+        "owner": "지자체 상품권/관광 담당",
+        "title": "환급·상품권 운영 가능 여부",
+        "action": "현재 응답의 문구만으로 지급 허용·즉시 정산을 확인할 수 없습니다. 공식 지침을 대조해야 합니다.",
+        "status": "적용 조건 확인 필요",
+        "required_materials": [
+          "선택 지역 상품권 운영지침/공고: 관광 환급 허용 여부, 가맹점·업종, 수수료, 지급 시점, 취소·중복 수혜 규칙",
+          "자료 제공 가능 항목 안내(개인정보·카드번호·이름은 보내지 않음)"
+        ]
+      }
+    ],
+    "final_audit_completed": false,
+    "quality_contract_version": "execution-evidence-v1"
+  },
+  "generation_mode": "openai",
+  "evidence_sources": [
+    {
+      "title": "한국관광 데이터랩 · 인천광역시 부평구 순 방문자 수 및 숙박 비율 (이동통신 기반 외지인)",
+      "summary": "월간 순 방문자 수: 3,514,485명 (관측 기준월: 2026-06)",
+      "source_id": "dataset:28237:1",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "dataset",
+      "observation_period": "2026-06",
+      "published_or_updated_at": "2026-06"
+    },
+    {
+      "title": "한국관광 데이터랩 · 인천광역시 부평구 월간 순 방문자 수 (이동통신 기반 외지인)",
+      "summary": "전년동월 외지인 방문자 증감률: -2.2% (관측 기준월: 2026-06)",
+      "source_id": "dataset:28237:2",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "dataset",
+      "observation_period": "2026-06",
+      "published_or_updated_at": "2026-06"
+    },
+    {
+      "title": "한국관광 데이터랩 · 인천광역시 부평구 관광소비 추이_외지인",
+      "summary": "월간 외지인 관광소비 총액: 77,138,204,000원 (관측 기준월: 2026-06)",
+      "source_id": "dataset:28237:3",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "dataset",
+      "observation_period": "2026-06",
+      "published_or_updated_at": "2026-06"
+    },
+    {
+      "title": "한국관광 데이터랩 · 인천광역시 부평구 숙박방문자 비율 추이 (이동통신 기반 외지인)",
+      "summary": "외지인 숙박 방문 비율: 6.6% (관측 기준월: 2026-06)",
+      "source_id": "dataset:28237:4",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "dataset",
+      "observation_period": "2026-06",
+      "published_or_updated_at": "2026-06"
+    },
+    {
+      "title": "한국관광 데이터랩 · 인천광역시 부평구 평균 숙박일 (이동통신 기반 외지인)",
+      "summary": "외지인 평균 숙박일수: 2.90일 (관측 기준월: 2026-06)",
+      "source_id": "dataset:28237:5",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "dataset",
+      "observation_period": "2026-06",
+      "published_or_updated_at": "2026-06"
+    },
+    {
+      "title": "한국관광 데이터랩 · 인천광역시 부평구 내비게이션 목적지 유형별 검색량",
+      "summary": "내비게이션 목적지 검색량: 121,606건 (관측 기준월: 2026-06)",
+      "source_id": "dataset:28237:6",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "dataset",
+      "observation_period": "2026-06",
+      "published_or_updated_at": "2026-06"
+    },
+    {
+      "title": "한국관광 데이터랩 · 인천광역시 부평구 SNS 언급량",
+      "summary": "SNS 언급량: 44,932건 (관측 기준월: 2026-06)",
+      "source_id": "dataset:28237:7",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "dataset",
+      "observation_period": "2026-06",
+      "published_or_updated_at": "2026-06"
+    },
+    {
+      "title": "한국관광 데이터랩 공식 다운로드 · 인천광역시_부평구/관광소비/2025_01_12.zip",
+      "summary": "전국 비교 기준 기간: 2025-07 ~ 2026-06",
+      "source_id": "datalab:088dce68db8c:f9e07528e9cc",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_dataset",
+      "observation_period": "2025-07 ~ 2026-06",
+      "published_or_updated_at": "2024-07 ~ 2025-06"
+    },
+    {
+      "title": "한국관광 데이터랩 공식 다운로드 · 인천광역시_부평구/숙박_체류시간/2026_01_06.zip",
+      "summary": "전국 비교 기준 기간: 2025-07 ~ 2026-06",
+      "source_id": "datalab:12893561bbea:153ed3aa5a6e",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_dataset",
+      "observation_period": "2025-07 ~ 2026-06",
+      "published_or_updated_at": "2024-07 ~ 2025-06"
+    },
+    {
+      "title": "한국관광 데이터랩 공식 다운로드 · 인천광역시_부평구/방문자/2025_01_12.zip",
+      "summary": "전국 비교 기준 기간: 2025-07 ~ 2026-06",
+      "source_id": "datalab:328e6d50da04:877452ad2b59",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_dataset",
+      "observation_period": "2025-07 ~ 2026-06",
+      "published_or_updated_at": "2024-07 ~ 2025-06"
+    },
+    {
+      "title": "한국관광 데이터랩 공식 다운로드 · 인천광역시_부평구/방문자/2026_01_06.zip",
+      "summary": "전국 비교 기준 기간: 2025-07 ~ 2026-06",
+      "source_id": "datalab:5104039977f5:37dc3b7e64b5",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_dataset",
+      "observation_period": "2025-07 ~ 2026-06",
+      "published_or_updated_at": "2024-07 ~ 2025-06"
+    },
+    {
+      "title": "한국관광 데이터랩 공식 다운로드 · 인천광역시_부평구/숙박_체류시간/2025_01_12.zip",
+      "summary": "전국 비교 기준 기간: 2025-07 ~ 2026-06",
+      "source_id": "datalab:b7bac265962d:97cf4d1db102",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_dataset",
+      "observation_period": "2025-07 ~ 2026-06",
+      "published_or_updated_at": "2024-07 ~ 2025-06"
+    },
+    {
+      "title": "한국관광 데이터랩 공식 다운로드 · 인천광역시_부평구/관광소비/2026_01_06.zip",
+      "summary": "전국 비교 기준 기간: 2025-07 ~ 2026-06",
+      "source_id": "datalab:bd21758c8a88:9597865e62ef",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_dataset",
+      "observation_period": "2025-07 ~ 2026-06",
+      "published_or_updated_at": "2024-07 ~ 2025-06"
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드 · 이동통신/내국인/지역별 방문자수/20260820140607__202601-202606_데이터랩_다운로드.zip",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:23ea68053684:6bfbcf8aabf6",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드 · 이동통신/외국인/20260820141710_전국_202601-202606_데이터랩_다운로드.zip",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:98d4ae590d9a:3be52dd54323",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드 · 신용카드/내국인/지역별 관광지출액/20260820140046__202601-202606_데이터랩_다운로드.zip",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:367cd0294ec4:873930d645e5",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드 · 신용카드/외국인/지역별 관광지출액/20260820140355__202601-202606_데이터랩_다운로드.zip",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:553a0dad4bb4:5a31355dffe8",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드 · 네비게이션/지역별 검색건수/20260820195507__202601-202606_데이터랩_다운로드.zip",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:a53dbe1c21df:77a052de41d5",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드 · 이동통신/내국인/지역별 방문자수/20260820140614__202501-202512_데이터랩_다운로드.zip",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:823a38d1d61c:5385261d02e5",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드 · 이동통신/외국인/20260820141649_전국_202501-202512_데이터랩_다운로드.zip",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:2723bdb0d589:1666a34058ed",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드 · 신용카드/내국인/지역별 관광지출액/20260820135957__202501-202512_데이터랩_다운로드.zip",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:83177a234971:c02cb7972e0f",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드 · 신용카드/외국인/지역별 관광지출액/20260820140409__202501-202512_데이터랩_다운로드.zip",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:58ded7732251:589c76395cbc",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드 · 네비게이션/지역별 검색건수/20260820132007__202501-202512_데이터랩_다운로드.zip",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:e28c947cb52f:bb4cb344a6ba",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드 · 이동통신/내국인/지역별 방문자수/20260820140624__202401-202412_데이터랩_다운로드.zip",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:8815bbb11a39:1a5988f5f8ec",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 전국 빅데이터 다운로드 · 이동통신/외국인/20260820141639_전국_202401-202412_데이터랩_다운로드.zip",
+      "summary": "시군구 기간합계·비중 또는 전국 월별 추이. 지역 월별 ML·정책 효과가 아닌 보조 근거.",
+      "source_id": "team-bigdata:19fd67fbb73d:afa4f0f54a2f",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "nationwide_bigdata_dataset",
+      "observation_period": "2026-01 ~ 2026-06",
+      "source_review_status": "needs_exact_download_url",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 지역별 관광 현황 · 인천광역시 부평구 · 지역집중률",
+      "summary": "관측 기간: 2025-07 ~ 2026-06. 유입·유출·인기장소 또는 30일 집중 운영 신호.",
+      "source_id": "regional-status:0b32b3d6db4d:a1a67792e3b1",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "regional_tourism_status",
+      "observation_period": "2025-07 ~ 2026-06",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 지역별 관광 현황 · 인천광역시 부평구 · 유입유출",
+      "summary": "관측 기간: 2025-07 ~ 2026-06. 유입·유출·인기장소 또는 30일 집중 운영 신호.",
+      "source_id": "regional-status:98eebe8613d3:723745281038",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "regional_tourism_status",
+      "observation_period": "2025-07 ~ 2026-06",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "한국관광 데이터랩 지역별 관광 현황 · 인천광역시 부평구 · 인기관광지",
+      "summary": "관측 기간: 2025-07 ~ 2026-06. 유입·유출·인기장소 또는 30일 집중 운영 신호.",
+      "source_id": "regional-status:b12ff2da0892:a553d7015259",
+      "source_url": "https://datalab.visitkorea.or.kr/",
+      "source_type": "regional_tourism_status",
+      "observation_period": "2025-07 ~ 2026-06",
+      "published_or_updated_at": ""
+    },
+    {
+      "title": "지역 관광수요 ML 전망 · 공식 관측값 아님",
+      "summary": "학습 202401~202606 · 모델 regional-demand-v3.1 · 자연 추세 예측",
+      "source_id": "ml:28237:regional-demand-v3.1:202606",
+      "source_url": "",
+      "source_type": "model_forecast",
+      "model_version": "regional-demand-v3.1",
+      "data_fingerprint": "06231bffd046b8ec0625c675881feb25e51324ad265d5b5ecf0dc8d247440a7d"
+    },
+    {
+      "title": "굴포천 생태하천",
+      "address": "인천광역시 부평구 굴포로 141 (삼산동)",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/60/3523760_image2_1.jpg",
+      "source_id": "tour-api:1619098",
+      "content_id": "1619098",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "12"
+    },
+    {
+      "title": "대왕김밥",
+      "address": "인천광역시 부평구 부평문화로 41 (부평동)",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/03/2875403_image2_1.jpg",
+      "source_id": "tour-api:2875411",
+      "content_id": "2875411",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "39"
+    },
+    {
+      "title": "돈타래게장정식",
+      "address": "인천광역시 부평구 열우물로 59",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/35/2790235_image2_1.jpg",
+      "source_id": "tour-api:2768148",
+      "content_id": "2768148",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "39"
+    },
+    {
+      "title": "면박사가야밀면",
+      "address": "인천광역시 부평구 주부토로172번길 28",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/52/2873452_image2_1.jpg",
+      "source_id": "tour-api:2873461",
+      "content_id": "2873461",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "39"
+    },
+    {
+      "title": "모녀떡볶이 부평남부역점",
+      "address": "강원특별자치도 태백시 광장로 16 (황지동)",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/58/2833858_image2_1.jpg",
+      "source_id": "tour-api:2833868",
+      "content_id": "2833868",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "39"
+    },
+    {
+      "title": "백운공원",
+      "address": "인천광역시 부평구 십정동 186-419",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/55/3395555_image2_1.JPG",
+      "source_id": "tour-api:2768156",
+      "content_id": "2768156",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "12"
+    },
+    {
+      "title": "별미칡냉면원조",
+      "address": "인천광역시 부평구 주부토로145번길 28 (갈산동)",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/46/2875446_image2_1.jpg",
+      "source_id": "tour-api:2875455",
+      "content_id": "2875455",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "39"
+    },
+    {
+      "title": "부영공원",
+      "address": "인천광역시 부평구 안남로 146",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/62/3395562_image2_1.JPG",
+      "source_id": "tour-api:2767563",
+      "content_id": "2767563",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "12"
+    },
+    {
+      "title": "부평 굴포누리 기후변화체험관",
+      "address": "인천광역시 부평구 장제로 267 (갈산동)",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/89/3456089_image2_1.jpg",
+      "source_id": "tour-api:3456754",
+      "content_id": "3456754",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "12"
+    },
+    {
+      "title": "부평 종합시장",
+      "address": "인천광역시 부평구 부흥로316번길 38-3",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/47/3395547_image2_1.JPG",
+      "source_id": "tour-api:1025514",
+      "content_id": "1025514",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "38"
+    },
+    {
+      "title": "부평 해물탕거리",
+      "address": "인천광역시 부평구 부평동",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/95/3309195_image2_1.jpg",
+      "source_id": "tour-api:749211",
+      "content_id": "749211",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "12"
+    },
+    {
+      "title": "부평모두몰(부평지하도상가)",
+      "address": "인천광역시 부평구 부평대로 지하 69",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/07/3395507_image2_1.JPG",
+      "source_id": "tour-api:2021033",
+      "content_id": "2021033",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "38"
+    },
+    {
+      "title": "부평시장",
+      "address": "인천광역시 부평구 부흥로316번길 38-3",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/42/3523842_image2_1.jpg",
+      "source_id": "tour-api:2768142",
+      "content_id": "2768142",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "38"
+    },
+    {
+      "title": "부평아트센터",
+      "address": "인천광역시 부평구 아트센터로 166 (십정동)",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/55/3457455_image2_1.jpg",
+      "source_id": "tour-api:3457385",
+      "content_id": "3457385",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "14"
+    },
+    {
+      "title": "부평역북광장",
+      "address": "인천광역시 부평구 광장로 지하30 (부평동)",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/90/3395490_image2_1.JPG",
+      "source_id": "tour-api:2768190",
+      "content_id": "2768190",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "12"
+    },
+    {
+      "title": "부흥기사식당",
+      "address": "인천광역시 부평구 부흥로 387 (부개동)",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/66/2875466_image2_1.jpg",
+      "source_id": "tour-api:2875488",
+      "content_id": "2875488",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "39"
+    },
+    {
+      "title": "삼산건강공원",
+      "address": "인천광역시 부평구 영성동로18번길 48 (삼산동)",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/25/3523825_image2_1.jpg",
+      "source_id": "tour-api:2768180",
+      "content_id": "2768180",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "12"
+    },
+    {
+      "title": "신트리공원(인천)",
+      "address": "인천광역시 부평구 신트리로 21",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/73/3030773_image2_1.jpg",
+      "source_id": "tour-api:126568",
+      "content_id": "126568",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "12"
+    },
+    {
+      "title": "양평신내서울해장국 부평직영점",
+      "address": "인천광역시 부평구 마장로 191 (산곡동)",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/45/2835945_image2_1.jpg",
+      "source_id": "tour-api:2835948",
+      "content_id": "2835948",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "39"
+    },
+    {
+      "title": "열우물전통시장",
+      "address": "인천광역시 부평구 배곶남로21번길 18",
+      "summary": "한국관광공사 국문관광정보 API가 반환한 선택 지역 관광자원",
+      "image_url": "http://tong.visitkorea.or.kr/cms/resource/31/3523831_image2_1.jpg",
+      "source_id": "tour-api:2765473",
+      "content_id": "2765473",
+      "source_url": "https://apis.data.go.kr/B551011/KorService2",
+      "source_type": "open_api",
+      "content_type_id": "38"
+    },
+    {
+      "title": "요즘, 한국관광 2호 - 지방공항 연계 지역관광 활성화 방안",
+      "summary": "44제 2장 지방공항 연계 지역관광 활성화 방안 요즘, 한국관광 한국관광공사는 본래의 기능인 해외 홍보마케팅을 통한 인지 형성, 지역 관광생태계 육성, 관광사업 추진을 여정 단계에 맞춰 재배치해야 한다. 해외지사와 국내지사를 연결한 중점지사제를 '관문-연계도시' 단위로 운영하고, 글로벌 OTA 와 현지 여행사가 실제 상품을 만들 수 있도록 상품화 모듈과 전세·임시편 유치를 고도화하며, 선상 마케팅처럼 항공사 기내·LCC 채널을 활용한 권역 홍보를 확대할 수 있어야 할 것이다. 특히 성과지표를 입국자 수와 공급석 중심에서 '입국객의 권역 내 첫 숙박률이나, 1인당 권역 내 소비, 지방 이동 비중' 중심으로 전환하고, 통신·카드 데이터에 소셜 담론 데이터를 결합한 공항-권역 대시보드를 상시 운영해 데이터 기반 성과관리를 지속적으로 보여주는 데이터 기반의 지방공항 중심 관광권 상황실을 구축하여야 한다. 지방자치단체와 한국공항공사는 공항에서 지역 상권까지 이어지는 현장 수용태세를 보다 면밀히 고려하는 정책과 사업이 필요하다. 공항 접근 교통과 안내·결제, 다국어 환경, 터미널과 도심·거점 관광지를 잇는 셔틀, 권역 내 숙박과 야간 콘텐츠는 지자체의 실행력이 좌우하는 영역이다. 공항 소재 지자체 단위 협의를 넘어 청주는 대전·세종·충남, 대구는 경북과 함께 상품·교통·마케팅 예산을 묶는 관광권 협의체를 구성하고, 중장기적으로는 일본의 광역연계 DMO처럼 권역 단위의 상설 조직과 재원으로 발전시켜야 한다. 민관협력은 이 체계를 지속 가능하게 만드는 가장 중요한 동인이라 할 수 있다. 항공사·LCC에는 신규 노선의 초기 리스크를 지방정부·공사와 분담하는 노선 개발 협약과 기내 권역 홍보를, 글로벌 OTA·현지 여행사에는 권역 루트 상품의",
+      "chunk_id": "reference:kto:2026:local-airport:page:044:chunk:01",
+      "source_id": "reference:kto:2026:local-airport",
+      "source_url": "https://datalab.visitkorea.or.kr/site/portal/ex/bbs/View.do?bcIdx=311068&cbIdx=1135&pageIndex=1",
+      "case_region": "",
+      "region_code": "ALL",
+      "region_name": "전국 공통",
+      "source_note": "지방공항·연계 지역에 관한 자료입니다. 다른 시군구의 사업 효과·예산을 보장하는 근거로 사용하지 않습니다.",
+      "source_type": "rag",
+      "intervention": "",
+      "document_type": "policy",
+      "matched_terms": [
+        "결제",
+        "관광사업",
+        "상권",
+        "성과",
+        "소비",
+        "수와",
+        "숙박",
+        "실제",
+        "연결한",
+        "연계",
+        "예산",
+        "운영",
+        "이어지는",
+        "전환",
+        "중심으로",
+        "지역",
+        "체류",
+        "함께",
+        "현장",
+        "협약"
+      ],
+      "page_references": "PDF 44쪽",
+      "parent_source_id": "reference:kto:2026:local-airport",
+      "retrieval_method": "local_curated_chunk",
+      "evidence_strength": "medium",
+      "published_or_updated_at": "2026-08"
+    },
+    {
+      "title": "요즘, 한국관광 2호 - 지방공항 연계 지역관광 활성화 방안",
+      "summary": "43제 2장 지방공항 연계 지역관광 활성화 방안 요즘, 한국관광 (전문가 제언) 지방공항 관문 활성화를 넘어 '지방관광 권역 활성화'로5. 지방공항을 통한 방한 입국은 분명한 성장 국면이다. 그러나 지방공항 관문 활성화가 곧바로 지방공항과 지역관광의 경쟁력으로 해석하기에는 아직 이르다. 최근의 지방공항 입국 증가는 대만 시장의 고성장, LCC의 공격적 공급 확대, 중국 단체 무비자와 중·일 관계 변화에 따른 수요 이동 등 외부 요인과 일부 결합되어 나타난 측면도 있기 때문이다. 지금 필요한 것은 입국자 수와 노선 수의 증가에 만족하는 것이 아니라, 이를 지역관광의 체질 전환과 고부가가치화로 연결하는 전략이 필요하다. 또한 특정 관광시장에 대한 의존도가 높을수록 공항은 외부 변수에 취약해질 수밖에 없고, 체류 전환이 약할수록 늘어난 유입은 지역에 효과를 남기지 않으며, 공항별 차이를 무시한 일률적 지원은 성과를 도출하기 어렵게 만든다. 결국 이제는 정책의 단위를 '공항' 중심에서 보다 관문과 연결되는 연계된 도시로 확장할 필요가 있다. 지방공항 활성화의 중장기 과제는 단순히 더 많은 노선을 유치하는 데서 끝나서는 안 되며, 공항을 관문으로 하는 배후 관광권 단위로 성과를 설계하고 측정하는 방향으로 전환되어야 한다. 정책의 단위를 '지방공항'에서 '지방관광 권역'으로 지방공항과 지방관광이 동시에 활성화하려면 두 관점이 함께 필요하다. 하나는 관문 기능의 고도화(노선·운수권·전세기 유치, CIQ와 터미널 용량, 공항-거점 교통의 직결성)이고, 다른 하나는 배후권역의 체류 전환(입국 이후 첫 숙박·첫 소비를 권역 안에서 완결되게 설계, 권역 내 이동의 관광 루트화, 지역 특화 업종의 객단가 제고)이다. 지금까지의 정책이",
+      "chunk_id": "reference:kto:2026:local-airport:page:043:chunk:01",
+      "source_id": "reference:kto:2026:local-airport",
+      "source_url": "https://datalab.visitkorea.or.kr/site/portal/ex/bbs/View.do?bcIdx=311068&cbIdx=1135&pageIndex=1",
+      "case_region": "",
+      "region_code": "ALL",
+      "region_name": "전국 공통",
+      "source_note": "지방공항·연계 지역에 관한 자료입니다. 다른 시군구의 사업 효과·예산을 보장하는 근거로 사용하지 않습니다.",
+      "source_type": "rag",
+      "intervention": "",
+      "document_type": "policy",
+      "matched_terms": [
+        "성과",
+        "소비",
+        "수와",
+        "숙박",
+        "연계",
+        "이후",
+        "전환",
+        "전환과",
+        "지역",
+        "체류",
+        "측정",
+        "필요한",
+        "함께"
+      ],
+      "page_references": "PDF 43쪽",
+      "parent_source_id": "reference:kto:2026:local-airport",
+      "retrieval_method": "local_curated_chunk",
+      "evidence_strength": "medium",
+      "published_or_updated_at": "2026-08"
+    },
+    {
+      "title": "요즘, 한국관광 2호 - 지방공항 연계 지역관광 활성화 방안",
+      "summary": "36제 2장 지방공항 연계 지역관광 활성화 방안 요즘, 한국관광 [제안 1] 의료·쇼핑 소비를 영남권 체류형 관광루트로 연결 대구공항 입국 방한객의 소비가 대구의 의료·쇼핑을 중심으로 형성되고, 경산·구미·포항·경주 등 경북 지역으로 이동하고 있는 점을 활용한다. 대구에서 시작된 의료·쇼핑 소비를 영남의 역사문화·해양·미식 등 관광자원과 연계해, 이미 형성된 지역 간 이동을 체류형 관광루트로 고도화한다. 특히 대만(30~40대)·중국(20대)·일본(20대·50대)으로 국가별 핵심 연령층이 다른 만큼, 연령층별 관심사와 이동 패턴을 반영한 맞춤형 루트를 함께 구성하는 것이 효과적이다. [제안 2] 의료 수요를 5박 6일 프리미엄 체류 패키지로 상품화 피부·성형을 핵심 의료 서비스로, 한방·치과·종합검진을 선택형 연계 서비스로 구성한 '대구 프리미엄 의료 패키지(5박 6 일)'를 개발한다. 진료와 회복 일정에 쇼핑·미식·문화관광을 결합하고 대경권 주요 관광지까지 동선을 확장해, 의료 목적 방문을 장기 체류와 광역 소비로 연결한다. 국가별 핵심 연령층이 다른 점을 고려해 대만 30~40대를 겨냥한 프리미엄 의료·웰니스 상품, 중국·일본 20대를 겨냥한 미용·체험 중심 상품으로 타깃을 세분화한다. [제안 3] 교통·결제 편의성 개선으로 소비 동선의 단절 해소 공항-도심-경북 주요 도시 간 이동정보와 예약을 다국어로 연결하고, 해외카드를 활용한 대중교통 이용 등 외국인이 도착 직후 겪는 교통·결제 불편을 줄여 의료·관광 소비 동선이 끊기지 않도록 한다. 취항 국가는 7개국에서 10개국으로, 취항 도시는 15개에서 27개로 늘었지만 실제 운항 편수는 오히려 줄어, 연결 범위 확대가 아직 공급 증가로 이어지지 않고 있다.",
+      "chunk_id": "reference:kto:2026:local-airport:page:036:chunk:01",
+      "source_id": "reference:kto:2026:local-airport",
+      "source_url": "https://datalab.visitkorea.or.kr/site/portal/ex/bbs/View.do?bcIdx=311068&cbIdx=1135&pageIndex=1",
+      "case_region": "",
+      "region_code": "ALL",
+      "region_name": "전국 공통",
+      "source_note": "지방공항·연계 지역에 관한 자료입니다. 다른 시군구의 사업 효과·예산을 보장하는 근거로 사용하지 않습니다.",
+      "source_type": "rag",
+      "intervention": "",
+      "document_type": "policy",
+      "matched_terms": [
+        "결제",
+        "방문",
+        "소비",
+        "실제",
+        "연결하고",
+        "연결한",
+        "연계",
+        "예약",
+        "이용",
+        "일정",
+        "중심으로",
+        "지역",
+        "체류",
+        "체험",
+        "함께"
+      ],
+      "page_references": "PDF 36쪽",
+      "parent_source_id": "reference:kto:2026:local-airport",
+      "retrieval_method": "local_curated_chunk",
+      "evidence_strength": "medium",
+      "published_or_updated_at": "2026-08"
+    },
+    {
+      "title": "요즘, 한국관광 2호 - 지방공항 연계 지역관광 활성화 방안",
+      "summary": "남부관광의 해 연계 지역상품 홍보 타이베이 지사가 개발한 2025년 대구 파워풀페스티벌 상품 홍보 로고 일본 시장은 다른 방식으로 접근하고 있다. 일본은 방한 재방문율이 높고 서울 이외의 새로운 지역과 관광콘텐츠를 찾는 수요가 비교적 뚜렷한 시장이다. 공사는 지방 직항노선을 기반으로 동남권 각 도시의 특색을 여행 목적과 테마로 재구성하고, 현지 여행사·항공사와 연계해 실제 상품과 모객으로 이어지도록 하는 방식을 추진하고 있다. 같은 지방공항 유치 사업이라도 시장 특성에 따라 대만은 지역의 범위를 단계적으로 넓히고, 일본은 재방문객에게 새로운 지역 방문 이유를 만드는 방식으로 접근하는 것이다. 해외에서 지방공항을 선택하게 하려면 노선과 함께 '도착한 뒤 무엇을 할 것인가'가 제시돼야 한다. 이를 위해 공사는 청주· 대구공항을 중심으로 지역 관광콘텐츠를 발굴하고, 이를 공항과 연결된 권역형·초광역형 관광코스로 구성했다. 2026년 6월 기준 발굴된 콘텐츠는 17개 테마 333개, 관광코스는 35개다. 럭셔리·한류·의료·웰니스·해양·축제·역사문화·미식·쇼핑 등 지역의 다양한 관광자원을 활용하되, 개별 콘텐츠에 그치지 않고 공항을 시작점으로 여러 지역을 이동할 수 있도록 연결한 것이 특징이다. 대표적으로 청주공항에서는 청주-공주-부여-전주를 잇는 백제 역사문화 루트와 같이 충청권과 인접 지역을 연결하는 코스를, 대구공항에서는 대구-경주-울산-부산을 잇는 유네스코 헤리티지 루트와 같이 영남권의 주요 관광자원을 묶은 광역 코스를 구성했다. 지방공항을 특정 도시 하나의 관문이 아니라 여러 지역으로 이동하는 여행의 출발점으로 활용하는 방식이다. 추진사업 2. 지역 콘텐츠를 실제 방한상품으로 연결",
+      "chunk_id": "reference:kto:2026:local-airport:page:040:chunk:02",
+      "source_id": "reference:kto:2026:local-airport",
+      "source_url": "https://datalab.visitkorea.or.kr/site/portal/ex/bbs/View.do?bcIdx=311068&cbIdx=1135&pageIndex=1",
+      "case_region": "",
+      "region_code": "ALL",
+      "region_name": "전국 공통",
+      "source_note": "지방공항·연계 지역에 관한 자료입니다. 다른 시군구의 사업 효과·예산을 보장하는 근거로 사용하지 않습니다.",
+      "source_type": "rag",
+      "intervention": "",
+      "document_type": "policy",
+      "matched_terms": [
+        "관광",
+        "소비",
+        "실제",
+        "연결한",
+        "연계",
+        "중심으로",
+        "지역의",
+        "체류",
+        "함께"
+      ],
+      "page_references": "PDF 40쪽",
+      "parent_source_id": "reference:kto:2026:local-airport",
+      "retrieval_method": "local_curated_chunk",
+      "evidence_strength": "medium",
+      "published_or_updated_at": "2026-08"
+    },
+    {
+      "title": "요즘, 한국관광 2호 - 지방공항 연계 지역관광 활성화 방안",
+      "summary": "41제 2장 지방공항 연계 지역관광 활성화 방안 요즘, 한국관광 관광상품을 만들어도 공항에서 관광지까지 이동하기 어렵다면 실제 지역 방문으로 연결되기 어렵다. 이에 공사는 지자체· 공항공사·교통기관 등 대외 협업체계와 함께 지방공항으로 유입된 방한객이 지역 관광지까지 불편 없이 이동할 수 있도록 교통 연계와 이용 편의 인프라를 개선하는 방향으로 사업을 추진하고 있다. 공사는 충청남도, 충청북도(광역지자체) 및 충 남문화재단, 충북문화재단(RTO)과 협업하여 청주공항과 오 송역, 공주터미널, 부여터미널 등 충청권 주요 관광지를 연결하는 광역 순환버스와 DRT(수요 응답형 버스) 운영을 지원하고 있다. 2026년 상반기 순환버스와 DRT 이용객은 총 7 ,470명으로, 공항에서 충청권 주요 관광지까지 직접 이동할 수 있는 선택지가 확대되고 있다. 대구공항에서는 외국인이 별도의 교통카드 없이 해외 신용카드 등으로 대중교통을 이용할 수 있는 개방형 교통결제 시스템 도입을 지원하고 있으며, 간편결제·관광안내·환전 및 면세 등 이용 편의도 단계적으로 보완하고 있다. 지방공항의 역할을 항공기에서 내리는 지점에 그치지 않고 지역 여행을 실제로 시작할 수 있는 관문으로 넓히는 과정이다. 추진사업 3. 교통 편의 인프라 - 공항 도착 이후 지역으로 이어지는 이동·편의 기반 구축 성과 | 전방위 유치·마케팅 성과 가시화…청주공항 방한객 6만 명 돌파, 부정기 항공편도 대폭 확대 한국관광공사, 공항활성화 협의체 및 관계기관의 협업체계가 잘 작동하고, 전방위적 역량을 집중한 결과, 지방공항 유치· 마케팅의 성과가 방한객 유입과 항공 공급 지표에서 가시화되고 있다. 특히 청주공항은 2026년 상반기 방한객이 6만 2,971 명으로 6만 명을 돌파하며 전년 동기 대비 109.1% 급증했다.",
+      "chunk_id": "reference:kto:2026:local-airport:page:041:chunk:01",
+      "source_id": "reference:kto:2026:local-airport",
+      "source_url": "https://datalab.visitkorea.or.kr/site/portal/ex/bbs/View.do?bcIdx=311068&cbIdx=1135&pageIndex=1",
+      "case_region": "",
+      "region_code": "ALL",
+      "region_name": "전국 공통",
+      "source_note": "지방공항·연계 지역에 관한 자료입니다. 다른 시군구의 사업 효과·예산을 보장하는 근거로 사용하지 않습니다.",
+      "source_type": "rag",
+      "intervention": "",
+      "document_type": "policy",
+      "matched_terms": [
+        "결제",
+        "방문",
+        "방문으로",
+        "사업을",
+        "성과",
+        "소비",
+        "실제",
+        "연계",
+        "운영",
+        "이어지는",
+        "이용",
+        "이후",
+        "지역",
+        "체류",
+        "함께"
+      ],
+      "page_references": "PDF 41쪽",
+      "parent_source_id": "reference:kto:2026:local-airport",
+      "retrieval_method": "local_curated_chunk",
+      "evidence_strength": "medium",
+      "published_or_updated_at": "2026-08"
+    },
+    {
+      "title": "부평풍물대축제ㅣ여행지ㅣ인천투어",
+      "summary": "제30회 부평풍물대축제는 2026년 10월 2일부터 10월 4일까지 부평대로 및 부평 일대에서 개최되며, 운영시간은 10:00~21:30, 입장료는 무료로 안내되어 있다. 축제 공간은 굴포천 일대까지 확장될 예정이며, 주최는 인천광역시 부평구, 주관은 부평구 축제위원회·부평구문화재단·부평문화원이다.",
+      "source_id": "web:28237:1",
+      "source_url": "https://itour.incheon.go.kr/ssst/ssst/detail.do?cotId=APD21112609174959336",
+      "source_type": "official_web",
+      "why_relevant": "고정 일정의 첫 주말에 이미 확정된 대규모 거리·생활문화 행사와 운영 주체가 있으므로, 별도 축제를 신설하기보다 축제 방문객이 시장·주변 문화공간으로 이동하도록 하는 현장 안내, 회유 콘텐츠, 참여점포 모집을 우선 검토할 수 있다. 다만 축제 방문이 시장 소비 또는 숙박 증가를 일으킨다고는 자료만으로 판단할 수 없다.",
+      "published_or_updated_at": "최종수정 2026-09-09"
+    },
+    {
+      "title": "부평시장 일대 부평종합시장, 부평깡시장, 부평문화의 거리 | 인천지역유산 만나보기",
+      "summary": "인천광역시 공식 문화유산 자료는 부평종합시장·부평깡시장·부평문화의 거리 일대를 생활문화 유산으로 소개하며, 해당 권역이 여러 시장이 경계를 이루는 특징을 가진다고 명시한다. 소재지는 부평구 부흥로316번길 38-3 일대이다.",
+      "source_id": "web:28237:2",
+      "source_url": "https://www.incheon.go.kr/culture/CU06010002/3064078",
+      "source_type": "official_web",
+      "why_relevant": "축제 연계 동선의 도착·체류 권역을 단일 점포가 아니라 시장과 문화의 거리로 구성할 수 있는 공식 공간 근거다. 음식·구매·공연·전시를 묶는 방식은 가능 후보이나, 개별 상인의 참여·영업시간·할인 제공 여부는 공식 자료에서 확인되지 않았으므로 사전 협의가 필요하다.",
+      "published_or_updated_at": "최종업데이트 2026-02-13"
+    },
+    {
+      "title": "관광지·명소(상세) | 무장애 관광정보 | 열린관광 모두의 여행 - 부평아트센터",
+      "summary": "부평아트센터는 인천광역시 부평구 아트센터로 166에 위치한 문화시설이며, 공식 열린관광 정보에는 장애인 화장실 설치 등 접근성 정보가 안내되어 있다.",
+      "source_id": "web:28237:3",
+      "source_url": "https://access.visitkorea.or.kr/ms/detail.do?cotId=7e599a22-ea47-4f8d-8daa-e347e6a94e4a",
+      "source_type": "official_web",
+      "why_relevant": "11~12월의 실내 체류 프로그램 후보 공간으로 검토할 수 있으며, 야외 축제 이후 계절 전환기에 활용 가능하다. 다만 대관 가능일, 대관료, 실제 공연·전시 일정, 운영 주체의 협력 가능 범위는 해당 자료만으로 확인되지 않는다.",
+      "published_or_updated_at": "수정 2025-08-20"
+    },
+    {
+      "title": "17-1. 부평역세권 복합환승센터 건설",
+      "summary": "부평역세권 복합환승센터 건설은 부평구 광장로 16 일원의 부평역을 대상으로 환승정류장·환승편의시설을 조성하는 인천광역시 사업이다. 공식 공약 자료는 GTX 개통에 따른 환승센터 운영을 2030년으로 제시하고, 현재 공약 이행 현황에서는 정상추진 사업으로 표시한다.",
+      "source_id": "web:28237:4",
+      "source_url": "https://www.incheon.go.kr/humanframe/theme/mayor_8/data/elect/17-1.%20%EB%B6%80%ED%8F%89%EC%97%AD%EC%84%B8%EA%B6%8C%20%EB%B3%B5%ED%95%A9%ED%99%98%EC%8A%B9%EC%84%BC%ED%84%B0%20%EA%B1%B4%EC%84%A4.pdf",
+      "source_type": "official_web",
+      "why_relevant": "중장기적으로는 부평역 접근성과 권역 안내체계의 변화 가능성을 검토할 기반이지만, 2026년 10~12월 파일럿의 완공 인프라 또는 운영 거점으로 전제해서는 안 된다. 이번 사업에서는 현행 보행·대중교통·행사장 안전 동선을 별도 현장점검해야 한다.",
+      "published_or_updated_at": "공약 자료상 사업기간 2022~2030"
+    },
+    {
+      "title": "공약목록 | 인천광역시장실",
+      "summary": "인천광역시 공약 현황 페이지는 부평역세권 복합환승센터 건설을 교통 분야의 임기후 신규사업으로 분류하고, 인천광역시를 사업주체로 표시한다.",
+      "source_id": "web:28237:5",
+      "source_url": "https://www.incheon.go.kr/mayor_8/MA0202010106?curPage=3",
+      "source_type": "official_web",
+      "why_relevant": "환승센터 관련 협의 상대와 사업의 장기성을 확인하는 보조 근거다. 관광사업의 행사 운영 권한이나 단기 예산을 의미하지는 않는다.",
+      "published_or_updated_at": "페이지 크롤링 기준 2026-08경"
+    },
+    {
+      "title": "강진 반값여행 지역경제 효과 소개",
+      "summary": "전라남도 강진군 · 반값여행 지역환급 · 상품권 결제 변화에 관한 소개 자료는 있으나, 사업 참여자 범위·정확한 비교 기간·원자료를 확인하지 못해 성과 수치 인용을 보류한다.",
+      "source_id": "case:gangjin_half_price_2024",
+      "source_url": "https://jnfarm.jeonnam.go.kr/board/FARM_BOARD_008/boardView.do?bdId=BD_00000000000011721&menuCd=farm004002",
+      "case_region": "전라남도 강진군",
+      "source_type": "benchmark_case",
+      "intervention": "반값여행 지역환급",
+      "document_type": "case_study",
+      "observed_result": "상품권 결제 변화에 관한 소개 자료는 있으나, 사업 참여자 범위·정확한 비교 기간·원자료를 확인하지 못해 성과 수치 인용을 보류한다.",
+      "operating_model": "여행자가 지역에서 지출한 비용의 일부를 지역상품권으로 돌려받게 하여 혜택이 다시 지역 상점에서 사용되도록 설계",
+      "retrieval_method": "curated_registry",
+      "evidence_strength": "low",
+      "retrieval_context": {
+        "scope": "cross_province",
+        "peer_region_code": null
+      },
+      "measurement_period": "게시일과 사업 측정기간은 다르며, 비교기간과 집계범위 원자료 확인 필요",
+      "transfer_conditions": [
+        "지역상품권 사용처와 관광업체 참여 기준 필요",
+        "여행 지출 증빙과 중복수혜 방지 절차 필요",
+        "지원금보다 추가 지역소비가 큰지 사후 측정 필요"
+      ],
+      "published_or_updated_at": "2025-01-02",
+      "quantitative_result_approved": false
+    },
+    {
+      "title": "2024년 6월 여행가는 달 추진 보도자료",
+      "summary": "전국 인구감소지역 34곳 · 디지털 관광주민증과 교통·숙박·상점 할인 결합 · 2024년 34개 지역 약 800개 관광업체에 혜택 구조를 적용",
+      "source_id": "case:digital_tourism_resident_2024",
+      "source_url": "https://mcst.go.kr/servlets/eduport/front/upload/UplDownloadFile?pFileName=%280514%29%EB%AC%B8%EC%B2%B4%EB%B6%80%EB%B3%B4%EB%8F%84%EC%9E%90%EB%A3%8C-6%EC%9B%94_%EC%97%AC%ED%96%89%EA%B0%80%EB%8A%94_%EB%8B%AC_%EC%B6%94%EC%A7%84.pdf&pPath=0302000000&pRealName=20240514083202149235802932_PRESS20240514083202456506.pdf",
+      "case_region": "전국 인구감소지역 34곳",
+      "source_type": "benchmark_case",
+      "intervention": "디지털 관광주민증과 교통·숙박·상점 할인 결합",
+      "document_type": "case_study",
+      "observed_result": "2024년 34개 지역 약 800개 관광업체에 혜택 구조를 적용",
+      "operating_model": "디지털 관광주민증 참여업체 현장 인증과 숙박·식음·관람·체험 할인, 특정 시간대 KTX 할인과 방문 후 교통 할인권을 결합",
+      "retrieval_method": "curated_registry",
+      "evidence_strength": "medium",
+      "retrieval_context": {
+        "scope": "national_or_unresolved",
+        "peer_region_code": null
+      },
+      "measurement_period": "2024년 6월 운영 계획",
+      "transfer_conditions": [
+        "지역 내 참여업체 수와 혜택 매력도 확보",
+        "QR 또는 위치인증과 실제 사용기록 수집",
+        "교통 할인 제공기관과 협약 필요"
+      ],
+      "published_or_updated_at": "2024-05-14",
+      "quantitative_result_approved": null
+    },
+    {
+      "title": "2022 대한민국 숙박대전 경제파급효과 공개자료",
+      "summary": "전국 숙박할인쿠폰 지원사업 · 온라인 예약 채널 숙박할인쿠폰 · 한국관광공사 자료는 약 104만 명이 할인혜택을 이용했고 서울·제주를 제외한 지역 사용 비율이 76%였다고 소개함",
+      "source_id": "case:kto_stay_discount_2022",
+      "source_url": "https://kto.visitkorea.or.kr/upload/flexer/upload/ktobiz/20220928/b623b5f9-3ec0-11ed-9832-ddf31964842e.hwp.files/Sections1.html",
+      "case_region": "전국 숙박할인쿠폰 지원사업",
+      "source_type": "benchmark_case",
+      "intervention": "온라인 예약 채널 숙박할인쿠폰",
+      "document_type": "case_study",
+      "observed_result": "한국관광공사 자료는 약 104만 명이 할인혜택을 이용했고 서울·제주를 제외한 지역 사용 비율이 76%였다고 소개함",
+      "operating_model": "온라인 여행사 예약 단계에서 할인쿠폰을 제공하고, 지역 숙소에서 사용할 수 있도록 참여 채널과 기간을 통합 운영",
+      "retrieval_method": "curated_registry",
+      "evidence_strength": "medium",
+      "retrieval_context": {
+        "scope": "national_or_unresolved",
+        "peer_region_code": null
+      },
+      "measurement_period": "2022년 사업 종료 후 한국관광공사 공개 자료",
+      "transfer_conditions": [
+        "참여 숙소·예약 채널·쿠폰 조건을 사전에 확정",
+        "주말과 성수기 쏠림을 막을 사용 가능일 설계",
+        "쿠폰 발급량이 아니라 실제 숙박 완료·지역소비를 함께 측정"
+      ],
+      "published_or_updated_at": "2022-09-28",
+      "quantitative_result_approved": null
+    },
+    {
+      "title": "2025 대한민국 밤밤페스타 개최 도시 및 일정",
+      "summary": "야간관광 특화도시 10곳 · 도시별 야간 콘텐츠를 순회형 축제로 묶는 운영 · 공식 여행기사는 개최 도시·장소·운영 시간과 콘텐츠만 제시하며 방문·소비 성과 수치는 제시하지 않음",
+      "source_id": "case:night_festival_2025",
+      "source_url": "https://korean.visitkorea.or.kr/detail/rem_detail.do?cotid=f9c636b2-dd7c-4f09-af3d-6af43b33d371",
+      "case_region": "야간관광 특화도시 10곳",
+      "source_type": "benchmark_case",
+      "intervention": "도시별 야간 콘텐츠를 순회형 축제로 묶는 운영",
+      "document_type": "case_study",
+      "observed_result": "공식 여행기사는 개최 도시·장소·운영 시간과 콘텐츠만 제시하며 방문·소비 성과 수치는 제시하지 않음",
+      "operating_model": "10개 야간관광 특화도시의 대표 장소와 시간대를 연결하고, 공연·체험·지역 디저트·판매상품 등 도시별 콘텐츠를 순회 일정으로 운영",
+      "retrieval_method": "curated_registry",
+      "evidence_strength": "medium",
+      "retrieval_context": {
+        "scope": "national_or_unresolved",
+        "peer_region_code": null
+      },
+      "measurement_period": "2025년 행사 일정",
+      "transfer_conditions": [
+        "야간에도 이용 가능한 교통·안전·식음 운영을 함께 설계",
+        "하나의 행사보다 지역별 대표 콘텐츠와 상점 참여를 연결",
+        "행사일과 비행사일을 분리해 방문·결제·숙박 변화를 측정"
+      ],
+      "published_or_updated_at": "2025",
+      "quantitative_result_approved": null
+    },
+    {
+      "title": "2024년도 정부업무평가 관광분야 성과자료",
+      "summary": "야간관광 특화도시 10곳 · 상설 야간 콘텐츠와 경관·교통·안전 운영 · 정부업무평가 자료는 특화도시 10곳 방문객이 2023년 같은 기간보다 3% 증가했다고 기록",
+      "source_id": "case:night_tourism_cities_2024",
+      "source_url": "https://www.evaluation.go.kr/upload2/atch/eval/20250429095846463.pdf",
+      "case_region": "야간관광 특화도시 10곳",
+      "source_type": "benchmark_case",
+      "intervention": "상설 야간 콘텐츠와 경관·교통·안전 운영",
+      "document_type": "case_study",
+      "observed_result": "정부업무평가 자료는 특화도시 10곳 방문객이 2023년 같은 기간보다 3% 증가했다고 기록",
+      "operating_model": "지역 스토리를 반영한 야간 프로그램을 상설·행사형으로 운영하고 야간 경관, 이동, 식음, 안전 여건을 함께 구성",
+      "retrieval_method": "curated_registry",
+      "evidence_strength": "medium",
+      "retrieval_context": {
+        "scope": "national_or_unresolved",
+        "peer_region_code": null
+      },
+      "measurement_period": "2023년 동기 대비 2024년 사업 평가 기간",
+      "transfer_conditions": [
+        "야간에 실제 이용 가능한 식음·교통·안전 운영 필요",
+        "일회성 행사보다 상설 운영일 확보",
+        "숙박 또는 야간 결제 데이터로 성과 측정"
+      ],
+      "published_or_updated_at": "2025-04-29",
+      "quantitative_result_approved": null
+    },
+    {
+      "title": "요즘, 한국관광 2호 - 지방공항 연계 지역관광 활성화 방안",
+      "summary": "작동하고, 전방위적 역량을 집중한 결과, 지방공항 유치· 마케팅의 성과가 방한객 유입과 항공 공급 지표에서 가시화되고 있다. 특히 청주공항은 2026년 상반기 방한객이 6만 2,971 명으로 6만 명을 돌파하며 전년 동기 대비 109.1% 급증했다. 인바운드 비중도 7 .9%에서 11.1%로 전년 동기 대비 3.2%p 상승했고, 국제선 공급석은 146만 3,061석으로 전년보다 43.0% 대폭 확대됐다. 대구공항도 같은 기간 방한객이 5만 7 ,058명으로 전년 동기 대비 2.6% 증가했고, 국제선 공급석은 90만 2,286석으로 6.3% 늘었다. 특히 부정기 항공편에서는 확대 폭이 더욱 뚜렷하다. 2026년 상반기 부정기 항공편은 청주공항 574회, 대구공항 458회로 총 1,032회가 확정됐으며, 전년 동기 대비 각각 178.6%, 854.2% 급증했다. 부정기 확대편의 사례로 공사에서 유치한 후쿠시마-청주 전세기 운영을 들 수 있다. 공사 도쿄지사가 한일 비운항지역인 후쿠시마를 대상으로, 현지 여행사, 항공사가 협력해 운항한 두 차례 전세기 360석이 모두 매진됐다. 해외 현지 수요를 발굴하고 항공편과 관광상품을 함께 구성해 지방공항 입국으로 연결한 사례라는 데 의미가 있다. 발굴한 콘텐츠가 실제 해외 여행상품으로 이어질 수 있도록 '인바운드 관광 상품화 툴킷'도 함께 마련했다. 지역별 교통· 숙박·쇼핑·식당과 관광사업자, 지자체 지원정보 등 해외 여행사가 상품을 구성할 때 필요한 정보를 한데 모아 제공하는 자료다. 해외지사는 이를 활용해 현지 여행사 ·OTA와 지방공항 연계 상품 을 개발하고 있으며, 2026년 6월 기준 청주공항 연계 상품 49개, 대구공항 연계 상품 10개가 개발됐다.",
+      "chunk_id": "reference:kto:2026:local-airport:page:041:chunk:02",
+      "source_id": "reference:kto:2026:local-airport",
+      "source_url": "https://datalab.visitkorea.or.kr/site/portal/ex/bbs/View.do?bcIdx=311068&cbIdx=1135&pageIndex=1",
+      "case_region": "",
+      "region_code": "ALL",
+      "region_name": "전국 공통",
+      "source_note": "지방공항·연계 지역에 관한 자료입니다. 다른 시군구의 사업 효과·예산을 보장하는 근거로 사용하지 않습니다.",
+      "source_type": "rag",
+      "intervention": "",
+      "document_type": "policy",
+      "matched_terms": [
+        "관광사업",
+        "사례",
+        "성과",
+        "소비",
+        "숙박",
+        "실제",
+        "연결한",
+        "연계",
+        "운영",
+        "지역",
+        "체류",
+        "필요한",
+        "함께",
+        "활용해"
+      ],
+      "page_references": "PDF 41쪽",
+      "parent_source_id": "reference:kto:2026:local-airport",
+      "retrieval_method": "local_curated_chunk",
+      "evidence_strength": "medium",
+      "published_or_updated_at": "2026-08"
+    },
+    {
+      "title": "요즘, 한국관광 2호 - 지방공항 연계 지역관광 활성화 방안",
+      "summary": "발전시켜야 한다. 민관협력은 이 체계를 지속 가능하게 만드는 가장 중요한 동인이라 할 수 있다. 항공사·LCC에는 신규 노선의 초기 리스크를 지방정부·공사와 분담하는 노선 개발 협약과 기내 권역 홍보를, 글로벌 OTA·현지 여행사에는 권역 루트 상품의 공동 개발과 판매 데이터 공유를, 지역 숙박·의료·외식 사업체에는 외국인 수용 인증과 바우처·즉시 환급 참여를 각각 요구하고 지원해야 한다. 방한객의 대다수가 개별여행객인 시대에 권역의 체류와 소비를 만드는 것은 결국 지역의 민간 사업자들이며, 이들이 참여할 유인과 수익 구조를 설계하는 것이 공공의 역할이라 할 것이다. 결국 지방공항 활성화의 과제는 더 많은 방한외래객을 지역 공항에 내리게 하는 데서 끝나지 않는다. 핵심은 지방공항을 수도권의 보조 관문이 아니라 권역 관광이 시작되는 출발점으로 자리 잡게 하고, 입국 이후의 인지·이동·체류·소비가 권역 안에서 완결되는 구조를 만드는 것이다. 단기적으로는 공항별 병목 단계에 맞춘 맞춤 전략으로 체류와 소비 전환율을 높이고, 중장기적으로는 5대 관광권 단위의 성과체계와 거버넌스, 민간 참여 구조를 정착시켜야 한다. 지금의 지방공항 성장세는 일시적인 수요 이동에 머물 수도 있고, 수도권에 집중된 방한 관광 구조를 바꾸는 전환점이 될 수도 있다. 필요한 것은 더 많은 노선이 아니라, 지역에서 첫 밤을 보내고 더 오래 머물며 더 깊게 소비하는 방한 여정으로의 전환이다.",
+      "chunk_id": "reference:kto:2026:local-airport:page:044:chunk:02",
+      "source_id": "reference:kto:2026:local-airport",
+      "source_url": "https://datalab.visitkorea.or.kr/site/portal/ex/bbs/View.do?bcIdx=311068&cbIdx=1135&pageIndex=1",
+      "case_region": "",
+      "region_code": "ALL",
+      "region_name": "전국 공통",
+      "source_note": "지방공항·연계 지역에 관한 자료입니다. 다른 시군구의 사업 효과·예산을 보장하는 근거로 사용하지 않습니다.",
+      "source_type": "rag",
+      "intervention": "",
+      "document_type": "policy",
+      "matched_terms": [
+        "공공",
+        "민간",
+        "성과",
+        "소비",
+        "숙박",
+        "연계",
+        "이후",
+        "전환",
+        "지역",
+        "지역의",
+        "체류",
+        "필요한",
+        "협약",
+        "환급"
+      ],
+      "page_references": "PDF 44쪽",
+      "parent_source_id": "reference:kto:2026:local-airport",
+      "retrieval_method": "local_curated_chunk",
+      "evidence_strength": "medium",
+      "published_or_updated_at": "2026-08"
+    },
+    {
+      "title": "요즘, 한국관광 2호 - 지방공항 연계 지역관광 활성화 방안",
+      "summary": "권·전세기 유치, CIQ와 터미널 용량, 공항-거점 교통의 직결성)이고, 다른 하나는 배후권역의 체류 전환(입국 이후 첫 숙박·첫 소비를 권역 안에서 완결되게 설계, 권역 내 이동의 관광 루트화, 지역 특화 업종의 객단가 제고)이다. 지금까지의 정책이 전자에 집중되어 왔다면, 앞으로의 무게중심은 후자를 함께 설계하는 데 있으며 지방공항 활성화의 성과는 공항 소재 시· 도 행정구역이 아니라 권역단위로 측정되어야 한다. 한국관광공사 관광컨설팅팀 협조를 통해 본 신세시오를 활용한 다국어 소셜 데이터에서도 청주는 여정 7단계 1) 가운데 '숙박·체류' 담론이 가장 약하고 대구는 '인지·정보·예약' 단계가 가장 약한 것 으로 나타난다. 같은 지방공항이라도 방한객의 여정에서 막히는 지점이 다르며, 전략은 그 병목 단계에 맞춰 설계되어야 할 것이다. 또한 지역 단위로 분산된 해외 홍보를 관문공항 단위의 공동 홍보로 전환해야 한다. 아직도 일부 방한외래객은 지역을 알지 못하기 때문에 서울만 방문하고, 정보의 다수는 글로벌 앱이나 유튜브 등에서 얻는 현실에서 시·군 단위 개별 마케팅은 효과가 제한적일 수밖에 없다. 대만 시장에서 부산을 출 발점으로 경남·남부권·중부권으로 대상 지역을 단계적으로 넓혀 온 ‘남부관광의 해’ 등 권역 중심의 홍보 전략은 시장 특성에 맞춘 권역형 인지 전략의 좋은 선례라 할 수 있다. 여기에 AI 검색 시대에 대응한 5대 관광권 정보의 AEO(AI 답변 최적화) 표준화가 더해진다면 보다 효과적인 마케팅이 가능할 것이다. 명확한 기관별 역할분담과 민관협력 문화체육관광부는 지방공항과 5대 관광권 2) 정책을 하나의 체계로 묶는 컨트롤타워가 되어야 한다. 5대 관광권의 지정과",
+      "chunk_id": "reference:kto:2026:local-airport:page:043:chunk:02",
+      "source_id": "reference:kto:2026:local-airport",
+      "source_url": "https://datalab.visitkorea.or.kr/site/portal/ex/bbs/View.do?bcIdx=311068&cbIdx=1135&pageIndex=1",
+      "case_region": "",
+      "region_code": "ALL",
+      "region_name": "전국 공통",
+      "source_note": "지방공항·연계 지역에 관한 자료입니다. 다른 시군구의 사업 효과·예산을 보장하는 근거로 사용하지 않습니다.",
+      "source_type": "rag",
+      "intervention": "",
+      "document_type": "policy",
+      "matched_terms": [
+        "검색",
+        "방문",
+        "성과",
+        "소비",
+        "숙박",
+        "연계",
+        "예약",
+        "이후",
+        "전환",
+        "지역",
+        "체류",
+        "측정",
+        "함께"
+      ],
+      "page_references": "PDF 43쪽",
+      "parent_source_id": "reference:kto:2026:local-airport",
+      "retrieval_method": "local_curated_chunk",
+      "evidence_strength": "medium",
+      "published_or_updated_at": "2026-08"
+    },
+    {
+      "title": "요즘, 한국관광 2호 - 지방공항 연계 지역관광 활성화 방안",
+      "summary": "광권 정보의 AEO(AI 답변 최적화) 표준화가 더해진다면 보다 효과적인 마케팅이 가능할 것이다. 명확한 기관별 역할분담과 민관협력 문화체육관광부는 지방공항과 5대 관광권 2) 정책을 하나의 체계로 묶는 컨트롤타워가 되어야 한다. 5대 관광권의 지정과 예산 통합, 국토교통부·법무부·지방정부와의 협업을 통해 운수권·슬롯·공항시설 사용료 인센티브, 비자·입국 절차, 광역 교통을 권역 단위로 조율하고, 민간의 지역 투자를 끌어내기 위한 장기적 관점의 규제 특례를 마련해야 한다. 무엇보다 공항별 성장 단계와 시장 구조에 따라 KPI와 사업적 특성을 권역에 맞게 적용하는 유형별 육성 로드맵이 필요하다. 1) 소셜 데이터의 담론을 7가지의 여정으로 구분하였는데, 여정은 1) 인지, 정보 및 예약, 2) 입국 및 방문, 3) 교통 및 이동, 4) 숙박 및 체류, 5) 관광 및 체험, 6) 쇼핑 및 식음, 7) 공유 및 재방문으로 구분하였다. 2) 시도 및 시군구 등 행정권역을 넘어 방한객의 여행 동선을 따라 여러 지역이 이어지는 관광 중심 권역을 의미하며, 방한객의 지역 입국이 시작되는 지 방국제공항이 있는 김해·대구·청주·무안·양양공항 등 관문도시를 중심으로 해 인근에 특화 관광자원을 보유한 연계 도시를 연결하는 전략으로 '관광권' 을 설계(출처: 대한민국 정책브리핑, 2026). 프로젝트수 대표, 한양대학교 관광학부 겸임교수 정란수",
+      "chunk_id": "reference:kto:2026:local-airport:page:043:chunk:03",
+      "source_id": "reference:kto:2026:local-airport",
+      "source_url": "https://datalab.visitkorea.or.kr/site/portal/ex/bbs/View.do?bcIdx=311068&cbIdx=1135&pageIndex=1",
+      "case_region": "",
+      "region_code": "ALL",
+      "region_name": "전국 공통",
+      "source_note": "지방공항·연계 지역에 관한 자료입니다. 다른 시군구의 사업 효과·예산을 보장하는 근거로 사용하지 않습니다.",
+      "source_type": "rag",
+      "intervention": "",
+      "document_type": "policy",
+      "matched_terms": [
+        "민간",
+        "방문",
+        "방문으로",
+        "소비",
+        "숙박",
+        "연계",
+        "예산",
+        "예약",
+        "이어지는",
+        "중심으로",
+        "지역",
+        "체류",
+        "체험"
+      ],
+      "page_references": "PDF 43쪽",
+      "parent_source_id": "reference:kto:2026:local-airport",
+      "retrieval_method": "local_curated_chunk",
+      "evidence_strength": "medium",
+      "published_or_updated_at": "2026-08"
+    }
+  ],
+  "observed_findings": [
+    {
+      "value": "3,514,485명",
+      "metric": "월간 순 방문자 수",
+      "source": "dataset:28237:1",
+      "interpretation": "2026년 6월 기준 외지인 방문 규모는 크나, 전년 동월 대비 증감률은 -2.2%로 감소 추세임"
+    },
+    {
+      "value": "쇼핑업 35.4%, 식음료업 35.3%",
+      "metric": "외지인 관광소비 업종별 비중",
+      "source": "dataset:28237:3",
+      "interpretation": "관광 소비의 약 70% 이상이 쇼핑과 식음료에 집중되어 있어 해당 업종 연계 환급이 효과적일 것으로 판단됨"
+    },
+    {
+      "value": "6.6%",
+      "metric": "외지인 숙박 방문 비율",
+      "source": "dataset:28237:4",
+      "interpretation": "방문객 대다수가 당일치기 형태이며, 숙박업 소비 비중(0.5%)이 매우 낮아 체류형 전환보다는 당일 소비 증대가 우선 과제임"
+    }
+  ],
+  "planning_decision": {
+    "case_linkage": {
+      "basis": "같은 운영 방식의 유효한 인용을 유지. 인용 누락·오류일 때만 지역 검색 맥락·문서 등급으로 참고 사례 1건 연결. 지역 적합성 순위나 효과 확률이 아님.",
+      "method": "operation-document-v2",
+      "operation_family": "spend_conversion",
+      "matched_source_ids": [
+        "case:gangjin_half_price_2024"
+      ],
+      "original_case_source_ids": [
+        "case:gangjin_half_price_2024"
+      ],
+      "regional_similarity_verified": false
+    },
+    "strategy_brief": {
+      "mechanism": "방문객이 부평구 내 상점에서 지출한 금액의 일부를 지역상품권으로 환급하여, 다시 지역 내 상점에서 사용하도록 유도",
+      "pilot_scope": "부평구 내 상점",
+      "target_users": "부평구를 방문하는 외지인",
+      "working_title": "부평구 지역상품권 환급 프로그램",
+      "budget_formula": "환급 지원액 = 각 적격 신청의 min(증빙 인정 지출액 × 가정 환급률, 건별 상한)을 합산한 값. 환급률은 10%로 가정, 건별 상한은 10,000원으로 설정. 예상 참여 인원 10,000명, 예상 환급액 10,000,000원.",
+      "target_problem": "외지인 방문자 수와 관광소비액 증가",
+      "success_metrics": "환급 지원액이 10,000,000원 이상 달성 시 성공",
+      "stop_or_scale_rule": "환급 지원액이 10,000,000원 이상 달성 시 성공, 5,000,000원 미만 시 중단. 환급률과 건별 상한을 조정하여 환급 지원액을 증가시킬 수 있습니다.",
+      "supporting_case_ids": [
+        "case:gangjin_half_price_2024"
+      ]
+    },
+    "period_alignment": [],
+    "selection_reason": "부평구 지역상품권 환급 프로그램은 강진 반값여행 지역환급 사례와 유사한 운영 방식을 채택하며, 부평구의 특성에 맞춘 지역상품권 환급 방식으로, 지역 내 소비 증대 효과를 극대화할 수 있습니다. 또한, 외지인 방문자 수와 관광소비액을 증가시키는 데 기여할 수 있으며, 환급 지원액이 10,000,000원 이상 달성 시 성공, 5,000,000원 미만 시 중단하는 성공·중단 기준을 설정할 수 있습니다.",
+    "selection_status": "needs_evidence",
+    "design_candidates": [
+      {
+        "title": "부평구 지역상품권 환급 프로그램",
+        "local_fit": "부평구의 외지인 방문자 수가 3,514,485명, 외지인 관광소비 총액이 77,138,204,000원인 점을 고려하여, 지역상품권 환급을 통해 지역 내 소비를 유도하는 방식을 제안합니다. 이는 강진 반값여행 지역환급 사례와 유사한 운영 방식이며, 외지인 방문자 수와 관광소비액을 증가시키는 데 기여할 수 있습니다.",
+        "mechanism": "방문객이 부평구 내 상점에서 지출한 금액의 일부를 지역상품권으로 환급하여, 다시 지역 내 상점에서 사용하도록 유도",
+        "candidate_id": "candidate:1",
+        "case_linkage": {
+          "basis": "같은 운영 방식의 유효한 인용을 유지. 인용 누락·오류일 때만 지역 검색 맥락·문서 등급으로 참고 사례 1건 연결. 지역 적합성 순위나 효과 확률이 아님.",
+          "method": "operation-document-v2",
+          "operation_family": "spend_conversion",
+          "matched_source_ids": [
+            "case:gangjin_half_price_2024"
+          ],
+          "original_case_source_ids": [
+            "case:gangjin_half_price_2024"
+          ],
+          "regional_similarity_verified": false
+        },
+        "prerequisites": "지역상품권 사용처와 관광업체 참여 기준, 여행 지출 증빙과 중복수혜 방지 절차, 지원금보다 추가 지역소비가 큰지 사후 측정 필요",
+        "budget_formula": "환급 지원액 = 각 적격 신청의 min(증빙 인정 지출액 × 가정 환급률, 건별 상한)을 합산한 값. 환급률은 10%로 가정, 건별 상한은 10,000원으로 설정. 예상 참여 인원 10,000명, 예상 환급액 10,000,000원.",
+        "candidate_type": "spend_conversion",
+        "case_source_ids": [
+          "case:gangjin_half_price_2024"
+        ],
+        "differentiation": "강진 반값여행 지역환급과 달리, 부평구의 특성에 맞춘 지역상품권 환급 방식으로, 지역 내 상점 참여 범위와 환급 조건을 명확히 설정하여, 지역 내 소비 증대 효과를 극대화할 수 있습니다.",
+        "measurement_plan": "환급 후 재사용률은 분자=환급 뒤 선택 지역 내 적격 재결제액 합계, 분모=지급한 환급액 합계로 계산한다. 운영 전 4주를 기준기간으로 두고 운영 중 매주 원자료=신청·승인·취소·이용·결제 원장을 사업 담당자가 집계한다. 같은 콘텐츠·기간의 순차 도입 미운영 집단과 동일 분모로 비교한다. 발전 가능 범위는 시범 대상 수×관측 완료율×건별 측정값의 가정 시나리오로 제시하고 지역 전체 자연증감과 분리한다. 성공·중단 기준은 기준선·표본수 확인 뒤 착수 전에 확정한다.",
+        "stop_or_scale_rule": "환급 지원액이 10,000,000원 이상 달성 시 성공, 5,000,000원 미만 시 중단. 환급률과 건별 상한을 조정하여 환급 지원액을 증가시킬 수 있습니다.",
+        "evidence_source_ids": [
+          "dataset:28237:1",
+          "dataset:28237:3",
+          "case:gangjin_half_price_2024"
+        ]
+      },
+      {
+        "title": "부평구 디지털 관광주민증 프로그램",
+        "local_fit": "부평구의 외지인 방문자 수가 3,514,485명, 외지인 관광소비 총액이 77,138,204,000원인 점을 고려하여, 디지털 관광주민증을 통해 외지인 방문객의 재방문을 유도하는 방식을 제안합니다. 이는 디지털 관광주민증과 교통·숙박·상점 할인 결합 사례와 유사한 운영 방식이며, 외지인 방문자 수와 관광소비액을 증가시키는 데 기여할 수 있습니다.",
+        "mechanism": "디지털 관광주민증을 발급하여, 부평구 내 숙박·식음·체험·지역상점 이용 시 할인 혜택을 제공",
+        "candidate_id": "candidate:2",
+        "case_linkage": {
+          "basis": "같은 운영 방식의 유효한 인용을 유지. 인용 누락·오류일 때만 지역 검색 맥락·문서 등급으로 참고 사례 1건 연결. 지역 적합성 순위나 효과 확률이 아님.",
+          "method": "operation-document-v2",
+          "operation_family": "return_visit",
+          "matched_source_ids": [
+            "case:digital_tourism_resident_2024"
+          ],
+          "original_case_source_ids": [
+            "case:digital_tourism_resident_2024"
+          ],
+          "regional_similarity_verified": false
+        },
+        "prerequisites": "지역 내 참여업체 수와 혜택 매력도 확보, QR 또는 위치인증과 실제 사용기록 수집, 교통 할인 제공기관과 협약 필요",
+        "budget_formula": "할인 혜택 금액 = 각 적격 신청의 min(증빙 인정 지출액 × 가정 할인율, 건별 상한)을 합산한 값. 할인율은 10%로 가정, 건별 상한은 10,000원으로 설정. 예상 참여 인원 10,000명, 예상 할인 혜택 금액 10,000,000원.",
+        "candidate_type": "return_visit",
+        "case_source_ids": [
+          "case:digital_tourism_resident_2024"
+        ],
+        "differentiation": "디지털 관광주민증과 교통·숙박·상점 할인 결합 사례와 달리, 부평구의 특성에 맞춘 디지털 관광주민증 프로그램으로, 지역 내 참여업체 수와 혜택 매력도를 확보하여, 외지인 방문객의 재방문을 유도할 수 있습니다.",
+        "measurement_plan": "재이용률은 분자=측정기간 안에 두 번째 이용을 완료한 고유 ID 수, 분모=첫 이용 완료 고유 ID 수로 계산한다. 운영 전 4주를 기준기간으로 두고 운영 중 매주 원자료=신청·승인·취소·이용·결제 원장을 사업 담당자가 집계한다. 같은 콘텐츠·기간의 순차 도입 미운영 집단과 동일 분모로 비교한다. 발전 가능 범위는 시범 대상 수×관측 완료율×건별 측정값의 가정 시나리오로 제시하고 지역 전체 자연증감과 분리한다. 성공·중단 기준은 기준선·표본수 확인 뒤 착수 전에 확정한다.",
+        "stop_or_scale_rule": "할인 혜택 금액이 10,000,000원 이상 달성 시 성공, 5,000,000원 미만 시 중단. 할인율과 건별 상한을 조정하여 할인 혜택 금액을 증가시킬 수 있습니다.",
+        "evidence_source_ids": [
+          "dataset:28237:1",
+          "dataset:28237:3",
+          "case:digital_tourism_resident_2024"
+        ]
+      }
+    ],
+    "diagnosis_summary": "인천광역시 부평구는 2026년 6월 기준, 월간 순 방문자 수 3,514,485명, 외지인 숙박 방문 비율 6.6%를 기록했으며, 전년 동월 대비 외지인 방문자 증감률은 -2.2%로 나타났습니다. 또한, 관광소비 총액은 77,138,204,000원으로, 이 중 35.4%는 쇼핑업, 35.3%는 식음료업에서 발생했습니다. 그러나, ML 전망에 따르면 2026년 10월~12월 기간에는 방문자 수와 관광소비액 전망이 불확실성이 높아, 단독 선정 근거 또는 확정 성과 목표로 사용할 수 없습니다.",
+    "recommended_case_ids": [
+      "case:gangjin_half_price_2024"
+    ],
+    "automatic_corrections": [
+      {
+        "field": "planning_decision.design_candidates[1].measurement_plan",
+        "reason": "분자·분모·수집 원장·비교 기준을 서버 측정 계약으로 보완했습니다."
+      },
+      {
+        "field": "planning_decision.design_candidates[2].measurement_plan",
+        "reason": "분자·분모·수집 원장·비교 기준을 서버 측정 계약으로 보완했습니다."
+      }
+    ],
+    "candidate_assessments": [
+      {
+        "fit_score": 0,
+        "adaptation": "지역상품권 사용처와 관광업체 참여 기준, 여행 지출 증빙과 중복수혜 방지 절차, 지원금보다 추가 지역소비가 큰지 사후 측정 필요",
+        "case_source_id": "case:gangjin_half_price_2024",
+        "evidence_score": 0,
+        "rejection_risks": [
+          "사업 참여자 증가와 지역 전체 소비 증가를 같은 인과효과로 단정할 수 없음",
+          "환급이 기존 방문객에게만 지급되면 순증 효과가 작을 수 있음"
+        ],
+        "validation_plan": "환급 지원액이 10,000,000원 이상 달성 시 성공, 5,000,000원 미만 시 중단. 환급률과 건별 상한을 조정하여 환급 지원액을 증가시킬 수 있습니다.",
+        "similarity_reason": "강진 반값여행 지역환급 사례와 유사한 운영 방식을 채택하며, 부평구의 특성에 맞춘 지역상품권 환급 방식으로, 지역 내 소비 증대 효과를 극대화할 수 있습니다."
+      },
+      {
+        "fit_score": 0,
+        "adaptation": "지역 내 참여업체 수와 혜택 매력도 확보, QR 또는 위치인증과 실제 사용기록 수집, 교통 할인 제공기관과 협약 필요",
+        "case_source_id": "case:digital_tourism_resident_2024",
+        "evidence_score": 0,
+        "rejection_risks": [
+          "발급 건수와 실제 지역소비를 혼동할 수 있음",
+          "혜택 사용률이 낮으면 홍보비만 증가할 수 있음"
+        ],
+        "validation_plan": "할인 혜택 금액이 10,000,000원 이상 달성 시 성공, 5,000,000원 미만 시 중단. 할인율과 건별 상한을 조정하여 할인 혜택 금액을 증가시킬 수 있습니다.",
+        "similarity_reason": "디지털 관광주민증과 교통·숙박·상점 할인 결합 사례와 유사한 운영 방식이며, 부평구의 특성에 맞춘 디지털 관광주민증 프로그램으로, 외지인 방문객의 재방문을 유도할 수 있습니다."
+      }
+    ],
+    "selected_candidate_id": "candidate:1",
+    "original_candidate_assessments": [
+      {
+        "fit_score": 0,
+        "adaptation": "지역상품권 사용처와 관광업체 참여 기준, 여행 지출 증빙과 중복수혜 방지 절차, 지원금보다 추가 지역소비가 큰지 사후 측정 필요",
+        "case_source_id": "case:gangjin_half_price_2024",
+        "evidence_score": 0,
+        "rejection_risks": [
+          "사업 참여자 증가와 지역 전체 소비 증가를 같은 인과효과로 단정할 수 없음",
+          "환급이 기존 방문객에게만 지급되면 순증 효과가 작을 수 있음"
+        ],
+        "validation_plan": "환급 지원액이 10,000,000원 이상 달성 시 성공, 5,000,000원 미만 시 중단. 환급률과 건별 상한을 조정하여 환급 지원액을 증가시킬 수 있습니다.",
+        "similarity_reason": "강진 반값여행 지역환급 사례와 유사한 운영 방식을 채택하며, 부평구의 특성에 맞춘 지역상품권 환급 방식으로, 지역 내 소비 증대 효과를 극대화할 수 있습니다."
+      },
+      {
+        "fit_score": 0,
+        "adaptation": "지역 내 참여업체 수와 혜택 매력도 확보, QR 또는 위치인증과 실제 사용기록 수집, 교통 할인 제공기관과 협약 필요",
+        "case_source_id": "case:digital_tourism_resident_2024",
+        "evidence_score": 0,
+        "rejection_risks": [
+          "발급 건수와 실제 지역소비를 혼동할 수 있음",
+          "혜택 사용률이 낮으면 홍보비만 증가할 수 있음"
+        ],
+        "validation_plan": "할인 혜택 금액이 10,000,000원 이상 달성 시 성공, 5,000,000원 미만 시 중단. 할인율과 건별 상한을 조정하여 할인 혜택 금액을 증가시킬 수 있습니다.",
+        "similarity_reason": "디지털 관광주민증과 교통·숙박·상점 할인 결합 사례와 유사한 운영 방식이며, 부평구의 특성에 맞춘 디지털 관광주민증 프로그램으로, 외지인 방문객의 재방문을 유도할 수 있습니다."
+      }
+    ]
+  },
+  "execution_scenario": {
+    "visitor_target_pct": 20.0,
+    "spending_target_pct": 20.0
+  },
+  "reference_estimate": {
+    "items": [
+      {
+        "name": "여행비 환급 지원",
+        "basis": "15,000건 × 50,000원",
+        "amount": 750000000
+      },
+      {
+        "name": "현장 운영·정산",
+        "basis": "max(월 20인일 × 3, 15,000건 ÷ 25건/인일 올림) = 600인일 × 150,000원",
+        "amount": 90000000
+      },
+      {
+        "name": "신청·증빙 시스템",
+        "basis": "기존 시스템 설정 1식 × 800만원",
+        "amount": 8000000
+      },
+      {
+        "name": "홍보·참여처 안내",
+        "basis": "콘텐츠·안내물 1식 × 500만원",
+        "amount": 5000000
+      },
+      {
+        "name": "성과 집계·검토",
+        "basis": "자료 정리·평가 1식 × 300만원",
+        "amount": 3000000
+      },
+      {
+        "name": "예비비",
+        "basis": "직접비 85,600만원 × 10%",
+        "amount": 85600000
+      }
+    ],
+    "months": 3,
+    "refund": true,
+    "status": "planning_assumption_not_quote",
+    "sources": [
+      {
+        "title": "강진군 반값여행 공식 신청·정산 조건",
+        "summary": "일반 관광객 여행비 50% 상품권 환급. 개인 최대 10만원·팀 최대 20만원. 원주 효과나 공급업체 단가의 근거는 아님.",
+        "source_id": "estimate:gangjin-refund-rules:20260905",
+        "source_url": "https://www.gangjintour.com/advance/advance_req.html",
+        "accessed_at": "2026-09-05",
+        "source_type": "budget_reference"
+      }
+    ],
+    "version": "reference-estimate-v2",
+    "quantity": 15000,
+    "unit_krw": 50000,
+    "total_krw": 941600000,
+    "assumptions": [
+      "전 항목은 기획용 가정 단가이며 확정 견적·공식 표준단가가 아닙니다.",
+      "인력 15만원/인일은 현장 용역 예산 가정입니다. 근로계약 임금 산정값이 아닙니다.",
+      "시스템은 기존 신청·정산 수단의 설정·운영 범위입니다. 신규 앱·키오스크 구축비는 제외합니다.",
+      "용역비는 세금 포함 예산 한도로 가정합니다. 환급금 과세·수수료·계약조건은 착수 전 확인합니다.",
+      "지원 건수·평균 지원액·80% 후속 사용 목표는 운영 제안이며 관측값 또는 ML 산출값이 아닙니다."
+    ],
+    "reserve_krw": 85600000,
+    "scale_basis": "사업기간 추가 방문 목표 1,499,970명 × 시범 담당 비중 1% → 15,000건(올림). 1%는 직접 운영할 참여량 배분 가정이며 전환율 예측이 아닙니다.",
+    "subtotal_krw": 856000000,
+    "pilot_share_pct": 1,
+    "redemption_count": 12000,
+    "within_hard_budget": true,
+    "qualifying_spend_krw": 1500000000,
+    "redemption_target_pct": 80,
+    "additional_visitors_target": 1499969.9333333336
+  },
+  "target_proposal_basis": {
+    "kind": "planning_assumption",
+    "period": "2024년 1~10월 누적 / 전년 비교 발표",
+    "case_title": "강진 반값여행과 지역축제 운영 실적",
+    "source_url": "https://clik.nanet.go.kr/minutes/viewer.do?DOCID=CLIKC3524169218564260&collection=minutes",
+    "explanation": "강진군의회 2024-11-20 시정연설: 10월 말 관광객 약 248만 명, 전년 대비 25% 증가. 전년 규모 역산: 248만÷1.25≈198.4만 명, 차이≈49.6만 명. 역산값은 별도 관측 원자료가 아니다. 반값여행과 축제의 동시기 실적이며 사업 단독 효과·ML 대비 증가율은 아니다. 인천광역시 부평구에서는 최종월 방문 +20%를 도전 목표로 제안한다(25% × 80%). 80%는 전면 적용 대신 단계 운영을 고려한 계획 가정이며 인구 보정·통계 추정 계수가 아니다. 기본 소비 목표는 월별 소비/방문 비율을 추가 방문 수에 적용한 계획 가정이며 강진 소비 실적으로 계산한 값이 아니다. 방문 수가 0보다 큰 월은 ML 소비액÷ML 방문 수를 추가 방문 수에 곱한다. 같은 월의 두 증가율은 같으며, 이 비율은 실제 1인당 소비액이 아니다.",
+    "observed_visitors": 2480000,
+    "visitor_target_pct": 20,
+    "reported_growth_pct": 25,
+    "spending_target_pct": 20,
+    "prior_visitors_backcalculated": 1984000
+  },
+  "planning_brief_fingerprint": "e0df8587904ae7223a3b0ef936f618fb86d46f528af89b00409eab7ef6d82812"
+}

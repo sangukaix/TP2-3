@@ -1,0 +1,809 @@
+[
+  {
+    "version": "regional-case-research-v1",
+    "selected_region": "인천광역시 부평구",
+    "peer_method": "standardized_euclidean_v1",
+    "peer_period": "2025-07 ~ 2026-06",
+    "selected_observed_profile": {
+      "region_code": "28237",
+      "region_name": "인천광역시 부평구",
+      "visitors_12m": 50883440,
+      "visitors_yoy_pct": 5.230015,
+      "domestic_spend_12m_thousand_krw": 994601151.0,
+      "domestic_spend_yoy_pct": 6.519112,
+      "spend_per_visitor_krw": 19546.66,
+      "overnight_ratio_avg_pct": 7.2333,
+      "avg_stay_days": 2.91,
+      "percentiles": {
+        "visitors_12m": 75.29,
+        "spend_per_visitor_krw": 71.1,
+        "overnight_ratio_avg_pct": 44.11,
+        "avg_stay_days": 61.41
+      }
+    },
+    "peer_source_ids": [
+      "datalab:088dce68db8c:f9e07528e9cc",
+      "datalab:12893561bbea:153ed3aa5a6e",
+      "datalab:328e6d50da04:877452ad2b59",
+      "datalab:5104039977f5:37dc3b7e64b5",
+      "datalab:b7bac265962d:97cf4d1db102",
+      "datalab:bd21758c8a88:9597865e62ef"
+    ],
+    "signal_groups": [
+      {
+        "id": "spend",
+        "question": "지역 상권·콘텐츠 이용과 소비를 늘린 운영",
+        "signals": [
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "below_baseline_on_test",
+            "metric": "spending_krw",
+            "period": "202610~202612",
+            "aggregation": "3_month_sum",
+            "forecast_value": 243545949020.0,
+            "previous_year_same_months_value": 251691159000.0,
+            "change_percent": -3.24,
+            "unit": "원",
+            "source_id": "ml:28237:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 관광소비액의 전년 동기간 대비 감소 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          }
+        ],
+        "search_priority_change_pct": -3.24
+      },
+      {
+        "id": "visit",
+        "question": "관심을 방문·예약으로 연결한 운영",
+        "signals": [
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "below_baseline_on_test",
+            "metric": "visitors",
+            "period": "202610~202612",
+            "aggregation": "3_month_sum",
+            "forecast_value": 11268139.0,
+            "previous_year_same_months_value": 11515444.0,
+            "change_percent": -2.15,
+            "unit": "명",
+            "source_id": "ml:28237:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 방문자 수의 전년 동기간 대비 감소 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          },
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "seasonal_baseline",
+            "metric": "navigation_searches",
+            "period": "202610~202612",
+            "aggregation": "3_month_sum",
+            "forecast_value": 487596.0,
+            "previous_year_same_months_value": 487596.0,
+            "change_percent": 0.0,
+            "unit": "건",
+            "source_id": "ml:28237:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 내비게이션 검색량의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          }
+        ],
+        "search_priority_change_pct": -1.075
+      },
+      {
+        "id": "stay",
+        "question": "체류·체험·숙박을 연결한 운영",
+        "signals": [
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "limited_backtest_support",
+            "metric": "lodging_nights",
+            "period": "202610~202612",
+            "aggregation": "3_month_average",
+            "forecast_value": 2.8966666666666665,
+            "previous_year_same_months_value": 2.8766666666666665,
+            "change_percent": 0.7,
+            "unit": "일",
+            "source_id": "ml:28237:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 평균 숙박일수의 전년 동기간 대비 증가 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          },
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "seasonal_baseline",
+            "metric": "lodging_rate_pct",
+            "period": "202610~202612",
+            "aggregation": "3_month_average",
+            "forecast_value": 7.466666666666666,
+            "previous_year_same_months_value": 7.466666666666666,
+            "change_percent": 0.0,
+            "unit": "%",
+            "source_id": "ml:28237:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 숙박방문자 비율의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          },
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "below_baseline_on_test",
+            "metric": "stay_minutes",
+            "period": "202610~202612",
+            "aggregation": "3_month_average",
+            "forecast_value": 1187.54,
+            "previous_year_same_months_value": 1171.0,
+            "change_percent": 1.41,
+            "unit": "분",
+            "source_id": "ml:28237:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 평균 체류시간의 전년 동기간 대비 증가 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          },
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "seasonal_baseline",
+            "metric": "lodging_searches",
+            "period": "202610~202612",
+            "aggregation": "3_month_sum",
+            "forecast_value": 22241.0,
+            "previous_year_same_months_value": 22241.0,
+            "change_percent": 0.0,
+            "unit": "건",
+            "source_id": "ml:28237:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 숙박 목적지 검색량의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          }
+        ],
+        "search_priority_change_pct": 0.5275
+      }
+    ],
+    "search_tasks": [
+      {
+        "region_code": "31140",
+        "region_name": "울산광역시 남구",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 1,
+          "region_code": "31140",
+          "region_name": "울산광역시 남구",
+          "distance": 0.318546,
+          "visitors_gap_pct": 3.041117,
+          "spend_per_visitor_gap_krw": -1895.31,
+          "overnight_ratio_gap_pct_point": 0.6166
+        },
+        "query": "울산광역시 남구 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": "28200",
+        "region_name": "인천광역시 남동구",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 2,
+          "region_code": "28200",
+          "region_name": "인천광역시 남동구",
+          "distance": 0.33655,
+          "visitors_gap_pct": -14.242767,
+          "spend_per_visitor_gap_krw": 79.22,
+          "overnight_ratio_gap_pct_point": 1.4666
+        },
+        "query": "인천광역시 남동구 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": "28177",
+        "region_name": "인천광역시 미추홀구",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 3,
+          "region_code": "28177",
+          "region_name": "인천광역시 미추홀구",
+          "distance": 0.409766,
+          "visitors_gap_pct": 7.274723,
+          "spend_per_visitor_gap_krw": -227.23,
+          "overnight_ratio_gap_pct_point": 0.4916
+        },
+        "query": "인천광역시 미추홀구 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": "41630",
+        "region_name": "경기도 양주시",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 4,
+          "region_code": "41630",
+          "region_name": "경기도 양주시",
+          "distance": 0.448959,
+          "visitors_gap_pct": 46.771184,
+          "spend_per_visitor_gap_krw": 810.41,
+          "overnight_ratio_gap_pct_point": -0.0167
+        },
+        "query": "경기도 양주시 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": "41113",
+        "region_name": "경기도 수원시 권선구",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 5,
+          "region_code": "41113",
+          "region_name": "경기도 수원시 권선구",
+          "distance": 0.47323,
+          "visitors_gap_pct": 0.658202,
+          "spend_per_visitor_gap_krw": -1444.25,
+          "overnight_ratio_gap_pct_point": 1.6833
+        },
+        "query": "경기도 수원시 권선구 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": null,
+        "region_name": "전국 확장",
+        "reason": "유사지역 목록 밖의 성공 운영도 비교; 지역 조건의 차이는 적용 설계에서 조정",
+        "query": "전국 2023 2024 2025 2026 지역 상권·콘텐츠 이용과 소비를 늘린 운영 관광사업 성과평가 전후 비교"
+      },
+      {
+        "region_code": null,
+        "region_name": "전국 확장",
+        "reason": "유사지역 목록 밖의 성공 운영도 비교; 지역 조건의 차이는 적용 설계에서 조정",
+        "query": "전국 2023 2024 2025 2026 관심을 방문·예약으로 연결한 운영 관광사업 성과평가 전후 비교"
+      },
+      {
+        "region_code": null,
+        "region_name": "전국 확장",
+        "reason": "유사지역 목록 밖의 성공 운영도 비교; 지역 조건의 차이는 적용 설계에서 조정",
+        "query": "전국 2023 2024 2025 2026 체류·체험·숙박을 연결한 운영 관광사업 성과평가 전후 비교"
+      }
+    ],
+    "eligibility": "peer는 검색 우선순위이며 필수 일치 조건이 아니다. 일부 조건이 다른 지역의 운영도 비교한다.",
+    "comparison_contract": [
+      "실제 지역과 사업명이 있는 서로 다른 운영 사례를 우선 3건 이상 조사한다. 없는 사례는 만들지 않는다.",
+      "사업 시행연도·운영방식·시행 전후 동일기간 방문/소비 수치와 각 원문 URL을 확인한다.",
+      "성과 미확인 운영 사례와 수치가 확인된 성과 사례를 구분한다. 전후 증가는 사업 단독 효과가 아니다.",
+      "선택 지역의 관측/ML 신호 → 사례 운영과 실적 → 공통점/차이 → 바꿀 운영조건 → 대안보다 선택한 이유를 연결한다.",
+      "ML이 약한 지표는 관측 자료와 함께 해석한다. 인구·지리·교통은 확인된 별도 근거가 있을 때만 비교한다."
+    ]
+  },
+  {
+    "version": "regional-case-research-v1",
+    "selected_region": "제주특별자치도 제주시",
+    "peer_method": "standardized_euclidean_v1",
+    "peer_period": "2025-07 ~ 2026-06",
+    "selected_observed_profile": {
+      "region_code": "50110",
+      "region_name": "제주특별자치도 제주시",
+      "visitors_12m": 60693357,
+      "visitors_yoy_pct": 5.559849,
+      "domestic_spend_12m_thousand_krw": 1794275552.0,
+      "domestic_spend_yoy_pct": -3.935727,
+      "spend_per_visitor_krw": 29562.96,
+      "overnight_ratio_avg_pct": 21.7583,
+      "avg_stay_days": 3.1258,
+      "percentiles": {
+        "visitors_12m": 83.27,
+        "spend_per_visitor_krw": 96.96,
+        "overnight_ratio_avg_pct": 95.82,
+        "avg_stay_days": 99.24
+      }
+    },
+    "peer_source_ids": [
+      "datalab:3ec866bde028:27b141591f10",
+      "datalab:4833a91757b2:5c2efa032440",
+      "datalab:5d9f73f9fe47:2904d99e7279",
+      "datalab:95122c38b4fc:522e2d839300",
+      "datalab:d73227708014:f4517115deb9",
+      "datalab:f07ad8a73d99:ed1b998de1b3"
+    ],
+    "signal_groups": [
+      {
+        "id": "visit",
+        "question": "관심을 방문·예약으로 연결한 운영",
+        "signals": [
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "mixed_recursive_performance",
+            "metric": "visitors",
+            "period": "202610~202612",
+            "aggregation": "3_month_sum",
+            "forecast_value": 10580165.0,
+            "previous_year_same_months_value": 10907053.0,
+            "change_percent": -3.0,
+            "unit": "명",
+            "source_id": "ml:50110:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 방문자 수의 전년 동기간 대비 감소 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          },
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "seasonal_baseline",
+            "metric": "navigation_searches",
+            "period": "202610~202612",
+            "aggregation": "3_month_sum",
+            "forecast_value": 2334580.0,
+            "previous_year_same_months_value": 2334580.0,
+            "change_percent": 0.0,
+            "unit": "건",
+            "source_id": "ml:50110:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 내비게이션 검색량의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          }
+        ],
+        "search_priority_change_pct": -1.5
+      },
+      {
+        "id": "spend",
+        "question": "지역 상권·콘텐츠 이용과 소비를 늘린 운영",
+        "signals": [
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "mixed_recursive_performance",
+            "metric": "spending_krw",
+            "period": "202610~202612",
+            "aggregation": "3_month_sum",
+            "forecast_value": 444918852321.0,
+            "previous_year_same_months_value": 446455624000.0,
+            "change_percent": -0.34,
+            "unit": "원",
+            "source_id": "ml:50110:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 관광소비액의 전년 동기간 대비 감소 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          }
+        ],
+        "search_priority_change_pct": -0.34
+      },
+      {
+        "id": "stay",
+        "question": "체류·체험·숙박을 연결한 운영",
+        "signals": [
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "seasonal_baseline",
+            "metric": "lodging_nights",
+            "period": "202610~202612",
+            "aggregation": "3_month_average",
+            "forecast_value": 3.11,
+            "previous_year_same_months_value": 3.11,
+            "change_percent": 0.0,
+            "unit": "일",
+            "source_id": "ml:50110:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 평균 숙박일수의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          },
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "seasonal_baseline",
+            "metric": "lodging_rate_pct",
+            "period": "202610~202612",
+            "aggregation": "3_month_average",
+            "forecast_value": 22.133333333333336,
+            "previous_year_same_months_value": 22.133333333333336,
+            "change_percent": 0.0,
+            "unit": "%",
+            "source_id": "ml:50110:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 숙박방문자 비율의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          },
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "seasonal_baseline",
+            "metric": "stay_minutes",
+            "period": "202610~202612",
+            "aggregation": "3_month_average",
+            "forecast_value": 2311.3333333333335,
+            "previous_year_same_months_value": 2311.3333333333335,
+            "change_percent": 0.0,
+            "unit": "분",
+            "source_id": "ml:50110:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 평균 체류시간의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          },
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "seasonal_baseline",
+            "metric": "lodging_searches",
+            "period": "202610~202612",
+            "aggregation": "3_month_sum",
+            "forecast_value": 310183.0,
+            "previous_year_same_months_value": 310183.0,
+            "change_percent": 0.0,
+            "unit": "건",
+            "source_id": "ml:50110:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 숙박 목적지 검색량의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          }
+        ],
+        "search_priority_change_pct": 0.0
+      }
+    ],
+    "search_tasks": [
+      {
+        "region_code": "50130",
+        "region_name": "제주특별자치도 서귀포시",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 1,
+          "region_code": "50130",
+          "region_name": "제주특별자치도 서귀포시",
+          "distance": 0.984226,
+          "visitors_gap_pct": 33.99293,
+          "spend_per_visitor_gap_krw": 5963.08,
+          "overnight_ratio_gap_pct_point": -0.2084
+        },
+        "query": "제주특별자치도 서귀포시 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": "51130",
+        "region_name": "강원특별자치도 원주시",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 2,
+          "region_code": "51130",
+          "region_name": "강원특별자치도 원주시",
+          "distance": 2.491037,
+          "visitors_gap_pct": 70.861913,
+          "spend_per_visitor_gap_krw": 6478.48,
+          "overnight_ratio_gap_pct_point": 8.0083
+        },
+        "query": "강원특별자치도 원주시 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": "41220",
+        "region_name": "경기도 평택시",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 3,
+          "region_code": "41220",
+          "region_name": "경기도 평택시",
+          "distance": 2.648059,
+          "visitors_gap_pct": 6.748548,
+          "spend_per_visitor_gap_krw": 7516.0,
+          "overnight_ratio_gap_pct_point": 12.4
+        },
+        "query": "경기도 평택시 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": "47190",
+        "region_name": "경상북도 구미시",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 4,
+          "region_code": "47190",
+          "region_name": "경상북도 구미시",
+          "distance": 2.826709,
+          "visitors_gap_pct": 118.315311,
+          "spend_per_visitor_gap_krw": 10053.85,
+          "overnight_ratio_gap_pct_point": 11.0083
+        },
+        "query": "경상북도 구미시 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": "41480",
+        "region_name": "경기도 파주시",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 5,
+          "region_code": "41480",
+          "region_name": "경기도 파주시",
+          "distance": 2.829383,
+          "visitors_gap_pct": 11.930426,
+          "spend_per_visitor_gap_krw": 5386.76,
+          "overnight_ratio_gap_pct_point": 13.925
+        },
+        "query": "경기도 파주시 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": null,
+        "region_name": "전국 확장",
+        "reason": "유사지역 목록 밖의 성공 운영도 비교; 지역 조건의 차이는 적용 설계에서 조정",
+        "query": "전국 2023 2024 2025 2026 관심을 방문·예약으로 연결한 운영 관광사업 성과평가 전후 비교"
+      },
+      {
+        "region_code": null,
+        "region_name": "전국 확장",
+        "reason": "유사지역 목록 밖의 성공 운영도 비교; 지역 조건의 차이는 적용 설계에서 조정",
+        "query": "전국 2023 2024 2025 2026 지역 상권·콘텐츠 이용과 소비를 늘린 운영 관광사업 성과평가 전후 비교"
+      },
+      {
+        "region_code": null,
+        "region_name": "전국 확장",
+        "reason": "유사지역 목록 밖의 성공 운영도 비교; 지역 조건의 차이는 적용 설계에서 조정",
+        "query": "전국 2023 2024 2025 2026 체류·체험·숙박을 연결한 운영 관광사업 성과평가 전후 비교"
+      }
+    ],
+    "eligibility": "peer는 검색 우선순위이며 필수 일치 조건이 아니다. 일부 조건이 다른 지역의 운영도 비교한다.",
+    "comparison_contract": [
+      "실제 지역과 사업명이 있는 서로 다른 운영 사례를 우선 3건 이상 조사한다. 없는 사례는 만들지 않는다.",
+      "사업 시행연도·운영방식·시행 전후 동일기간 방문/소비 수치와 각 원문 URL을 확인한다.",
+      "성과 미확인 운영 사례와 수치가 확인된 성과 사례를 구분한다. 전후 증가는 사업 단독 효과가 아니다.",
+      "선택 지역의 관측/ML 신호 → 사례 운영과 실적 → 공통점/차이 → 바꿀 운영조건 → 대안보다 선택한 이유를 연결한다.",
+      "ML이 약한 지표는 관측 자료와 함께 해석한다. 인구·지리·교통은 확인된 별도 근거가 있을 때만 비교한다."
+    ]
+  },
+  {
+    "version": "regional-case-research-v1",
+    "selected_region": "강원특별자치도 원주시",
+    "peer_method": "standardized_euclidean_v1",
+    "peer_period": "2025-07 ~ 2026-06",
+    "selected_observed_profile": {
+      "region_code": "51130",
+      "region_name": "강원특별자치도 원주시",
+      "visitors_12m": 35521876,
+      "visitors_yoy_pct": 5.962258,
+      "domestic_spend_12m_thousand_krw": 820004210.0,
+      "domestic_spend_yoy_pct": 5.32308,
+      "spend_per_visitor_krw": 23084.48,
+      "overnight_ratio_avg_pct": 13.75,
+      "avg_stay_days": 2.8133,
+      "percentiles": {
+        "visitors_12m": 60.84,
+        "spend_per_visitor_krw": 82.51,
+        "overnight_ratio_avg_pct": 84.41,
+        "avg_stay_days": 47.53
+      }
+    },
+    "peer_source_ids": [
+      "datalab:16d84bd9b1d0:620b2639a268",
+      "datalab:242a2c1249d4:f84e1a5f3914",
+      "datalab:a050e5a84ef4:3906c6ac70a7",
+      "datalab:bd9d3d26da19:991f2264ad4a",
+      "datalab:d54a3fb44037:ee4640b6178b",
+      "datalab:ebce91b8bf02:1770c2d94cc6"
+    ],
+    "signal_groups": [
+      {
+        "id": "stay",
+        "question": "체류·체험·숙박을 연결한 운영",
+        "signals": [
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "below_baseline_on_test",
+            "metric": "lodging_nights",
+            "period": "202610~202612",
+            "aggregation": "3_month_average",
+            "forecast_value": 2.8266666666666667,
+            "previous_year_same_months_value": 2.77,
+            "change_percent": 2.05,
+            "unit": "일",
+            "source_id": "ml:51130:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 평균 숙박일수의 전년 동기간 대비 증가 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          },
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "seasonal_baseline",
+            "metric": "lodging_rate_pct",
+            "period": "202610~202612",
+            "aggregation": "3_month_average",
+            "forecast_value": 14.0,
+            "previous_year_same_months_value": 14.0,
+            "change_percent": 0.0,
+            "unit": "%",
+            "source_id": "ml:51130:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 숙박방문자 비율의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          },
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "seasonal_baseline",
+            "metric": "stay_minutes",
+            "period": "202610~202612",
+            "aggregation": "3_month_average",
+            "forecast_value": 1679.0,
+            "previous_year_same_months_value": 1679.0,
+            "change_percent": 0.0,
+            "unit": "분",
+            "source_id": "ml:51130:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 평균 체류시간의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          },
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "below_baseline_on_test",
+            "metric": "lodging_searches",
+            "period": "202610~202612",
+            "aggregation": "3_month_sum",
+            "forecast_value": 126781.0,
+            "previous_year_same_months_value": 132276.0,
+            "change_percent": -4.15,
+            "unit": "건",
+            "source_id": "ml:51130:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 숙박 목적지 검색량의 전년 동기간 대비 감소 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          }
+        ],
+        "search_priority_change_pct": -0.5250000000000001
+      },
+      {
+        "id": "visit",
+        "question": "관심을 방문·예약으로 연결한 운영",
+        "signals": [
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "below_baseline_on_test",
+            "metric": "visitors",
+            "period": "202610~202612",
+            "aggregation": "3_month_sum",
+            "forecast_value": 7364200.0,
+            "previous_year_same_months_value": 7426060.0,
+            "change_percent": -0.83,
+            "unit": "명",
+            "source_id": "ml:51130:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 방문자 수의 전년 동기간 대비 감소 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          },
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "seasonal_baseline",
+            "metric": "navigation_searches",
+            "period": "202610~202612",
+            "aggregation": "3_month_sum",
+            "forecast_value": 1093900.0,
+            "previous_year_same_months_value": 1093900.0,
+            "change_percent": 0.0,
+            "unit": "건",
+            "source_id": "ml:51130:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 내비게이션 검색량의 전년 동기간 대비 유지 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          }
+        ],
+        "search_priority_change_pct": -0.415
+      },
+      {
+        "id": "spend",
+        "question": "지역 상권·콘텐츠 이용과 소비를 늘린 운영",
+        "signals": [
+          {
+            "kind": "forecast_signal",
+            "window_label": "입력 일정 전망",
+            "window_months": 3,
+            "reliability": "exploratory_longer_horizon",
+            "model_reliability": "below_baseline_on_test",
+            "metric": "spending_krw",
+            "period": "202610~202612",
+            "aggregation": "3_month_sum",
+            "forecast_value": 256774459671.0,
+            "previous_year_same_months_value": 186554967000.0,
+            "change_percent": 37.64,
+            "unit": "원",
+            "source_id": "ml:51130:regional-demand-v3.1:202606",
+            "interpretation": "입력 일정 전망에서 관광소비액의 전년 동기간 대비 증가 추세 예측입니다. 원인 또는 사업 효과를 뜻하지 않습니다."
+          }
+        ],
+        "search_priority_change_pct": 37.64
+      }
+    ],
+    "search_tasks": [
+      {
+        "region_code": "52130",
+        "region_name": "전북특별자치도 군산시",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 1,
+          "region_code": "52130",
+          "region_name": "전북특별자치도 군산시",
+          "distance": 0.56952,
+          "visitors_gap_pct": 30.014826,
+          "spend_per_visitor_gap_krw": 1722.45,
+          "overnight_ratio_gap_pct_point": -0.6417
+        },
+        "query": "전북특별자치도 군산시 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": "44270",
+        "region_name": "충청남도 당진시",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 2,
+          "region_code": "44270",
+          "region_name": "충청남도 당진시",
+          "distance": 0.717962,
+          "visitors_gap_pct": 57.914364,
+          "spend_per_visitor_gap_krw": -389.8,
+          "overnight_ratio_gap_pct_point": 2.6833
+        },
+        "query": "충청남도 당진시 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": "51110",
+        "region_name": "강원특별자치도 춘천시",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 3,
+          "region_code": "51110",
+          "region_name": "강원특별자치도 춘천시",
+          "distance": 0.775437,
+          "visitors_gap_pct": 17.576504,
+          "spend_per_visitor_gap_krw": 2387.43,
+          "overnight_ratio_gap_pct_point": -1.6917
+        },
+        "query": "강원특별자치도 춘천시 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": "44133",
+        "region_name": "충청남도 천안시 서북구",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 4,
+          "region_code": "44133",
+          "region_name": "충청남도 천안시 서북구",
+          "distance": 0.896567,
+          "visitors_gap_pct": -20.160674,
+          "spend_per_visitor_gap_krw": -488.5,
+          "overnight_ratio_gap_pct_point": 4.3583
+        },
+        "query": "충청남도 천안시 서북구 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": "41650",
+        "region_name": "경기도 포천시",
+        "reason": "동일 기간 관광 관측지표 거리로 찾은 우선 조사 지역",
+        "comparison": {
+          "rank": 5,
+          "region_code": "41650",
+          "region_name": "경기도 포천시",
+          "distance": 0.930275,
+          "visitors_gap_pct": 21.81174,
+          "spend_per_visitor_gap_krw": -1601.4,
+          "overnight_ratio_gap_pct_point": 3.95
+        },
+        "query": "경기도 포천시 2023 2024 2025 2026 관광사업 성과평가 방문객 관광소비 전년 운영 결과"
+      },
+      {
+        "region_code": null,
+        "region_name": "전국 확장",
+        "reason": "유사지역 목록 밖의 성공 운영도 비교; 지역 조건의 차이는 적용 설계에서 조정",
+        "query": "전국 2023 2024 2025 2026 체류·체험·숙박을 연결한 운영 관광사업 성과평가 전후 비교"
+      },
+      {
+        "region_code": null,
+        "region_name": "전국 확장",
+        "reason": "유사지역 목록 밖의 성공 운영도 비교; 지역 조건의 차이는 적용 설계에서 조정",
+        "query": "전국 2023 2024 2025 2026 관심을 방문·예약으로 연결한 운영 관광사업 성과평가 전후 비교"
+      },
+      {
+        "region_code": null,
+        "region_name": "전국 확장",
+        "reason": "유사지역 목록 밖의 성공 운영도 비교; 지역 조건의 차이는 적용 설계에서 조정",
+        "query": "전국 2023 2024 2025 2026 지역 상권·콘텐츠 이용과 소비를 늘린 운영 관광사업 성과평가 전후 비교"
+      }
+    ],
+    "eligibility": "peer는 검색 우선순위이며 필수 일치 조건이 아니다. 일부 조건이 다른 지역의 운영도 비교한다.",
+    "comparison_contract": [
+      "실제 지역과 사업명이 있는 서로 다른 운영 사례를 우선 3건 이상 조사한다. 없는 사례는 만들지 않는다.",
+      "사업 시행연도·운영방식·시행 전후 동일기간 방문/소비 수치와 각 원문 URL을 확인한다.",
+      "성과 미확인 운영 사례와 수치가 확인된 성과 사례를 구분한다. 전후 증가는 사업 단독 효과가 아니다.",
+      "선택 지역의 관측/ML 신호 → 사례 운영과 실적 → 공통점/차이 → 바꿀 운영조건 → 대안보다 선택한 이유를 연결한다.",
+      "ML이 약한 지표는 관측 자료와 함께 해석한다. 인구·지리·교통은 확인된 별도 근거가 있을 때만 비교한다."
+    ]
+  }
+]

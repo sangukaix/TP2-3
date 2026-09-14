@@ -11,6 +11,7 @@ import { chatWithProjectLearningAssistant, getProjectLearningCatalog } from '../
 import LearningSectionNav from './LearningSectionNav'
 import useLearningAssistantStatus from './useLearningAssistantStatus'
 import './mlTest.css'
+import CurrentWorkflowGuide from './CurrentWorkflowGuide'
 
 const EXAMPLES = {
   openai: ['5개 Agent는 각각 무슨 일을 해?', 'OpenAI는 어느 단계에서 개입해?', 'RAG와 웹 검색은 어떻게 달라?', '기획안이 품질검수를 통과하지 못하면 어떻게 돼?'],
@@ -121,7 +122,7 @@ function TechnicalIndex({ topic, catalog }) {
 }
 
 /** OpenAI·React 페이지가 공유하는 오른쪽 학습 챗봇입니다. */
-function ProjectTutor({ topic }) {
+export function ProjectTutor({ topic }) {
   const [messages, setMessages] = useState([])
   const [question, setQuestion] = useState('')
   const [busy, setBusy] = useState(false)
@@ -157,12 +158,13 @@ export default function LearningArchitecturePage({ topic }) {
   const [catalog, setCatalog] = useState(null)
   const [error, setError] = useState('')
   useEffect(() => { let active = true; getProjectLearningCatalog(topic).then((data) => { if (active) setCatalog(data) }).catch((reason) => { if (active) setError(reason.message) }); return () => { active = false } }, [topic])
-  return <WorkspaceShell><main className={`ml-test-page learning-architecture-page ${topic === 'openai' ? 'is-openai-study' : ''}`}><LearningSectionNav />
+  return <WorkspaceShell><main className={`ml-test-page learning-architecture-page admin-study-page ${topic === 'openai' ? 'is-openai-study' : ''}`}><LearningSectionNav />
     {!catalog && !error && <div className="ml-test-state"><LoaderCircle className="learning-spin" size={18} />현재 프로젝트 구조를 읽고 있습니다.</div>}
     {error && <div className="ml-test-state is-error"><AlertCircle size={18} />{error}</div>}
     {catalog && <div className="learning-architecture-layout"><div className="learning-architecture-content">
       <header className="learning-architecture-hero"><div><p>PROJECT STUDY</p><h1>{catalog.title}</h1><span>{catalog.subtitle}</span></div><div className="learning-scan-source"><Braces size={16} /><span>실제 코드 자동 반영</span>{catalog.generated_from.map((source) => <code key={source}>{source}</code>)}</div></header>
       <section className="learning-summary-row">{catalog.summary.map((item) => <div key={item.label}><small>{item.label}</small><b>{item.value}</b></div>)}</section>
+      <CurrentWorkflowGuide topic={topic} />
 
       {topic === 'react' ? <>
         <ReactSystemArchitecture architecture={catalog.architecture} />

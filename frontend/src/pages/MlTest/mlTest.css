@@ -171,3 +171,41 @@
  .is-openai-study .learning-architecture-layout { grid-template-columns: minmax(0, 1fr); }
  .is-openai-study .learning-tutor { position: relative; width: min(100%, 432px); justify-self: end; }
 }
+
+/* Shared admin study layout: equal, compact chat on all three pages. */
+.admin-study-page .learning-architecture-layout { display:grid; grid-template-columns:minmax(0,1fr) 340px; gap:22px; align-items:start; }
+.admin-study-page .learning-architecture-content { min-width:0; }
+.admin-study-page .learning-tutor { width:100%; height:min(680px,calc(100vh - 140px)); min-height:420px; position:sticky; top:88px; box-sizing:border-box; }
+.admin-study-page .learning-tutor-messages { min-height:0; flex:1; overflow:auto; }
+.admin-study-page .learning-tutor h2 { font-size:15px; }
+.admin-study-page .learning-tutor p,.admin-study-page .learning-tutor button { font-size:12px; line-height:1.65; }
+.current-workflow-guide { margin:0 0 20px; padding:22px; border:1px solid #d7e4ee; border-radius:16px; background:linear-gradient(135deg,#f4f9ff,#fff); }
+.current-workflow-guide header>span { color:#1765a5; font-size:11px; font-weight:700; }
+.current-workflow-guide h2 { margin:7px 0; font-size:21px; color:#173e60; }
+.current-workflow-guide p { margin:5px 0; font-size:13px; line-height:1.8; color:#536b7e; }
+.current-workflow-guide ol { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; padding:0; margin:18px 0; list-style:none; }
+.current-workflow-guide li { display:flex; gap:11px; padding:16px; border:1px solid #e1eaf1; border-radius:12px; background:#fff; min-width:0; }
+.current-workflow-guide li>span { color:#2174b8; font-size:13px; font-weight:800; }
+.current-workflow-guide li>div { min-width:0; }
+.current-workflow-guide h3 { margin:0 0 7px; font-size:15px; color:#244c6c; }
+.current-workflow-guide code { display:block; margin-top:10px; font-size:11px; color:#3d7196; overflow-wrap:anywhere; }
+.current-workflow-guide details { padding-top:12px; border-top:1px solid #dce7ef; }
+.current-workflow-guide summary { cursor:pointer; color:#315b7b; font-size:13px; font-weight:700; }
+.admin-study-page .llm-routing-panel p,.admin-study-page .llm-trace-panel p { font-size:12px; line-height:1.6; }
+.admin-study-page .llm-routing-row>b,.admin-study-page .llm-routing-panel select,.admin-study-page .llm-routing-panel input { font-size:12px; }
+.admin-study-page .llm-routing-row small { font-size:11px; overflow-wrap:anywhere; }
+@media(max-width:1200px) {
+ .admin-study-page .learning-architecture-layout { grid-template-columns:minmax(0,1fr); }
+ .admin-study-page .learning-tutor { position:relative; top:auto; width:100%; max-width:680px; height:480px; justify-self:center; }
+}
+@media(max-width:650px) {
+ .current-workflow-guide { padding:16px; }
+ .current-workflow-guide ol { grid-template-columns:minmax(0,1fr); }
+ .admin-study-page .llm-provider-grid { grid-template-columns:minmax(0,1fr); }
+ .admin-study-page .llm-routing-table { overflow-x:auto; }
+ .admin-study-page .llm-routing-row { min-width:500px; }
+ .admin-study-page .llm-routing-panel>header,.admin-study-page .llm-routing-panel>footer { flex-wrap:wrap; }
+}
+.admin-study-page .ml-test-hero>button { flex-shrink:0; white-space:nowrap; min-width:96px; }
+.admin-study-page .ml-test-hero>div { min-width:0; }
+.admin-study-page .learning-architecture-hero h1,.admin-study-page .ml-test-hero h1 { font-size:26px; line-height:1.4; }

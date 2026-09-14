@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { Component, lazy, Suspense } from 'react'
 import { resolveAppRoute } from './routes'
 
 // 첫 화면에서 Leaflet·Recharts·보고서 코드를 모두 내려받지 않도록 페이지 단위로 분리합니다.
@@ -29,6 +29,20 @@ function PageLoading() {
   )
 }
 
+// 배포 직후 구형 청크 주소나 화면 오류가 생겨도 빈 화면 대신 복구 경로를 제공합니다.
+class PageErrorBoundary extends Component {
+  state = { failed: false }
+  static getDerivedStateFromError() { return { failed: true } }
+  render() {
+    if (!this.state.failed) return this.props.children
+    return <main role="alert" style={{ padding: 48, color: '#334155', background: '#f8fafc', minHeight: '100vh' }}>
+      <h1 style={{ fontSize: 22 }}>화면을 불러오지 못했습니다.</h1>
+      <p>새로고침해 다시 열어 주세요. 서버에서 진행 중인 기획안 생성 작업은 계속됩니다.</p>
+      <button type="button" onClick={() => window.location.reload()}>화면 다시 불러오기</button>
+    </main>
+  }
+}
+
 function NotFoundPage() {
   return (
     <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#f8fafc', color: '#334155' }}>
@@ -57,5 +71,5 @@ export default function App() {
   }
   const Page = pages[route.pageId] || NotFoundPage
 
-  return <Suspense fallback={<PageLoading />}><Page /></Suspense>
+  return <PageErrorBoundary><Suspense fallback={<PageLoading />}><Page /></Suspense></PageErrorBoundary>
 }

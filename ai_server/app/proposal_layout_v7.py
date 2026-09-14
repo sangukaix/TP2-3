@@ -98,7 +98,7 @@ def wrap_words(text, width, size):
 
 def fit_text(shape, value, size=24, color=INK, bold=False):
     value=str(value or '').replace('…','').replace('...','').replace('자연추세','ML예측치')
-    w=shape.width/EMU-12; h=shape.height/EMU-8
+    w=shape.width/EMU-min(52,shape.width/EMU*.10); h=shape.height/EMU-8
     chosen=size
     while chosen>12:
         lines=wrap_words(value,w,chosen)
@@ -163,7 +163,8 @@ def project(prs,report,photo_sources):
     text(s,'title',short_title(report),561,80,950,135,46,BLUE,True)
     text(s,'s3-thesis',copy_text(strategy.get('solution') or candidate.get('mechanism') or report.get('summary')),561,275,895,190,34,INK,True)
     text(s,'s3-detail-label','사업 대상과 운영 범위',561,500,895,45,26,BLUE,True)
-    detail='\n'.join(filter(None,[candidate.get('target_users'),candidate.get('pilot_scope'),strategy.get('timeframe')]))
+    brief=(report.get('planning_decision') or {}).get('strategy_brief') or {}
+    detail='\n'.join(filter(None,[candidate.get('target_users') or brief.get('target_users'),candidate.get('pilot_scope') or brief.get('pilot_scope'),strategy.get('timeframe')]))
     text(s,'s3-detail',detail or '대상·운영 권역은 사업 착수 전 협의합니다.',561,554,895,95,26,SLATE)
     rect(s,'s3-operation-rule',567,678,6,127,CYAN)
     text(s,'s3-operation',copy_text(candidate.get('prerequisites') or '참여처와 담당 역할을 정하고 이용·정산 절차를 확인한 뒤 시범 운영합니다.'),589,683,850,135,25,SLATE)
@@ -173,12 +174,17 @@ def project(prs,report,photo_sources):
             src=photo_sources[0];loc=src.get('address') or src.get('addr1') or src.get('location') or report.get('region_name')
             caption=f"{loc} · {src.get('title') or '지역 관광명소'}"
         else:caption='참고 이미지 · 실제 장소 사진 아님'
-        label.top=832*EMU;label.height=60*EMU
+        # Use the same wrapping width as fit_text; anchor the caption to the
+        # photo bottom while growing upward for multi-line location names.
+        caption_lines=wrap_words(caption,label.width/EMU-min(52,label.width/EMU*.10),17)
+        label.height=round((len(caption_lines)*17*1.25+8)*EMU)
+        label.top=round(886*EMU-label.height)
         background=next((o for o in s.shapes if o.name=='hero-source-bg'),None)
         if background:
             background.left=label.left; background.top=label.top-6*EMU
             background.width=label.width; background.height=label.height+12*EMU
         fit_text(label,caption,17,WHITE)
+        label.text_frame.vertical_anchor=MSO_ANCHOR.MIDDLE
 
 
 def chart(slide,name,x,y,w,h,scenario,key,divisor):

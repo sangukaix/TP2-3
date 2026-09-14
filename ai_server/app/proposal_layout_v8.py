@@ -172,7 +172,11 @@ def kpi(prs,report):
             b=bs[i] if bs else None;t=ts[i] if ts else None
             rows.append([m,fmt(b) if b is not None else '미제공',fmt(t) if t is not None else '목표율 미입력',f'↑ {fmt(t-b)} · {(t/b-1)*100:.2f}%' if t is not None and b else '산출 보류'])
         rows.append(['3개월 월별 합계',fmt(sum(bs)) if bs else '미제공',fmt(sum(ts)) if ts else '목표율 미입력',f'↑ {fmt(sum(ts)-sum(bs))} · {(sum(ts)/sum(bs)-1)*100:.2f}%' if ts and sum(bs) else '산출 보류'])
-        table(s,f'kpi-{key}-table',rows,106,y+49,1388,212,[225,350,350,463],21)
+        kpi_table=table(s,f'kpi-{key}-table',rows,106,y+49,1388,212,[225,350,350,463],21)
+        for row in list(kpi_table.table.rows)[1:]:
+            for paragraph in row.cells[3].text_frame.paragraphs:
+                for run in paragraph.runs:
+                    run.font.color.rgb=RGBColor.from_string(ORANGE);run.font.bold=True
         if ts:
             centered(text(s,f'kpi-total-{k}',f'3개월 목표 추가 규모  ↑ {fmt(sum(ts)-sum(bs))}',918,y,576,43,23,ORANGE,True))
     note='방문자 합계는 월별 합계로 월 간 중복을 포함합니다. 목표 KPI는 예측값에 입력 목표율을 단계 적용한 계획값이며, 보장된 사업 효과가 아닙니다.'

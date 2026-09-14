@@ -1,0 +1,86 @@
+{
+  "runtime": [
+    {
+      "name": "gemma4:26b",
+      "context_length": 65536,
+      "size": 1422645000,
+      "size_vram": 1049068829
+    }
+  ],
+  "trace": [
+    {
+      "agent": "planner",
+      "stage": "planner_revision",
+      "status": "completed",
+      "provider": "gemma",
+      "requested_provider": "gemma",
+      "model": "gemma4:26b",
+      "duration_ms": 66912,
+      "usage": {
+        "input_tokens": 19721,
+        "output_tokens": 1480,
+        "total_tokens": 21201
+      },
+      "fallback": false,
+      "fallback_reason": "",
+      "web_search_used": false,
+      "attempts": [
+        {
+          "phase": "final_json",
+          "status": "completed",
+          "usage_reported": true,
+          "usage": {
+            "input_tokens": 19721,
+            "output_tokens": 1480,
+            "total_tokens": 21201
+          }
+        }
+      ],
+      "tool_trace": [
+        {
+          "tool": "get_region_metrics",
+          "status": "completed"
+        },
+        {
+          "tool": "get_regional_tourism_status",
+          "status": "completed"
+        },
+        {
+          "tool": "compare_regions",
+          "status": "completed"
+        },
+        {
+          "tool": "get_ml_forecast",
+          "status": "completed"
+        },
+        {
+          "tool": "get_planning_decision",
+          "status": "completed"
+        },
+        {
+          "tool": "read_collected_source",
+          "status": "completed"
+        },
+        {
+          "tool": "read_task_section",
+          "status": "completed"
+        },
+        {
+          "tool": "read_task_section",
+          "status": "completed"
+        }
+      ],
+      "input_preparation": {
+        "mode": "request_scoped_evidence_tools",
+        "original_bytes": 101484,
+        "overview_bytes": 4875,
+        "sources_available": 17,
+        "sources_read": 1
+      },
+      "max_output_tokens": 10000,
+      "paid_reason": "",
+      "retry_count": 0
+    }
+  ],
+  "paid_calls": 0
+}

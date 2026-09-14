@@ -16,7 +16,7 @@ app.add_middleware(GZipMiddleware, minimum_size=1024, compresslevel=6)
 # 개발 중 Vite 화면에서 직접 API를 확인할 수 있도록 허용합니다. 배포 시 실제 도메인으로 제한합니다.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:5175', 'http://127.0.0.1:5175'],
+    allow_origins=['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:5175', 'http://127.0.0.1:5175', 'http://localhost:5176', 'http://127.0.0.1:5176'],
     allow_credentials=False,
     allow_methods=['GET'],
     allow_headers=['*'],

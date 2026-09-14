@@ -29,7 +29,7 @@ from .report_review_status import review_label
 PRESENTATION_TEMPLATE_PATH = (
     Path(__file__).resolve().parent / "templates" / "tourism_strategy_12_slide_template_v6.pptx"
 )
-PRESENTATION_RENDER_VERSION = "pptx-regional-target-estimate-v17"
+PRESENTATION_RENDER_VERSION = "pptx-calculation-infographic-v19"
 FINAL_SLIDE_COUNT = 12
 
 BLUE = RGBColor(0x00, 0x4E, 0xA2)

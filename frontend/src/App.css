@@ -1,7 +1,5 @@
 @import 'leaflet/dist/leaflet.css';
 
-@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap');
-
 :root {
   color: #172b4d;
   background: #f4f7fb;
@@ -513,3 +511,28 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 24px
 
 /* 세 업무 화면의 선택 지역명은 기획안 생성 화면의 크기·색상으로 통일합니다. */
 .workspace-content .selected-region-heading h2,.strategy-page .work-page-header h1{margin:0;color:#163b61;font-size:23px;font-weight:700;letter-spacing:-1px}.workspace-content .dashboard-section--hero .selected-region-heading h2{font-size:23px}@media(max-width:760px){.workspace-content .selected-region-heading h2,.strategy-page .work-page-header h1{font-size:20px}}
+.strategy-briefs article > strong{display:block;margin-top:8px;color:#334155;font-size:12px;line-height:1.65}
+.strategy-briefs article > ul{margin:8px 0 0;padding-left:20px;color:#334155;font-size:12px;line-height:1.65;overflow-wrap:anywhere}
+
+/* Full industry labels and in-flow, keyboard-accessible consumption explanations. */
+.consumption-breakdown { min-width:0; }
+.diagnostic-subheading { flex-wrap:wrap; }
+.diagnostic-subheading > span { flex-shrink:0; white-space:nowrap; }
+.consumption-category--explained { grid-template-columns:minmax(0,1fr) auto; gap:6px 12px; }
+.consumption-category-name { display:flex; align-items:center; gap:6px; min-width:0; grid-column:1 / -1; color:#405b78; font-size:12px; font-weight:700; }
+.consumption-category-name > span { white-space:normal; overflow-wrap:anywhere; line-height:1.5; }
+.consumption-category-name > i { display:grid; place-items:center; flex:0 0 20px; height:20px; border-radius:50%; background:#e5f7f8; color:#357a93; font-size:10px; font-style:normal; }
+.consumption-help-toggle { display:inline-grid; place-items:center; flex:0 0 22px; width:22px; height:22px; padding:0; border:1px solid #9abbd2; border-radius:50%; color:#23648a; background:#f2f9ff; font-size:12px; font-weight:700; line-height:1; cursor:pointer; }
+.consumption-help-toggle:hover,.consumption-help-toggle[aria-expanded=true] { background:#deefff; border-color:#3985bc; }
+.consumption-help-toggle:focus-visible { outline:2px solid #2563eb; outline-offset:3px; }
+.consumption-category--explained > b { text-align:left; padding-left:26px; font-size:12px; }
+.consumption-help-content { grid-column:1 / -1; padding:11px 2px 3px; border-top:1px solid #dce7ef; color:#405b78; font-size:12px; line-height:1.65; overflow-wrap:anywhere; }
+.consumption-help-content > strong { font-size:12px; }
+.consumption-help-content ul { margin:7px 0; padding-left:19px; }
+.consumption-help-content p { margin:8px 0; color:#62758a; font-size:11px; }
+.consumption-help-content a { font-size:11px; color:#226bb2; }
+.consumption-donut-legend span { white-space:normal; overflow:visible; overflow-wrap:anywhere; line-height:1.5; }
+.consumption-method-note { grid-column:1 / -1; margin:0; color:#62758a; font-size:11px; line-height:1.6; }
+@media (min-width:721px) and (max-width:1250px) {
+  .tourism-diagnosis-body { grid-template-columns:minmax(0,1fr); }
+}

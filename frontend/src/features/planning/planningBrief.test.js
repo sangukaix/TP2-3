@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { emptyPlanningBrief, validatePlanningBrief, savePlanningDraft, readPlanningDraft, briefBudget, briefPeriod, planningContextCharCount } from './planningBrief.js'
-import { threeMonthSchedule, simplifiedDraft } from './planningBrief.js'
+import { threeMonthSchedule, nextThreeMonthSchedule, simplifiedDraft } from './planningBrief.js'
 
 test('간편 일정은 연도 경계를 넘어 3개월 말일까지 계산한다', () => {
   assert.deepEqual(threeMonthSchedule('2026-12'), { schedule_status: 'fixed', start_date: '2026-12-01', end_date: '2027-02-28' })
@@ -13,8 +13,10 @@ test('간편 입력은 숨겨진 구형 조건을 전송하지 않는다', () =>
   assert.equal(brief.visitor_target_pct,null)
   assert.equal(brief.budget_hard_limit,false)
   assert.equal(brief.hard_constraints,'')
-  assert.equal(brief.field_context,'선호')
-  assert.match(validatePlanningBrief({...brief,business_direction:'night_time_experience',excluded_operations:['night_time_experience']}),/충돌/)
+  assert.equal(brief.field_context,'')
+  assert.deepEqual(brief.excluded_operations,[])
+  assert.equal(brief.input_profile,'guided_v2')
+  assert.match(validatePlanningBrief({...brief,input_profile:'guided_v1',business_direction:'night_time_experience',excluded_operations:['night_time_experience']}),/충돌/)
 })
 
 test('미정은 예산 0원이 아니며 유효하다', () => {
@@ -47,4 +49,20 @@ test('자유 입력과 첨부문서의 합계가 문맥 한도를 넘으면 생�
   assert.equal(planningContextCharCount(valid), 6000)
   assert.equal(validatePlanningBrief(valid), '')
   assert.match(validatePlanningBrief({ ...valid, preferences: '추가' }), /합계 6,000자/)
+})
+
+test('한국 시간 월 경계와 연도 경계에서 다음 세 달을 선택한다', () => {
+  assert.deepEqual(nextThreeMonthSchedule(new Date('2026-09-01T00:00:00+09:00')), {schedule_status:'fixed',start_date:'2026-10-01',end_date:'2026-12-31'})
+  assert.deepEqual(nextThreeMonthSchedule(new Date('2026-09-30T15:00:00Z')), {schedule_status:'fixed',start_date:'2026-11-01',end_date:'2027-01-31'})
+  assert.equal(nextThreeMonthSchedule(new Date('2027-11-01T00:00:00+09:00')).end_date,'2028-02-29')
+})
+test('새 선택형 초안은 구형 자유 입력 초안을 덮어쓰지 않는다', () => {
+  const data = new Map()
+  globalThis.window = {localStorage:{getItem:(key)=>data.get(key),setItem:(key,value)=>data.set(key,value)}}
+  savePlanningDraft({...emptyPlanningBrief('11680'),field_context:'이전 메모'})
+  const old = data.get('tour-insight-planning-brief-11680')
+  savePlanningDraft({...simplifiedDraft('11680'),resource_options:['merchants'],context_options:['families']})
+  assert.equal(data.get('tour-insight-planning-brief-11680'),old)
+  assert.deepEqual(simplifiedDraft('11680').resource_options,['merchants'])
+  delete globalThis.window
 })

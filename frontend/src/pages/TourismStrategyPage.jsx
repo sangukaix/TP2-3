@@ -6,6 +6,7 @@ import { downloadAiStrategyPresentation, downloadAiStrategyProposal, getAiStrate
 import { clearActiveStrategyJob, downloadBlob, readActiveStrategyJob, readSavedReport, saveReport, useWorkspaceRegionData } from './tourismWorkspace'
 import { readPlanningDraft } from '../features/planning/planningBrief'
 import { applyReportPatch } from '../features/planning/applyReportPatch'
+import { clearStrategyJobLink, readStrategyJobLink } from '../features/planning/strategyJobLink'
 import '../features/planning/planning.css'
 import '../App.css'
 
@@ -26,7 +27,7 @@ export default function TourismStrategyPage() {
   // 선택 지역과 해당 지역의 마지막 생성 작업을 여러 페이지에서 이어서 사용합니다.
   const { region } = useWorkspaceRegionData()
   const [report, setReport] = useState(null)
-  const [activeJob, setActiveJob] = useState(null)
+  const [activeJob, setActiveJob] = useState(readStrategyJobLink)
   const [jobProgress, setJobProgress] = useState(null)
   const [downloadingFormat, setDownloadingFormat] = useState('')
   const [error, setError] = useState('')
@@ -72,14 +73,17 @@ export default function TourismStrategyPage() {
             setReport(completed)
             setError('기획안은 생성됐지만 브라우저에 보관하지 못했습니다. 내용을 확인한 뒤 서버 저장 또는 문서 다운로드를 이용해 주세요.')
           } finally {
+            clearStrategyJobLink()
             clearActiveStrategyJob(region.code)
             setActiveJob(null)
           }
         } else if (job.status === 'completed') {
+          clearStrategyJobLink()
           clearActiveStrategyJob(region.code)
           setActiveJob(null)
           setError('완료된 기획안 본문을 불러오지 못했습니다. 같은 조건으로 다시 생성해 주세요.')
         } else if (job.status === 'failed') {
+          clearStrategyJobLink()
           clearActiveStrategyJob(region.code)
           setActiveJob(null)
           setError(job.error || job.message || 'AI 전략기획서를 생성하지 못했습니다.')
@@ -87,6 +91,7 @@ export default function TourismStrategyPage() {
       } catch (requestError) {
         if (!isActive) return
         if (requestError?.status === 404) {
+          clearStrategyJobLink()
           clearActiveStrategyJob(region.code)
           setActiveJob(null)
           setError('이전 생성 작업을 서버에서 찾지 못했습니다. 입력 조건은 유지되므로 다시 생성해 주세요.')
@@ -109,7 +114,11 @@ export default function TourismStrategyPage() {
     if (!first) return
     // 본문이 바뀌면 이전 초안에 부여했던 승인 배지를 계속 표시하지 않습니다.
     const next = applyReportPatch(current, patch)
-    setReport(saveReport(region.code, next))
+    try { setReport(saveReport(region.code, next)) }
+    catch {
+      setReport(next)
+      setError('수정 내용은 화면에 반영됐습니다. 브라우저 보관 공간이 부족하므로 기획안 저장하기로 서버에 저장해 주세요.')
+    }
     setSaveMessage('수정 내용을 확인한 뒤 저장하세요.')
   }
 
@@ -127,8 +136,10 @@ export default function TourismStrategyPage() {
     if (!displayReport?.__savedEntryId) { setError('저장할 기획안을 먼저 생성해 주세요.'); return }
     setError(''); setSaveMessage('')
     try {
-      const stored = saveReport(region.code, displayReport)
+      const stored = displayReport
       await saveStoredStrategyReport(stored.__savedEntryId, region.code, stored)
+      try { saveReport(region.code, stored) }
+      catch { /* MySQL 저장 성공 여부는 선택적인 브라우저 캐시에 의존하지 않습니다. */ }
       setReport(stored)
       setSaveMessage('기획안을 저장했습니다.')
     } catch (requestError) { setError(requestError.message) }

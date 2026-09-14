@@ -1,0 +1,79 @@
+// INSERT_TOC
+{
+ const s=slide('목차');
+ const entries=[['1. 서비스 개요','기획 목적 · 메인 4단계 모션','03–04'],['2. 실제 화면과 이용 흐름','대시보드 · 지역/지표/소비 · 기획 입력','05–11'],['3. 시스템 구조','React · API · 비동기 생성 작업','12–14'],['4. 데이터와 머신러닝','원자료 · MySQL · 7개 ML · 평가','15–20'],['5. 공식 근거와 AI Agent','유사지역 · RAG · 5개 역할 · 모델 라우팅','21–28'],['6. 기획안과 문서 출력','KPI · 견적 · 사례 · Word/PPT · 챗봇','29–33'],['7. 검증·운영·시연','오류 보완 · 운영 · 향후 검증 · Q&A','34–38']];
+ entries.forEach((e,i)=>{const y=177+i*62;text(s,e[0],56,y,470,37,25,C.ink,true);text(s,e[1],508,y+2,598,35,21,C.muted);text(s,e[2],1130,y+1,96,34,22,C.teal,true);rule(s,56,y+47,1168);});
+ note(s,'발표는 서비스 목적을 소개한 뒤 실제 화면을 먼저 보여 주고, 그 화면을 만드는 React·API·데이터·머신러닝·AI의 내부 구조를 설명합니다. 각 슬라이드 제목의 첫 번호는 이 목차의 섹션과 대응하며 소수점 뒤 번호는 해당 섹션의 상세 주제입니다. 예를 들어 2.4는 실제 화면 섹션의 네 번째 설명, 5.3은 AI 섹션의 세 번째 설명입니다. 하단에는 섹션 이름과 전체 슬라이드 번호가 있습니다. 상세 코드 질문은 각 페이지의 발표자 노트를 참고합니다.');
+}
+// INSERT_DEMO
+{
+ const s=slide('모션');
+ await picture(s,path.join(MOTION,'home_poster.png'),56,192,1168,420,'HOME_WORKFLOW_ANIMATED');
+ text(s,'지역 선택 → 데이터 진단 → AI 챗봇 → 기획서 출력',56,151,1168,33,23,C.teal,true);
+ foot(s,'실제 홈페이지 모션 · 장면당 4초 순환 · 화면 안 수치는 이용 안내용 예시입니다.');
+ note(s,'이 화면은 TourismHomePage.jsx의 실제 home-workflow-layout을 브라우저에서 캡처한 반복 GIF입니다. STEPS와 INTERACTION_DEMOS가 네 장면을 정의하고 CARD_ROTATION_MS=4000과 setInterval이 활성 번호를 바꿉니다. CSS가 지도·차트·대화·문서의 등장과 포인터를 움직입니다. 홈에 표시된 방문자 수·목표율·공식 자료 4건 등은 하드코딩된 소개용 데모이므로 실제 API 조회 결과나 방금 생성한 보고서 성과로 설명하지 않습니다. 실제 값은 다음 대시보드 캡처에서 설명합니다. 데스크톱 PowerPoint의 슬라이드 쇼에서 반복 재생되며 편집 화면이나 일부 웹 뷰어는 정지 화면만 보일 수 있습니다.',['frontend/src/pages/TourismHomePage.jsx','frontend/src/App.css','https://support.microsoft.com/en-us/PowerPoint/add-an-animated-gif-to-a-slide']);
+}
+{
+ const s=slide('대시보드');
+ await picture(s,path.join(MOTION,'dashboard_top.png'),56,175,750,455,'실제 강남구 대시보드 전체 화면');
+ text(s,'읽는 순서',859,179,345,42,28,C.teal,true);
+ const rows=[['① 지역','검색·시도·시군구로 선택'],['② 규모와 방향','방문·소비·숙박 카드 확인'],['③ 추세와 구성','월별 그래프와 업종 분포'],['④ 다음 업무','기획안 생성 화면으로 이동']];
+ rows.forEach((e,i)=>{text(s,e[0],859,242+i*87,350,32,24,C.ink,true);text(s,e[1],859,278+i*87,350,42,21,C.muted);});
+ note(s,'2026-09-10 실제 localhost:5176/dashboard를 조회한 서울특별시 강남구 화면입니다. 전체 화면의 왼쪽은 지역과 지도, 오른쪽은 예측 카드·월별 추세·소비 분포입니다. 사이드바로 기획안 생성, 기획안 수정·출력, 저장된 기획서로 이동합니다. 슬라이드의 번호는 설명을 위한 읽는 순서이며 프로그램이 사용자의 분석 결론을 자동 확정하는 순서라는 뜻은 아닙니다. 데이터 확인만으로 OpenAI 보고서 생성 요청이 실행되지 않습니다. 발표에서는 먼저 왼쪽 지도에서 지역 범위를 지정한 뒤 오른쪽에서 기준월과 전망을 읽고, 사업 방향을 정할 질문으로 연결한다는 점을 설명합니다.',['frontend/src/pages/TourismDashboardPage.jsx','frontend/src/components/WorkspaceShell.jsx','frontend/src/api/dashboardApi.js']);
+}
+{
+ const s=slide('지역 선택');
+ await picture(s,path.join(MOTION,'dashboard_map.png'),56,170,552,444,'실제 지역 선택과 지도 화면 확대');
+ text(s,'선택한 지역 코드가 조회 기준',666,183,560,40,28,C.teal,true);
+ text(s,'검색 또는 시도·시군구 선택\n→ selectedCode 변경\n→ 지도 강조 + 지역 API 조회\n→ 카드·차트·소비 분포 갱신',666,255,548,172,25);
+ rule(s,666,451,550);
+ text(s,'같은 지역을 다음 화면에서도 사용',666,482,550,36,25,C.ink,true);
+ text(s,'브라우저에 코드·지역명을 저장하고\n기획 입력 화면이 다시 읽습니다.',666,529,550,76,23,C.muted);
+ foot(s,'초록색은 자료·로컬 연결 준비 상태입니다. 실제 생성 성공과 기획 품질은 별도로 확인합니다.');
+ note(s,'RegionMap은 Leaflet로 Backend의 시도/시군구 GeoJSON을 그립니다. 선택 이벤트가 selectedCode를 바꾸면 getAiRegionDashboard(selectedCode,selectedRegion.name)가 AI Server GET /ai/v1/demo/{region_code}/dashboard를 요청합니다. React useEffect는 이전 요청의 결과가 다른 지역 선택 뒤에 적용되지 않도록 isActive를 검사합니다. 선택 코드와 이름은 tour-insight-selected-region 키로 localStorage에 저장합니다. 다음 기획 화면은 이 값을 초기 선택으로 읽습니다. 원자료는 지역 이름을 추측해서 결합하지 않고 등록 지역 코드로 조회합니다. 초록색 여부는 readiness-audit 결과이며 미래 응답 시간이나 문서 품질을 보증하는 색상은 아닙니다.',['frontend/src/pages/TourismDashboardPage.jsx','frontend/src/api/dashboardApi.js','frontend/src/components/RegionWorkspacePicker.jsx']);
+}
+{
+ const s=slide('핵심 지표');
+ await picture(s,path.join(MOTION,'dashboard_metrics.png'),104,176,1072,268,'강남구 2026년 10월 예상 지표 카드');
+ text(s,'먼저 기준월과 비교 대상을 확인',56,460,566,41,26,C.teal,true);
+ text(s,'10월 예상 방문자 17,767,384명\n9월 예상 대비 −2.6%',56,515,552,81,26);
+ text(s,'서버가 계산한 전망과 변화량',666,460,559,41,26,C.teal,true);
+ text(s,'방문·소비는 증감률(%)\n숙박은 평균 일수 차이(일)',666,515,550,81,26);
+ foot(s,'대시보드의 다음 달 전망은 조회 날짜에 따라 이동합니다. 사업 목표 KPI는 기획안에서 별도로 계산합니다.');
+ note(s,'실제 API metrics에 10월 방문자17,767,384명, 관광소비액 약4,595억원, 평균 숙박2.87일이 있습니다. 비교 문구는 9월 예상 대비이며 최근 관측값 대비라는 뜻이 아닙니다. _build_registered_ml_dashboard는 현재 날짜의 다음 달 target_month를 정하고 저장 모델로 필요한 전망 구간을 만든 뒤 _select_display_forecasts로 표시 월을 선택합니다. 방문·소비 변화율은 (다음 월 값/비교 월 값-1)×100이며 숙박은 일수 차이입니다. 서버가 생성한 metrics의 snake_case 필드를 프론트의 카드 props로 바꿔 표시합니다. 카드는 ML 기준 흐름이고 관광사업을 실행한 추가 효과나 사용자의 목표율이 아닙니다.',['ai_server/app/main.py','ai_server/ml/region_registry.py','frontend/src/pages/TourismDashboardPage.jsx']);
+}
+{
+ const s=slide('월별 그래프');
+ await picture(s,path.join(MOTION,'dashboard_trend.png'),56,177,677,425,'관측 및 전망을 구분한 실제 방문자·소비 그래프');
+ text(s,'관측 구간',796,180,410,38,28,C.teal,true);
+ text(s,'2026.05–07\n공식 원자료의 최근 확정값',796,231,410,85,25);
+ text(s,'전망 구간',796,340,410,38,28,C.teal,true);
+ text(s,'2026.09–11\n저장 모델로 계산한 전망',796,391,410,85,25);
+ text(s,'계절 흐름과 규모를 읽고\n기획의 운영 시점을 검토',796,516,410,88,25,C.ink,true);
+ foot(s,'방문자 수는 왼쪽 축(만 명), 관광소비액은 오른쪽 축(억 원)을 사용합니다.');
+ note(s,'2026-09-10 강남구 실제 monthly_trend 응답을 확인했습니다. recent_actuals의 마지막3개월2026.05·06·07과 직전 전망2026.09 및 표시 전망2026.10·11을 조합합니다. 따라서 모든 달이 연속된 선 그래프처럼 설명하지 않고 실제 x축 월을 읽습니다. is_forecast=false/true가 관측/전망 색 구분을 결정합니다. MonthlyActualTrendChart는 방문자는 막대, 소비는 선으로 Recharts ComposedChart에 표시하고 좌우 축 단위를 분리합니다. 높은 방문 전망은 프로그램의 효과를 입증하지 않으며, 운영 시점과 수요 규모를 검토할 입력입니다. 기획서의 사업 월 그래프는 별도 report_projection이 기간을 맞추므로 대시보드와 항상 동일한 월 구간이 아닙니다.',['ai_server/app/main.py','frontend/src/pages/TourismDashboardPage.jsx','ai_server/app/report_projection.py']);
+}
+{
+ const s=slide('소비 분포');
+ await picture(s,path.join(MOTION,'dashboard_consumption.png'),56,185,685,403,'실제 소비패턴 예상 분포 화면');
+ text(s,'예상 업종 금액의 계산',794,183,422,44,27,C.teal,true);
+ text(s,'3개월 전체 소비 전망 평균\n× 최신 관측 업종 비중',794,242,422,88,26);
+ text(s,'식음료업 예시',794,361,422,35,25,C.ink,true);
+ text(s,'약 4,953억 원 × 49.1%\n≈ 2,432억 원',794,409,422,80,26);
+ text(s,'“어느 업종과 참여처를\n연결할 것인가?”로 구체화',794,527,422,77,24,C.teal,true);
+ foot(s,'업종별 별도 ML 모델이 아니라 전체 소비 전망에 현재 업종 구성비를 적용한 표시용 가정입니다.');
+ note(s,'API diagnostic.forecast_average_spending_krw=495317450667원이며 식음료업 비중은49.1%, amount_krw는 이를 곱하고 원 단위 반올림한 값입니다. 화면은 금액을 억 원으로 반올림해2,432억원으로 표시합니다. 쇼핑35.1%, 의료웰니스6.5%, 운송3.9%, 기타5.4%도 같은 관측 구성입니다. 기타는 표시 상위4개 업종 이외의 잔여 비중입니다. TourismConsumptionStayDiagnostic은 이 값을 표와 도넛으로 보여 줍니다. 이 구성은 예를 들어 식음·쇼핑 참여처를 어떤 묶음으로 연결할지 질문을 구체화하는 자료지만 높은 비중 자체가 정책 필요성이나 신규 사업 성공의 증명은 아닙니다. LLM은 같은 계열의 지역 원자료를 snapshot과 읽기 전용 도구로 받으며 대시보드 이미지를 보고 계산하지 않습니다.',['ai_server/app/main.py','frontend/src/pages/TourismDashboardPage.jsx','ai_server/ml/planning_evidence.py','ai_server/app/llm/evidence_tools.py']);
+}
+// INSERT_BRIDGE
+{
+ const s=slide('화면과 기획 연결');
+ const steps=[['대시보드','지역 코드 선택\n지표·월별 흐름 확인'],['기획 입력','사업 방향·참고 예산\n시범 월·제외 조건'],['서버 근거 구성','관측·ML·공식 사례\n사용자 조건 결합'],['기획안·문서','후보 비교·본문 작성\n검토·수정·출력']];
+ steps.forEach((v,i)=>{box(s,v[0],v[1],56+i*298,192,274,160,i===2?C.lime:C.pale);if(i<3)arrow(s,333+i*298,263,18);});
+ text(s,'화면 사이에 유지하는 정보',56,411,520,43,28,C.teal,true);
+ text(s,'선택 지역 코드·이름\n사용자가 정한 사업 조건',56,474,538,91,27);
+ text(s,'서버가 다시 확인하는 정보',666,411,558,43,28,C.teal,true);
+ text(s,'해당 지역의 원자료·저장 ML\n공식 출처·모델 연결·입력 조건',666,474,558,91,26);
+ foot(s,'LLM은 화면 캡처를 해석해 기획하지 않습니다. 서버가 구조화한 사실·전망·사례를 전달받습니다.');
+ note(s,'대시보드에서 선택한 지역 코드는 다음 기획 폼의 초기값으로 이어집니다. TourismPlanningPage의 guided 입력은 planning_brief로 생성 작업 API에 전달됩니다. 서버는 browser에 그려진 숫자나 스크린샷을 신뢰해 재사용하지 않고 해당 지역 원자료 snapshot과 저장 ML의 planning evidence를 요청에 맞춰 구성합니다. 실제 입력 묶음은 관측 사실, ml_analysis, planning_brief, 공식 근거로 분리됩니다. Evidence/CaseStudy가 준비한 자료를 Qwen 후보 비교와 Gemma 작성에 전달하고 코드/모델 검토를 거쳐 사용자에게 보여 줍니다. 사람은 입력과 수정·저장을 선택하고 Python은 조회·계산·허용 도구 실행을 담당합니다. 이 구분이 UI의 흐름과 AI의 내부 흐름이 연결되는 지점입니다.',['frontend/src/pages/TourismPlanningPage.jsx','frontend/src/api/dashboardApi.js','ai_server/app/main.py','ai_server/app/agents/report_orchestrator.py','ai_server/ml/planning_evidence.py']);
+}
+

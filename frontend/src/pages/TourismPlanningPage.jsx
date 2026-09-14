@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ArrowRight, CalendarDays, Check, CircleHelp, Coins, Layers3, LoaderCircle, Save, ShieldCheck, Sparkles } from 'lucide-react'
+import { ArrowRight, Check, CircleHelp, Coins, Layers3, LoaderCircle, Save, Sparkles } from 'lucide-react'
 import WorkspaceShell from '../components/WorkspaceShell'
 import RegionWorkspacePicker from '../components/RegionWorkspacePicker'
 import PlanningBriefSummary from '../features/planning/PlanningBriefSummary'
-import { BUSINESS_DIRECTIONS, EXCLUDED_OPERATIONS, simplifiedDraft, threeMonthSchedule, savePlanningDraft, validatePlanningBrief } from '../features/planning/planningBrief'
+import { BUSINESS_DIRECTIONS, RESOURCE_OPTIONS, CONTEXT_OPTIONS, simplifiedDraft, nextThreeMonthSchedule, savePlanningDraft, validatePlanningBrief } from '../features/planning/planningBrief'
 import { readActiveStrategyJob, saveActiveStrategyJob, useWorkspaceRegionData } from './tourismWorkspace'
 import { getStrategyGenerationReadiness, startAiStrategyReportJob } from '../api/dashboardApi'
+import { strategyJobUrl } from '../features/planning/strategyJobLink'
 import '../App.css'
 import '../features/planning/planning.css'
 
@@ -13,7 +14,12 @@ import '../features/planning/planning.css'
 // radio input 대신 버튼과 aria-pressed를 사용해 현재 선택을 더 분명하게 표시합니다.
 function Choice({ label, value, options, onChange }) {
   return <div className="planning-choice" role="group" aria-label={label}>{options.map(([key, text]) =>
-    <button key={key} type="button" aria-pressed={value === key} className={value === key ? 'is-selected' : ''} onClick={() => onChange(key)}>{value === key && <Check size={13} />}{text}</button>
+    <button key={key} type="button" aria-pressed={value === key} className={value === key ? 'is-selected' : ''} onClick={() => onChange(key)}>{value === key && <Check size={13} />}{key === 'spend_conversion' ? <span>지역 소비<br />환급</span> : text}</button>
+  )}</div>
+}
+function MultiChoice({ label, options, value = [], onChange }) {
+  return <div className="planning-options" role="group" aria-label={label}>{options.map(([key, text]) =>
+    <label className="planning-check" key={key}><input type="checkbox" checked={value.includes(key)} onChange={(event) => onChange(event.target.checked ? [...value, key] : value.filter((item) => item !== key))} />{text}</label>
   )}</div>
 }
 // 네 개의 사업 여건 카드가 같은 제목·도움말·아이콘 구조를 쓰도록 만든 공통 레이아웃입니다.
@@ -25,6 +31,15 @@ function PlanningForm({ region, dataState, onDirtyChange, onSaveReady }) {
   // 입력 초안은 지역 코드별 localStorage에서 복원합니다.
   // 단, 첨부 문서 본문은 브라우저에 저장하지 않고 생성 요청 시에만 사용합니다.
   const [brief, setBrief] = useState(() => simplifiedDraft(region.code))
+  useEffect(() => {
+    const refresh = () => setBrief((current) => {
+      const schedule = nextThreeMonthSchedule()
+      return current.start_date === schedule.start_date ? current : { ...current, ...schedule }
+    })
+    const timer = window.setInterval(refresh, 30000)
+    window.addEventListener('focus', refresh)
+    return () => { window.clearInterval(timer); window.removeEventListener('focus', refresh) }
+  }, [])
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
@@ -53,7 +68,7 @@ function PlanningForm({ region, dataState, onDirtyChange, onSaveReady }) {
   const save = useCallback(() => {
     const problem = validatePlanningBrief(brief)
     if (problem) { setError(problem); return false }
-    try { savePlanningDraft(brief); setDirty(false); setMessage('이 브라우저에 기획 조건을 저장했습니다.'); setError(''); return true }
+    try { savePlanningDraft({ ...brief, ...nextThreeMonthSchedule() }); setDirty(false); setMessage('이 브라우저에 기획 조건을 저장했습니다.'); setError(''); return true }
     catch { setError('이 브라우저에 임시저장할 수 없습니다. 저장 공간과 브라우저 설정을 확인해 주세요.'); return false }
   }, [brief])
   // 상단의 임시저장 버튼도 같은 저장·검증 함수를 사용하도록 부모 화면에 함수를 전달합니다.
@@ -69,12 +84,12 @@ function PlanningForm({ region, dataState, onDirtyChange, onSaveReady }) {
     if (submitting.current || !save()) return
     submitting.current = true; setBusy(true)
     try {
-      if (activeJob) { window.location.assign('/strategy'); return }
+      if (activeJob) { window.location.assign(strategyJobUrl(activeJob, region.name)); return }
       // 입력한 조건의 복사본이 서버 작업에 전달됩니다. 작성 중 초안은 별도입니다.
-      const job = await startAiStrategyReportJob(region.code, { region_name: region.name, planning_brief: brief })
+      const job = await startAiStrategyReportJob(region.code, { region_name: region.name, planning_brief: { ...brief, ...nextThreeMonthSchedule() } })
       // 작업 ID만 브라우저에 남기고, 첨부 문서 본문은 서버 작업 중에만 사용합니다.
       saveActiveStrategyJob(job)
-      window.location.assign('/strategy')
+      window.location.assign(strategyJobUrl(job, region.name))
     } catch (requestError) { setError(requestError.message); submitting.current = false; setBusy(false) }
   }
   // 화면에서는 쉼표가 있는 금액도 허용하지만, 저장 값은 계산 가능한 정수 원 단위로 정규화합니다.
@@ -91,18 +106,13 @@ function PlanningForm({ region, dataState, onDirtyChange, onSaveReady }) {
           {brief.budget_status !== 'unknown' && <label>참고 예산 총액<div className="planning-money"><input aria-label="참고 예산 총액" inputMode="numeric" value={brief.budget_max_krw?.toLocaleString('ko-KR') || ''} onChange={(e) => amountChange('budget_max_krw', e.target.value)} placeholder="예: 30,000,000" /><span>원</span></div></label>}
           <p className="planning-hint">입력 금액은 견적 예시의 항목별 배분에 반영합니다. 사업 규모·인력·KPI가 이 금액으로 달성된다는 뜻은 아닙니다.</p>
         </Section>
-        <Section number="03" icon={CalendarDays} title="3개월 시범 운영" why="시작 월부터 준비·운영·평가를 포함한 3개월로 구성합니다.">
-          <label>시작 월 <small>선택 · 비우면 이번 달 기준</small><input type="month" min={new Date().toISOString().slice(0, 7)} value={brief.start_date?.slice(0, 7) || ''} onChange={(e) => update(threeMonthSchedule(e.target.value))} /></label>
-          <p className="planning-hint">전망 가능한 기간 안에서 선택해 주세요. 오래된 관측 자료나 너무 먼 일정은 생성 전에 안내합니다.</p>
+        <Section number="03" icon={Layers3} title="활용할 자원" why="사업 설계에 참고할 자원을 복수 선택하세요. 선택 내용은 공식 확인 사실과 구분합니다.">
+          <MultiChoice label="활용할 자원" options={RESOURCE_OPTIONS} value={brief.resource_options} onChange={(resource_options) => update({ resource_options })} />
+          <p className="planning-hint">선택 사항 · 활용을 검토할 자원만 고르세요. 선택하지 않아도 생성할 수 있습니다.</p>
         </Section>
-        <Section number="04" icon={Layers3} title="활용할 자원" why="사용자가 제공한 정보로 참고하며 공식적으로 확인된 사실과 구분합니다.">
-          <label>시설·행사·협력처·인력 <small>선택 · 300자</small><textarea rows="2" maxLength={300} value={brief.resources_confirmed} onChange={(e) => update({ resources_confirmed: e.target.value, resources_status: e.target.value ? 'known' : 'unknown' })} placeholder="예: 기존 관광안내소, 상인회 협력 가능, 운영 담당 2명" /></label>
-        </Section>
-        <Section number="05" icon={ShieldCheck} title="제외할 운영 방식" why="선택한 유형을 사례와 설계 후보에서 제외합니다.">
-          {EXCLUDED_OPERATIONS.map(([value, label]) => <label className="planning-check" key={value}><input type="checkbox" checked={brief.excluded_operations.includes(value)} onChange={(e) => update({ excluded_operations: e.target.checked ? [...brief.excluded_operations, value] : brief.excluded_operations.filter((item) => item !== value) })} />{label}</label>)}
-        </Section>
-        <Section number="선택" icon={Layers3} title="현장 메모" why="사업 범위 안의 참고 정보입니다. 관측값이나 ML 예측을 바꾸지 않습니다.">
-          <label>현장 정보와 선호 <small>500자 이내</small><textarea rows="3" maxLength={500} value={brief.field_context} onChange={(e) => update({ field_context: e.target.value })} placeholder="예: 기존 행사와 연계하고 싶음, 주말 가족 방문객 중심. 개인정보는 입력하지 마세요." /></label>
+        <Section number="04" icon={Layers3} title="현장 정보와 선호" why="방문 대상과 운영 방향을 참고합니다. 관측값이나 ML 예측은 바꾸지 않습니다.">
+          <MultiChoice label="현장 정보와 선호" options={CONTEXT_OPTIONS} value={brief.context_options} onChange={(context_options) => update({ context_options })} />
+          <p className="planning-hint">선택 사항 · 대상 방문객과 연계 방식을 복수 선택할 수 있습니다.</p>
         </Section>
       </fieldset>
       {/* 빈 임시저장 영역은 제거하고, 필요한 상태 안내만 입력 카드 아래에 간결하게 표시합니다. */}
@@ -119,11 +129,12 @@ export default function TourismPlanningPage() {
   const { region, regions, chooseRegion, state } = useWorkspaceRegionData()
   const [dirty, setDirty] = useState(false)
   const [saveDraft, setSaveDraft] = useState(null)
+  const registerSave = useCallback((handler) => setSaveDraft(() => handler), [])
   // 다른 지역으로 바꾸기 전, 아직 저장하지 않은 사업 여건이 있으면 한 번 확인합니다.
   const changeRegion = (code) => {
     if (code === region.code) return
     if (dirty && !window.confirm('저장하지 않은 변경사항이 있습니다. 저장하지 않고 지역을 변경할까요?')) return
     setDirty(false); chooseRegion(code)
   }
-  return <WorkspaceShell><main className="tourism-work-page planning-page"><header className="work-page-header"><div><h1>{region.name}</h1></div><RegionWorkspacePicker region={region} regions={regions} label="분석지역 변경" onChange={changeRegion} /><button type="button" className="planning-header-save" disabled={!saveDraft} onClick={() => saveDraft?.()}><Save size={15} />임시저장</button></header><PlanningForm key={region.code} region={region} dataState={state} onDirtyChange={setDirty} onSaveReady={setSaveDraft} /></main></WorkspaceShell>
+  return <WorkspaceShell><main className="tourism-work-page planning-page"><header className="work-page-header"><div><h1>{region.name}</h1></div><RegionWorkspacePicker region={region} regions={regions} label="분석지역 변경" onChange={changeRegion} /><button type="button" className="planning-header-save" disabled={!saveDraft} onClick={() => saveDraft?.()}><Save size={15} />임시저장</button></header><PlanningForm key={region.code} region={region} dataState={state} onDirtyChange={setDirty} onSaveReady={registerSave} /></main></WorkspaceShell>
 }

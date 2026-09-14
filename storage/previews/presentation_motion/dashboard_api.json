@@ -1,0 +1,128 @@
+{
+  "region_name": "서울특별시 강남구",
+  "latest_month": "2026-10",
+  "source": "한국관광 데이터랩 서울특별시 강남구 공식 다운로드 원본 + 저장된 ML 예측 모델",
+  "metrics": [
+    {
+      "label": "10월 예상 방문자 수",
+      "value": "17,767,384명",
+      "detail": "",
+      "change_label": "9월 예상 대비",
+      "change_value": "-2.6%",
+      "change_direction": "down",
+      "accent": "aqua"
+    },
+    {
+      "label": "10월 예상 관광소비액",
+      "value": "₩4,595억",
+      "detail": "",
+      "change_label": "9월 예상 대비",
+      "change_value": "+0.2%",
+      "change_direction": "up",
+      "accent": "blue"
+    },
+    {
+      "label": "10월 예상 숙박일",
+      "value": "평균 2.87일",
+      "detail": "",
+      "change_label": "9월 예상 대비",
+      "change_value": "+0.00일",
+      "change_direction": "same",
+      "accent": "purple"
+    }
+  ],
+  "monthly_trend": [
+    {
+      "month": "2026.05",
+      "visitor_index": 100,
+      "spending_index": 100,
+      "visitors": 17488819,
+      "spending_krw": 495964678000,
+      "is_forecast": false,
+      "is_current_month": false
+    },
+    {
+      "month": "2026.06",
+      "visitor_index": 103.4,
+      "spending_index": 94.2,
+      "visitors": 18086524,
+      "spending_krw": 467385522000,
+      "is_forecast": false,
+      "is_current_month": false
+    },
+    {
+      "month": "2026.07",
+      "visitor_index": 102.7,
+      "spending_index": 97.2,
+      "visitors": 17963441,
+      "spending_krw": 481986415000,
+      "is_forecast": false,
+      "is_current_month": false
+    },
+    {
+      "month": "2026.09",
+      "visitor_index": 104.3,
+      "spending_index": 92.4,
+      "visitors": 18237833,
+      "spending_krw": 458448924000,
+      "is_forecast": true,
+      "is_current_month": false
+    },
+    {
+      "month": "2026.10",
+      "visitor_index": 101.6,
+      "spending_index": 92.7,
+      "visitors": 17767384,
+      "spending_krw": 459549656000,
+      "is_forecast": true,
+      "is_current_month": false
+    },
+    {
+      "month": "2026.11",
+      "visitor_index": 104.7,
+      "spending_index": 97.8,
+      "visitors": 18314976,
+      "spending_krw": 485186671000,
+      "is_forecast": true,
+      "is_current_month": false
+    }
+  ],
+  "diagnostic": {
+    "consumption_categories": [
+      {
+        "name": "식음료업",
+        "share": 49.1,
+        "amount_krw": 243200868277
+      },
+      {
+        "name": "쇼핑업",
+        "share": 35.1,
+        "amount_krw": 173856425184
+      },
+      {
+        "name": "의료웰니스업",
+        "share": 6.5,
+        "amount_krw": 32195634293
+      },
+      {
+        "name": "운송업",
+        "share": 3.9,
+        "amount_krw": 19317380576
+      }
+    ],
+    "lodging_rate": 3.1,
+    "average_lodging_nights": 2.87,
+    "lodging_nights_change": 0,
+    "forecast_month": "202610",
+    "is_forecast": true,
+    "forecast_average_spending_krw": 495317450667,
+    "assumption": "향후 3개월 전체 관광소비액 ML 예측 평균값에 최신 업종 비중을 적용한 예상 분포"
+  },
+  "forecast": {
+    "model_version": "demand-v3.0",
+    "test_period": "202604~202607",
+    "visitor_mae": 537513.5,
+    "spending_mae_krw": 24906220750,
+    "limitation": "31개월·한 지역의 초기 모델이며 3개월 재귀 시험 origin은 제한적일 수 있습니다."
+  }
+}

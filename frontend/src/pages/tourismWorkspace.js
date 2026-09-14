@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getAiRegionCatalog, getAiRegionDashboard } from '../api/dashboardApi'
+import { readStrategyJobLink } from '../features/planning/strategyJobLink'
 
 /** AI 서버가 아직 시작되지 않은 첫 화면에도 사용할 최소 기본값입니다.
  * 실제 선택 목록은 useWorkspaceRegionData가 서버 카탈로그에서 자동으로 갱신합니다.
@@ -12,6 +13,8 @@ export const DEFAULT_TOURISM_REGION = SUPPORTED_TOURISM_REGIONS[0]
 const REGION_STORAGE_KEY = 'tour-insight-selected-region'
 
 export function readWorkspaceRegion() {
+  const linkedJob = readStrategyJobLink()
+  if (linkedJob) return { code: linkedJob.region_code, name: linkedJob.region_name }
   try {
     const saved = JSON.parse(window.localStorage.getItem(REGION_STORAGE_KEY) || 'null')
     if (saved?.code && saved?.name) return saved
@@ -21,7 +24,10 @@ export function readWorkspaceRegion() {
   return DEFAULT_TOURISM_REGION
 }
 
-export function saveWorkspaceRegion(region) { window.localStorage.setItem(REGION_STORAGE_KEY, JSON.stringify(region)) }
+export function saveWorkspaceRegion(region) {
+  try { window.localStorage.setItem(REGION_STORAGE_KEY, JSON.stringify(region)); return true }
+  catch { return false }
+}
 
 /** 선택 지역의 실제 최신 월 지표를 불러오는 공통 Hook입니다. */
 export function useWorkspaceRegionData() {
@@ -80,6 +86,8 @@ export function downloadBlob(blob, filename) {
 
 export function reportStorageKey(regionCode) { return `tour-insight-strategy-report-${regionCode}` }
 const ACTIVE_STRATEGY_JOB_PREFIX = 'tour-insight-active-strategy-job-'
+// 삭제가 차단된 브라우저에서도 완료 작업을 같은 화면에서 다시 폴링하지 않습니다.
+const activeJobOverrides = new Map()
 const SAVED_PLAN_INDEX_KEY = 'tour-insight-saved-plan-index'
 const SAVED_PLAN_REPORT_PREFIX = 'tour-insight-saved-plan-report-'
 
@@ -93,6 +101,7 @@ function savedPlanReportKey(entryId) { return `${SAVED_PLAN_REPORT_PREFIX}${entr
 
 /** 페이지·탭을 바꿔도 이어서 조회할 서버 작업 ID를 지역별로 보관합니다. */
 export function readActiveStrategyJob(regionCode) {
+  if (activeJobOverrides.has(regionCode)) return activeJobOverrides.get(regionCode)
   try {
     const value = JSON.parse(window.localStorage.getItem(`${ACTIVE_STRATEGY_JOB_PREFIX}${regionCode}`) || 'null')
     return value?.job_id && value?.region_code === regionCode ? value : null
@@ -103,11 +112,15 @@ export function readActiveStrategyJob(regionCode) {
 
 export function saveActiveStrategyJob(job) {
   if (!job?.job_id || !job?.region_code) return
-  window.localStorage.setItem(`${ACTIVE_STRATEGY_JOB_PREFIX}${job.region_code}`, JSON.stringify(job))
+  activeJobOverrides.set(job.region_code, job)
+  try { window.localStorage.setItem(`${ACTIVE_STRATEGY_JOB_PREFIX}${job.region_code}`, JSON.stringify(job)); return true }
+  catch { return false }
 }
 
 export function clearActiveStrategyJob(regionCode) {
-  window.localStorage.removeItem(`${ACTIVE_STRATEGY_JOB_PREFIX}${regionCode}`)
+  activeJobOverrides.set(regionCode, null)
+  try { window.localStorage.removeItem(`${ACTIVE_STRATEGY_JOB_PREFIX}${regionCode}`) }
+  catch { /* 서버 작업 완료와 브라우저 캐시 삭제는 별개입니다. */ }
 }
 
 function readSavedPlanIndex() {

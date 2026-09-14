@@ -14,6 +14,7 @@ from ..llm.models import LLMRequest
 from ..llm.router import LLMRouter
 from ..rag_store import OfficialTourismRagStore
 from ..case_registry import load_curated_case_registry
+from ..case_research_plan import build_case_research_plan, comparison_coverage
 from ..case_scope import build_case_search_policy, case_relation, select_case_cards
 from .evidence_agent import _url_is_allowed, allowed_domains
 from .prompts import CASE_STUDY_RESEARCH_INSTRUCTIONS
@@ -154,6 +155,8 @@ def _needs_targeted_case_research(curated_cards: list[dict[str, Any]], snapshot:
                 and re.search(r'\b20\d{2}', str(card.get('measurement_period') or ''))
                 and card.get('evidence_strength') in {'high', 'medium'}]
     families = {_case_mechanism_family(card) for card in reusable}
+    # An unrelated catalog still triggers regional research; this does NOT
+    # exclude discovered cases outside the peer list from final comparison.
     return not target_related or len(families) < 3
 
 
@@ -181,11 +184,14 @@ class CaseStudyAgent:
         # 어느 단계가 실패했는지는 trace·research_gaps에 남겨 Planner와 Reviewer가 알 수 있게 합니다.
         curated_cards = _load_curated_case_cards(self.project_root, self.domains)
         case_search_policy = build_case_search_policy(snapshot)
+        research_plan = build_case_research_plan(snapshot)
         curated_cards, registry_coverage = select_case_cards(curated_cards, snapshot, mechanism_key=_case_mechanism_family)
         gaps: list[str] = []
         trace: list[dict[str, Any]] = [{
             'agent': 'case_scout', 'stage': 'curated_registry', 'status': 'completed', 'items': len(curated_cards),
         }]
+        trace.append({'agent': 'case_scout', 'stage': 'regional_research_plan',
+                      'status': 'completed', 'research_plan': research_plan})
 
         # 영속 ChromaDB에는 이미 검수한 문서의 의미 검색 결과가 들어 있습니다.
         # 월별 숫자 표는 RAG에 넣지 않고 snapshot의 원자료 수치로만 다룹니다.
@@ -259,6 +265,8 @@ class CaseStudyAgent:
                         'curated_case_cards': curated_cards, 'case_rag_candidates': rag_candidates,
                         'case_research_lenses': case_lenses,
                         'case_search_policy': case_search_policy,
+                        'case_research_plan': research_plan,
+                        'consumption_by_category': snapshot.get('consumption_by_category') or [],
                     },
                     schema_name='official_tourism_case_studies', schema=CASE_STUDY_SCHEMA,
                     # 공식 사례의 운영·예산·성과·조건을 완성할 공간을 확보하되 무한 재시도하지 않습니다.
@@ -287,6 +295,7 @@ class CaseStudyAgent:
                         'case_rag_candidates': rag_candidates,
                         'case_research_lenses': case_lenses,
                         'case_search_policy': case_search_policy,
+                        'case_research_plan': research_plan,
                     },
                     schema_name='official_tourism_case_studies',
                     require_web_search=True,
@@ -309,7 +318,8 @@ class CaseStudyAgent:
                     cases.append({**case, 'source_id': _case_source_id(source_url), 'retrieval_method': 'official_web_search'})
                 gaps.extend(result.get('gaps') or [])
                 trace.append({
-                    'agent': 'case_scout', 'stage': 'official_case_web', 'status': 'completed', 'items': len(cases),
+                    'agent': 'case_scout', 'stage': 'official_case_web', 'status': 'completed',
+                    'items': len(cases) - len(curated_cards), 'grounding': result.get('_web_grounding', {}),
                 })
             except (OpenAIResponseError, LLMProviderError) as exc:
                 cases = curated_cards
@@ -317,6 +327,8 @@ class CaseStudyAgent:
                 trace.append({
                     'agent': 'case_scout', 'stage': 'official_case_web', 'status': 'failed', 'items': 0,
                     'error_code': exc.code,
+                    'upstream_error': next((a['upstream_error'] for a in reversed(exc.attempts) if 'upstream_error' in a), {}),
+                    'grounding': next((a['web_grounding'] for a in reversed(exc.attempts) if 'web_grounding' in a), {}),
                 })
 
         # 같은 URL은 하나의 사례로만 유지하고 Planner가 인용할 수 있도록 source 레코드도 만듭니다.
@@ -328,6 +340,11 @@ class CaseStudyAgent:
         cases, case_coverage = select_case_cards(cases, snapshot, mechanism_key=_case_mechanism_family)
         case_coverage['registry_candidates'] = registry_coverage['catalog_candidates']
         case_coverage['registry_excluded'] = registry_coverage['excluded_candidates']
+        case_coverage.update(comparison_coverage(cases))
+        web_status = next((r for r in reversed(trace) if r.get('stage') == 'official_case_web'), {})
+        case_coverage['research_status'] = ('ready_for_comparison' if case_coverage['sufficient_for_comparison']
+                                          else 'insufficient_diverse_evidence')
+        case_coverage['web_status'] = web_status.get('status')
         if not any(row['retrieval_context']['scope'] == 'same_province' for row in cases):
             gaps.append('같은 시도의 타 시군구 공식 사례 카드는 현재 후보에 없습니다. 전국 사례를 비교하되 인근 사업이 없다고 단정하지 않습니다.')
         if not any(row['retrieval_context']['scope'] in {'cross_province_peer', 'cross_province'} for row in cases):
@@ -364,6 +381,7 @@ class CaseStudyAgent:
             # RAG 후보도 실제 검수 문맥으로 전달하되 정형 사례 카드로 자동 승격하지 않는다.
             'sources': [*sources, *rag_candidates],
             'case_search_policy': case_search_policy,
+            'case_research_plan': research_plan,
             'case_search_coverage': case_coverage,
             'research_gaps': list(dict.fromkeys(gaps)),
             'trace': trace,

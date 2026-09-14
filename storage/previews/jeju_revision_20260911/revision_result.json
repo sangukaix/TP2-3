@@ -1,0 +1,151 @@
+{
+  "report": {
+    "summary": "제주시의 높은 관광 관심도(내비게이션 검색량)를 실제 소비로 전환하기 위해, 외지인 관광객이 지정 업종에서 결제 시 지역 상품권을 환급해 주는 시범 사업을 제안합니다. 강진군 사례를 참고하되, 제주시 상권 규모에 맞춰 특정 업종과 환급 한도를 제한하여 운영합니다.",
+    "observed_findings": [
+      {
+        "metric": "월간 순 방문자 수",
+        "value": "3,131,476명",
+        "interpretation": "2026년 6월 기준 외지인 방문 규모는 크나, 전년 동월 대비 8.9% 감소 추세임 (dataset:50110:2)",
+        "source": "dataset:50110:1"
+      },
+      {
+        "metric": "관광소비 구성",
+        "value": "쇼핑업 39.0%, 식음료업 38.1%",
+        "interpretation": "쇼핑과 식음료가 소비의 핵심이며, 환급 사업의 주요 타겟 업종으로 적합함 (consumption_by_category)",
+        "source": "dataset:50110:3"
+      },
+      {
+        "metric": "내비게이션 목적지 검색량",
+        "value": "580,380건",
+        "interpretation": "관심도는 높으나 실제 방문 및 숙박으로의 전환을 촉진할 유인책이 필요함 (dataset:50110:6)",
+        "source": "dataset:50110:6"
+      }
+    ],
+    "strategies": [
+      {
+        "priority": 1,
+        "timeframe": "2026-10 ~ 2026-12, 3개월",
+        "title": "제주시 외지인 관광 소비 촉진을 위한 지역 상품권 환급 프로그램",
+        "problem_to_solve": "높은 관광 관심도(검색량) 대비 실제 지역 내 소비 전환 및 체류 유도 필요",
+        "comparison_analysis": "강진 반값여행(case:761228c746fb13)은 지역 지출의 일부를 모바일 상품권으로 환급하여 재소비를 유도함. 제주시의 경우 규모가 훨씬 크므로, 전 지역이 아닌 특정 권역(전통시장, 외식업 등)과 업종에 집중한 시범 사업 형태로 운영하여 예산 효율성을 높임.",
+        "solution": "제주시를 방문한 외지인이 지정된 적격 업종(전통시장, 외식업, 소매업 등)에서 결제 시, 지출액의 일부를 제주시 지역 상품권으로 환급하여 지역 내 재사용을 유도함.",
+        "implementation_steps": [
+          {
+            "step": 1,
+            "schedule": "2026-10",
+            "task": "사업 담당자가 참여 업체 명단을 확보하고, 시스템 운영팀이 디지털 바우처 및 상품권 정산 프로세스의 기술적 검증을 완료함",
+            "deliverable": "참여 업체 명단 및 디지털 바우처/상품권 정산 프로세스 확정안"
+          },
+          {
+            "step": 2,
+            "schedule": "2026-10",
+            "task": "사업 담당자가 중복 수혜 방지 및 영수증 검증 절차를 포함한 운영 매뉴얼을 작성하고 법무팀의 검토를 받음",
+            "deliverable": "운영 규정 및 환급 가이드라인 수립"
+          },
+          {
+            "step": 3,
+            "schedule": "2026-10 ~ 2026-12",
+            "task": "운영팀이 실시간으로 신청·승인·결제 원장을 집계하고, 사업 담당자가 주간 단위로 모니터링함",
+            "deliverable": "주간 단위 신청·승인·결제 원장"
+          },
+          {
+            "step": 4,
+            "schedule": "2026-11",
+            "task": "사업 담당자가 중간 집계 데이터를 바탕으로 예산 소진율을 분석하고, 예산 조기 소진 시 규모 축소 여부를 결정함",
+            "deliverable": "중간 분석 보고서"
+          },
+          {
+            "step": 5,
+            "schedule": "2026-12",
+            "task": "사업 담당자가 최종 결제 및 환급 데이터를 취합하고, 분석팀이 재사용률과 순증 결제액을 중심으로 성과를 평가함",
+            "deliverable": "최종 결과 보고서"
+          }
+        ],
+        "expected_effect": "계획 목표: 최종월 ML 기준 전망 대비 방문 +20%, 소비 +20%. (단, 이는 사업 효과에 대한 가설이며 실제 성과는 사후 검증 필요)",
+        "budget": "환급액 총액 100,000,000원 (기획 가정: 환급률 20%, 건별 상한 50,000원, 예상 참여자 10,000명 기준. 실제 집행 시 사업 담당자가 참여 업체 수와 건별 단가를 확정하여 산출함)",
+        "kpi": "① 환급 후 재사용률(분자: 환급 후 선택 지역 내 적격 재결제액 합계 / 분모: 지급한 환급액 합계) ② 인정 결제액(적격 신청 건의 총 결제액) ③ 환급분 재사용액(환급된 상품권의 재결제액). [기준: 2026-10~12, 주기: 매주, 원자료: 신청·승인·결제 원장(사업 담당자 집계), 비교: 미운영 집단과의 차이 분석 및 전년 동월 대비 변화 확인, 성공 기준: 재사용률 70% 이상, 인정 결제액 1억 원 이상, 재사용액 5천만 원 이상]",
+        "evidence": "case:761228c746fb13",
+        "visual_asset_source_ids": [
+          "dataset:50110:1",
+          "dataset:50110:3"
+        ]
+      }
+    ]
+  },
+  "trace": [
+    {
+      "agent": "planner",
+      "stage": "planner_revision",
+      "status": "completed",
+      "provider": "gemma",
+      "requested_provider": "gemma",
+      "model": "gemma4:26b",
+      "duration_ms": 66912,
+      "usage": {
+        "input_tokens": 19721,
+        "output_tokens": 1480,
+        "total_tokens": 21201
+      },
+      "fallback": false,
+      "fallback_reason": "",
+      "web_search_used": false,
+      "attempts": [
+        {
+          "phase": "final_json",
+          "status": "completed",
+          "usage_reported": true,
+          "usage": {
+            "input_tokens": 19721,
+            "output_tokens": 1480,
+            "total_tokens": 21201
+          }
+        }
+      ],
+      "tool_trace": [
+        {
+          "tool": "get_region_metrics",
+          "status": "completed"
+        },
+        {
+          "tool": "get_regional_tourism_status",
+          "status": "completed"
+        },
+        {
+          "tool": "compare_regions",
+          "status": "completed"
+        },
+        {
+          "tool": "get_ml_forecast",
+          "status": "completed"
+        },
+        {
+          "tool": "get_planning_decision",
+          "status": "completed"
+        },
+        {
+          "tool": "read_collected_source",
+          "status": "completed"
+        },
+        {
+          "tool": "read_task_section",
+          "status": "completed"
+        },
+        {
+          "tool": "read_task_section",
+          "status": "completed"
+        }
+      ],
+      "input_preparation": {
+        "mode": "request_scoped_evidence_tools",
+        "original_bytes": 101484,
+        "overview_bytes": 4875,
+        "sources_available": 17,
+        "sources_read": 1
+      },
+      "max_output_tokens": 10000,
+      "paid_reason": "",
+      "retry_count": 0
+    }
+  ],
+  "saved_report_modified": false
+}

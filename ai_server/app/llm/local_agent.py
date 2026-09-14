@@ -13,8 +13,9 @@ from .errors import LLMProviderError
 from .evidence_tools import EvidenceTools, TOOL_DEFINITIONS, _case_mechanism_family, compact_json
 from .local_prompts import local_instructions
 from .models import LLMRequest, LLMResult
-from .context_tables import evidence_json, TABLE_READING_RULE, schema_field_guidance
+from .context_tables import evidence_json, TABLE_READING_RULE, schema_field_guidance, schema_without_guided_descriptions
 from ..agents.planning_requirements import QUALITY_CONTRACT_VERSION
+from ..case_recommendation import budget_only
 
 
 def _prefetch_required_evidence(workspace: EvidenceTools, task: str) -> list[dict[str, Any]]:
@@ -50,7 +51,7 @@ def _prefetch_required_evidence(workspace: EvidenceTools, task: str) -> list[dic
     case_items = [
         (source_id, item['case'])
         for source_id, item in workspace.sources.items()
-        if item.get('case')
+        if item.get('case') and (task != 'transferability' or not budget_only(item['case']))
     ]
     if case_items:
         # 저장소 첫 사례가 아니라 실제 선정/인용한 사례를 먼저 읽는다.
@@ -68,10 +69,10 @@ def _prefetch_required_evidence(workspace: EvidenceTools, task: str) -> list[dic
         priority = {key: index for index, key in enumerate(list(dict.fromkeys(preferred))[:3])}
         case_items.sort(key=lambda item: priority.get(item[0], len(priority)))
         # 후보 비교 전에는 운영 원리를 한눈에 보고, Qwen의 적용성 판단은 서로 다른
-        # 원리의 사례 두 건까지 원문으로 확인합니다. 작성/검수는 실제 선정 사례를 우선합니다.
-        if task == 'transferability' and not feedback_issues:
+        # 원리의 사례 세 건까지 원문으로 확인합니다. 작성/검수는 실제 선정 사례를 우선합니다.
+        if task == 'transferability':
             calls.append(('get_case_comparison_matrix', {}))
-        required_family_count = min(2, len({_case_mechanism_family(case) for _, case in case_items})) if task == 'transferability' else 1
+        required_family_count = min(3, len({_case_mechanism_family(case) for _, case in case_items})) if task == 'transferability' else 1
         selected_case_ids: list[str] = []
         selected_families: set[str] = set()
         for source_id, case in case_items:
@@ -124,6 +125,10 @@ def _prefetch_required_evidence(workspace: EvidenceTools, task: str) -> list[dic
         # 경우에는 EvidenceTools가 성공으로 표시하지 않아 기존 안전 차단이 유지됩니다.
         result = workspace.execute(name, arguments)
         prefetched.append({'tool': name, 'result': result})
+        if name == 'get_case_comparison_matrix':
+            while result.get('next_offset') is not None:
+                result = workspace.execute(name, {'offset': result['next_offset']})
+                prefetched.append({'tool': name, 'result': result})
     return prefetched
 
 
@@ -171,6 +176,12 @@ async def run_local_agent(provider: Any, request: LLMRequest, model: str) -> LLM
     attempts: list[dict[str, Any]] = []
     measured_prefix = None
     pending_phase = None
+    # Exact successful results already present in the same conversation can be
+    # referenced instead of appended again. Different pages/results stay intact.
+    delivered_results = {
+        (row['tool'], compact_json(row['result'])): f'prefetched_evidence[{index}]'
+        for index, row in enumerate(prefetched_evidence) if 'error' not in row['result']
+    }
 
     def account(current: dict[str, int], phase: str) -> None:
         for key, value in current.items():
@@ -202,7 +213,9 @@ async def run_local_agent(provider: Any, request: LLMRequest, model: str) -> LLM
                 # 로컬 모델이 여기서 함수 호출 대신 장문을 써 출력 상한에 닿더라도 완성된
                 # 필수 근거를 버리지 않고 최종 Schema 작성으로 진행한다. 필수 조회가 남은
                 # 경우에는 절대 우회하지 않고 기존 오류를 유지한다.
-                if exc.code != 'OLLAMA_INCOMPLETE_RESPONSE' or required:
+                # 선택 도구 응답이 비어도 필수 원문을 전부 읽었다면 최종 JSON으로
+                # 진행할 수 있다. 최종 본문/검수의 빈 응답이나 연결 오류에는 적용하지 않는다.
+                if exc.code not in {'OLLAMA_INCOMPLETE_RESPONSE', 'OLLAMA_OUTPUT_MISSING'} or required:
                     raise
                 for key, value in exc.usage.items():
                     usage[key] = usage.get(key, 0) + value
@@ -248,6 +261,13 @@ async def run_local_agent(provider: Any, request: LLMRequest, model: str) -> LLM
                     result = {'error': exc.code, 'message': '이 함수는 실행하지 않았습니다. 허용 인자만 사용하고, 인자가 없는 함수에는 {}를 보내세요.',
                               'allowed_argument_schema': parameters}
                     workspace.events.append({'tool': name, 'status': 'invalid_arguments'})
+                serialized = compact_json(result)
+                result_key = (name, serialized)
+                if 'error' not in result and result_key in delivered_results:
+                    result = {'already_provided': True, 'reference': delivered_results[result_key],
+                              'message': '동일한 결과 원문이 앞선 메시지에 있습니다. 해당 근거를 그대로 사용하세요.'}
+                elif 'error' not in result:
+                    delivered_results[result_key] = f'messages[{len(messages)}]'
                 messages.append({'role': 'tool', 'tool_name': name, 'content': compact_json(result)})
 
         missing_required = workspace.missing_required_reads()
@@ -258,18 +278,30 @@ async def run_local_agent(provider: Any, request: LLMRequest, model: str) -> LLM
         read_case_ids = workspace.read_case_source_ids()
         feedback = request.input_payload.get('quality_review_feedback') or {}
         if feedback.get('issues'):
+            if request.task == 'planner' and feedback.get('scope') == 'candidate_handoff':
+                feedback_instruction = (
+                    '아래는 후보 비교에서 남은 보완 항목이다. 초안 작성 시 해당 오류를 그대로 옮기지 마라. '
+                    '후보의 운영 방식과 근거를 유지하고, 잘못된 산식·미확인 조건을 본문의 비용·측정·실행 설계에 반영하라. '
+                    '출처 없는 사실을 만들거나 후보를 승인된 사업으로 표현하지 마라.\n'
+                )
+            else:
+                feedback_instruction = (
+                    '이번 요청은 기존 결과의 보완이다. 아래 오류 목록의 필드를 실제로 수정하라. '
+                    '이전 선택안은 승인된 정답이 아니다. 수정할 근거가 없으면 한계를 명시하고, '
+                    '잘못된 원문을 그대로 복사하여 ready로 제출하지 마라. '
+                    '연관된 strategy_brief와 후보를 일치시켜라.\n'
+                )
             messages.append({'role': 'user', 'content':
-                             '이번 요청은 기존 결과의 보완이다. 아래 오류 목록의 필드를 실제로 수정하라. '
-                             '이전 선택안은 승인된 정답이 아니다. 수정할 근거가 없으면 한계를 명시하고, '
-                             '잘못된 원문을 그대로 복사하여 ready로 제출하지 마라. '
-                             '연관된 strategy_brief와 후보를 일치시켜라.\n'
-                             + evidence_json(feedback)})
+                             feedback_instruction + evidence_json(feedback)})
         messages.append({'role': 'user', 'content':
                          '도구 단계가 끝났다. 확보한 근거만 사용해 지정 Schema의 최종 JSON을 작성하라. '
                          '추가 검색을 했다고 주장하지 말고, 읽지 못한 근거로 확정 판단하지 마라. '
                          '원문을 읽어 최종 인용 가능한 공식 사례 source_id는 ' + compact_json(read_case_ids) +
                          ' 이다. 이 목록 밖의 사례 ID는 최종 JSON에 넣지 마라.'})
         validator = Draft202012Validator(request.schema)
+        # 필드 설명은 첫 system 메시지에 이미 전부 있다. 같은 설명을 format에
+        # 다시 넣지 않되, 원본 Schema 검증과 모든 근거·출력/문맥 상한은 유지한다.
+        format_schema = schema_without_guided_descriptions(request.schema)
         schema_repairs = 0
         citation_repairs = 0
         incomplete_repairs = 0
@@ -277,11 +309,11 @@ async def run_local_agent(provider: Any, request: LLMRequest, model: str) -> LLM
         # 최초 작성 뒤 출력 미완료 재생성·Schema 교정·미조회 사례 원문 보강을 각각
         # 1회만 허용합니다. 여러 교정이 연달아 필요한 경우에도 무한 재시도하지 않습니다.
         for _attempt in range(5):
-            provider._check_context(messages, request.schema, request.max_output_tokens, measured_prefix)
+            provider._check_context(messages, format_schema, request.max_output_tokens, measured_prefix)
             pending_phase = phase
             try:
                 content, current_usage = await provider._call(
-                    model=model, messages=messages, schema=request.schema, max_output_tokens=request.max_output_tokens,
+                    model=model, messages=messages, schema=format_schema, max_output_tokens=request.max_output_tokens,
                 )
             except LLMProviderError as exc:
                 if exc.code != 'OLLAMA_INCOMPLETE_RESPONSE' or incomplete_repairs >= 1:

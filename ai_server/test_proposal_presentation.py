@@ -70,10 +70,10 @@ def _sample_report() -> dict:
 class ProposalPresentationTest(unittest.TestCase):
     """PPT 다운로드가 서버에서 재현 가능한지 확인합니다."""
 
-    def test_generates_twelve_slide_strategy_deck(self) -> None:
+    def test_generates_strategy_deck_with_calculation_pages(self) -> None:
         output = create_strategy_proposal_presentation(_sample_report())
         presentation = Presentation(output)
-        self.assertIn(len(presentation.slides), (11,12))
+        self.assertEqual(len(presentation.slides), 14)
         all_text = '\n'.join(
             shape.text
             for slide in presentation.slides
@@ -82,7 +82,7 @@ class ProposalPresentationTest(unittest.TestCase):
         )
         for label in (
             '야간 체류와 상권 소비', '사업 설계', '실행 가이드', '머신러닝 예측값',
-            '견적', '근거·데이터', '머신러닝 예측치', '감사합니다',
+            '견적', '근거·데이터', '머신러닝 예측치', '산출 근거 ①', '산출 근거 ②', '감사합니다',
         ):
             self.assertIn(label, all_text)
 

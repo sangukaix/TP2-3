@@ -1,5 +1,9 @@
 # 프론트엔드 연동 API 초안
 
+2026-09-13 D-153: 공개 API/보고서 JSON 계약은 유지한다. 내부 Planner 최초 작성에는 남은 `candidate_validation_findings`를 `quality_review_feedback.scope=candidate_handoff`와 함께 전달하며 로컬 최종 JSON 직전에 원문 전체를 한 번 제공한다. 보완 작성에는 기존 검수 지시와 후보 지적을 합쳐 보존한다. 쿠폰 비용의 점포 수/지급 건수 혼동, `00%` 목표 및 함수로 변경한 사례의 의미 재검토 항목은 기존 보완 경로로 전달한다. LLM 호출 수·유료 정책·승인 기준은 변경하지 않는다. 오프라인 151개 테스트 통과이며 실제 모델 재검증은 미실행이다.
+
+D-142: API 스키마는 유지한다. `GET /ai/v1/regions/catalog`은 활성 카탈로그·모델이 갖춰진 250개 지역을 반환한다. ML 등록표는 카탈로그 교체를 다음 조회에 반영한다. `GET /ai/v1/demo/sido-comparison` 및 기획 스냅샷의 동일 시도 비교는 폴더 계층과 관계없이 등록표의 지역명·로컬 경로를 사용한다. `readiness-audit`의 `data_ready`는 데이터 검증, `generation_ready`는 데이터 검증과 현재 Qwen·Gemma 연결의 결합이며 향후 응답 품질 보장이 아니다. `audit_all_regions --data-only`는 HTTP 서버와 LLM 없이 생성 입력을 검증한다. [데이터 통합 기록](TEAM_DATA_INTEGRATION_20260911.md).
+
 D-115: 공개 API 변경 없음. 로컬 후보 재생 CLI는 모델 원문 계약과 서버 보정 후 계약을 구분해 `stabilized_candidate_contract_passed`, `stabilized_issues`, `automatic_corrections`, `stabilized_decision`을 추가 기록한다. 이 진단은 유료 호출·보고서 저장·승인을 수행하지 않으며 보정 통과도 의미 품질 승인으로 취급하지 않는다.
 
 D-114: React 화면 경로는 `frontend/src/routes.js`의 명시적 공개 경로와 `/diagnosis`·`/proposal` 별칭을 사용한다. 알 수 없는 주소는 클라이언트 404로 표시하며 `/api`·`/ai` 요청 계약은 바뀌지 않는다.
@@ -395,3 +399,63 @@ PPT 출력 버전 `pptx-visitor-spending-formula-v12`는 동일 방문·소비 �
 ### D-138 생성 진행 단계 표시 (2026-09-10)
 
 생성 대기 화면 제목은 ‘기획서 초안을 생성중입니다’. 작업 조회 응답에 `progress_step`을 추가한다: 0 데이터 분석(연결 확인 포함), 1 공식사례 확인(지역 근거 병행), 2 기획안 생성(후보 비교·초안), 3 품질검토(보완·재검수 포함), 4 검토 절차 종료 후 본문·문서 준비. null은 단계 미확인이다. 실제 실행 지점에서 요청별 ContextVar 콜백으로 메모리 작업 상태를 갱신하며 기존 3초 상태 조회로 표시한다. 경과 시간으로 단계를 추측하지 않는다. 진행 단계는 파란 음영 애니메이션, 완료 단계는 파란 채움, 대기 단계는 기존 외곽선으로 구분한다. 재접속 시 서버 상태를 다시 읽고 연결 오류에는 확인 지연을 표시한다. 단계 완료는 품질 승인과 다르며 모델/유료 호출 수는 변경하지 않는다.
+
+
+공통 목표/견적 출력 변경(D-139): 신규 기본 목표는 연결된 강진 환급 사례에 대해 20%(발표25%×계획채택80%), 그 외 5% 가정. 명시한 사용자 목표를 보존합니다. `reference_estimate.version=reference-estimate-v2`는 추가 방문 목표의 1%를 참여량으로 배분하고 `scale_basis`, `additional_visitors_target`, `pilot_share_pct`를 제공합니다. 인구나 인과효과를 추정한 값이 아닌 시범 운영·단가 가정이며 참고 총액 입력을 우선합니다. PPT v17·Word v5에 공통 반영하고 과거 저장 보고서는 자동 갱신하지 않습니다. 성동구 검토본은 `storage/previews/seongdong_updated_20260910.pptx`와 `.docx`입니다.
+
+
+#### 기획 입력 guided_v2 (2026-09-11)
+웹 `/planning`은 참고 예산·사업 방향·활용 자원·현장 선호를 받습니다. 자원과 선호는 선택 코드 배열 `resource_options`, `context_options`이며 자유 메모와 제외 운영 입력은 없습니다. 신규 `/strategy-report` 및 `/strategy-report/jobs` 요청에서 AI 서버가 한국 시간의 다음 달부터 3개월을 `planning_brief.start_date/end_date`에 확정합니다(9월→10~12월). 저장·복구 시에는 당시 날짜를 유지하며 공통 Word/PPT 전망도 이 구간을 사용합니다. 이는 예측 구간이며 3개월 시범 운영 의무가 아닙니다. 선택 목록과 입력 제한은 `ai_server/app/planning_brief.py`, UI는 `frontend/src/features/planning/planningBrief.js`에 정의합니다.
+
+
+철원 반복 추천 점검(D-141): 자동 사업 추천은 공식 운영 근거가 있는 예약·교통·체험까지 비교하고, 유효한 출처 인용과 후보 선정 이유를 보존합니다. v2 사업기간은 본문과 실행 일정에 공통 적용하며 보정 이력은 `planning_decision.period_alignment`에 남습니다. 사례 연결은 운영 문서 기반 규칙이며 학습된 지역 적합성 모델이 아닙니다. 실제 확인 결과는 `docs/CHEORWON_RECOMMENDATION_AUDIT_20260911.md`를 참고하세요.
+
+D-143: 공개 API 스키마 변경 없음. `/ai/v1/learning/openai` 파일 설명에 지역 모델 등록·Router·로컬 프롬프트를 추가하고 React 구조 설명의 현재 RAG·LLM 역할을 갱신했다. AI Router의 학습 패널은 기존 `/ai/v1/learning/openai/assistant`를 사용한다. 운영 라우팅 PUT/POST는 기존 관리자 토큰 정책을 유지한다.
+
+D-144: 공개 API 스키마 변경 없음. 문서 출력 캐시 버전 PPT `pptx-calculation-basis-v18`, Word `strategy-docx-v6-calculation-basis`. 사업 목표/산출 설명 추가 시 저장 보고서 원본은 변경하지 않는다. 로컬 `get_planning_decision.additional_sections`에 과거 평가/교정 감사 기록의 read_task_section 경로를 제공하여 반복 사전 전달을 줄인다.
+
+D-145: 출력 캐시 버전 PPT `pptx-calculation-infographic-v19`, Word `strategy-docx-v7-ml-role-basis`. 모델별 문맥 환경변수는 각각의 Ollama `options.num_ctx`와 사전 문맥 검사에 동일하게 사용한다. 기존 공통 환경변수 하위 호환 유지. API 스키마/유료 라우팅은 변경하지 않는다.
+
+D-146: Word 렌더 버전만 `strategy-docx-v8-ppt-parity-a4`로 변경한다. PPT `pptx-calculation-infographic-v19`와 공개 API 스키마는 유지한다. 저장/신규 Word 다운로드 모두 기존 공통 렌더 함수를 통해 A4 구성과 PPT의 월별 시나리오를 사용한다. 저장 JSON, 승인 상태, 모델 학습과 LLM 호출은 변경하지 않는다. 시각 렌더 QA는 승인 검토 한도로 보류되어 최종 디자인 승인 상태가 아니다.
+
+2026-09-12 D-146 보충: Word 렌더 버전 `strategy-docx-v9-paginated-a4`. 공통 다운로드에서 방문/소비 그래프별 페이지, 사례·출처 단위 페이지 분할 방지를 적용한다. 제주시 16쪽 Word 실제 렌더 검수 완료. 기존 PPT 버전/API 스키마/저장 데이터 유지.
+
+D-147: API 변경 없음. dashboard.diagnostic.consumption_categories의 name/share/amount_krw를 그대로 표시하며 클라이언트에서 업종별 도움말을 제공한다. is_forecast=true의 amount_krw는 forecast_average_spending_krw × share/100이다. 새 유료/LLM 호출 없음.
+
+D-148: GET `/ai/v1/regions/readiness-audit`의 만료 상태를 `expired`로 구분하고 이전 checked_at을 보존한다. regions는 기존과 같이 빈 배열이며 generation_ready를 부여하지 않는다. 미점검/읽기 실패는 기존 not_checked. UI는 만료와 자료 부족·모델 연결 상태를 별도로 표시한다.
+
+D-149: GET `/ai/v1/regions/readiness-audit`는 점검일만으로 expired를 반환하지 않는다. `data_ready`는 저장 점검 + 현재 파일/SQL 서명 + 월별 자료 최신성 검증 결과다. `readiness_reason`에 자료 변경/SQL 연결·누락/관측월 갱신 사유를 제공한다. `generation_ready`는 `data_ready && local_models_ready`를 유지한다. UI 초록색만 data_ready로 변경하고 로컬 모델 상태는 별도 표시한다. 오래된 무서명 audit는 갱신 필요로 처리한다.
+# 지역별 사례 조사 상태 (D-150)
+
+`agent_trace`의 `regional_research_plan` 단계에는 SQL peer·지표 격차와 ML 신호에 연결한 검색 과제가 담깁니다.
+`official_case_web.grounding` 및 provider `attempts[].web_grounding`은 카드별 채택 수와 제외 URL을 기록합니다.
+HTTP 실패는 `official_case_web.upstream_error`와 provider `attempts[].upstream_error`에
+`http_status`, 알려진 `code`/`type`(그 외 `unknown`)을 기록합니다. `OPENAI_QUOTA_ERROR`,
+`OPENAI_RATE_LIMIT_ERROR`, 원인 미확인 `OPENAI_LIMIT_ERROR`, `OPENAI_AUTH_ERROR`,
+`OPENAI_ACCESS_ERROR`, `OPENAI_SERVER_ERROR`로 구분합니다. 공급자 원문 메시지·헤더·본문은 저장하지 않습니다.
+사용량 미보고는 0토큰 또는 과금 없음으로 해석하지 않습니다. HTTP 실패 시 자동 유료 재시도는 하지 않습니다.
+출처 검증 부분 실패는 나머지 유효한 카드를 보존하며, 전체 실패·비교 근거 부족을 성공 캐시로 저장하지 않습니다.
+자동 추천에서 최소 2개 실제 지역·2개 운영 방식을 확보하지 못하면 `CASE_RESEARCH_INCOMPLETE`(503)로
+본문 작성 전에 중단합니다. 정확한 peer 일치 조건은 없으며, 사용자가 지정한 사업 방향은 해당 방향 안에서 비교합니다.
+지역 데이터 준비 상태(`data_ready`)는 외부 사례 검색 성공이나 최종 기획 품질을 보증하지 않습니다.
+
+로컬 `get_case_comparison_matrix`는 큰 결과를 `offset` 기반 JSON 조각으로 제공합니다.
+`segment_index`, `segment_count`, `serialized_json_segment`, `next_offset`을 순서대로 읽어
+원문 전체를 구성합니다. 전 페이지 성공 전에는 필수 조회 완료로 인정하지 않습니다.
+동일 요청의 성공 도구 결과가 앞서 전달한 결과와 완전히 같으면 `already_provided`와 기존
+메시지 `reference`로 반환합니다. 최초 원문·새 페이지·실패 응답은 유지합니다.
+
+2026-09-12 코드 점검: 기존 jobs API의 응답 `job_id`, `region_code`와 표시 지역명을
+`/strategy?job_id=...&region_code=...&region_name=...`로 전달할 수 있습니다.
+본문·비밀 값은 주소에 포함하지 않으며 완료/실패 시 작업 query를 제거합니다.
+브라우저 캐시는 선택적이며 기획안 확정 저장 성공은 기존 PUT 서버 응답으로 판단합니다.
+Backend는 개발용 `http://localhost:5176`, `http://127.0.0.1:5176` Origin도 허용합니다.
+사례 coverage는 동일 행정 단위의 다른 서술과 광역시 전체/포함 구를 중복 집계하지 않습니다.
+조사 캐시 계약은 v6입니다. API 응답 필드·모델 호출 횟수 변경은 없습니다.
+
+로컬 Agent 최종 출력 format은 system 필드 지침에 이미 전달한 description만 중복 제거합니다.
+서버는 원본 JSON Schema로 검증하며 필드·타입·enum·출력/문맥 상한은 유지합니다(D-152).
+
+선택 도구 단계의 `OLLAMA_OUTPUT_MISSING`도 필수 원문 조회 완료일 때에만 최종 JSON으로
+진행합니다. 사용량과 선택 단계 실패는 trace에 남깁니다. 필수 근거 누락·최종 JSON 빈 응답·
+연결 실패는 이 경로로 우회하지 않으며 검수 승인 결과를 합성하지 않습니다.

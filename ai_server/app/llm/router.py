@@ -67,15 +67,14 @@ class LLMRouter:
                 # 현재 팀의 Qwen3:14b가 제공하는 40,960 토큰 문맥을 기본으로 씁니다.
                 # 이전 32,768 기본값은 여러 공식 사례·ML·비교표를 함께 검토하는
                 # 적용성 단계에서 실제 모델 한도보다 먼저 안전 차단되는 문제가 있었습니다.
-                context_length=int(env_values.get('LOCAL_LLM_CONTEXT_LENGTH') or 40960),
+                context_length=int(env_values.get('OLLAMA_QWEN_CONTEXT_LENGTH') or env_values.get('LOCAL_LLM_CONTEXT_LENGTH') or 40960),
             ),
             'gemma': OllamaProvider(
                 base_url=str(env_values.get('LOCAL_LLM_BASE_URL') or ''),
                 default_model=str(env_values.get('OLLAMA_GEMMA_MODEL') or ''),
                 timeout_seconds=float(env_values.get('LOCAL_LLM_TIMEOUT_SECONDS') or 1800),
-                # Qwen과 같은 공통 문맥 예산을 적용해 Agent 단계별 동작을 예측 가능하게
-                # 유지합니다. Gemma는 더 긴 문맥을 지원하지만 요청마다 임의로 달라지지 않습니다.
-                context_length=int(env_values.get('LOCAL_LLM_CONTEXT_LENGTH') or 40960),
+                # 모델별 문맥을 분리한다. 명시된 공통 설정은 하위 호환용으로 유지.
+                context_length=int(env_values.get('OLLAMA_GEMMA_CONTEXT_LENGTH') or env_values.get('LOCAL_LLM_CONTEXT_LENGTH') or 40960),
             ),
         }
         self.trace: list[dict[str, Any]] = []
@@ -291,7 +290,9 @@ class LLMRouter:
                 'provider': provider_name, 'requested_provider': requested_provider, 'model': provider_request.model,
                 'duration_ms': round((perf_counter() - started) * 1000), 'usage': exc.usage,
                 'fallback': bool(fallback_reason), 'fallback_reason': fallback_reason or exc.code,
-                'error_code': exc.code, 'web_search_used': False, 'attempts': exc.attempts,
+                'error_code': exc.code,
+                'web_search_used': any(a.get('web_grounding', {}).get('searched') for a in exc.attempts),
+                'attempts': exc.attempts,
                 'tool_trace': getattr(exc, 'tool_trace', []),
                 'max_output_tokens': output_limit,
                 'paid_reason': paid_reason,

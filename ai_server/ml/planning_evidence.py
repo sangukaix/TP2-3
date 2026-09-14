@@ -214,7 +214,7 @@ def build_planning_ml_evidence(
     questions.extend([
         f'{region_name}의 {decision_periods} 방문자 수와 내비게이션 검색량 전망을 비교해 관심을 실제 방문으로 연결한 공식 사업의 운영방법·예산·성과·실패조건을 조사하세요.',
         f'{region_name}의 {decision_periods} 숙박검색·숙박방문 비율·평균 숙박일·체류시간 전망을 함께 보고 숙박 전환과 장시간 체류를 높인 공식 사업을 조사하세요.',
-        f'{region_name}의 {decision_periods} 관광소비액 전망과 계절 조건이 비슷한 지역의 쿠폰·환급·숙박 연계 사업을 공식 성과자료 중심으로 조사하세요.',
+        f'{region_name}의 {decision_periods} 관광소비액 전망과 계절 조건을 참고해 지역 상권·관광콘텐츠 이용을 늘린 다양한 운영 방식을 공식 성과자료 중심으로 비교하세요. 지원금 지급 방식으로 미리 한정하지 마세요.',
     ])
     return PlanningMlEvidence(
         status='available', **identity, source_id=source_id,

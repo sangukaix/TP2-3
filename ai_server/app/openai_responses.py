@@ -19,13 +19,15 @@ class OpenAIResponseError(RuntimeError):
     """에이전트 단계에서 발생한 OpenAI 요청 오류입니다."""
 
     def __init__(self, code: str, message: str, *, status_code: int = 502,
-                 usage: dict[str, int] | None = None, attempts: list[dict[str, Any]] | None = None) -> None:
+                 usage: dict[str, int] | None = None, attempts: list[dict[str, Any]] | None = None,
+                 upstream_error: dict[str, Any] | None = None) -> None:
         super().__init__(message)
         self.code = code
         self.message = message
         self.status_code = status_code
         self.usage = usage or {}
         self.attempts = attempts or []
+        self.upstream_error = upstream_error or {}
 
 
 LOGGER = logging.getLogger(__name__)
@@ -94,7 +96,7 @@ def _source_urls(value: Any, *, key_names: tuple[str, ...] = ('source_url',)) ->
     return found
 
 
-def _verify_web_grounding(payload: dict[str, Any], data: dict[str, Any], input_payload: dict[str, Any]) -> bool:
+def _web_grounding_urls(payload: dict[str, Any], input_payload: dict[str, Any]) -> set[str]:
     """도구가 실제 실행됐는지와 반환 출처가 조회 기록/검수 입력에 있는지를 확인합니다.
 
     URL 확인은 주장의 사실성 보장과 다릅니다. 본문·수치 타당성은 별도 Reviewer가 검수합니다.
@@ -107,10 +109,39 @@ def _verify_web_grounding(payload: dict[str, Any], data: dict[str, Any], input_p
     consulted.update(_source_urls(payload.get('output') or [], key_names=('url',)))
     # 사용자가 첨부한 임의 URL은 검수 입력으로 승격하지 않습니다.
     trusted_input = {key: input_payload.get(key) for key in ('curated_case_cards', 'case_rag_candidates')}
-    known = consulted | _source_urls(trusted_input)
+    return consulted | _source_urls(trusted_input)
+
+
+def _verify_web_grounding(payload: dict[str, Any], data: dict[str, Any], input_payload: dict[str, Any]) -> bool:
+    known = _web_grounding_urls(payload, input_payload)
     if _source_urls(data) - known:
         raise OpenAIResponseError('OPENAI_UNVERIFIED_WEB_SOURCE', '검색 기록에 없는 출처가 반환되어 조사 결과를 채택하지 않았습니다.')
     return True
+
+
+def _filter_grounded_cases(payload: dict, data: dict, input_payload: dict) -> tuple[dict, dict]:
+    """Reject individual ungrounded cards, not unrelated verified search results.
+
+    URL matching stays exact (except existing fragment/trailing slash handling).
+    Free-form summary/gaps are replaced after rejection to avoid leaking claims
+    from discarded cards. This applies only to the case research schema.
+    """
+    known = _web_grounding_urls(payload, input_payload)
+    accepted, rejected = [], []
+    for index, card in enumerate(data.get('cases') or []):
+        urls = _source_urls(card)
+        missing = urls - known
+        if missing or not urls:
+            rejected.append({'case_index': index, 'source_url': card.get('source_url'),
+                             'unverified_urls': sorted(missing), 'reason': 'source_not_in_search_record'})
+        else:
+            accepted.append(card)
+    audit = {'searched': True, 'accepted_cases': len(accepted), 'rejected_cases': rejected}
+    result = {**data, 'cases': accepted}
+    if rejected:
+        result['summary'] = f'조회 기록과 URL이 일치하는 사례 {len(accepted)}건을 남겼습니다. 본문 성과 검증은 별도입니다.'
+        result['gaps'] = [f'출처 조회 기록이 확인되지 않은 사례 {len(rejected)}건을 제외했습니다.']
+    return result, audit
 
 
 async def create_structured_response(
@@ -174,6 +205,8 @@ async def create_structured_response(
             attempts.append({'attempt': index + 1, 'max_output_tokens': limit, 'status': 'failed',
                              'reason': exc.code, 'usage': {}, 'usage_reported': False,
                              'duration_ms': round((perf_counter() - started) * 1000)})
+            if exc.upstream_error:
+                attempts[-1]['upstream_error'] = exc.upstream_error
             exc.usage, exc.attempts = total_usage, attempts
             raise
         usage = _response_usage(payload)
@@ -213,10 +246,18 @@ async def create_structured_response(
                           for item in payload.get('output') or [])
     if require_web_search:
         try:
+            if schema_name == 'official_tourism_case_studies':
+                data, grounding = _filter_grounded_cases(payload, data, input_payload)
+                attempts[-1]['web_grounding'] = grounding
+                if grounding['rejected_cases'] and not data['cases']:
+                    raise OpenAIResponseError('OPENAI_UNVERIFIED_WEB_SOURCE', '모든 사례의 출처가 검색 기록에서 확인되지 않았습니다.')
             web_search_used = _verify_web_grounding(payload, data, input_payload)
         except OpenAIResponseError as exc:
             exc.usage, exc.attempts = total_usage, attempts
             raise
+        if schema_name == 'official_tourism_case_studies':
+            # Server metadata, added only after validating the model's strict schema.
+            data['_web_grounding'] = grounding
     if return_metadata:
         # 재시도 전후를 합산합니다. reasoning_tokens는 output_tokens에 포함되므로 총합에 다시 더하지 않습니다.
         return {'data': data, 'response_id': payload.get('id'), 'usage': total_usage,
@@ -250,14 +291,8 @@ async def _post_response(api_key: str, body: dict[str, Any], timeout_seconds: fl
         raise OpenAIResponseError('OPENAI_TIMEOUT', 'AI 에이전트 처리 시간이 초과되었습니다.', status_code=504) from exc
     except httpx.HTTPError as exc:
         raise OpenAIResponseError('OPENAI_CONNECTION_ERROR', 'OpenAI API 서버에 연결하지 못했습니다.') from exc
-    if response.status_code == 401:
-        raise OpenAIResponseError('OPENAI_AUTH_ERROR', 'AI 서버의 OpenAI API 키 인증에 실패했습니다.', status_code=503)
     if response.status_code >= 400:
-        error_payload = response.json().get('error', {}) if response.headers.get('content-type', '').startswith('application/json') else {}
-        raise OpenAIResponseError(
-            'OPENAI_MODEL_OR_REQUEST_ERROR' if response.status_code in (400, 404) else 'OPENAI_RESPONSE_ERROR',
-            str(error_payload.get('message') or 'OpenAI가 에이전트 요청을 처리하지 못했습니다.'),
-        )
+        raise _http_response_error(response)
     try:
         payload = response.json()
     except ValueError as exc:
@@ -265,3 +300,50 @@ async def _post_response(api_key: str, body: dict[str, Any], timeout_seconds: fl
     if not isinstance(payload, dict):
         raise OpenAIResponseError('OPENAI_INVALID_OUTPUT', 'OpenAI 응답 형식이 올바르지 않습니다.')
     return payload
+
+
+def _http_response_error(response: httpx.Response) -> OpenAIResponseError:
+    """Preserve actionable status/codes without persisting echoed input or credentials.
+
+    429 alone cannot distinguish billing from rate limits. Unknown error fields
+    stay unknown; raw messages, headers and bodies never enter the trace.
+    https://developers.openai.com/api/docs/guides/error-codes
+    """
+    try:
+        payload = response.json()
+    except ValueError:
+        payload = {}
+    error = payload.get('error') if isinstance(payload, dict) else None
+    error = error if isinstance(error, dict) else {}
+    billing_codes = {
+        'credit_balance_exhausted', 'organization_spend_limit_exceeded',
+        'project_spend_limit_exceeded', 'organization_usage_limit_exceeded', 'insufficient_quota',
+    }
+    known_codes = billing_codes | {'rate_limit_exceeded', 'slow_down', 'server_is_overloaded',
+                                  'invalid_api_key', 'model_not_found', 'context_length_exceeded'}
+    known_types = {'insufficient_quota', 'rate_limit_error', 'server_error',
+                   'service_unavailable_error', 'invalid_request_error', 'authentication_error'}
+    code = error.get('code')
+    kind = error.get('type')
+    code = code if isinstance(code, str) and code in known_codes else 'unknown'
+    kind = kind if isinstance(kind, str) and kind in known_types else 'unknown'
+    status = response.status_code
+    detail = {'http_status': status, 'code': code, 'type': kind}
+    app_code, message = 'OPENAI_RESPONSE_ERROR', 'OpenAI가 요청을 처리하지 못했습니다. 관리자 오류 기록을 확인해 주세요.'
+    if status == 401:
+        app_code, message = 'OPENAI_AUTH_ERROR', 'AI 서버의 OpenAI API 키 인증에 실패했습니다.'
+    elif status == 403:
+        app_code, message = 'OPENAI_ACCESS_ERROR', 'OpenAI API 접근이 거부되었습니다. 프로젝트 권한과 접근 제한을 확인해 주세요.'
+    elif status == 429:
+        if code in billing_codes or kind == 'insufficient_quota':
+            app_code, message = 'OPENAI_QUOTA_ERROR', 'OpenAI API 크레딧 또는 사용·지출 한도에 도달했습니다. API 결제와 한도를 확인해 주세요.'
+        elif code in {'rate_limit_exceeded', 'slow_down'} or kind == 'rate_limit_error':
+            app_code, message = 'OPENAI_RATE_LIMIT_ERROR', 'OpenAI API 요청 속도 한도에 도달했습니다. 잠시 후 다시 시도해 주세요.'
+        else:
+            app_code, message = 'OPENAI_LIMIT_ERROR', 'OpenAI API가 한도 오류(429)를 반환했습니다. 크레딧·사용 한도와 요청 속도를 확인해 주세요.'
+    elif status >= 500:
+        app_code, message = 'OPENAI_SERVER_ERROR', 'OpenAI 서버에서 요청 처리 오류가 발생했습니다. 잠시 후 상태를 확인해 주세요.'
+    elif status in (400, 404, 422):
+        app_code, message = 'OPENAI_MODEL_OR_REQUEST_ERROR', 'OpenAI 모델 또는 요청 설정을 처리할 수 없습니다. 관리자 설정을 확인해 주세요.'
+    return OpenAIResponseError(app_code, message, status_code=503 if status == 401 else 502,
+                               upstream_error=detail)

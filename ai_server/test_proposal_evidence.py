@@ -31,7 +31,7 @@ class ProposalEvidenceTest(unittest.TestCase):
     def test_target_uses_final_month_not_first_month(self):
         report=_sample_report();deck=Presentation(create_strategy_proposal_presentation(report))
         rows=select_report_forecast(report)['rows']; last=rows[-1]
-        data=table_text(deck.slides[8])
+        data=table_text(deck.slides[7])
         self.assertIn(f"{last['visitors']*1.01:,.0f}명",data)
         self.assertIn(f"{last['spending_krw']*1.02/1e8:,.2f}억 원",data)
 
@@ -48,7 +48,10 @@ class ProposalEvidenceTest(unittest.TestCase):
     def test_reference_budget_sums_and_hard_limit(self):
         report=_sample_report();report['strategies'][0]['title']='반값 환급 여행'
         estimate=build_reference_estimate(report)
-        self.assertEqual(estimate['total_krw'],82_500_000)
+        self.assertGreater(estimate['quantity'],1000)
+        larger=__import__('copy').deepcopy(report)
+        larger['execution_scenario']={'visitor_target_pct':2,'spending_target_pct':2}
+        self.assertGreater(build_reference_estimate(larger)['total_krw'],estimate['total_krw'])
         self.assertEqual(sum(i['amount'] for i in estimate['items']),estimate['total_krw'])
         report['planning_brief'].update(budget_hard_limit=True,budget_max_krw=40_000_000)
         estimate=build_reference_estimate(report)

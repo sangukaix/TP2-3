@@ -224,6 +224,13 @@ ML의 research_questions를 공식 자료 조사 우선순위로 활용하되, �
 """
 CASE_STUDY_RESEARCH_INSTRUCTIONS += ML_EVIDENCE_RULES + """
 forecast_research_questions에 맞는 계절·지역 조건의 사례를 우선하되, 성공 수치만 보고 복제하지 않는다.
+case_research_plan의 search_tasks를 사용한다. peer 지역부터 실제 사업과 시행연도·공식 운영 결과를 찾고,
+조건이 일부 다른 전국 지역도 확장 조사한다. peer가 아닌 이유만으로 제외하지 않는다.
+전국 공통 제도 소개만 반복하지 말고 가능한 한 실제 시행 지역과 사업이 다른 사례 3건 이상을 확보한다.
+같은 기준의 시행 전후 방문·소비 수치, 기간, 집계대상, 원문 URL을 observed_result와 measurement_period에 적는다.
+없는 수치와 성공 사례는 만들지 않는다. 수치가 없는 운영 사례는 성과가 확인된 사례와 구분한다.
+source_url은 실제 검색·열람 도구 기록 또는 검수 입력의 URL을 그대로 사용한다. 추정 URL을 작성하지 않는다.
+ML 변화와 peer 거리의 의미는 구분한다. ML은 조사할 행동을 좁히고, 관측 peer는 비교 지역을 찾는 입력이다.
 """
 TRANSFERABILITY_INSTRUCTIONS += ML_EVIDENCE_RULES + """
 전망과 사업 예산·기간을 함께 고려하여 사례의 적용 이유와 적용하지 않을 이유를 비교한다.

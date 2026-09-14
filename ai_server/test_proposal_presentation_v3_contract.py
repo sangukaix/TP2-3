@@ -169,7 +169,7 @@ def _slide_text(slide) -> str:
 
 
 class ProposalPresentationV4ContractTest(unittest.TestCase):
-    """공개 다운로드 함수가 승인된 12장 템플릿 계약을 지키는지 확인합니다."""
+    """공개 다운로드 함수가 승인된 템플릿과 산출 근거 2장 계약을 지키는지 확인합니다."""
 
     def test_public_entrypoint_uses_approved_template_renderer(self) -> None:
         """기존 API import가 새 구현을 가리키고 템플릿 파일이 실제로 존재해야 합니다."""
@@ -177,7 +177,7 @@ class ProposalPresentationV4ContractTest(unittest.TestCase):
             proposal_presentation.create_strategy_proposal_presentation,
             proposal_presentation_v4.create_strategy_proposal_presentation,
         )
-        self.assertEqual(proposal_presentation_v4.PRESENTATION_RENDER_VERSION, 'pptx-regional-target-estimate-v17')
+        self.assertEqual(proposal_presentation_v4.PRESENTATION_RENDER_VERSION, 'pptx-calculation-infographic-v19')
         template_path = Path(proposal_presentation_v4.PRESENTATION_TEMPLATE_PATH)
         self.assertEqual(template_path.name, 'tourism_strategy_12_slide_template_v6.pptx')
         self.assertTrue(template_path.is_file(), f'승인된 PPT 레이아웃 원본을 찾을 수 없습니다: {template_path}')
@@ -189,7 +189,7 @@ class ProposalPresentationV4ContractTest(unittest.TestCase):
         self.assertTrue(legacy_path.is_file(), f'구형 12장 템플릿 보존본이 없습니다: {legacy_path}')
         self.assertNotEqual(legacy_path, Path(proposal_presentation_v4.PRESENTATION_TEMPLATE_PATH))
 
-    def test_generates_twelve_editable_slides_with_native_charts(self) -> None:
+    def test_generates_editable_slides_with_native_charts_and_calculations(self) -> None:
         """각 장을 이미지 한 장으로 붙이지 않고 텍스트·사진·차트를 편집 가능하게 유지합니다."""
         output = proposal_presentation.create_strategy_proposal_presentation(_sample_report())
         deck = Presentation(output)
@@ -207,7 +207,9 @@ class ProposalPresentationV4ContractTest(unittest.TestCase):
             8: ('머신러닝 예측값과 목표 KPI',),
             9: ('사례 실적과 목표 KPI 설정 근거',),
             10: ('견적 예시안', '시범 예산',),
-            11: ('근거·데이터', '관측 데이터'),
+            11: ('산출 근거 ①', 'ML 기준 전망', '견적 총액'),
+            12: ('산출 근거 ②',),
+            13: ('근거·데이터', '관측 데이터'),
         }
         for slide_number, labels in required_by_slide.items():
             for label in labels:
@@ -294,7 +296,7 @@ class ProposalPresentationV4ContractTest(unittest.TestCase):
                                       'adaptation': '문화시설 이용을 확인한 참여자에게 지역 상점 후속 혜택을 제공합니다.'}],
         }
         output = Presentation(proposal_presentation.create_strategy_proposal_presentation(report))
-        text = _slide_text(output.slides[4])
+        text = ' '.join(_slide_text(output.slides[4]).split())
         self.assertIn('선정된 공식 문화 프로그램 사례', text)
         self.assertIn('문화시설 이용을 확인한', text)
         self.assertIn('핵심 운영 참고', text)

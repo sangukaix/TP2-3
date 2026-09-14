@@ -3,12 +3,28 @@ from copy import deepcopy
 import json
 import unittest
 
-from ai_server.app.llm.context_tables import TABLE, MAPPING, encode_tables, decode_tables, evidence_json, schema_field_guidance
+from ai_server.app.llm.context_tables import TABLE, MAPPING, encode_tables, decode_tables, evidence_json, schema_field_guidance, schema_without_guided_descriptions
 from ai_server.app.llm.ollama_provider import OllamaProvider
 from ai_server.app.scripts.check_local_agent_smoke import semantic_errors
 
 
 class ContextTableTests(unittest.TestCase):
+    def test_guided_descriptions_are_deduplicated_without_changing_validity(self):
+        from jsonschema import Draft202012Validator
+        schema = {'type': 'object', 'description': '필드 지침', 'required': ['description'],
+                  'additionalProperties': False, 'properties': {
+                      'description': {'type': 'string', 'enum': ['확인'], 'description': '확인만 허용'}},
+                  '$defs': {'other': {'type': 'string', 'description': '별도 정의 설명'}}}
+        before = deepcopy(schema)
+        compact = schema_without_guided_descriptions(schema)
+        self.assertEqual(schema, before)
+        self.assertIn('description', compact['properties'])
+        self.assertEqual(compact['$defs'], schema['$defs'])
+        self.assertIn('확인만 허용', schema_field_guidance(schema))
+        self.assertNotIn('description', compact['properties']['description'])
+        for value in ({'description': '확인'}, {}, {'description': 1}, {'description': '틀림'}, {'description': '확인', 'extra': 1}):
+            self.assertEqual(Draft202012Validator(schema).is_valid(value), Draft202012Validator(compact).is_valid(value))
+
     def test_schema_meanings_are_transmitted_without_repeating_full_grammar(self):
         schema = {'type': 'object', 'description': '검사', 'properties': {
             'forecast': {'type': 'array', 'items': {'type': 'object', 'properties': {
