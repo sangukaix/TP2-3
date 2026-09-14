@@ -1,4 +1,60 @@
 {
-  "mode": "student_budget",
-  "routes": {}
+  "mode": "local_first",
+  "routes": {
+    "evidence": {
+      "provider": "openai",
+      "model_env": "OPENAI_RESEARCH_MODEL",
+      "fallback": "none"
+    },
+    "case_study": {
+      "provider": "openai",
+      "model_env": "OPENAI_CASE_RESEARCH_MODEL",
+      "fallback": "none"
+    },
+    "local_web_query_planner": {
+      "provider": "qwen",
+      "model_env": "OLLAMA_QWEN_MODEL",
+      "fallback": "none"
+    },
+    "transferability": {
+      "provider": "qwen",
+      "model_env": "OLLAMA_QWEN_MODEL",
+      "fallback": "openai"
+    },
+    "planner": {
+      "provider": "gemma",
+      "model_env": "OLLAMA_GEMMA_MODEL",
+      "fallback": "openai"
+    },
+    "planner_revision": {
+      "provider": "gemma",
+      "model_env": "OLLAMA_GEMMA_MODEL",
+      "fallback": "openai"
+    },
+    "reviewer": {
+      "provider": "openai",
+      "model_env": "OPENAI_REVIEW_MODEL",
+      "fallback": "none"
+    },
+    "final_reviewer": {
+      "provider": "openai",
+      "model_env": "OPENAI_REVIEW_MODEL",
+      "fallback": "none"
+    },
+    "chat_explain": {
+      "provider": "qwen",
+      "model_env": "OLLAMA_QWEN_MODEL",
+      "fallback": "openai"
+    },
+    "chat_research": {
+      "provider": "openai",
+      "model_env": "OPENAI_CHAT_MODEL",
+      "fallback": "none"
+    },
+    "chat_revise": {
+      "provider": "gemma",
+      "model_env": "OLLAMA_GEMMA_MODEL",
+      "fallback": "openai"
+    }
+  }
 }
