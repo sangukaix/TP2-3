@@ -8,12 +8,17 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Callable, Any
-from threading import RLock
 
 from .gangnam_data import load_gangnam_monthly_demand
 from .gangnam_forecast import predict_future_months, train_gangnam_models
-from .region_catalog import CATALOG_PATH, list_region_data_catalog
+from .region_catalog import list_region_data_catalog
 from .standard_region_pipeline import STANDARD_DATALAB_ADAPTER_TYPES, build_standard_pipeline_functions
+
+
+def _predict_gangnam_from_current_artifact(horizon: int) -> dict[str, Any]:
+    """강남구는 통합 switch artifact를 사용하는 최신 예측 로더를 연결합니다."""
+    from .region_service import predict_region_demand
+    return predict_region_demand('11680', horizon)
 
 
 @dataclass(frozen=True)
@@ -39,7 +44,7 @@ def _build_region_pipelines() -> dict[str, RegionMlPipeline]:
             '11680',
             '서울특별시 강남구',
             train_gangnam_models,
-            predict_future_months,
+            _predict_gangnam_from_current_artifact,
             load_gangnam_monthly_demand,
         ),
     }
@@ -57,36 +62,18 @@ def _build_region_pipelines() -> dict[str, RegionMlPipeline]:
     return pipelines
 
 
-def _catalog_signature() -> tuple[int, int]:
-    stat = CATALOG_PATH.stat()
-    return stat.st_mtime_ns, stat.st_size
-
-
-_PIPELINE_LOCK = RLock()
-_CATALOG_SIGNATURE = _catalog_signature()
+# 모듈 시작 시 한 번 구성합니다. 원본을 바꾼 경우 서버를 재시작한 뒤 점검·재학습합니다.
 _PIPELINES = _build_region_pipelines()
-
-
-def _current_pipelines() -> dict[str, RegionMlPipeline]:
-    """검증된 카탈로그의 원자적 교체를 반영합니다. 요청 중 학습은 하지 않습니다."""
-    global _PIPELINES, _CATALOG_SIGNATURE
-    with _PIPELINE_LOCK:
-        signature = _catalog_signature()
-        if signature != _CATALOG_SIGNATURE:
-            updated = _build_region_pipelines()
-            _PIPELINES = updated
-            _CATALOG_SIGNATURE = signature
-        return _PIPELINES
 
 
 def get_region_pipeline(region_code: str) -> RegionMlPipeline:
     """등록되지 않은 지역에 강남 모델을 잘못 적용하지 않도록 명시적으로 거절합니다."""
     try:
-        return _current_pipelines()[str(region_code)]
+        return _PIPELINES[str(region_code)]
     except KeyError as exc:
         raise ValueError(f'{region_code} 지역의 ML 파이프라인이 아직 등록되지 않았습니다.') from exc
 
 
 def list_region_pipelines() -> tuple[RegionMlPipeline, ...]:
     """관리 화면·일괄 학습 CLI가 지원 지역 목록을 재사용할 수 있게 합니다."""
-    return tuple(_current_pipelines().values())
+    return tuple(_PIPELINES.values())
