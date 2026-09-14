@@ -1,5 +1,7 @@
 # 프론트엔드 연동 API 초안
 
+2026-09-14 D-154: 공개 API 변경 없음. `measurement_missing`에서 월간 주기를 인정하고 실행 단계 담당은 `task`와 `deliverable`을 함께 검사한다. 측정 분모·담당 실재 여부를 자동 승인하지 않는다. 저장 사례의 실제 로컬 작성/보완/검수는 완료했으나 의미 품질 미승인이다.
+
 2026-09-13 D-153: 공개 API/보고서 JSON 계약은 유지한다. 내부 Planner 최초 작성에는 남은 `candidate_validation_findings`를 `quality_review_feedback.scope=candidate_handoff`와 함께 전달하며 로컬 최종 JSON 직전에 원문 전체를 한 번 제공한다. 보완 작성에는 기존 검수 지시와 후보 지적을 합쳐 보존한다. 쿠폰 비용의 점포 수/지급 건수 혼동, `00%` 목표 및 함수로 변경한 사례의 의미 재검토 항목은 기존 보완 경로로 전달한다. LLM 호출 수·유료 정책·승인 기준은 변경하지 않는다. 오프라인 151개 테스트 통과이며 실제 모델 재검증은 미실행이다.
 
 D-142: API 스키마는 유지한다. `GET /ai/v1/regions/catalog`은 활성 카탈로그·모델이 갖춰진 250개 지역을 반환한다. ML 등록표는 카탈로그 교체를 다음 조회에 반영한다. `GET /ai/v1/demo/sido-comparison` 및 기획 스냅샷의 동일 시도 비교는 폴더 계층과 관계없이 등록표의 지역명·로컬 경로를 사용한다. `readiness-audit`의 `data_ready`는 데이터 검증, `generation_ready`는 데이터 검증과 현재 Qwen·Gemma 연결의 결합이며 향후 응답 품질 보장이 아니다. `audit_all_regions --data-only`는 HTTP 서버와 LLM 없이 생성 입력을 검증한다. [데이터 통합 기록](TEAM_DATA_INTEGRATION_20260911.md).
@@ -459,3 +461,7 @@ Backend는 개발용 `http://localhost:5176`, `http://127.0.0.1:5176` Origin도 
 선택 도구 단계의 `OLLAMA_OUTPUT_MISSING`도 필수 원문 조회 완료일 때에만 최종 JSON으로
 진행합니다. 사용량과 선택 단계 실패는 trace에 남깁니다. 필수 근거 누락·최종 JSON 빈 응답·
 연결 실패는 이 경로로 우회하지 않으며 검수 승인 결과를 합성하지 않습니다.
+
+D-155: Ollama 네이티브 생성 요청에 truncate=false/shift=false를 명시합니다(0.34 실측). 개인 Gemma 문맥131,072, Qwen40,960이며 공개 API 스키마/유료 호출 정책은 유지합니다. 설정한 num_ctx와 실제 할당량이 다를 수 있으므로 /api/ps 실측을 기준으로 기록합니다.
+
+네이티브 문맥 검증 opt-in: OLLAMA_NATIVE_CONTEXT_VALIDATION=true는 Ollama0.34.0 이상 버전 확인 후 서버 실제 토큰 판정에 맡깁니다. 구형/미확인 버전은 OLLAMA_NATIVE_CONTEXT_UNSUPPORTED, 실제 입력 초과는 OLLAMA_CONTEXT_BUDGET_EXCEEDED로 구분합니다. 문맥 중간 소진이나 미완성 출력은 성공 처리하지 않습니다. 공개 API 변경 없음.

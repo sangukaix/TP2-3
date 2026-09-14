@@ -622,6 +622,8 @@ class OllamaWireTests(unittest.TestCase):
         self.assertTrue(message['tool_calls'])
         self.assertNotIn('format', seen[0])
         self.assertFalse(seen[0]['think'])
+        self.assertIs(seen[0]['truncate'], False)
+        self.assertIs(seen[0]['shift'], False)
         self.assertEqual(usage['total_tokens'], 20)
 
     def test_final_structured_output_disables_thinking_and_keeps_model_loaded(self):
@@ -640,6 +642,8 @@ class OllamaWireTests(unittest.TestCase):
                                                      max_output_tokens=50))
         self.assertEqual(content, '{"answer":"ok"}')
         self.assertFalse(seen[0]['think'])
+        self.assertIs(seen[0]['truncate'], False)
+        self.assertIs(seen[0]['shift'], False)
         self.assertEqual(seen[0]['keep_alive'], '15m')
 
     def test_roles_include_factual_safety_and_causal_boundary(self):

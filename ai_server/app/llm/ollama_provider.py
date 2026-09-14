@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import math
+import re
 from time import perf_counter
 from typing import Any
 
@@ -21,11 +22,13 @@ class OllamaProvider:
     capabilities = ('structured_output', 'local_inference', 'read_only_evidence_tools')
 
     def __init__(self, *, base_url: str, default_model: str, timeout_seconds: float = 180,
-                 context_length: int = 40960) -> None:
+                 context_length: int = 40960, native_context_validation: bool = False) -> None:
         self.base_url = str(base_url or '').rstrip('/')
         self.default_model = str(default_model or '').strip()
         self.timeout_seconds = max(15.0, float(timeout_seconds))
         self.context_length = max(4096, int(context_length))
+        self.native_context_validation = native_context_validation
+        self._native_context_verified = False
 
     async def _chat(self, *, model: str, messages: list[dict[str, Any]], schema: dict | None,
                     max_output_tokens: int, tools: list[dict] | None = None,
@@ -37,6 +40,11 @@ class OllamaProvider:
             'model': model,
             'messages': messages,
             'stream': False,
+            # Ollama 0.34: preserve the entire evidence at prompt ingestion and
+            # during generation. A larger requested num_ctx can be capped by the
+            # model metadata, so our estimate alone is not sufficient protection.
+            'truncate': False,
+            'shift': False,
             # Qwen/Gemma가 각 Agent 호출 사이에 모델을 다시 올리지 않게 해 LAN GPU의
             # 첫 응답 지연을 줄입니다. 개인 노트북을 끄면 이 값도 자동으로 사라집니다.
             'keep_alive': '15m',
@@ -50,6 +58,19 @@ class OllamaProvider:
             body['think'] = think
         try:
             async with httpx.AsyncClient(timeout=self.timeout_seconds) as client:
+                if self.native_context_validation and not self._native_context_verified:
+                    version_response = await client.get(f'{self.base_url}/api/version')
+                    try:
+                        version_payload = version_response.json()
+                        version = re.fullmatch(r'(\d+)\.(\d+)\.(\d+)', str(version_payload.get('version', '')))
+                    except (ValueError, AttributeError):
+                        version = None
+                    if (version_response.status_code != 200 or not version
+                            or tuple(map(int, version.groups())) < (0, 34, 0)):
+                        raise LLMProviderError('OLLAMA_NATIVE_CONTEXT_UNSUPPORTED',
+                            '실제 토큰 기준 문맥 검증에는 Ollama 0.34.0 이상이 필요합니다. 서버 버전과 문맥 설정을 확인해주세요.',
+                            status_code=503)
+                    self._native_context_verified = True
                 response = await client.post(f'{self.base_url}/api/chat', json=body)
         except httpx.TimeoutException as exc:
             raise LLMProviderError('OLLAMA_TIMEOUT', '로컬 LLM 응답 시간이 초과되었습니다.', status_code=504) from exc
@@ -62,6 +83,10 @@ class OllamaProvider:
                 detail = str((response.json() or {}).get('error') or '').strip()
             except ValueError:
                 detail = ''
+            if ('exceed_context_size_error' in detail
+                    or 'exceeds the available context size' in detail):
+                raise LLMProviderError('OLLAMA_CONTEXT_BUDGET_EXCEEDED',
+                    '실제 입력 토큰이 로컬 모델의 문맥 한도를 넘습니다. 근거를 자르지 않고 중단했습니다.')
             suffix = f' {detail[:180]}' if detail else ''
             raise LLMProviderError('OLLAMA_REQUEST_ERROR', f'Ollama 요청이 실패했습니다. ({response.status_code}){suffix}')
         try:
@@ -116,7 +141,12 @@ class OllamaProvider:
                 # 붙은 도구 결과·스키마만 같은 한국어 추정식으로 더합니다.
                 added = {'messages': messages[len(prefix):], 'schema': schema}
                 input_budget = tokens + self._estimated_context_tokens(added)
-        if input_budget + output_limit > self.context_length:
+        # A verified strict native request is checked by the server tokenizer.
+        # Both prompt truncation and generation-time context shifting are disabled
+        # in _chat. Unknown/old servers fail before inference; no silent fallback
+        # to truncation or a weaker estimate. The requested output cap is unchanged.
+        if input_budget + output_limit > self.context_length and (
+                not self.native_context_validation or output_limit >= self.context_length):
             raise LLMProviderError('OLLAMA_CONTEXT_BUDGET_EXCEEDED',
                                    '근거 전체와 출력의 안전한 문맥 예산이 로컬 한도를 넘습니다. 근거를 자르지 않습니다.')
 

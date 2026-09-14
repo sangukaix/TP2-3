@@ -1,0 +1,35 @@
+{
+  "requested_context": 131072,
+  "load_seconds": 19.17,
+  "load_result": {
+    "model": "gemma4:26b",
+    "created_at": "2026-09-14T03:34:56.0708456Z",
+    "response": "",
+    "done": true,
+    "done_reason": "load"
+  },
+  "loaded_models": {
+    "models": [
+      {
+        "name": "gemma4:26b",
+        "model": "gemma4:26b",
+        "size": 1556862728,
+        "digest": "08ae7ec1744bd7f451c4a530afb39d2673ad9d07a8369b8a33a3613b41212a68",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "gemma4",
+          "families": [
+            "gemma4"
+          ],
+          "parameter_size": "25.2B",
+          "quantization_level": "Q4_K_M"
+        },
+        "expires_at": "2026-09-14T12:49:56.0708456+09:00",
+        "size_vram": 1116177693,
+        "context_length": 131072
+      }
+    ]
+  },
+  "paid_calls": 0
+}

@@ -68,6 +68,7 @@ class LLMRouter:
                 # 이전 32,768 기본값은 여러 공식 사례·ML·비교표를 함께 검토하는
                 # 적용성 단계에서 실제 모델 한도보다 먼저 안전 차단되는 문제가 있었습니다.
                 context_length=int(env_values.get('OLLAMA_QWEN_CONTEXT_LENGTH') or env_values.get('LOCAL_LLM_CONTEXT_LENGTH') or 40960),
+                native_context_validation=str(env_values.get('OLLAMA_NATIVE_CONTEXT_VALIDATION') or '').lower() == 'true',
             ),
             'gemma': OllamaProvider(
                 base_url=str(env_values.get('LOCAL_LLM_BASE_URL') or ''),
@@ -75,6 +76,7 @@ class LLMRouter:
                 timeout_seconds=float(env_values.get('LOCAL_LLM_TIMEOUT_SECONDS') or 1800),
                 # 모델별 문맥을 분리한다. 명시된 공통 설정은 하위 호환용으로 유지.
                 context_length=int(env_values.get('OLLAMA_GEMMA_CONTEXT_LENGTH') or env_values.get('LOCAL_LLM_CONTEXT_LENGTH') or 40960),
+                native_context_validation=str(env_values.get('OLLAMA_NATIVE_CONTEXT_VALIDATION') or '').lower() == 'true',
             ),
         }
         self.trace: list[dict[str, Any]] = []

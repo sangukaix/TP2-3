@@ -10,6 +10,7 @@ from ai_server.app.agents.planner_agent import PlannerAgent
 from ai_server.app.agents.planning_requirements import (
     candidate_delivery_issues, execution_delivery_issues, stabilize_candidate_decision,
     uses_merchant_count_for_visitor_payout, has_placeholder_rate,
+    measurement_missing,
 )
 from ai_server.app.llm.context_tables import decode_tables
 from ai_server.test_planning_requirements import pack, transfer
@@ -20,6 +21,14 @@ required_calls = local_fixtures.required_calls
 
 
 class OperationFallbackTest(unittest.TestCase):
+    def test_monthly_period_and_role_in_deliverable_are_not_missing(self):
+        self.assertNotIn('확인 주기', measurement_missing('측정주기: 월간'))
+        self.assertIn('확인 주기', measurement_missing('측정주기: 정기적으로'))
+        strategy = {'implementation_steps': [{'task': '성과 분석 및 정산', 'deliverable': '결과 보고서 | 담당: 운영 사무국'}]}
+        self.assertFalse(any('.task' in r['field'] for r in execution_delivery_issues(strategy, 'strategies[1]')))
+        strategy['implementation_steps'][0]['deliverable'] = '결과 보고서'
+        self.assertTrue(any('.task' in r['field'] for r in execution_delivery_issues(strategy, 'strategies[1]')))
+
     def test_relinked_citations_need_semantic_recomparison_not_automatic_quality_pass(self):
         original = transfer()
         original['design_candidates'][0]['case_linkage'] = {
