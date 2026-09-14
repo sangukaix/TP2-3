@@ -1,0 +1,12 @@
+{
+  "http_status": 400,
+  "response": {
+    "error": "{\"error\":{\"code\":400,\"message\":\"request (180017 tokens) exceeds the available context size (40960 tokens), try increasing it\",\"type\":\"exceed_context_size_error\",\"n_prompt_tokens\":180017,\"n_ctx\":40960}}"
+  },
+  "seconds": 2.156,
+  "input_repetitions": 45000,
+  "requested_context": 40960,
+  "truncate": false,
+  "shift": false,
+  "paid_calls": 0
+}

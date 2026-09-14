@@ -197,7 +197,7 @@ def timeframe_schedule_issues(strategy: dict[str, Any], prefix: str) -> list[dic
 def measurement_missing(text: str) -> list[str]:
     requirements = {
         '기준기간': r'기준(?:월|기간|선)|전년\s*(?:동기|같은|동월)|운영\s*전',
-        '확인 주기': r'매주|주별|주간|월별|매월|매일|일별|분기별|매\s*분기|종료\s*후',
+        '확인 주기': r'매주|주별|주간|월별|월간|매월|매일|일별|분기별|매\s*분기|종료\s*후',
         '원자료·수집방법': r'원자료|수집\s*방법|원장|기록|로그|거래내역|정산(?:자료|대장)|설문|집계표',
         '비교 대상': r'비교|대조|순차\s*도입',
         '분자·분모 또는 금액 합계 정의': r'분자.+분모|분모.+분자|취소.+(?:제외|차감)|순결제\s*(?:액|합계)',
@@ -580,7 +580,8 @@ def execution_delivery_issues(strategy: dict[str, Any], prefix: str) -> list[dic
                               '근거 없는 20%/5% 같은 문턱값을 확정하지 마세요. 근거 출처·산출 방법 또는 목표안/착수 전 확정 절차를 적으세요.'))
     steps = strategy.get('implementation_steps') or []
     for index, step in enumerate(steps, 1):
-        if not re.search(r'담당|운영자|운영팀|사업팀|업체|시청|군청|구청|사업자|평가자|협력사', str(step.get('task') or '')):
+        role_text = str(step.get('task') or '') + ' ' + str(step.get('deliverable') or '')
+        if not re.search(r'담당|운영자|운영팀|사업팀|업체|시청|군청|구청|사업자|평가자|협력사', role_text):
             problems.append(issue(prefix + f'.implementation_steps[{index}].task', '실행 단계의 담당 역할이 없습니다.',
                                   '누가 어떤 입력·확인 조건으로 실제 작업을 하는지 task에 적고 deliverable을 구체적으로 유지하세요.'))
     return problems
