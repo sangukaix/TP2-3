@@ -1538,42 +1538,6 @@ async def download_saved_strategy_document(report_id: str, file_format: Literal[
     return StreamingResponse(BytesIO(content), media_type=media_type, headers={'Content-Disposition': f'attachment; filename="tourism-strategy-proposal.{file_format}"'})
 
 
-@app.get('/ai/v1/ml/{region_code}/model-status')
-async def read_ml_model_status(region_code: str) -> dict[str, Any]:
-    """저장된 ML 모델의 활성 계열·평가 메타데이터를 반환합니다."""
-    artifact_directory = PROJECT_ROOT / 'artifacts' / 'ml' / str(region_code)
-    model_path = artifact_directory / 'demand_model.joblib'
-    metadata_path = artifact_directory / 'demand_model.metadata.json'
-    if not model_path.is_file() or not metadata_path.is_file():
-        raise HTTPException(status_code=404, detail={'code': 'ML_MODEL_NOT_FOUND', 'message': f'지역 {region_code}의 모델 파일이 없습니다.'})
-    try:
-        metadata = json.loads(metadata_path.read_text(encoding='utf-8'))
-    except (OSError, json.JSONDecodeError) as exc:
-        raise HTTPException(status_code=503, detail={'code': 'ML_METADATA_UNAVAILABLE', 'message': 'ML 모델 메타데이터를 읽지 못했습니다.'}) from exc
-    families = metadata.get('model_families') or []
-    evaluation_by_family = metadata.get('evaluation_by_family') or {}
-    # 학습 당시 저장된 기본값이 아니라, 현재 예측에 실제로 사용하는
-    # model_switch_002.py의 스위치를 화면에도 표시합니다.
-    active_family = metadata.get('active_model_family') or 'random_forest'
-    active_model_name = active_family
-    if str(region_code) == '11680':
-        from ..ml.model_switch_002 import ACTIVE_MODEL_FAMILY, get_active_model_family
-        active_model_name = ACTIVE_MODEL_FAMILY
-        active_family = get_active_model_family()
-    return {
-        'region_code': str(region_code),
-        'model_version': metadata.get('version', ''),
-        'source_period': metadata.get('source_period', ''),
-        'test_period': metadata.get('test_period', ''),
-        'active_model_family': active_family,
-        'active_model_name': active_model_name,
-        'trained_model_families': list(families),
-        'evaluation_by_family': evaluation_by_family,
-        'evaluation': evaluation_by_family.get(active_family) or metadata.get('evaluation') or {},
-        'target': metadata.get('target') or {},
-    }
-
-
 @app.get('/ai/v1/ml/{region_code}/planning-evidence', response_model=PlanningMlEvidence)
 async def read_planning_ml_evidence(region_code: str, region_name: str) -> PlanningMlEvidence:
     """유료 API 없이 기획 Agent에 전달될 ML 전망·오차·조사 질문을 확인합니다."""
