@@ -2245,7 +2245,7 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 .dashboard-top-grid--map-first .region-select-label svg{right:7px; width:14px; height:14px;}
 
 @media(max-width:500px){
-  .workspace-content .dashboard-section--hero{margin-top:16px;}
+  .workspace-content .dashboard-section--hero{margin-top:0;}
   .workspace-content .dashboard-section--hero .dashboard-top-grid{margin-top:8px;}
   .dashboard-top-grid--map-first .map-selection-controls{grid-template-columns:1fr;}
   .map-region-search-message{grid-column:auto;}
@@ -2349,8 +2349,10 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
   background:rgb(239 251 255 / 88%); box-shadow:0 4px 12px rgb(52 137 170 / 12%);
   z-index:2; font-size:10px; line-height:1.2; text-align:center; opacity:0; transform:translate(-50%,-50%);}
 .monthly-trend-forecast-zone{position:absolute; z-index:0; top:28px; right:20px; bottom:42px; left:50%;
-  border-left:1px solid rgb(180 128 169 / 35%); background:linear-gradient(90deg,rgb(245 221 235 / 30%),rgb(239 224 244 / 46%));
+  border-left:1px solid rgb(180 128 169 / 35%); background:transparent;
   display:flex; align-items:center; justify-content:center; overflow:hidden; pointer-events:none; transition:background .35s ease, border-color .35s ease;}
+.monthly-trend-forecast-zone::before{content:''; position:absolute; z-index:0; top:0; right:54px; bottom:0; left:0;
+  background:linear-gradient(90deg,rgb(245 221 235 / 30%),rgb(239 224 244 / 46%)); pointer-events:none;}
 .monthly-trend-forecast-loading-video{position:absolute; top:0; right:0; left:0; z-index:3; display:block; width:100%; height:calc(100% - 32px); object-fit:contain; object-position:center bottom; background:transparent; pointer-events:none; opacity:1; transition:opacity .45s ease;}
 .monthly-trend-forecast-loading-video.is-fading{opacity:0;}
 .monthly-trend-forecast-status{position:absolute; top:50%; left:50%; display:block; width:max-content; max-width:calc(100% - 18px);
@@ -2599,6 +2601,7 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 @media(max-width:500px){
   .workspace-sidebar,  .workspace-topbar{display:none;}
   .workspace-main{margin-left:0;}  .workspace-content{padding:0 14px 138px;}
+  .workspace-content:has(.dashboard-section){padding-top:18px;}
   .workspace-mobile-nav{position:fixed; z-index:1000; right:0; bottom:0; left:0; display:grid;
     height:124px; grid-template-columns:repeat(2,1fr); grid-template-rows:repeat(2,1fr);
     border-top:1px solid #67c3cd66;  background:linear-gradient(105deg,#08263f,#163b59);}
@@ -2609,6 +2612,14 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
   .workspace-content .dashboard-section{width:100%;}
   .dashboard-top-grid--map-first>.map-panel{min-height:560px;}
   .dashboard-top-grid--map-first .map-frame{min-height:430px;}
+  /* 모바일 차트는 축 폭만 줄여 실제 plot 영역을 넓히고, 예측 배경을 plot 경계에 맞춥니다. */
+  .workspace-shell:has(.dashboard-section) .trend-chart-wrap{padding:10px 4px 18px;}
+  .workspace-shell:has(.dashboard-section) .tourism-chart-legend{gap:8px; font-size:9px; flex-wrap:wrap;}
+  /* plot 경계(좌 38px, 우 44px)의 실제 중앙을 기준으로 50:50 분할합니다. */
+  .monthly-trend-chart--forecast .monthly-trend-actual-zone{left:38px; right:calc(50% + 3px);}
+  .monthly-trend-chart--forecast .monthly-trend-forecast-zone{right:44px; left:calc(50% - 3px);}
+  /* 모바일 zone 자체가 margin(4px)+오른쪽 YAxis(40px)를 이미 제외합니다. */
+  .monthly-trend-chart--forecast .monthly-trend-forecast-zone::before{right:0;}
 }
 /*지역선택 대시보드의 야간 데이터 테마를 기획·저장 업무 화면에도 공통 적용합니다.*/
 .workspace-shell:not(:has(.dashboard-section)){
@@ -2871,7 +2882,7 @@ html[data-theme='night'] .global-header-actions button:focus-visible{
 /* 버튼 스타일 - 데이 모드 */
 html[data-theme='day'] .global-header-actions button{
   position:relative;  height:44px;  padding:0 20px;  border:2px solid rgb(154 181 204 / 60%);  border-radius:12px;
-  color:#173b57;  font-size:15px;  font-weight:700;  letter-spacing:-0.02em;
+  color:#173b57;  font-size:16px;  font-weight:700;  letter-spacing:-0.02em;
   background: linear-gradient(180deg,  rgb(255 255 255 / 98%) 0%,  rgb(246 250 252 / 98%) 100%);
   box-shadow: 0 4px 12px rgb(45 79 108 / 10%),  inset 0 1px 0 rgb(255 255 255 / 100%);
   backdrop-filter:blur(8px);  -webkit-backdrop-filter:blur(8px);  overflow:hidden;
@@ -2926,10 +2937,14 @@ html[data-theme='day'] .global-header-actions button:focus-visible{
   .global-header-actions{right:calc(100vw - 830px);}
 }
 @media(max-width:500px){
-  :root{--mobile-global-header-height:106px;}
-  .home-header>div{height:var(--mobile-global-header-height);}
+  :root{--mobile-global-header-height:104px;}
+  .home-header,
+  .workspace-shell>.workspace-global-header{height:var(--mobile-global-header-height); box-sizing:border-box;}
+  .home-header>div,
+  .workspace-global-header>div{height:100%;}
   .home-brand-wrap{height:100%; box-sizing:border-box; flex-direction:column; align-items:center;
-    justify-content:center; gap:4px;}
+    justify-content:flex-start; gap:0; padding-top:4px;}
+  .home-brand-wrap .home-brand-logo{margin:0 2px;}
   .home-brand-wrap .global-header-actions{position:static; right:auto; top:auto; width:100%; box-sizing:border-box;
     justify-content:center; gap:4px; padding:0 4px; transform:none;}
   .account-header{height:var(--mobile-global-header-height);}
@@ -2944,6 +2959,9 @@ html[data-theme='day'] .global-header-actions button:focus-visible{
     width:100%; box-sizing:border-box; justify-content:center; gap:4px; margin-left:0; padding:0 4px; transform:none;}
   .global-header-actions button{min-width:0; height:30px; flex:0 1 auto; padding:0 5px; border-width:1px;
     font-size:9px; white-space:nowrap;}
+  /* HeaderActions가 있는 Home/Workspace의 고정 헤더와 본문 offset을 동일하게 유지합니다. */
+  .tourism-home,
+  .workspace-shell{padding-top:var(--mobile-global-header-height);}
 }
 /* 계정 페이지 로고는 wrapper가 아니라 실제 이미지가 본문 폭을 모두 사용합니다. */
 .signup-header.account-header,
