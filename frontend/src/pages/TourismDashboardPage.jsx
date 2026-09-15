@@ -542,13 +542,37 @@ function MonthlyActualTrendChart({ trend, height = 278, emptyMessage = '월간 �
   const hasForecast = Boolean(trend?.some((point) => point.is_forecast))
   const forecastKey = trend?.filter((point) => point.is_forecast).map((point) => point.month).join('|') || ''
   const forecastCount = trend?.filter((point) => point.is_forecast).length || 0
+  const [isMobileChart, setIsMobileChart] = useState(() => (
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 500px)').matches
+  ))
   const [forecastRevealCount, setForecastRevealCount] = useState(0)
   const [showForecastBridge, setShowForecastBridge] = useState(false)
   const [forecastVideoState, setForecastVideoState] = useState('playing')
   const [forecastRevealStart, setForecastRevealStart] = useState(null)
   const forecastRevealStartedRef = useRef(false)
   const formatVisitorTick = (value) => `${Math.round(value / 10_000).toLocaleString('ko-KR')}만`
+  const formatMobileVisitorTick = (value) => {
+    const amount = Math.round(value / 10_000)
+    return amount === 0 ? '0' : `${amount}만`
+  }
   const formatSpendingTick = (value) => `${Math.round(value / 100_000_000).toLocaleString('ko-KR')}억`
+  const formatMobileSpendingTick = (value) => {
+    const amount = Number(value) / 100_000_000
+    if (!Number.isFinite(amount) || amount === 0) return '0'
+    if (amount >= 1_000) {
+      const thousands = amount / 1_000
+      return `${Number.isInteger(thousands) ? thousands : thousands.toFixed(1)}천억`
+    }
+    return `${Math.round(amount)}억`
+  }
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 500px)')
+    const handleViewportChange = () => setIsMobileChart(mediaQuery.matches)
+    handleViewportChange()
+    mediaQuery.addEventListener?.('change', handleViewportChange)
+    return () => mediaQuery.removeEventListener?.('change', handleViewportChange)
+  }, [])
   const startForecastReveal = useCallback(() => {
     if (forecastRevealStartedRef.current) return
     forecastRevealStartedRef.current = true
@@ -638,6 +662,9 @@ function MonthlyActualTrendChart({ trend, height = 278, emptyMessage = '월간 �
   }))
   const visitorAxisMax = paddedAxisMax(Math.max(...chartData.map((point) => Number(point.visitors) || 0)))
   const spendingAxisMax = paddedAxisMax(Math.max(...chartData.map((point) => Number(point.spending_krw) || 0)))
+  const chartMargin = isMobileChart
+    ? { top: 28, right: 4, left: 4, bottom: 10 }
+    : { top: 28, right: 20, left: 14, bottom: 10 }
   return (
     <div className={`monthly-trend-chart${hasForecast ? ' monthly-trend-chart--forecast' : ''}${showForecast ? ' is-ready' : ' is-loading'}`}>
       {hasForecast && (
@@ -665,11 +692,11 @@ function MonthlyActualTrendChart({ trend, height = 278, emptyMessage = '월간 �
         </>
       )}
       <ResponsiveContainer width="100%" height={height}>
-      <ComposedChart data={bridgeData} margin={{ top: 28, right: 20, left: 14, bottom: 10 }}>
+      <ComposedChart data={bridgeData} margin={chartMargin}>
         <CartesianGrid stroke="#dfe5ea" strokeDasharray="0" vertical={false} />
-        <XAxis dataKey="month" axisLine={{ stroke: '#2f3640' }} tickLine={{ stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: 11 }} />
-        <YAxis yAxisId="visitors" axisLine={{ stroke: '#2f3640' }} tickLine={{ stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: 10 }} width={54} tickFormatter={formatVisitorTick} domain={[0, visitorAxisMax]} />
-        <YAxis yAxisId="spending" orientation="right" axisLine={{ stroke: '#2f3640' }} tickLine={{ stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: 10 }} width={54} tickFormatter={formatSpendingTick} domain={[0, spendingAxisMax]} />
+        <XAxis dataKey="month" axisLine={{ stroke: '#2f3640' }} tickLine={{ stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: isMobileChart ? 9 : 11 }} tickMargin={isMobileChart ? 2 : 5} />
+        <YAxis yAxisId="visitors" axisLine={{ stroke: '#2f3640' }} tickLine={isMobileChart ? false : { stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: isMobileChart ? 9 : 10 }} width={isMobileChart ? 34 : 54} tickMargin={isMobileChart ? 2 : 5} tickFormatter={isMobileChart ? formatMobileVisitorTick : formatVisitorTick} domain={[0, visitorAxisMax]} />
+        <YAxis yAxisId="spending" orientation="right" axisLine={{ stroke: '#2f3640' }} tickLine={isMobileChart ? false : { stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: isMobileChart ? 9 : 10 }} width={isMobileChart ? 40 : 54} tickMargin={isMobileChart ? 2 : 5} tickFormatter={isMobileChart ? formatMobileSpendingTick : formatSpendingTick} domain={[0, spendingAxisMax]} />
         <ChartTooltip cursor={{ fill: '#1fbac80d' }} content={<TourismChartTooltip />} />
         <Legend verticalAlign="bottom" content={<TourismChartLegend />} />
         <Bar yAxisId="visitors" dataKey="visitors" name={TOURISM_CHART_CONFIG.visitors.label} fill={TOURISM_CHART_CONFIG.visitors.color} barSize={25} radius={[4, 4, 0, 0]}>
