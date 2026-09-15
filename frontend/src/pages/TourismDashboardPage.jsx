@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   ChevronDown,
   ChevronUp,
@@ -29,7 +29,7 @@ import {
 import { downloadAiStrategyPresentation, downloadAiStrategyProposal, getAiRegionDashboard, getAiRegionOpenApiInfo, getSidoBoundaries, getSigunguBoundaries } from '../api/dashboardApi'
 import TourismAssistant from '../components/TourismAssistant'
 import WorkspaceShell from '../components/WorkspaceShell'
-import loadingImage from '../assets/loading2.png'
+import predictionLoadingVideo from '../assets/prediction-animation-alpha-v7.webm'
 import '../App.css'
 
 // 섬이 많거나 길쭉한 시도는 도형의 가운데에 자동으로 이름을 찍으면 글자가 바다 쪽으로 밀릴 수 있습니다.
@@ -526,6 +526,7 @@ function TourismChartLegend({ payload }) {
   return (
     <ul className="tourism-chart-legend" aria-label="그래프 항목">
       {payload.map((entry) => {
+        if (entry.dataKey === 'spending_bridge_krw') return null
         const series = TOURISM_CHART_CONFIG[entry.dataKey]
         return <li key={entry.dataKey}><i style={{ background: series?.color ?? entry.color }} />{series?.label ?? entry.value}{entry.dataKey === 'visitors' && <small>(만 단위)</small>}</li>
       })}
@@ -540,22 +541,58 @@ function TourismChartLegend({ payload }) {
 function MonthlyActualTrendChart({ trend, height = 278, emptyMessage = '월간 원자료를 불러오는 중입니다.' }) {
   const hasForecast = Boolean(trend?.some((point) => point.is_forecast))
   const forecastKey = trend?.filter((point) => point.is_forecast).map((point) => point.month).join('|') || ''
-  const [forecastVisible, setForecastVisible] = useState(false)
+  const forecastCount = trend?.filter((point) => point.is_forecast).length || 0
+  const [forecastRevealCount, setForecastRevealCount] = useState(0)
+  const [showForecastBridge, setShowForecastBridge] = useState(false)
+  const [forecastVideoState, setForecastVideoState] = useState('playing')
+  const [forecastRevealStart, setForecastRevealStart] = useState(null)
+  const forecastRevealStartedRef = useRef(false)
   const formatVisitorTick = (value) => `${Math.round(value / 10_000).toLocaleString('ko-KR')}만`
   const formatSpendingTick = (value) => `${Math.round(value / 100_000_000).toLocaleString('ko-KR')}억`
+  const startForecastReveal = useCallback(() => {
+    if (forecastRevealStartedRef.current) return
+    forecastRevealStartedRef.current = true
+    setForecastVideoState('fading')
+    setForecastRevealStart(Date.now())
+  }, [])
+
   useEffect(() => {
-    if (!hasForecast) {
-      setForecastVisible(true)
+    if (!hasForecast || forecastCount === 0) {
+      setForecastRevealCount(forecastCount)
+      setShowForecastBridge(false)
+      setForecastVideoState('hidden')
+      setForecastRevealStart(null)
       return undefined
     }
-    setForecastVisible(false)
-    const timer = window.setTimeout(() => setForecastVisible(true), 6000)
-    return () => window.clearTimeout(timer)
-  }, [hasForecast, forecastKey])
+    setForecastRevealCount(0)
+    setShowForecastBridge(false)
+    setForecastVideoState('playing')
+    setForecastRevealStart(null)
+    forecastRevealStartedRef.current = false
+    // WebM이 정상적으로 끝나지 않는 환경을 위한 안전장치입니다.
+    const fallbackTimer = window.setTimeout(startForecastReveal, 7000)
+    return () => window.clearTimeout(fallbackTimer)
+  }, [hasForecast, forecastCount, forecastKey, startForecastReveal])
 
-  const showForecast = !hasForecast || forecastVisible
+  useEffect(() => {
+    if (!forecastRevealStart) return undefined
+    const timers = Array.from({ length: forecastCount }, (_, index) => (
+      window.setTimeout(() => setForecastRevealCount(index + 1), index * 500)
+    ))
+    // 마지막 예측월 공개와 라벨 bounce(1.65초)가 끝난 뒤 bridge를 그립니다.
+    timers.push(window.setTimeout(() => setShowForecastBridge(true), 1650))
+    return () => timers.forEach((timer) => window.clearTimeout(timer))
+  }, [forecastRevealStart, forecastCount])
+
+  useEffect(() => {
+    if (forecastVideoState !== 'fading') return undefined
+    const timer = window.setTimeout(() => setForecastVideoState('hidden'), 450)
+    return () => window.clearTimeout(timer)
+  }, [forecastVideoState])
+
+  const showForecast = !hasForecast || forecastRevealCount > 0
   const renderVisitorBarLabel = ({ x, y, width, height: barHeight, value, payload }) => {
-    if (payload?.is_forecast && !showForecast) return null
+    if (hasForecast && (!payload || (payload.is_forecast && payload.forecastIndex >= forecastRevealCount))) return null
     const amount = Number(value)
     // 매우 낮은 막대는 두 줄 라벨이 겹칠 수 있어 표시하지 않습니다.
     if (!Number.isFinite(amount) || Number(barHeight) < 32) return null
@@ -581,24 +618,54 @@ function MonthlyActualTrendChart({ trend, height = 278, emptyMessage = '월간 �
 
   if (!trend?.length) return <div className="trend-empty-state">{emptyMessage}</div>
   // 관측선은 실제 마지막 월에서 끝내고, 예측선은 그 지점에서 이어서 다른 색으로 표시합니다.
-  const chartData = trend.map((point) => ({
+  let forecastIndex = 0
+  const chartData = trend.map((point) => {
+    const pointForecastIndex = point.is_forecast ? forecastIndex++ : -1
+    const isForecastVisible = !point.is_forecast || pointForecastIndex < forecastRevealCount
+    return {
+      ...point,
+      forecastIndex: pointForecastIndex,
+      spending_actual_krw: point.is_forecast ? null : point.spending_krw,
+      // 예측선은 공개된 예측월까지만 그려 실제선과 단계적으로 이어집니다.
+      spending_forecast_krw: point.is_forecast && isForecastVisible ? point.spending_krw : null,
+    }
+  })
+  const lastActualIndex = chartData.reduce((lastIndex, point, index) => (point.is_forecast ? lastIndex : index), -1)
+  const firstForecastIndex = chartData.findIndex((point) => point.is_forecast)
+  const bridgeData = chartData.map((point, index) => ({
     ...point,
-    spending_actual_krw: point.is_forecast ? null : point.spending_krw,
-    // 예측선은 첫 예측월(8월)부터만 그려 실제선(7월까지)과 색이 섞이지 않게 합니다.
-    spending_forecast_krw: point.is_forecast ? point.spending_krw : null,
+    spending_bridge_krw: index === lastActualIndex || index === firstForecastIndex ? point.spending_krw : null,
   }))
   const visitorAxisMax = paddedAxisMax(Math.max(...chartData.map((point) => Number(point.visitors) || 0)))
   const spendingAxisMax = paddedAxisMax(Math.max(...chartData.map((point) => Number(point.spending_krw) || 0)))
   return (
     <div className={`monthly-trend-chart${hasForecast ? ' monthly-trend-chart--forecast' : ''}${showForecast ? ' is-ready' : ' is-loading'}`}>
       {hasForecast && (
-        <div className="monthly-trend-forecast-zone" aria-live="polite">
-          <img className="monthly-trend-forecast-loading-image" src={loadingImage} alt="예측 데이터 계산 중" />
-          <span className="monthly-trend-forecast-status">{showForecast ? '예측' : '예측 데이터 계산 중...'}</span>
-        </div>
+        <>
+          <div className="monthly-trend-actual-zone" aria-label="최근 3개월">
+            <span className="monthly-trend-actual-status">최근 3개월</span>
+          </div>
+          <div className="monthly-trend-forecast-zone" aria-live="polite">
+            {forecastVideoState !== 'hidden' && (
+              <video
+                key={forecastKey}
+                className={`monthly-trend-forecast-loading-video${forecastVideoState === 'fading' ? ' is-fading' : ''}`}
+                src={predictionLoadingVideo}
+                autoPlay
+                muted
+                playsInline
+                preload="auto"
+                aria-hidden="true"
+                onEnded={startForecastReveal}
+                onError={startForecastReveal}
+              />
+            )}
+            <span className="monthly-trend-forecast-status">{showForecast ? '예측' : '예측 데이터 계산 중...'}</span>
+          </div>
+        </>
       )}
       <ResponsiveContainer width="100%" height={height}>
-      <ComposedChart data={chartData} margin={{ top: 28, right: 20, left: 14, bottom: 10 }}>
+      <ComposedChart data={bridgeData} margin={{ top: 28, right: 20, left: 14, bottom: 10 }}>
         <CartesianGrid stroke="#dfe5ea" strokeDasharray="0" vertical={false} />
         <XAxis dataKey="month" axisLine={{ stroke: '#2f3640' }} tickLine={{ stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: 11 }} />
         <YAxis yAxisId="visitors" axisLine={{ stroke: '#2f3640' }} tickLine={{ stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: 10 }} width={54} tickFormatter={formatVisitorTick} domain={[0, visitorAxisMax]} />
@@ -607,12 +674,15 @@ function MonthlyActualTrendChart({ trend, height = 278, emptyMessage = '월간 �
         <Legend verticalAlign="bottom" content={<TourismChartLegend />} />
         <Bar yAxisId="visitors" dataKey="visitors" name={TOURISM_CHART_CONFIG.visitors.label} fill={TOURISM_CHART_CONFIG.visitors.color} barSize={25} radius={[4, 4, 0, 0]}>
           {/* 8월부터는 저장 모델의 예측값이므로 실제값과 부드러운 보라색으로 구분합니다. */}
-          {chartData.map((point) => <Cell key={`visitor-${point.month}`} className={point.is_forecast ? 'monthly-trend-forecast-cell' : undefined} fill={point.is_forecast ? '#7a87d8' : TOURISM_CHART_CONFIG.visitors.color} opacity={point.is_forecast && !showForecast ? 0 : 1} />)}
+          {chartData.map((point) => <Cell key={`visitor-${point.month}`} className={point.is_forecast ? 'monthly-trend-forecast-cell' : undefined} fill={point.is_forecast ? '#7a87d8' : TOURISM_CHART_CONFIG.visitors.color} opacity={point.is_forecast && point.forecastIndex >= forecastRevealCount ? 0 : 1} />)}
           {/* 막대 내부 중앙에 두 줄로 표시해 어떤 화면 크기에서도 라벨이 막대 밖으로 튀지 않게 합니다. */}
           <LabelList content={renderVisitorBarLabel} />
         </Bar>
         <Line yAxisId="spending" type="monotone" dataKey="spending_actual_krw" name={TOURISM_CHART_CONFIG.spending_krw.label} stroke={TOURISM_CHART_CONFIG.spending_krw.color} strokeWidth={3.5} dot={{ r: 4, fill: '#fff', stroke: TOURISM_CHART_CONFIG.spending_krw.color, strokeWidth: 2 }} activeDot={{ r: 6 }} />
         <Line yAxisId="spending" type="monotone" dataKey="spending_forecast_krw" name="관광소비액 예상" stroke="#ee7180" strokeWidth={3.5} dot={{ r: 4, fill: '#fff', stroke: '#ee7180', strokeWidth: 2 }} activeDot={{ r: 6 }} legendType="none" opacity={showForecast ? 1 : 0} />
+        {showForecastBridge && lastActualIndex >= 0 && firstForecastIndex >= 0 && (
+          <Line yAxisId="spending" type="monotone" dataKey="spending_bridge_krw" name="" stroke="#16a34a" strokeWidth={3.5} dot={false} activeDot={false} connectNulls legendType="none" isAnimationActive animationDuration={600} animationEasing="ease-out" />
+        )}
       </ComposedChart>
       </ResponsiveContainer>
     </div>

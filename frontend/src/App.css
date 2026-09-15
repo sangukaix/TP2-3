@@ -2342,19 +2342,53 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 .monthly-trend-chart{position:relative; width:100%; height:100%;}
 .monthly-trend-chart--forecast{isolation:isolate; overflow:hidden;}
 .monthly-trend-chart--forecast>.recharts-responsive-container{position:relative; z-index:1;}
+.monthly-trend-actual-zone{position:absolute; z-index:0; top:28px; right:50%; bottom:42px; left:68px;
+  background:rgb(220 243 250 / 45%); pointer-events:none;}
+.monthly-trend-actual-status{position:absolute; top:50%; left:50%; display:block; width:max-content; max-width:calc(100% - 18px);
+  padding:6px 9px; border:1px solid rgb(126 190 215 / 45%); border-radius:999px; color:#397e9a;
+  background:rgb(239 251 255 / 88%); box-shadow:0 4px 12px rgb(52 137 170 / 12%);
+  z-index:2; font-size:10px; line-height:1.2; text-align:center; opacity:0; transform:translate(-50%,-50%);}
 .monthly-trend-forecast-zone{position:absolute; z-index:0; top:28px; right:20px; bottom:42px; left:50%;
   border-left:1px solid rgb(180 128 169 / 35%); background:linear-gradient(90deg,rgb(245 221 235 / 30%),rgb(239 224 244 / 46%));
   display:flex; align-items:center; justify-content:center; overflow:hidden; pointer-events:none; transition:background .35s ease, border-color .35s ease;}
-.monthly-trend-forecast-loading-image{display:block; width:min(88%, 220px); max-width:calc(100% - 18px); max-height:68%; height:auto; object-fit:contain; opacity:1; transition:opacity .45s ease;}
+.monthly-trend-forecast-loading-video{position:absolute; top:0; right:0; left:0; z-index:3; display:block; width:100%; height:calc(100% - 32px); object-fit:contain; object-position:center bottom; background:transparent; pointer-events:none; opacity:1; transition:opacity .45s ease;}
+.monthly-trend-forecast-loading-video.is-fading{opacity:0;}
 .monthly-trend-forecast-status{position:absolute; top:50%; left:50%; display:block; width:max-content; max-width:calc(100% - 18px);
   padding:6px 9px; border:1px solid rgb(190 145 181 / 38%); border-radius:999px; color:#806779;
   background:rgb(255 249 253 / 82%); box-shadow:0 4px 12px rgb(120 83 125 / 10%);
-  font-size:10px; line-height:1.2; text-align:center; opacity:0; transform:translate(-50%,-50%); transition:opacity .4s ease;}
-.monthly-trend-chart--forecast.is-ready .monthly-trend-forecast-loading-image{opacity:0;}
-.monthly-trend-chart--forecast.is-ready .monthly-trend-forecast-status{color:#765f8b; background:rgb(250 244 255 / 72%); opacity:1;}
+  z-index:2; font-size:10px; line-height:1.2; text-align:center; opacity:0; transform:translate(-50%,-50%); transition:opacity .4s ease;}
+.monthly-trend-chart--forecast.is-ready .monthly-trend-forecast-status{color:#173B57; background:rgb(250 244 255 / 72%); opacity:1; animation:forecast-label-bounce-in 1.65s cubic-bezier(.22,.8,.28,1) both;}
+.monthly-trend-chart--forecast.is-ready .monthly-trend-actual-status{opacity:1; animation:actual-label-bounce-in 1.65s cubic-bezier(.22,.8,.28,1) both;}
 .monthly-trend-chart--forecast .monthly-trend-forecast-cell,
 .monthly-trend-chart--forecast .recharts-line-curve,
 .monthly-trend-chart--forecast .recharts-line-dot{transition:opacity .45s ease;}
+@keyframes forecast-label-bounce-in{
+  0%{left:88%; top:78%; opacity:0; transform:translate(-50%,-50%) scale(.94);}
+  8%{left:84%; top:61%; opacity:1; transform:translate(-50%,-50%) scale(.98);}
+  23%{left:73%; top:4%; opacity:1; transform:translate(-50%,-50%) scale(1.03);}
+  37%{left:65%; top:34%; transform:translate(-50%,-50%) scale(.99);}
+  52%{left:57%; top:17%; transform:translate(-50%,-50%) scale(1.01);}
+  67%{left:51%; top:39%; transform:translate(-50%,-50%) scale(.995);}
+  81%{left:45%; top:5%; transform:translate(-50%,-50%) scale(1.015);}
+  89%{left:43%; top:11%; transform:translate(-50%,-50%) scale(.998);}
+  95%{left:42%; top:6%; transform:translate(-50%,-50%) scale(1.005);}
+  100%{left:42%; top:8%; opacity:1; transform:translate(-50%,-50%) scale(1);}
+}
+@keyframes actual-label-bounce-in{
+  0%{left:50%; top:-18%; opacity:0; transform:translate(-50%,-50%) scale(.94);}
+  10%{left:50%; top:1%; opacity:1; transform:translate(-50%,-50%) scale(.99);}
+  25%{left:50%; top:13%; transform:translate(-50%,-50%) scale(1.035);}
+  39%{left:50%; top:5%; transform:translate(-50%,-50%) scale(.99);}
+  54%{left:50%; top:10%; transform:translate(-50%,-50%) scale(1.012);}
+  68%{left:50%; top:7%; transform:translate(-50%,-50%) scale(.998);}
+  82%{left:50%; top:9%; transform:translate(-50%,-50%) scale(1.006);}
+  92%{left:50%; top:8%; transform:translate(-50%,-50%) scale(1.002);}
+  100%{left:50%; top:8%; opacity:1; transform:translate(-50%,-50%) scale(1);}
+}
+@media (prefers-reduced-motion: reduce){
+  .monthly-trend-chart--forecast.is-ready .monthly-trend-forecast-status{animation:none; left:42%; top:8%; opacity:1; transform:translate(-50%,-50%);}
+  .monthly-trend-chart--forecast.is-ready .monthly-trend-actual-status{animation:none; left:50%; top:8%; opacity:1; transform:translate(-50%,-50%);}
+}
 
 .planning-page .work-region-picker{display:flex; align-items:center; gap:10px; min-width:280px;}
 .planning-page .work-region-picker span{margin:0; white-space:nowrap;}
@@ -2780,10 +2814,98 @@ footer{display:flex; justify-content:space-between; gap:20px; padding:24px max(2
 .home-brand-wrap {position: relative; width: 100%; display: flex; align-items: center;}
 .global-header-actions{position:absolute; right:40px; top:50%; display:flex; align-items:center; gap:16px;
   transform:translateY(-50%);}
-.global-header-actions button{
-  min-width:90px; height:38px; padding:0 18px; border:2px solid red; border-radius:10px; cursor:pointer;
-  font-weight:700;
+/* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+  /* 재근 - 버튼 스타일 */
+/* .global-header-actions button{
+  height: 44px;  padding: 0 18px;  border-radius: 12px;  font-size: 16px;  font-weight: 700;  letter-spacing: -0.02em;
+  transition: all 0.22s ease;  border: 1px solid transparent; box-shadow: 0 4px 14px rgba(22, 59, 97, 0.08);  color: #fff;
+  background:linear-gradient(105deg,#28b4c1,#536dcf 62%,#876bc5); box-shadow:0 8px 18px #174b7860;
+} */
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* 버튼 스타일 - 나잇 모드 */
+html[data-theme='night'] .global-header-actions button{
+  position:relative;  height:44px;  padding:0 20px;  border:2px solid rgb(104 189 220 / 58%);  border-radius:12px;
+  color:#f8fbff;  font-size:16px;  font-weight:700;  letter-spacing:-0.02em;  
+  background:
+    linear-gradient(180deg,  rgb(25 67 96 / 92%) 0%,  rgb(10 47 75 / 94%) 100%);
+  box-shadow:  0 4px 12px rgb(0 10 30 / 28%),  inset 0 1px 0 rgb(255 255 255 / 10%);
+  backdrop-filter:blur(8px);   -webkit-backdrop-filter:blur(8px);
+  transition: transform .22s ease,  border-color .22s ease,  box-shadow .22s ease,  background .22s ease;  overflow:hidden;
 }
+/* 상단의 얇은 '서울 야경 불빛' 포인트 */
+html[data-theme='night'] .global-header-actions button::before{
+  content:'';  position:absolute;  top:0;  left:10px;  right:10px;  height:2px;  border-radius:0 0 999px 999px;
+  background:#46d9ea;  box-shadow: 0 0 8px rgb(70 217 234 / 70%),   0 0 16px rgb(70 217 234 / 25%);
+}
+/* 회원가입 - 청록 야경 */
+html[data-theme='night'] .global-header-actions button:nth-child(1)::before{
+  background:#39d6d7;  box-shadow: 0 0 8px rgb(57 214 215 / 75%),   0 0 16px rgb(57 214 215 / 28%);
+}
+/* 로그인 - 서울 야경 블루 */
+html[data-theme='night'] .global-header-actions button:nth-child(2)::before{
+  background:#55a6ff;  box-shadow: 0 0 8px rgb(85 166 255 / 75%),   0 0 16px rgb(85 166 255 / 26%);
+}
+/* My Page - 보라빛 도심 조명 */
+html[data-theme='night'] .global-header-actions button:nth-child(3)::before{
+  background:#8e79ea;  box-shadow: 0 0 8px rgb(142 121 234 / 70%),  0 0 16px rgb(142 121 234 / 26%);
+}
+/* Day Mode - 남산/도시의 따뜻한 불빛 */
+html[data-theme='night'] .global-header-actions button:nth-child(4)::before{
+  background:#f2b84b;  box-shadow: 0 0 8px rgb(242 184 75 / 72%),   0 0 16px rgb(242 184 75 / 24%);
+}
+/* hover */
+html[data-theme='night'] .global-header-actions button:hover{
+  transform:translateY(-2px);  border-color:rgb(122 216 239 / 58%);
+  background: linear-gradient(180deg,  rgb(32 82 113 / 96%) 0%,  rgb(12 55 85 / 98%) 100%);
+  box-shadow: 0 7px 18px rgb(0 11 32 / 34%),  0 0 18px rgb(54 177 216 / 12%),  inset 0 1px 0 rgb(255 255 255 / 14%);
+}
+/* active */
+html[data-theme='night'] .global-header-actions button:active{
+  transform:translateY(0);  box-shadow: 0 3px 8px rgb(0 10 30 / 28%),  inset 0 2px 5px rgb(0 0 0 / 18%);
+}
+/* focus */
+html[data-theme='night'] .global-header-actions button:focus-visible{
+  outline:3px solid rgb(66 205 230 / 22%); outline-offset:3px;
+}
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* 버튼 스타일 - 데이 모드 */
+html[data-theme='day'] .global-header-actions button{
+  position:relative;  height:44px;  padding:0 20px;  border:2px solid rgb(154 181 204 / 60%);  border-radius:12px;
+  color:#173b57;  font-size:15px;  font-weight:700;  letter-spacing:-0.02em;
+  background: linear-gradient(180deg,  rgb(255 255 255 / 98%) 0%,  rgb(246 250 252 / 98%) 100%);
+  box-shadow: 0 4px 12px rgb(45 79 108 / 10%),  inset 0 1px 0 rgb(255 255 255 / 100%);
+  backdrop-filter:blur(8px);  -webkit-backdrop-filter:blur(8px);  overflow:hidden;
+  transition:  transform .22s ease,  border-color .22s ease,  box-shadow .22s ease,  background .22s ease;  
+}
+/* 상단의 얇은 '낮빛 / 단청 포인트' */
+html[data-theme='day'] .global-header-actions button::before{
+  content:'';  position:absolute;  top:0; left:10px; right:10px;  height:2px; border-radius:0 0 999px 999px;
+  background:#2eb7c4;   box-shadow: 0 0 6px rgb(46 183 196 / 38%),  0 0 12px rgb(46 183 196 / 14%);}
+/* 회원가입 - 청자 / 맑은 청록빛 */
+html[data-theme='day'] .global-header-actions button:nth-child(1)::before{
+  background:#24aeb8;  box-shadow:  0 0 6px rgb(36 174 184 / 42%),  0 0 12px rgb(36 174 184 / 16%);}
+/* 로그인 - 맑은 서울 하늘 / 쪽빛 */
+html[data-theme='day'] .global-header-actions button:nth-child(2)::before{
+  background:#4387ce;  box-shadow:  0 0 6px rgb(67 135 206 / 40%),  0 0 12px rgb(67 135 206 / 14%);}
+/* My Page - 은은한 자색 / 전통 보라 계열 */
+html[data-theme='day'] .global-header-actions button:nth-child(3)::before{
+  background:#806fbd;  box-shadow:  0 0 6px rgb(128 111 189 / 36%), 0 0 12px rgb(128 111 189 / 13%);}
+/* Night Mode - 따뜻한 황금빛 / 햇빛·단청 포인트 */
+html[data-theme='day'] .global-header-actions button:nth-child(4)::before{
+  background:#d69b39;  box-shadow:  0 0 6px rgb(214 155 57 / 42%),  0 0 12px rgb(214 155 57 / 15%);}
+/* Hover */
+html[data-theme='day'] .global-header-actions button:hover{
+  transform:translateY(-2px);  border-color:rgb(88 153 190 / 58%);
+  background: linear-gradient(180deg,  #fffef9 0%,  #f7faef 50%,  #eef5e6 100%);
+  box-shadow: 0 7px 18px rgb(37 72 101 / 14%), 0 0 18px rgb(67 169 194 / 9%),  inset 0 1px 0 #ffffff;}
+/* Active */
+html[data-theme='day'] .global-header-actions button:active{
+  transform:translateY(0);  background: linear-gradient(180deg, #f5f9fb 0%, #edf3f6 100%);
+  box-shadow: 0 3px 8px rgb(39 71 95 / 11%),  inset 0 2px 5px rgb(42 70 88 / 7%);}
+/* Focus */
+html[data-theme='day'] .global-header-actions button:focus-visible{
+  outline:3px solid rgb(42 174 193 / 20%);  outline-offset:3px;}
+
 .account-header{position:relative; z-index:10; height:84px; box-sizing:border-box; border:0; background:transparent;
   box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none;}
 .signup-header .account-header-inner{width:min(720px,calc(100% - 40px)); margin:0 auto; padding:0; grid-template-columns:1fr;}
@@ -2931,3 +3053,12 @@ html[data-theme='day'] .my-page{background:var(--theme-outer-bg);}
 html[data-theme='day'] .signup-page::before,
 html[data-theme='day'] .login-page::before,
 html[data-theme='day'] .my-page::before{background:transparent;}
+
+/* =================================
+   Global Header Actions - Night
+   Seoul Night Skyline Style
+================================= */
+
+
+
+
