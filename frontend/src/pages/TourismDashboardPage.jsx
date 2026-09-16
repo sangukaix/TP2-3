@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { saveWorkspaceRegion } from './tourismWorkspace'
 import {
   ChevronDown,
@@ -27,7 +27,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { downloadAiStrategyPresentation, downloadAiStrategyProposal, getAiRegionDashboard, getAiRegionOpenApiInfo, getSidoBoundaries, getSigunguBoundaries, getRegionReadinessAudit } from '../api/dashboardApi'
+import { downloadAiStrategyPresentation, downloadAiStrategyProposal, getAiRegionCatalog, getAiRegionDashboard, getAiRegionOpenApiInfo, getSidoBoundaries, getSigunguBoundaries, getRegionReadinessAudit } from '../api/dashboardApi'
 import TourismAssistant from '../components/TourismAssistant'
 import ConsumptionCategoryHelp from '../components/ConsumptionCategoryHelp'
 import { regionReadinessLabel } from '../features/planning/regionReadinessLabel'
@@ -828,6 +828,7 @@ function DashboardApp() {
   // 이 값은 화면에 표시하지 않고 API 요청 효과를 다시 실행하는 용도로만 사용합니다.
   const [dashboardRefreshTick, setDashboardRefreshTick] = useState(0)
   const [regionSearch, setRegionSearch] = useState('')
+  const [pendingRegion, setPendingRegion] = useState(null)
   const [readinessAudit, setReadinessAudit] = useState({ regions: [] })
   useEffect(() => {
     let active = true
