@@ -13,9 +13,10 @@ const menuItems = [
   { href: '/strategy', label: '기획안 수정 · 출력', icon: Sparkles },
 ]
 const savedPlansMenuItem = { href: '/saved-plans', label: '저장된 기획서', icon: FileBarChart }
+const seoulBackgroundPaths = new Set(['/dashboard', '/planning', '/strategy', '/saved-plans'])
 
 /**
- * bid3의 224px 사이드바·64px 상단바 비율을 React + Vite에 맞춰 옮긴 공통 화면 틀입니다.
+ * 270px 사이드바와 64px 상단바를 사용하는 공통 관광 업무 화면 틀입니다.
  * 입찰·결제 메뉴는 제거하고 관광 분석 업무 흐름만 남겼습니다.
  */
 export default function WorkspaceShell({ children }) {
@@ -41,12 +42,16 @@ export default function WorkspaceShell({ children }) {
           : '지역관광 전략 업무공간'
 
   return (
-    <div className="workspace-shell">
+    <div className={pageClassName}>
       <header className="home-header workspace-global-header">
         <div>
           <div className="home-brand-wrap">
-            <a className="home-brand" href="/" aria-label="OLIGO 홈"><img className="home-brand-logo" src={logo} alt="OLIGO (가제)" /></a>
+            <a className="home-brand" href="/" aria-label="OLIGO 홈">
+              <img className="home-brand-logo theme-logo theme-logo--night" src={logo} alt="OLIGO (가제)" />
+              <img className="home-brand-logo theme-logo theme-logo--day" src={dayLogo} alt="OLIGO (가제)" />
+            </a>
             <a className="ml-learning-dot" href="/ml-test" aria-label="머신러닝 학습 결과 보기" title="머신러닝 학습 결과" />
+            <HeaderActions />
           </div>
         </div>
       </header>
@@ -54,8 +59,8 @@ export default function WorkspaceShell({ children }) {
       <aside className="workspace-sidebar">
         <nav className="workspace-nav" aria-label="관광 분석 메뉴">
           <p>분석 업무</p>
-          {menuItems.map(({ href, label, icon: Icon }) => (
-            <a className={currentPath === href ? 'is-active' : ''} href={href} key={href}><Icon size={17} /><span>{label}</span></a>
+          {menuItems.map(({ href, label }, index) => (
+            <a className={currentPath === href ? 'is-active' : ''} href={href} key={href}><span>{index+1}</span><span>{label}</span></a>
           ))}
           <p>기획서 관리</p>
           <a className={currentPath === '/saved-plans' ? 'is-active' : ''} href="/saved-plans"><FileBarChart size={17} /><span>저장된 기획서</span></a>

@@ -27,7 +27,7 @@ function Section({ number, icon: Icon, title, why, children }) {
   return <section className="planning-section"><header><span className="planning-section-icon"><Icon size={18} /></span><div><span className="planning-section-number">{number}</span><h2>{title}</h2></div><span className="planning-help" tabIndex="0" aria-label={why}><CircleHelp size={16} /><span>{why}</span></span></header>{children}</section>
 }
 
-function PlanningForm({ region, dataState, onDirtyChange, onSaveReady }) {
+function PlanningForm({ region, regions, dataState, saveDraft, onRegionChange, onDirtyChange, onSaveReady }) {
   // 입력 초안은 지역 코드별 localStorage에서 복원합니다.
   // 단, 첨부 문서 본문은 브라우저에 저장하지 않고 생성 요청 시에만 사용합니다.
   const [brief, setBrief] = useState(() => simplifiedDraft(region.code))
@@ -73,8 +73,8 @@ function PlanningForm({ region, dataState, onDirtyChange, onSaveReady }) {
   }, [brief])
   // 상단의 임시저장 버튼도 같은 저장·검증 함수를 사용하도록 부모 화면에 함수를 전달합니다.
   useEffect(() => {
-    onSaveReady?.(save)
-    return () => onSaveReady?.(null)
+    onSaveReady?.(() => save)
+    return () => onSaveReady?.(() => null)
   }, [onSaveReady, save])
   // 생성 버튼은 장시간 걸리는 AI 작업을 서버에 등록한 뒤 /strategy로 이동합니다.
   // 중복 클릭은 submitting ref로 막고, 실제 진행 상태는 작업 ID로 복원합니다.
@@ -96,6 +96,11 @@ function PlanningForm({ region, dataState, onDirtyChange, onSaveReady }) {
   // 화면에서는 쉼표가 있는 금액도 허용하지만, 저장 값은 계산 가능한 정수 원 단위로 정규화합니다.
   const amountChange = (field, raw) => update({ [field]: raw.replace(/\D/g, '') ? Number(raw.replace(/\D/g, '')) : null })
   return <form className="planning-layout" onSubmit={generate}>
+    <header className="work-page-header">
+      <div><h1>{region.name}</h1></div>
+      <RegionWorkspacePicker region={region} regions={regions} label="분석지역 변경" onChange={onRegionChange} />
+      <button type="button" className="planning-header-save" disabled={!saveDraft} onClick={() => saveDraft?.()}><Save size={15} />임시저장</button>
+    </header>
     <div className="planning-fields">
       <fieldset disabled={busy} className="planning-fieldset">
         <Section number="01" icon={Sparkles} title="사업 방향" why="공식 사례가 확보된 사업 유형 안에서 비교합니다.">

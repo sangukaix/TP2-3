@@ -32,6 +32,7 @@ import TourismAssistant from '../components/TourismAssistant'
 import ConsumptionCategoryHelp from '../components/ConsumptionCategoryHelp'
 import { regionReadinessLabel } from '../features/planning/regionReadinessLabel'
 import WorkspaceShell from '../components/WorkspaceShell'
+import predictionLoadingVideo from '../assets/prediction-animation-alpha-v7.webm'
 import '../App.css'
 
 // 섬이 많거나 길쭉한 시도는 도형의 가운데에 자동으로 이름을 찍으면 글자가 바다 쪽으로 밀릴 수 있습니다.
@@ -525,6 +526,7 @@ function TourismChartLegend({ payload }) {
   return (
     <ul className="tourism-chart-legend" aria-label="그래프 항목">
       {payload.map((entry) => {
+        if (entry.dataKey === 'spending_bridge_krw') return null
         const series = TOURISM_CHART_CONFIG[entry.dataKey]
         return <li key={entry.dataKey}><i style={{ background: series?.color ?? entry.color }} />{series?.label ?? entry.value}{entry.dataKey === 'visitors' && <small>(만 단위)</small>}</li>
       })}
@@ -537,9 +539,84 @@ function TourismChartLegend({ payload }) {
  * 상대지수로 변환하지 않아 담당자가 월별 실제 규모를 바로 읽을 수 있습니다.
  */
 function MonthlyActualTrendChart({ trend, height = 278, emptyMessage = '월간 원자료를 불러오는 중입니다.' }) {
+  const hasForecast = Boolean(trend?.some((point) => point.is_forecast))
+  const forecastKey = trend?.filter((point) => point.is_forecast).map((point) => point.month).join('|') || ''
+  const forecastCount = trend?.filter((point) => point.is_forecast).length || 0
+  const [isMobileChart, setIsMobileChart] = useState(() => (
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 500px)').matches
+  ))
+  const [forecastRevealCount, setForecastRevealCount] = useState(0)
+  const [showForecastBridge, setShowForecastBridge] = useState(false)
+  const [forecastVideoState, setForecastVideoState] = useState('playing')
+  const [forecastRevealStart, setForecastRevealStart] = useState(null)
+  const forecastRevealStartedRef = useRef(false)
   const formatVisitorTick = (value) => `${Math.round(value / 10_000).toLocaleString('ko-KR')}만`
+  const formatMobileVisitorTick = (value) => {
+    const amount = Math.round(value / 10_000)
+    return amount === 0 ? '0' : `${amount}만`
+  }
   const formatSpendingTick = (value) => `${Math.round(value / 100_000_000).toLocaleString('ko-KR')}억`
-  const renderVisitorBarLabel = ({ x, y, width, height: barHeight, value }) => {
+  const formatMobileSpendingTick = (value) => {
+    const amount = Number(value) / 100_000_000
+    if (!Number.isFinite(amount) || amount === 0) return '0'
+    if (amount >= 1_000) {
+      const thousands = amount / 1_000
+      return `${Number.isInteger(thousands) ? thousands : thousands.toFixed(1)}천억`
+    }
+    return `${Math.round(amount)}억`
+  }
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 500px)')
+    const handleViewportChange = () => setIsMobileChart(mediaQuery.matches)
+    handleViewportChange()
+    mediaQuery.addEventListener?.('change', handleViewportChange)
+    return () => mediaQuery.removeEventListener?.('change', handleViewportChange)
+  }, [])
+  const startForecastReveal = useCallback(() => {
+    if (forecastRevealStartedRef.current) return
+    forecastRevealStartedRef.current = true
+    setForecastVideoState('fading')
+    setForecastRevealStart(Date.now())
+  }, [])
+
+  useEffect(() => {
+    if (!hasForecast || forecastCount === 0) {
+      setForecastRevealCount(forecastCount)
+      setShowForecastBridge(false)
+      setForecastVideoState('hidden')
+      setForecastRevealStart(null)
+      return undefined
+    }
+    setForecastRevealCount(0)
+    setShowForecastBridge(false)
+    setForecastVideoState('playing')
+    setForecastRevealStart(null)
+    forecastRevealStartedRef.current = false
+    // WebM이 정상적으로 끝나지 않는 환경을 위한 안전장치입니다.
+    const fallbackTimer = window.setTimeout(startForecastReveal, 7000)
+    return () => window.clearTimeout(fallbackTimer)
+  }, [hasForecast, forecastCount, forecastKey, startForecastReveal])
+
+  useEffect(() => {
+    if (!forecastRevealStart) return undefined
+    const timers = Array.from({ length: forecastCount }, (_, index) => (
+      window.setTimeout(() => setForecastRevealCount(index + 1), index * 500)
+    ))
+    // 마지막 예측월 공개와 라벨 bounce(1.65초)가 끝난 뒤 bridge를 그립니다.
+    timers.push(window.setTimeout(() => setShowForecastBridge(true), 1650))
+    return () => timers.forEach((timer) => window.clearTimeout(timer))
+  }, [forecastRevealStart, forecastCount])
+
+  useEffect(() => {
+    if (forecastVideoState !== 'fading') return undefined
+    const timer = window.setTimeout(() => setForecastVideoState('hidden'), 450)
+    return () => window.clearTimeout(timer)
+  }, [forecastVideoState])
+
+  const showForecast = !hasForecast || forecastRevealCount > 0
+  const renderVisitorBarLabel = ({ x, y, width, height: barHeight, value, payload }) => {
+    if (hasForecast && (!payload || (payload.is_forecast && payload.forecastIndex >= forecastRevealCount))) return null
     const amount = Number(value)
     // 매우 낮은 막대는 두 줄 라벨이 겹칠 수 있어 표시하지 않습니다.
     if (!Number.isFinite(amount) || Number(barHeight) < 32) return null
@@ -565,30 +642,74 @@ function MonthlyActualTrendChart({ trend, height = 278, emptyMessage = '월간 �
 
   if (!trend?.length) return <div className="trend-empty-state">{emptyMessage}</div>
   // 관측선은 실제 마지막 월에서 끝내고, 예측선은 그 지점에서 이어서 다른 색으로 표시합니다.
-  const chartData = trend.map((point) => ({
+  let forecastIndex = 0
+  const chartData = trend.map((point) => {
+    const pointForecastIndex = point.is_forecast ? forecastIndex++ : -1
+    const isForecastVisible = !point.is_forecast || pointForecastIndex < forecastRevealCount
+    return {
+      ...point,
+      forecastIndex: pointForecastIndex,
+      spending_actual_krw: point.is_forecast ? null : point.spending_krw,
+      // 예측선은 공개된 예측월까지만 그려 실제선과 단계적으로 이어집니다.
+      spending_forecast_krw: point.is_forecast && isForecastVisible ? point.spending_krw : null,
+    }
+  })
+  const lastActualIndex = chartData.reduce((lastIndex, point, index) => (point.is_forecast ? lastIndex : index), -1)
+  const firstForecastIndex = chartData.findIndex((point) => point.is_forecast)
+  const bridgeData = chartData.map((point, index) => ({
     ...point,
-    spending_actual_krw: point.is_forecast ? null : point.spending_krw,
-    // 예측선은 첫 예측월(8월)부터만 그려 실제선(7월까지)과 색이 섞이지 않게 합니다.
-    spending_forecast_krw: point.is_forecast ? point.spending_krw : null,
+    spending_bridge_krw: index === lastActualIndex || index === firstForecastIndex ? point.spending_krw : null,
   }))
+  const visitorAxisMax = paddedAxisMax(Math.max(...chartData.map((point) => Number(point.visitors) || 0)))
+  const spendingAxisMax = paddedAxisMax(Math.max(...chartData.map((point) => Number(point.spending_krw) || 0)))
+  const chartMargin = isMobileChart
+    ? { top: 28, right: 4, left: 4, bottom: 10 }
+    : { top: 28, right: 20, left: 14, bottom: 10 }
   return (
-    <div className="monthly-trend-chart">
+    <div className={`monthly-trend-chart${hasForecast ? ' monthly-trend-chart--forecast' : ''}${showForecast ? ' is-ready' : ' is-loading'}`}>
+      {hasForecast && (
+        <>
+          <div className="monthly-trend-actual-zone" aria-label="최근 3개월">
+            <span className="monthly-trend-actual-status">최근 3개월</span>
+          </div>
+          <div className="monthly-trend-forecast-zone" aria-live="polite">
+            {forecastVideoState !== 'hidden' && (
+              <video
+                key={forecastKey}
+                className={`monthly-trend-forecast-loading-video${forecastVideoState === 'fading' ? ' is-fading' : ''}`}
+                src={predictionLoadingVideo}
+                autoPlay
+                muted
+                playsInline
+                preload="auto"
+                aria-hidden="true"
+                onEnded={startForecastReveal}
+                onError={startForecastReveal}
+              />
+            )}
+            <span className="monthly-trend-forecast-status">{showForecast ? '예측' : '예측 데이터 계산 중...'}</span>
+          </div>
+        </>
+      )}
       <ResponsiveContainer width="100%" height={height}>
-      <ComposedChart data={chartData} margin={{ top: 28, right: 20, left: 14, bottom: 10 }}>
+      <ComposedChart data={bridgeData} margin={chartMargin}>
         <CartesianGrid stroke="#dfe5ea" strokeDasharray="0" vertical={false} />
-        <XAxis dataKey="month" axisLine={{ stroke: '#2f3640' }} tickLine={{ stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: 11 }} />
-        <YAxis yAxisId="visitors" axisLine={{ stroke: '#2f3640' }} tickLine={{ stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: 10 }} width={54} tickFormatter={formatVisitorTick} domain={[0, paddedAxisMax]} />
-        <YAxis yAxisId="spending" orientation="right" axisLine={{ stroke: '#2f3640' }} tickLine={{ stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: 10 }} width={54} tickFormatter={formatSpendingTick} domain={[0, paddedAxisMax]} />
+        <XAxis dataKey="month" axisLine={{ stroke: '#2f3640' }} tickLine={{ stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: isMobileChart ? 9 : 11 }} tickMargin={isMobileChart ? 2 : 5} />
+        <YAxis yAxisId="visitors" axisLine={{ stroke: '#2f3640' }} tickLine={isMobileChart ? false : { stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: isMobileChart ? 9 : 10 }} width={isMobileChart ? 34 : 54} tickMargin={isMobileChart ? 2 : 5} tickFormatter={isMobileChart ? formatMobileVisitorTick : formatVisitorTick} domain={[0, visitorAxisMax]} />
+        <YAxis yAxisId="spending" orientation="right" axisLine={{ stroke: '#2f3640' }} tickLine={isMobileChart ? false : { stroke: '#2f3640' }} tick={{ fill: '#424b58', fontSize: isMobileChart ? 9 : 10 }} width={isMobileChart ? 40 : 54} tickMargin={isMobileChart ? 2 : 5} tickFormatter={isMobileChart ? formatMobileSpendingTick : formatSpendingTick} domain={[0, spendingAxisMax]} />
         <ChartTooltip cursor={{ fill: '#1fbac80d' }} content={<TourismChartTooltip />} />
         <Legend verticalAlign="bottom" content={<TourismChartLegend />} />
         <Bar yAxisId="visitors" dataKey="visitors" name={TOURISM_CHART_CONFIG.visitors.label} fill={TOURISM_CHART_CONFIG.visitors.color} barSize={25} radius={[4, 4, 0, 0]}>
           {/* 8월부터는 저장 모델의 예측값이므로 실제값과 부드러운 보라색으로 구분합니다. */}
-          {chartData.map((point) => <Cell key={`visitor-${point.month}`} fill={point.is_forecast ? '#7a87d8' : TOURISM_CHART_CONFIG.visitors.color} />)}
+          {chartData.map((point) => <Cell key={`visitor-${point.month}`} className={point.is_forecast ? 'monthly-trend-forecast-cell' : undefined} fill={point.is_forecast ? '#7a87d8' : TOURISM_CHART_CONFIG.visitors.color} opacity={point.is_forecast && point.forecastIndex >= forecastRevealCount ? 0 : 1} />)}
           {/* 막대 내부 중앙에 두 줄로 표시해 어떤 화면 크기에서도 라벨이 막대 밖으로 튀지 않게 합니다. */}
           <LabelList content={renderVisitorBarLabel} />
         </Bar>
         <Line yAxisId="spending" type="monotone" dataKey="spending_actual_krw" name={TOURISM_CHART_CONFIG.spending_krw.label} stroke={TOURISM_CHART_CONFIG.spending_krw.color} strokeWidth={3.5} dot={{ r: 4, fill: '#fff', stroke: TOURISM_CHART_CONFIG.spending_krw.color, strokeWidth: 2 }} activeDot={{ r: 6 }} />
-        <Line yAxisId="spending" type="monotone" dataKey="spending_forecast_krw" name="관광소비액 예상" stroke="#ee7180" strokeWidth={3.5} dot={{ r: 4, fill: '#fff', stroke: '#ee7180', strokeWidth: 2 }} activeDot={{ r: 6 }} legendType="none" />
+        <Line yAxisId="spending" type="monotone" dataKey="spending_forecast_krw" name="관광소비액 예상" stroke="#ee7180" strokeWidth={3.5} dot={{ r: 4, fill: '#fff', stroke: '#ee7180', strokeWidth: 2 }} activeDot={{ r: 6 }} legendType="none" opacity={showForecast ? 1 : 0} />
+        {showForecastBridge && lastActualIndex >= 0 && firstForecastIndex >= 0 && (
+          <Line yAxisId="spending" type="monotone" dataKey="spending_bridge_krw" name="" stroke="#16a34a" strokeWidth={3.5} dot={false} activeDot={false} connectNulls legendType="none" isAnimationActive animationDuration={600} animationEasing="ease-out" />
+        )}
       </ComposedChart>
       </ResponsiveContainer>
     </div>
@@ -681,6 +802,7 @@ function DashboardApp() {
   // 첫 화면은 특정 시군구가 아닌 서울특별시 전체를 기본 선택합니다.
   const [selectedCode, setSelectedCode] = useState('11680')
   const [selectedSidoCode, setSelectedSidoCode] = useState('11')
+  const [draftSigunguCode, setDraftSigunguCode] = useState('11680')
   const [isReportVisible, setIsReportVisible] = useState(false)
   const [strategyReport, setStrategyReport] = useState(null)
   // AI 전략기획은 전용 페이지에서 생성합니다. 이 대시보드에서는 생성 상태를 만들지 않습니다.
@@ -699,6 +821,9 @@ function DashboardApp() {
   const [boundaryError, setBoundaryError] = useState(false)
   const [regionDashboard, setRegionDashboard] = useState(null)
   const [regionDashboardState, setRegionDashboardState] = useState('idle')
+  const [regionDashboardError, setRegionDashboardError] = useState('')
+  const [regionFetchVersion, setRegionFetchVersion] = useState(0)
+  const [regionCatalog, setRegionCatalog] = useState([])
   // 한 달이 바뀌어도 열린 화면이 이전 예측월에 머물지 않도록, 한 시간마다 최신 대시보드 데이터를 다시 요청합니다.
   // 이 값은 화면에 표시하지 않고 API 요청 효과를 다시 실행하는 용도로만 사용합니다.
   const [dashboardRefreshTick, setDashboardRefreshTick] = useState(0)
@@ -713,6 +838,12 @@ function DashboardApp() {
   }, [])
   const auditedRegion = readinessAudit.regions.find((r) => r.region_code === selectedCode)
   const [regionSearchMessage, setRegionSearchMessage] = useState('')
+  const [isRegionSuggestionsOpen, setIsRegionSuggestionsOpen] = useState(false)
+  const [regionPickerTab, setRegionPickerTab] = useState('admin')
+  const [regionSelectionConfirmed, setRegionSelectionConfirmed] = useState(false)
+  const [regionToastMessage, setRegionToastMessage] = useState('')
+  const regionToastTimerRef = useRef(null)
+  const regionSearchInputRef = useRef(null)
   const [isRegionInfoVisible, setIsRegionInfoVisible] = useState(false)
   const [regionInfo, setRegionInfo] = useState(null)
   const [regionInfoState, setRegionInfoState] = useState('idle')
@@ -726,6 +857,19 @@ function DashboardApp() {
     window.addEventListener('scroll', updateScrollTopVisibility, { passive: true })
     return () => window.removeEventListener('scroll', updateScrollTopVisibility)
   }, [])
+
+  useEffect(() => () => {
+    if (regionToastTimerRef.current) window.clearTimeout(regionToastTimerRef.current)
+  }, [])
+
+  useEffect(() => {
+    if (regionPickerTab !== 'search') return
+    setRegionSearch('')
+    setPendingRegion(null)
+    setRegionSearchMessage('')
+    setIsRegionSuggestionsOpen(false)
+    window.requestAnimationFrame(() => regionSearchInputRef.current?.focus())
+  }, [regionPickerTab])
 
   // 서버가 "다음 달"을 날짜 기준으로 계산하므로, 브라우저를 새로고침하지 않아도 자정·월 변경 후 최신 기준을 받습니다.
   // 시간 단위 재검증은 OpenAI 호출이 아닌 공식 지표/저장 모델 조회라 비용을 발생시키지 않습니다.
@@ -747,17 +891,24 @@ function DashboardApp() {
     [selectedSidoCode, sidoBoundaries],
   )
 
+  const selectedCatalogRegion = useMemo(
+    () => regionCatalog.find((region) => region.region_code === selectedCode) ?? null,
+    [regionCatalog, selectedCode],
+  )
+
   // 경계 이름만 화면 메타데이터로 사용합니다. 실제 지표는 AI Server 응답이 성공한 경우에만 채웁니다.
   // 이렇게 하면 미지원 지역에서 개발용 예시 숫자가 실제 값처럼 노출되지 않습니다.
   const selectedRegion = useMemo(
-    () => (selectedBoundary
+    () => (selectedCatalogRegion
+      ? createPendingRegion(selectedCatalogRegion.region_code, selectedCatalogRegion.region_name)
+      : selectedBoundary
       ? createPendingRegion(selectedCode, selectedBoundary.properties.region_name)
       : selectedCode === '11680'
         ? createPendingRegion('11680', '서울특별시 강남구')
       : selectedSido
         ? createPendingRegion(selectedSidoCode, selectedSido.properties.region_name)
         : createPendingRegion(selectedSidoCode, selectedSidoCode === '11' ? '서울특별시' : '선택 지역')),
-    [selectedBoundary, selectedCode, selectedSido, selectedSidoCode],
+    [selectedBoundary, selectedCatalogRegion, selectedCode, selectedSido, selectedSidoCode],
   )
 
   // 다른 업무 페이지에서도 같은 시군구를 이어서 검토할 수 있도록, 실제 시군구 선택만 저장합니다.
@@ -793,6 +944,14 @@ function DashboardApp() {
     [selectedSidoCode, sigunguBoundaries],
   )
 
+  const regionSuggestions = useMemo(() => {
+    const query = regionSearch.replace(/\s+/g, '').toLowerCase()
+    if (!query) return []
+    return regionCatalog
+      .filter((region) => region.region_name.replace(/\s+/g, '').toLowerCase().includes(query))
+      .slice(0, 8)
+  }, [regionCatalog, regionSearch])
+
   const selectedMarkerPosition = useMemo(
     () => getFeatureCenter(selectedBoundary)
       ?? SIDO_LABEL_POSITIONS[selectedSidoCode]
@@ -825,6 +984,18 @@ function DashboardApp() {
     return () => { isActive = false }
   }, [])
 
+  useEffect(() => {
+    let isActive = true
+    getAiRegionCatalog()
+      .then((catalog) => {
+        if (isActive) setRegionCatalog(catalog.regions ?? [])
+      })
+      .catch(() => {
+        // 카탈로그 오류가 지도 선택 자체를 막지 않도록, 기존 경계 선택은 계속 사용할 수 있게 둡니다.
+      })
+    return () => { isActive = false }
+  }, [])
+
   // 브라우저에는 현재 시도의 시군구만 전달해 전국 상세 경계 수십 MB를 한꺼번에 파싱하지 않습니다.
   useEffect(() => {
     let isActive = true
@@ -846,9 +1017,15 @@ function DashboardApp() {
     let isActive = true
 
     if (!selectedCode) {
+      setRegionDashboard(null)
+      setRegionDashboardState('idle')
+      setRegionDashboardError('')
       return () => { isActive = false }
     }
 
+    setRegionDashboard(null)
+    setRegionDashboardState('loading')
+    setRegionDashboardError('')
     getAiRegionDashboard(selectedCode, selectedRegion.name)
       .then((data) => {
         if (isActive) {
@@ -856,15 +1033,16 @@ function DashboardApp() {
           setRegionDashboardState('ready')
         }
       })
-      .catch(() => {
+      .catch((error) => {
         if (isActive) {
           setRegionDashboard(null)
-          setRegionDashboardState('unavailable')
+          setRegionDashboardState('error')
+          setRegionDashboardError(error.message || '데이터를 불러오지 못했습니다. 다시 시도해 주세요.')
         }
       })
 
     return () => { isActive = false }
-  }, [selectedCode, selectedRegion.name])
+  }, [dashboardRefreshTick, regionFetchVersion, selectedCode, selectedRegion.name])
 
   // 지역 선택 이벤트에서만 이전 지역(현재는 강남구)의 AI 문서를 초기화합니다.
   // useEffect가 아니라 선택 처리 함수에서 실행해 불필요한 추가 렌더링을 막습니다.
@@ -884,51 +1062,92 @@ function DashboardApp() {
     clearStrategyReport()
     setRegionDashboard(null)
     setRegionDashboardState('idle')
+    setRegionDashboardError('')
     setSigunguBoundaries(null)
     setSelectedSidoCode(sidoCode)
+    setDraftSigunguCode('')
     // 시도가 바뀌면 기존 시군구 선택은 해제해 "해당 시도 전체" 상태로 돌아갑니다.
     setSelectedCode('')
   }
 
-  const selectSigungu = (sigunguCode) => {
+  const confirmRegionSelection = (regionName) => {
+    if (!regionName) return
+    setRegionSelectionConfirmed(true)
+    setRegionToastMessage(`${regionName}가 저장되었습니다.`)
+    if (regionToastTimerRef.current) window.clearTimeout(regionToastTimerRef.current)
+    regionToastTimerRef.current = window.setTimeout(() => setRegionToastMessage(''), 2600)
+  }
+
+  const handleMapSidoSelection = (sidoCode) => {
+    selectSido(sidoCode)
+  }
+
+  const commitRegion = (region) => {
+    const regionCode = region?.region_code
+    const regionName = region?.region_name
+    if (!regionCode || !regionName) return
+
     clearStrategyReport()
     setRegionDashboard(null)
-    setRegionDashboardState(sigunguCode ? 'loading' : 'idle')
-    setSelectedCode(sigunguCode)
+    setRegionDashboardState('loading')
+    setRegionDashboardError('')
+    setSelectedSidoCode(regionCode.slice(0, 2))
+    setDraftSigunguCode(regionCode)
+    setSelectedCode(regionCode)
+    setRegionFetchVersion((version) => version + 1)
+    setRegionSearch(regionName)
+    setRegionSearchMessage('')
+    setIsRegionSuggestionsOpen(false)
+    confirmRegionSelection(regionName)
+  }
+
+  const applyAdministrativeSelection = () => {
+    if (!draftSigunguCode) {
+      setRegionSearchMessage('시군구를 선택한 뒤 적용해 주세요.')
+      return
+    }
+    const region = regionCatalog.find((item) => item.region_code === draftSigunguCode)
+    if (!region) {
+      setRegionSearchMessage('선택한 지역의 분석 데이터를 준비하지 못했습니다.')
+      return
+    }
+    commitRegion(region)
+  }
+
+  const selectSigungu = (sigunguCode) => {
+    setDraftSigunguCode(sigunguCode)
+    setRegionSearchMessage('')
   }
 
   const searchRegion = (event) => {
     event.preventDefault()
     const query = regionSearch.replace(/\s+/g, '').toLowerCase()
-    if (!query) return
-
-    const sidoFeatures = sidoBoundaries?.features ?? []
-    const sigunguFeatures = sigunguBoundaries?.features ?? []
-    const matchedSido = sidoFeatures.find((feature) => feature.properties.region_name.replace(/\s+/g, '').toLowerCase().includes(query))
-    const matchedSigungu = sigunguFeatures.find((feature) => {
-      const sidoName = sidoFeatures.find((sido) => feature.properties.region_code.startsWith(sido.properties.region_code))?.properties.region_name ?? ''
-      const regionName = feature.properties.region_name.replace(/\s+/g, '').toLowerCase()
-      const fullName = `${sidoName}${feature.properties.region_name}`.replace(/\s+/g, '').toLowerCase()
-      return regionName.includes(query) || fullName.includes(query)
-    })
-
-    if (matchedSido) {
-      selectSido(matchedSido.properties.region_code)
-      setRegionSearch(matchedSido.properties.region_name)
-      setRegionSearchMessage('')
+    if (!query) {
+      setRegionSearchMessage('검색 결과에서 지역을 선택해주세요.')
       return
     }
-    if (matchedSigungu) {
-      clearStrategyReport()
-      setRegionDashboard(null)
-      setRegionDashboardState('loading')
-      setSelectedSidoCode(matchedSigungu.properties.region_code.slice(0, 2))
-      setSelectedCode(matchedSigungu.properties.region_code)
-      setRegionSearch(matchedSigungu.properties.region_name)
-      setRegionSearchMessage('')
+
+    const matchedRegion = pendingRegion?.region_code
+      ? pendingRegion
+      : regionCatalog.find((region) => region.region_name.replace(/\s+/g, '').toLowerCase() === query)
+
+    if (matchedRegion) {
+      commitRegion(matchedRegion)
       return
     }
-    setRegionSearchMessage('일치하는 도·시·군·구를 찾지 못했습니다.')
+    setIsRegionSuggestionsOpen(false)
+    setRegionSearchMessage(regionCatalog.length ? '검색 결과에서 지역을 선택해주세요.' : '분석 가능한 지역 목록을 불러오는 중입니다.')
+  }
+
+  const selectRegionSuggestion = (region) => {
+    setRegionSearch(region.region_name)
+    setPendingRegion(region)
+    setIsRegionSuggestionsOpen(false)
+    setRegionSearchMessage('')
+  }
+
+  const toggleRegionPickerTab = () => {
+    setRegionPickerTab((current) => current === 'admin' ? 'search' : 'admin')
   }
 
   const openRegionInfo = async () => {
@@ -1028,6 +1247,16 @@ function DashboardApp() {
             </button>
           </div>
 
+          {regionSelectionConfirmed && (
+            <div className="region-selection-notice" role="status">
+              <div className="region-selection-notice-copy">
+                <strong>{selectedRegion.name}가 저장되었습니다.</strong>
+                <span>기획안 생성 단계로 이동하여 기획안을 생성해보세요!</span>
+              </div>
+              <button type="button" onClick={() => { window.history.pushState({}, '', '/planning'); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo({ top: 0 }) }}>다음단계로 이동!</button>
+            </div>
+          )}
+
           <div className="dashboard-top-grid dashboard-top-grid--map-first">
             <div className="dashboard-left">
               <div className="metric-grid" aria-label={`${selectedRegion.name} 핵심 지표`}>
@@ -1042,8 +1271,8 @@ function DashboardApp() {
                 <TourismTrendChart
                   trend={regionDashboard?.monthly_trend}
                   emptyMessage={
-                    regionDashboardState === 'unavailable'
-                      ? '이 지역의 검증된 월간 원자료가 아직 연결되지 않았습니다.'
+                    regionDashboardState === 'error'
+                      ? regionDashboardError || '데이터를 불러오지 못했습니다. 다시 시도해 주세요.'
                       : regionDashboardState === 'idle'
                         ? '시군구를 선택하면 최근 12개월 원자료를 표시합니다.'
                         : '선택한 지역의 월간 원자료를 불러오는 중입니다.'
@@ -1112,7 +1341,7 @@ function DashboardApp() {
                   selectedSigungu={selectedBoundary}
                   markerPosition={selectedMarkerPosition}
                   markerLabel={selectedRegion.name}
-                  onSelectSido={selectSido}
+                  onSelectSido={handleMapSidoSelection}
                   onZoomChange={handleMapZoomChange}
                   isLoading={isBoundaryLoading}
                   error={boundaryError}
@@ -1145,6 +1374,7 @@ function DashboardApp() {
       />
       <StrategyReport key={`${selectedRegion.code}-${strategyReport?.summary ?? 'loading'}`} region={selectedRegion} visible={isReportVisible} report={strategyReport} isLoading={isStrategyReportLoading} error={strategyReportError} onClose={() => setIsReportVisible(false)} onDownload={downloadStrategyProposal} onDownloadPptx={downloadStrategyPresentation} isDownloading={isProposalDownloading} isPresentationDownloading={isPresentationDownloading} downloadError={proposalDownloadError} executionScenario={executionScenario} onExecutionScenarioChange={setExecutionScenario} />
       <TourismAssistant open={isAssistantOpen} onClose={() => setIsAssistantOpen(false)} region={selectedRegion} report={strategyReport} onApplyPatch={applyAssistantReportPatch} />
+      {regionToastMessage && <div className="region-selection-toast" role="status"><span aria-hidden="true">✓</span>{regionToastMessage}</div>}
 
       <button
         type="button"
