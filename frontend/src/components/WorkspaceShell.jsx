@@ -5,7 +5,9 @@ import {
   ClipboardList,
 } from 'lucide-react'
 import logo from '../assets/logo.png'
+import dayLogo from '../assets/logo-day.png'
 import { resolveAppRoute } from '../routes'
+import HeaderActions from './HeaderActions'
 
 const menuItems = [
   { href: '/dashboard', label: '지역선택', icon: LayoutDashboard },
@@ -21,6 +23,9 @@ const seoulBackgroundPaths = new Set(['/dashboard', '/planning', '/strategy', '/
  */
 export default function WorkspaceShell({ children }) {
   const currentPath = resolveAppRoute(window.location.pathname).canonicalPath
+  const pageClassName = seoulBackgroundPaths.has(currentPath)
+    ? 'workspace-shell oligo-seoul-page'
+    : 'workspace-shell'
   const topbarLabel = currentPath === '/dashboard'
     ? '1. 희망 지역을 선택해주세요'
     : currentPath === '/planning'
