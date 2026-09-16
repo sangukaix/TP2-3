@@ -43,7 +43,7 @@ def _build_revision_evidence_pack(
     for source in evidence_pack.get('sources') or []:
         source_id = str(source.get('source_id') or '')
         source_type = str(source.get('source_type') or '')
-        if source_id in priority_ids or source_type in {'dataset', 'nationwide_dataset', 'model_forecast'}:
+        if source_id in priority_ids or source_type in {'dataset', 'nationwide_dataset', 'model_forecast', 'provincial_tourism_context'}:
             selected_sources.append(source)
     # 기존 초안에 없던 공식 비교 근거가 필요할 수 있어 웹 근거를 최대 4건 보완합니다.
     selected_ids = {str(source.get('source_id') or '') for source in selected_sources}

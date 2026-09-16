@@ -6,6 +6,7 @@
 
 # ML은 수치 계산, LLM은 조사·해석을 담당합니다. 모든 Agent에 같은 경계 규칙을 줍니다.
 ML_EVIDENCE_RULES = """
+snapshot.provincial_context는 소속 시도와 같은 관측월의 전년 대비 증감률·숙박 특성을 비교한 보조 근거다. 제공되면 지역 관광 흐름 설명에 짧게 활용하되, 집계 경계가 다르므로 총량 순위·점유율·유사도·사업 효과로 해석하지 않는다. 기존 ML 전망·KPI를 이 값으로 바꾸지 않는다. 없으면 이 비교를 생략한다.
 snapshot.ml_analysis 또는 ml_analysis는 서버가 계산한 별도 예측 근거다.
 status=available일 때만 forecasts의 기간·숫자·단위를 그대로 인용한다.
 signals는 전년 같은 달 대비 전망이며 원인이나 사업의 인과효과가 아니다.
@@ -54,6 +55,15 @@ CASE_STUDY_RESEARCH_INSTRUCTIONS = """
 `공식 자료에서 확인되지 않음`이라고 적는다. 사업 시행과 지표 변화가 함께 관측됐다는 사실만으로 인과효과라고
 단정하지 않는다. 기사·블로그·광고·커뮤니티는 사용하지 않는다. 입력으로 제공된 검수 사례와 RAG 문서는
 출발점으로 활용하되, 최신 공식 자료로 보강한다. 선택 지역의 성과처럼 바꾸어 쓰지 않는다.
+운영 규모 비교를 위해 운영일수, 참여시설 수, 참여인원, 이용률, 추가 방문 비중, 참여자 소비도 조사한다.
+operating_statistics에는 원문에서 직접 확인한 값·단위·기간·집계 범위·짧은 원문 인용만 넣는다.
+이용률은 같은 사업·기간의 총 정원(capacity_count)과 실제 참여 인원(participant_count), 세부 사업명(program_name)을 함께 확보한다.
+예약 신청자·경쟁률·매진·도시 전체 방문객을 실제 참여 인원으로 대체하지 않는다. 정원은 회당 정원과 총 정원을 구분한다.
+해당 값이 없거나 다른 지표인 경우 추가 필드는 null로 둔다. 75% 미만 실적도 그대로 수집하며 목표 하한을 맞추려고 원문 수치를 바꾸지 않는다.
+자료가 없으면 빈 배열이다. 지역 전체 전년 대비 증가율을 이용률이나 추가 방문 비중으로 바꾸지 않는다.
+사업 참여 기준의 비율은 scope=program_participants, 백분율은 unit=percent로 적는다.
+additional_visitor_share는 단순 외지인 비율이 아니라 사업 때문에 추가 방문했다는 조사 기준일 때만 기록한다.
+자동 추출은 검토 전 자료이며 검토 완료라는 표시를 만들지 않는다. 기존 호출 횟수 안에서 조사한다.
 """
 
 # Agent 3의 페르소나: 성공사례가 선택 지역에 옮겨질 수 있는지 냉정하게 판단합니다.
@@ -284,6 +294,29 @@ case_search_policy는 탐색 정책이고 case_search_coverage는 이번 요청�
 retrieval_context의 scope/peer_region_code는 탐색 안내이지 사업 적합성·효과 검증 결과가 아니다.
 """
 CASE_STUDY_RESEARCH_INSTRUCTIONS += NATIONWIDE_CASE_RULES
+
+FESTIVAL_CASE_RULES = """
+festival_candidates / evidence_kind=festival_statistics는 팀이 보관한 관광데이터랩 CSV를
+Python으로 계산한 축제 방문 실적 참고다. LLM이 검색으로 새로 발견하거나 효과를 예측한 수치가 아니다.
+local_context는 선택 지역의 기존 축제이며 '타지역 사례'로 쓰지 않는다. external_benchmark는
+타지역의 최근 일평균·외지인 일평균 방문이 함께 증가한 비교 후보다. 이는 성공 원인의 증명이 아니다.
+후보의 retrieval_basis는 지역 관측 peer·ML 조사 방향·선택 자원·축제명 주제의 함수 기반 우선순위다.
+인구·지리 환경의 유사도나 ML 추천 점수로 설명하지 않는다.
+사용자 사업 방향에 허용되는 타지역 축제 후보가 있으면 최소 한 타지역 축제의 실적과 지역 적용 아이디어를
+기존 환급·야간 사업과 비교한다. 가장 높은 성장률이라는 이유만으로 선택하지 않는다.
+CSV에 실제 운영 프로그램, 예약·정산·정원 정보는 없다. 사례에서 확인된 사실은 축제명·개최 일수·
+방문 실적까지이며 체험/상권 연계/시간대/회차 구성은 우리 지역에 대한 새 제안으로 명시한다.
+공식 웹 조사에서는 축제 후보의 정확한 이름으로 실제 운영 프로그램·시기·자원을 보완한다.
+원본 비교가 있으면 before/after/year/days와 total/outside/daily를 그대로 인용한다.
+목적지 검색 장소는 후보이며 참여처 협약·실제 방문을 뜻하지 않는다. 연령·검색 표에는 연도 열이 없어
+최신 개최연도 자료라고 단정하지 않는다. 관광소비 지표값을 원화·소비 증가율로 환산하지 않는다.
+정원이나 참여 실측값이 없으므로 축제 방문자 수로 75% 참여율, 추가 방문 비중을 산출하지 않는다.
+새 기획의 목표는 운영 규모 산식으로 계산하고, 축제 성장률을 도시 전체의 3개월 성장률로 복사하지 않는다.
+"""
+CASE_STUDY_RESEARCH_INSTRUCTIONS += FESTIVAL_CASE_RULES
+TRANSFERABILITY_INSTRUCTIONS += FESTIVAL_CASE_RULES
+PLANNER_INSTRUCTIONS += FESTIVAL_CASE_RULES
+REVIEW_INSTRUCTIONS += FESTIVAL_CASE_RULES
 TRANSFERABILITY_INSTRUCTIONS += NATIONWIDE_CASE_RULES + """
 candidate_assessments에서 인근/타시도 사례를 비교하고 similarity_reason에 수요·운영 조건을,
 adaptation에 실제 축소/변경 방법을 기록한다. 지역 간 차이를 검증할 자료가 없으면 rejection_risks에 남긴다.

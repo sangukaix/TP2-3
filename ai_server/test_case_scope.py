@@ -164,6 +164,14 @@ class NationwideRagTests(unittest.IsolatedAsyncioTestCase):
 
 
 class CaseIntegrationTests(unittest.IsolatedAsyncioTestCase):
+    def setUp(self):
+        # These tests own their small registry fixtures. Real festival ingestion
+        # and its handoff are covered separately in test_festival_cases.
+        festivals = patch('ai_server.app.agents.case_study_agent.collect_festival_cases',
+                          return_value=([], {'status':'not_imported'}))
+        festivals.start()
+        self.addCleanup(festivals.stop)
+
     async def test_student_budget_passes_national_rag_and_scope_without_cloud(self):
         router = SimpleNamespace(student_budget=True, local_first=True, generate=AsyncMock(side_effect=AssertionError('no cloud')))
         rows = [card('outside', '전남 강진군'), card('other', '서울특별시 종로구', '교통 접근 운영')]

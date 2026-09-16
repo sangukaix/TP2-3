@@ -12,6 +12,11 @@ from ai_server.app.project_learning_catalog import build_project_learning_catalo
 
 
 class ProjectLearningCatalogTest(unittest.TestCase):
+    def setUp(self) -> None:
+        # Catalog/API tests do not own the running service's database or jobs.
+        self.enterContext(patch('ai_server.app.main.initialize_strategy_store'))
+        self.enterContext(patch('ai_server.app.main.list_interrupted_strategy_jobs', return_value=[]))
+
     def test_openai_catalog_discovers_five_core_agents(self) -> None:
         catalog = build_project_learning_catalog('openai')
         pipeline_ids = {node.id for node in catalog.pipeline}

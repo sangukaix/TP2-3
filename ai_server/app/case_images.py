@@ -24,6 +24,12 @@ IMAGES = {
 }
 
 SIMILAR_IMAGES = {
+    'experience_product': {
+        'filename': 'jeongdong_2024.jpg', 'caption': '서울 중구 정동야행 · 문화행사 참고 사진',
+        'credit': '서울문화포털 · 2024 정동야행',
+        'page_url': 'https://culture.seoul.go.kr/culture/culture/cultureEvent/view.do?cultcode=146365&menuNo=200009',
+        'image_url': 'https://culture.seoul.go.kr/resources/culture/img/editor/culture/editor_20240530140505_47975.jpg',
+    },
     'spend_conversion': IMAGES['case:gangjin_half_price_2024'],
     'stay_conversion': IMAGES['case:291a33370ec9b1'],
     'return_visit': IMAGES['case:digital_tourism_resident_2024'],

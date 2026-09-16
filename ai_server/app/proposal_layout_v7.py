@@ -17,7 +17,7 @@ from pptx.chart.data import CategoryChartData
 from pptx.dml.color import RGBColor
 from pptx.enum.chart import XL_CHART_TYPE, XL_LEGEND_POSITION, XL_MARKER_STYLE
 from pptx.enum.shapes import MSO_SHAPE
-from pptx.enum.text import MSO_ANCHOR, MSO_AUTO_SIZE
+from pptx.enum.text import MSO_ANCHOR, MSO_AUTO_SIZE, PP_ALIGN
 from pptx.util import Pt
 
 from . import proposal_presentation_v3 as base
@@ -162,10 +162,10 @@ def project(prs,report,photo_sources):
     strategy=base._first_strategy(report);candidate=_selected_candidate(report)
     text(s,'title',short_title(report),561,80,950,135,46,BLUE,True)
     text(s,'s3-thesis',copy_text(strategy.get('solution') or candidate.get('mechanism') or report.get('summary')),561,275,895,190,34,INK,True)
-    text(s,'s3-detail-label','사업 대상과 운영 범위',561,500,895,45,26,BLUE,True)
+    text(s,'s3-detail-label','사업 대상과 운영 범위',561,470,895,45,26,BLUE,True)
     brief=(report.get('planning_decision') or {}).get('strategy_brief') or {}
     detail='\n'.join(filter(None,[candidate.get('target_users') or brief.get('target_users'),candidate.get('pilot_scope') or brief.get('pilot_scope'),strategy.get('timeframe')]))
-    text(s,'s3-detail',detail or '대상·운영 권역은 사업 착수 전 협의합니다.',561,554,895,95,26,SLATE)
+    text(s,'s3-detail',detail or '대상·운영 권역은 사업 착수 전 협의합니다.',561,524,895,95,26,SLATE)
     rect(s,'s3-operation-rule',567,678,6,127,CYAN)
     text(s,'s3-operation',copy_text(candidate.get('prerequisites') or '참여처와 담당 역할을 정하고 이용·정산 절차를 확인한 뒤 시범 운영합니다.'),589,683,850,135,25,SLATE)
     label=next((o for o in s.shapes if o.name=='hero-source-label'),None)
@@ -185,6 +185,8 @@ def project(prs,report,photo_sources):
             background.width=label.width; background.height=label.height+12*EMU
         fit_text(label,caption,17,WHITE)
         label.text_frame.vertical_anchor=MSO_ANCHOR.MIDDLE
+        for paragraph in label.text_frame.paragraphs:
+            paragraph.alignment=PP_ALIGN.CENTER
 
 
 def chart(slide,name,x,y,w,h,scenario,key,divisor):
@@ -334,13 +336,16 @@ def provenance(prs,report):
     entries=[]
     for title,items in groups:
         for value,url in items:entries.append((title.split(' · ')[0],copy_text(value).replace('한국관광공사 TourAPI','').strip(),url))
+    from .proposal_case_outcomes import outcome_references
+    existing_urls={entry[2] for entry in entries}
+    entries.extend(('사례 실적',title,url) for title,url in outcome_references(report) if url not in existing_urls)
     if not entries:entries=[('출처','저장된 출처 레코드 없음','')]
     # Allocate height by wrapped text; append pages instead of hiding sources.
-    page_rows=[[]];col=0;y=270
+    page_rows=[[]];col=0;y=260
     for kind,value,url in entries:
-        height=max(48,len(wrap_words(f'{kind}  {value}',434,18))*18*1.25+18)
+        height=max(32,len(wrap_words(f'{kind}  {value}',408,15))*15*1.25+8)
         if y+height>850:
-            col+=1;y=270
+            col+=1;y=260
         if col==3:
             page_rows.append([]);col=0
         page_rows[-1].append((kind,value,url,col,y,height))
@@ -350,7 +355,7 @@ def provenance(prs,report):
     for page,(s,portion) in enumerate(zip(slides,page_rows)):
         header(s,'근거·데이터·출처',f'전체 자료명과 머신러닝 모델  {page+1}/{pages} · 파란 자료명을 누르면 원문으로 이동합니다.')
         for i,(kind,value,url,col,y,height) in enumerate(portion):
-            shape=text(s,f'reference-{i}',f'{kind}  {value}',106+col*470,y,446,height-3,18,BLUE)
+            shape=text(s,f'reference-{i}',f'{kind}  {value}',106+col*470,y,446,height-3,15,BLUE)
             if url.startswith(('https://','http://')):
                 for p in shape.text_frame.paragraphs:
                     for r in p.runs:r.hyperlink.address=url;r.font.underline=False

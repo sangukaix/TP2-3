@@ -444,8 +444,12 @@ class RepairFlowTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(request.task, 'transferability')
         self.assertEqual(request.local_max_output_tokens, 8000)
 
-    async def run_flow(self, repair_fails=False, repair_valid=True):
+    async def run_flow(self, repair_fails=False, repair_valid=True, constraint_failure=False):
         evidence = pack(False)
+        planning_brief = {'input_profile': 'guided_v2', 'business_direction': 'auto'} if constraint_failure else None
+        if constraint_failure:
+            for source in evidence['benchmark_cases']:
+                source.update(source_url='https://example.go.kr/' + source['source_id'], operating_model=source['intervention'])
         class Evidence:
             def __init__(self, **kwargs): pass
             async def collect(self, **kwargs):
@@ -455,13 +459,21 @@ class RepairFlowTest(unittest.IsolatedAsyncioTestCase):
             async def collect(self, **kwargs):
                 return {'benchmark_cases': evidence['benchmark_cases'], 'sources': [], 'research_gaps': [], 'trace': []}
         assessments = []
+        self.constraint_calls = assessments
         class Transfer:
             def __init__(self, **kwargs): pass
             async def assess(self, *, evidence_pack, revision_feedback=None):
                 assessments.append(deepcopy(revision_feedback))
                 if revision_feedback and repair_fails:
                     raise LLMProviderError('OLLAMA_TIMEOUT', '테스트 실패')
-                return transfer(bool(revision_feedback) and repair_valid)
+                value = transfer(bool(revision_feedback) and repair_valid)
+                if constraint_failure:
+                    from ai_server.app.case_recommendation import constrain_decision
+                    value['design_candidates'][0]['mechanism'] = '지역 환급' if revision_feedback and repair_valid else '야간 공연'
+                    value['design_candidates'][1]['mechanism'] = '시간대 예약'
+                    value['strategy_brief']['mechanism'] = value['design_candidates'][0]['mechanism']
+                    return constrain_decision(value, evidence['benchmark_cases'], planning_brief, defer_repair=True)
+                return value
         final_flags = []
         async def review(**kwargs):
             final_flags.append(kwargs.get('final_pass', False))
@@ -469,7 +481,7 @@ class RepairFlowTest(unittest.IsolatedAsyncioTestCase):
         router = SimpleNamespace(local_first=True, student_budget=True,
                                  public_config=lambda: {}, effective_routes=lambda: {},
                                  preflight_local_models=AsyncMock(), consume_trace=lambda: [])
-        ml = SimpleNamespace(model_dump=lambda **kwargs: {}, status='unavailable', reason_code='test', horizon_policy={})
+        ml = SimpleNamespace(model_dump=lambda **kwargs: {'horizon_policy': {'coverage_complete': True}}, status='unavailable', reason_code='test', horizon_policy={})
         _CASE_STUDY_CACHE.clear()
         _EVIDENCE_CACHE.clear()
         with (
@@ -483,8 +495,24 @@ class RepairFlowTest(unittest.IsolatedAsyncioTestCase):
             patch('ai_server.app.agents.report_orchestrator.ReviewerAgent', return_value=SimpleNamespace(review=review)),
         ):
             result = await orchestrate_strategy_report(project_root=Path(directory), env_values={}, region_code='51130',
-                                                       snapshot={'region_name': '강원특별자치도 원주시'}, report_schema={})
+                                                       snapshot={'region_name': '강원특별자치도 원주시'}, report_schema={}, planning_brief=planning_brief)
         return result, assessments, final_flags
+
+    async def test_selection_constraint_uses_one_existing_repair_then_writes(self):
+        result, calls, _ = await self.run_flow(constraint_failure=True)
+        self.assertEqual(len(calls), 2)
+        self.assertTrue(any(r['field'].endswith('constraint_repair') for r in calls[1]))
+        self.assertEqual(result['planning_decision']['selected_candidate_id'], 'candidate:1')
+        self.assertNotIn('constraint_repair', result['planning_decision'])
+
+    async def test_persistent_selection_constraint_stops_before_planner(self):
+        from ai_server.app.openai_responses import OpenAIResponseError
+        FakePlannerAgent.calls = 0
+        with self.assertRaises(OpenAIResponseError) as raised:
+            await self.run_flow(constraint_failure=True, repair_valid=False)
+        self.assertEqual(len(self.constraint_calls), 2)
+        self.assertEqual(raised.exception.code, 'TRANSFERABILITY_SELECTION_UNSUPPORTED')
+        self.assertEqual(FakePlannerAgent.calls, 0)
 
     async def test_upstream_repair_happens_once_before_draft_and_one_final_audit(self):
         result, calls, final_flags = await self.run_flow()

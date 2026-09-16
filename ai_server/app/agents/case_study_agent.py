@@ -15,7 +15,8 @@ from ..llm.router import LLMRouter
 from ..rag_store import OfficialTourismRagStore
 from ..case_registry import load_curated_case_registry
 from ..case_research_plan import build_case_research_plan, comparison_coverage
-from ..case_scope import build_case_search_policy, case_relation, select_case_cards
+from ..case_scope import build_case_search_policy, case_relation, select_case_cards, case_identity
+from ..festival_cases import collect_festival_cases, attach_festival_statistics
 from .evidence_agent import _url_is_allowed, allowed_domains
 from .prompts import CASE_STUDY_RESEARCH_INSTRUCTIONS
 
@@ -41,6 +42,17 @@ CASE_STUDY_SCHEMA = {
                     'duration': {'type': 'string'},
                     'public_budget': {'type': 'string'},
                     'observed_result': {'type': 'string'},
+                    'operating_statistics': {'type': 'array', 'maxItems': 6, 'items': {
+                        'type': 'object', 'additionalProperties': False,
+                        'properties': {
+                            'metric': {'type': 'string', 'enum': ['operating_days', 'sites', 'participants', 'utilization_rate', 'additional_visitor_share', 'participant_spending']},
+                            'value': {'type': 'number'}, 'unit': {'type': 'string'},
+                            'period': {'type': 'string'}, 'scope': {'type': 'string'}, 'quote': {'type': 'string'},
+                            'capacity_count': {'type': ['number', 'null']},
+                            'participant_count': {'type': ['number', 'null']},
+                            'program_name': {'type': ['string', 'null']},
+                        }, 'required': ['metric', 'value', 'unit', 'period', 'scope', 'quote',
+                                        'capacity_count', 'participant_count', 'program_name']}},
                     'measurement_period': {'type': 'string'},
                     'evidence_strength': {'type': 'string', 'enum': ['high', 'medium', 'low']},
                     'transfer_conditions': {'type': 'array', 'maxItems': 5, 'items': {'type': 'string'}},
@@ -52,7 +64,7 @@ CASE_STUDY_SCHEMA = {
                 'required': [
                     'case_region', 'intervention', 'problem_addressed', 'target_group', 'operating_model',
                     'duration', 'public_budget', 'observed_result', 'measurement_period', 'evidence_strength',
-                    'transfer_conditions', 'risks', 'source_title', 'source_url', 'published_or_updated_at',
+                    'transfer_conditions', 'risks', 'source_title', 'source_url', 'published_or_updated_at', 'operating_statistics',
                 ],
             },
         },
@@ -91,6 +103,7 @@ def _load_curated_case_cards(project_root: Path, domains: list[str]) -> list[dic
             'duration': str(record.get('duration') or '공식 자료에서 확인되지 않음'),
             'public_budget': str(record.get('public_budget') or '공식 자료에서 확인되지 않음'),
             'observed_result': str(record.get('observed_result') or '공식 자료에서 확인되지 않음'),
+            'operating_statistics': list(record.get('operating_statistics') or []),
             'measurement_period': str(record.get('measurement_period') or '공식 자료에서 확인되지 않음'),
             'evidence_strength': str(record.get('evidence_strength') or 'low'),
             'quantitative_result_approved': record.get('quantitative_result_approved'),
@@ -146,6 +159,8 @@ def _needs_targeted_case_research(curated_cards: list[dict[str, Any]], snapshot:
     뜻이 아닙니다. 선택 지역 또는 검증된 peer와 맞닿은 공식 카드가 없으면, local_first라도
     OpenAI Web Search의 한정된 사례 조사 1회를 사용합니다.
     """
+    if any(c.get('evidence_kind')=='festival_statistics' for c in curated_cards):
+        return True  # CSV statistics do not replace research into actual operations.
     target_related = any(
         (relation := case_relation(card, snapshot))['scope'] == 'selected_region'
         or relation['peer_region_code'] is not None
@@ -183,13 +198,27 @@ class CaseStudyAgent:
         # 1) 팀이 먼저 검수한 JSONL 사례, 2) 영속 RAG, 3) 허용 도메인 웹 검색 순서로 근거를 모읍니다.
         # 어느 단계가 실패했는지는 trace·research_gaps에 남겨 Planner와 Reviewer가 알 수 있게 합니다.
         curated_cards = _load_curated_case_cards(self.project_root, self.domains)
+        festival_cards, festival_status = collect_festival_cases(self.project_root, self.env_values, snapshot, planning_brief)
+        curated_cards.extend(festival_cards)
         case_search_policy = build_case_search_policy(snapshot)
         research_plan = build_case_research_plan(snapshot)
+        research_plan['festival_dataset'] = festival_status
+        research_plan['festival_candidates'] = [
+            {key: card[key] for key in ('source_id','case_region','intervention','observed_result','retrieval_basis')}
+            for card in festival_cards]
+        research_plan['search_tasks'] = [
+            {'region_code':c['region_code'],'region_name':c['case_region'],
+             'reason':'보유 축제 CSV로 비교한 후보의 실제 프로그램·운영 방식 확인',
+             'query':f"{c['case_region']} {c['intervention']} {c['measurement_period']} 공식 프로그램 운영 결과"}
+            for c in festival_cards if c['retrieval_basis']['kind']=='external_benchmark'
+        ] + research_plan['search_tasks']
         curated_cards, registry_coverage = select_case_cards(curated_cards, snapshot, mechanism_key=_case_mechanism_family)
         gaps: list[str] = []
         trace: list[dict[str, Any]] = [{
             'agent': 'case_scout', 'stage': 'curated_registry', 'status': 'completed', 'items': len(curated_cards),
         }]
+        trace.append({'agent':'case_scout','stage':'festival_dataset','status':'completed' if festival_cards else 'skipped',
+                      'dataset':festival_status,'items':len(festival_cards)})
         trace.append({'agent': 'case_scout', 'stage': 'regional_research_plan',
                       'status': 'completed', 'research_plan': research_plan})
 
@@ -262,6 +291,7 @@ class CaseStudyAgent:
                         'ml_analysis': snapshot.get('ml_analysis') or {},
                         'regional_comparison': snapshot.get('regional_comparison') or {},
                         'nationwide_comparison': snapshot.get('nationwide_comparison') or {},
+                        'provincial_context': snapshot.get('provincial_context') or {},
                         'curated_case_cards': curated_cards, 'case_rag_candidates': rag_candidates,
                         'case_research_lenses': case_lenses,
                         'case_search_policy': case_search_policy,
@@ -291,6 +321,7 @@ class CaseStudyAgent:
                         'regional_comparison': snapshot.get('regional_comparison') or {},
                         # peer 비교는 사례를 그대로 복사하지 않고 적용 조건을 좁히는 참고 근거입니다.
                         'nationwide_comparison': snapshot.get('nationwide_comparison') or {},
+                        'provincial_context': snapshot.get('provincial_context') or {},
                         'curated_case_cards': curated_cards,
                         'case_rag_candidates': rag_candidates,
                         'case_research_lenses': case_lenses,
@@ -333,9 +364,9 @@ class CaseStudyAgent:
 
         # 같은 URL은 하나의 사례로만 유지하고 Planner가 인용할 수 있도록 source 레코드도 만듭니다.
         unique_cases: dict[str, dict[str, Any]] = {}
-        for case in cases:
+        for case in attach_festival_statistics(cases):
             if case.get('source_url'):
-                unique_cases.setdefault(str(case['source_url']), case)
+                unique_cases.setdefault(case_identity(case), case)
         cases = list(unique_cases.values())
         cases, case_coverage = select_case_cards(cases, snapshot, mechanism_key=_case_mechanism_family)
         case_coverage['registry_candidates'] = registry_coverage['catalog_candidates']
@@ -367,12 +398,14 @@ class CaseStudyAgent:
             'retrieval_method': case.get('retrieval_method', 'unrecorded'),
             'retrieval_context': case.get('retrieval_context'),
             'observed_result': case.get('observed_result'),
+            'operating_statistics': case.get('operating_statistics') or [],
+            **{key: case[key] for key in ('evidence_kind','festival_statistics','retrieval_basis','source_files','dataset_hash') if key in case},
             'measurement_period': case.get('measurement_period'),
             'transfer_conditions': case.get('transfer_conditions'),
         } for case in cases]
         # 최신 검수 카드와 같은 출처의 오래된 Chroma 요약이 교정 내용을 덮어쓰지 않게 한다.
         current_ids = {row['source_id'] for row in sources}
-        current_urls = {row['source_url'] for row in sources}
+        current_urls = {row['source_url'] for row in sources if row.get('retrieval_method') != 'datalab_festival_table'}
         rag_candidates = [row for row in rag_candidates if row.get('source_id') not in current_ids
                           and row.get('source_url') not in current_urls]
         return {

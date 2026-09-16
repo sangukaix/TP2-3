@@ -144,6 +144,11 @@ class EvidenceAgent:
                 'published_or_updated_at': observation.get('period') or snapshot.get('latest_month', ''),
             })
         trace.append({'agent': 'evidence', 'stage': 'dataset', 'status': 'completed', 'items': len(sources)})
+        provincial = snapshot.get('provincial_context') or {}
+        if provincial.get('available'):
+            sources.extend(provincial.get('source_records') or [])
+            trace.append({'agent': 'evidence', 'stage': 'provincial_context', 'status': 'completed',
+                          'items': len(provincial.get('comparisons') or [])})
         # 전국 비교는 MySQL에서 검증한 12개월 요약일 때만 별도 출처로 추가합니다.
         # 관측 수치와 peer 비교의 원본 ID를 분리해 Planner가 출처 없는 순위·평균을 만들지 못하게 합니다.
         nationwide = snapshot.get('nationwide_comparison') or {}
@@ -296,6 +301,7 @@ class EvidenceAgent:
                         'period': snapshot['period'],
                         'observations': snapshot.get('observations') or [],
                         'nationwide_comparison': snapshot.get('nationwide_comparison') or {},
+                        'provincial_context': snapshot.get('provincial_context') or {},
                         'regional_tourism_status': tourism_status,
                         'ml_analysis': ml,
                         'research_questions': [
@@ -323,6 +329,7 @@ class EvidenceAgent:
                         'observations': snapshot.get('observations') or [],
                         # 전국 peer 비교는 MySQL 검증 완료 상태일 때만 조사 질문의 맥락으로 사용합니다.
                         'nationwide_comparison': snapshot.get('nationwide_comparison') or {},
+                        'provincial_context': snapshot.get('provincial_context') or {},
                         'regional_tourism_status': tourism_status,
                         'ml_analysis': ml,
                         'research_questions': [

@@ -29,7 +29,7 @@ from .report_review_status import review_label
 PRESENTATION_TEMPLATE_PATH = (
     Path(__file__).resolve().parent / "templates" / "tourism_strategy_12_slide_template_v6.pptx"
 )
-PRESENTATION_RENDER_VERSION = "pptx-calculation-infographic-v19"
+PRESENTATION_RENDER_VERSION = "pptx-v46-linked-cost"
 FINAL_SLIDE_COUNT = 12
 
 BLUE = RGBColor(0x00, 0x4E, 0xA2)
@@ -830,7 +830,7 @@ def _validate_presentation(prs: Presentation, report: dict[str, Any]) -> None:
     if len(prs.slides) < 11:
         raise ValueError(f"PowerPoint 11~12장 구조를 확인해주세요: {len(prs.slides)}장")
     all_text = "\n".join(shape.text for slide in prs.slides for shape in slide.shapes if getattr(shape, "has_text_frame", False))
-    required = ("사업 설계", "지역별 참고 사례", "머신러닝 예측값", "견적", "근거·데이터", "감사합니다")
+    required = ("사업 목표", "지역별 참고 사례", "머신러닝 예측값", "견적", "근거·데이터", "감사합니다")
     missing = [label for label in required if label not in all_text]
     if missing:
         raise ValueError(f"PowerPoint 필수 섹션 누락: {', '.join(missing)}")
@@ -875,6 +875,8 @@ def create_strategy_proposal_presentation(report: dict[str, Any]) -> BytesIO:
     layout.case_selection_page(prs, report)
     from .proposal_layout_v10 import polish
     polish(prs, report)
+    from .proposal_operating_slides import append_operating_pages
+    append_operating_pages(prs, report)
     output = BytesIO()
     prs.save(output)
     output.seek(0)

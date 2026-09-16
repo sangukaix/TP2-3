@@ -10,6 +10,13 @@ from typing import Any, Callable
 
 CASE_SCOPE_VERSION = 'nationwide-case-scope-v1'
 CASE_DOCUMENT_TYPES = ('case_study', 'case_study_budget')
+
+
+def case_identity(card: dict) -> str:
+    # Separate downloaded festival tables share the provider homepage URL.
+    if card.get('retrieval_method') == 'datalab_festival_table':
+        return str(card.get('source_id') or '')
+    return str(card.get('source_url') or card.get('source_id') or '')
 PROVINCE_ALIASES = {
     '서울': ('서울특별시', '서울시', '서울'), '부산': ('부산광역시', '부산시', '부산'),
     '대구': ('대구광역시', '대구시', '대구'), '인천': ('인천광역시', '인천시', '인천'),
@@ -89,7 +96,7 @@ def select_case_cards(cards: list[dict[str, Any]], snapshot: dict[str, Any], *,
     """검수 원문을 자르지 않고 작은 비교 후보군을 선정. 이것은 적합성/효과 점수가 아니다."""
     unique: dict[str, dict[str, Any]] = {}
     for card in cards:
-        key = str(card.get('source_url') or card.get('source_id') or '')
+        key = case_identity(card)
         if key:
             unique.setdefault(key, deepcopy(card))
     # 예산서가 운영 사례의 제한된 비교 슬롯을 차지하지 않게 한다.
@@ -108,6 +115,14 @@ def select_case_cards(cards: list[dict[str, Any]], snapshot: dict[str, Any], *,
     def add(row: dict[str, Any]) -> None:
         if len(chosen) < limit and row not in chosen:
             chosen.append(row)
+
+    festivals = sorted((r for r in rows if r.get('festival_statistics')),
+                       key=lambda r: -r.get('retrieval_basis', {}).get('score', 0))
+    local = next((r for r in festivals if r['retrieval_context']['scope']=='selected_region'), None)
+    if local:
+        add(local)
+    for row in [r for r in festivals if r is not local][:2]:
+        add(row)
 
     # 인근 사례가 많아도 타시도 peer·새 운영 원리의 사례가 Top-K에서 모두 밀리지 않게 한다.
     for group in ({'selected_region', 'same_province'}, {'cross_province_peer'},

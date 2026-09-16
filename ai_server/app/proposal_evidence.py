@@ -61,6 +61,10 @@ def build_reference_estimate(report: dict[str, Any]) -> dict[str, Any]:
     A hard budget is respected by reducing funded volume; an infeasible fixed-cost
     floor is reported, never hidden. No LLM or network request is needed.
     """
+    from .operating_target import build_operating_target
+    operating_plan = build_operating_target(report)
+    if operating_plan.get('estimate'):
+        return deepcopy(operating_plan['estimate'])
     strategy = (report.get('strategies') or [{}])[0]
     text = ' '.join(str(strategy.get(k) or '') for k in ('title', 'solution'))
     refund = '환급' in text or '반값' in text

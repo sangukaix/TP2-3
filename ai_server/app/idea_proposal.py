@@ -6,33 +6,32 @@ CASE_URL = 'https://clik.nanet.go.kr/minutes/viewer.do?DOCID=CLIKC35241692185642
 
 
 def target_basis(report):
-    strategy = (report.get('strategies') or [{}])[0]
-    decision = report.get('planning_decision') or {}
-    ids = list(decision.get('recommended_case_ids') or [])
-    for candidate in decision.get('design_candidates') or []:
-        if candidate.get('candidate_id') == decision.get('selected_candidate_id'):
-            ids.extend(candidate.get('case_source_ids') or [])
-    refund = any(word in str(strategy.get('title', '')) + str(strategy.get('solution', '')) for word in ('반값', '환급'))
-    gangjin = refund and ('gangjin' in str(ids) or '강진' in str(strategy))
-    return {
-        'kind': 'planning_assumption', 'visitor_target_pct': 20.0 if gangjin else 5.0, 'spending_target_pct': 20.0 if gangjin else 5.0,
-        'case_title': '강진 반값여행과 지역축제 운영 실적' if gangjin else '선정 사례의 운영 방식과 시범 목표',
-        'source_url': CASE_URL if gangjin else '',
-        'period': '2024년 1~10월 누적 / 전년 비교 발표' if gangjin else '',
-        'observed_visitors': 2480000 if gangjin else None,
-        'reported_growth_pct': 25.0 if gangjin else None,
-        'prior_visitors_backcalculated': 1984000 if gangjin else None,
-        'explanation': (
-            '강진군의회 2024-11-20 시정연설: 10월 말 관광객 약 248만 명, 전년 대비 25% 증가. '
-            '전년 규모 역산: 248만÷1.25≈198.4만 명, 차이≈49.6만 명. 역산값은 별도 관측 원자료가 아니다. '
-            '반값여행과 축제의 동시기 실적이며 사업 단독 효과·ML 대비 증가율은 아니다. '
-            f"{report.get('region_name') or '선택 지역'}에서는 최종월 방문 +20%를 도전 목표로 제안한다(25% × 80%). 80%는 전면 적용 대신 단계 운영을 고려한 계획 가정이며 인구 보정·통계 추정 계수가 아니다. "
-            '기본 소비 목표는 월별 소비/방문 비율을 추가 방문 수에 적용한 계획 가정이며 강진 소비 실적으로 계산한 값이 아니다.'
-            if gangjin else
-            '선정 사례의 운영 방식을 참고하여 최종월 방문·소비 +5%를 초기 계획 목표로 제안한다. '
-            '이 비율은 사례의 검증된 효과율이나 ML 결과가 아니라 조정 가능한 기획 가정이다.'
-        ),
-    }
+    from .operating_target import build_operating_target
+    plan = build_operating_target(report)
+    central = plan.get('central') or {}
+    return {'kind': 'operating_capacity', 'capacity_plan': plan,
+            'case_title': '선정 사례의 운영 방식과 지역 운영 규모', 'observed_visitors': None,
+            'source_url': '', 'reported_growth_pct': None,
+            'visitor_target_pct': central.get('visitor_target_pct'),
+            'spending_target_pct': central.get('spending_target_pct'),
+            'explanation': plan['explanation']}
+
+
+def _automatic_target(report):
+    """Migrate identifiable old defaults, but preserve explicit/ambiguous edits."""
+    from .report_projection import execution_target
+    current = execution_target(report)
+    brief = report.get('planning_brief') or {}
+    if brief.get('visitor_target_pct') is not None or (report.get('execution_scenario') or {}).get('target_origin') == 'user':
+        return False
+    basis = report.get('target_proposal_basis') or {}
+    if current is None: return True
+    if basis.get('target_mode') == 'user': return False
+    if basis.get('kind') == 'operating_capacity':
+        return current == (basis.get('visitor_target_pct'), basis.get('spending_target_pct'))
+    explanation = basis.get('explanation', '')
+    return (basis.get('kind') == 'planning_assumption' and '현재 조정된 목표' not in explanation
+            and current in ((5.0, 5.0), (20.0, 20.0)))
 
 
 def align_business_period(report):
@@ -66,24 +65,36 @@ def prepare_idea_report(report):
         [s for s in result.get('evidence_sources') or [] if s.get('source_type') == 'benchmark_case'])
     result['summary'] = re.sub(r'\s*·?\s*코드 점검에서 실행·근거 보완 항목이 확인되었습니다\.?', '', str(result.get('summary') or ''))
     align_business_period(result)
+    automatic = _automatic_target(result)
     basis = target_basis(result)
-    if execution_target(result) is None:
-        result['execution_scenario'] = {key: basis[key] for key in ('visitor_target_pct', 'spending_target_pct')}
+    plan = basis['capacity_plan']
+    if automatic:
+        result['execution_scenario'] = ({**{key: basis[key] for key in ('visitor_target_pct', 'spending_target_pct')},
+                                        'target_origin': 'operating_capacity'} if plan.get('central') else None)
     actual = execution_target(result)
-    if actual != (basis['visitor_target_pct'], basis['spending_target_pct']):
-        basis['explanation'] += f' 현재 조정된 목표는 방문 +{actual[0]:g}%, 소비 +{actual[1]:g}%이다.'
-    if actual[0] != actual[1]:
-        basis['explanation'] += ' 현재 소비 목표는 방문 연동식 대신 별도로 지정한 소비 목표율을 적용한다.'
-    else:
-        basis['explanation'] += ' 방문 수가 0보다 큰 월은 ML 소비액÷ML 방문 수를 추가 방문 수에 곱한다. 같은 월의 두 증가율은 같으며, 이 비율은 실제 1인당 소비액이 아니다.'
-    basis['visitor_target_pct'], basis['spending_target_pct'] = actual
+    basis['target_mode'] = 'automatic' if automatic else 'user'
+    if not automatic and actual:
+        basis['explanation'] = (f'현재 최종월 목표는 사용자 지정 방문 +{actual[0]:.2f}%, 소비 +{actual[1]:.2f}%입니다. '
+                                '운영 규모로 계산한 시나리오는 별도 참고안입니다. ' + plan['explanation'])
+    if actual: basis['visitor_target_pct'], basis['spending_target_pct'] = actual
     result['target_proposal_basis'] = basis
     for strategy in result.get('strategies') or []:
-        strategy['expected_effect'] = f'계획 목표: 최종월 ML 기준 전망 대비 방문 +{actual[0]:g}%, 소비 +{actual[1]:g}%. 월별 목표는 단계 적용하며 참여·이용 실적은 별도 집계합니다.'
+        if actual:
+            strategy['expected_effect'] = f'계획 목표: 최종월 ML 전망 대비 방문 +{actual[0]:.2f}%, 소비 +{actual[1]:.2f}%. 운영 규모와 참여 가정으로 산정하며 실제 성과는 별도 집계합니다.'
         kpi = str(strategy.get('kpi') or '')
+        from .measurement_alignment import align_night_growth
+        aligned_kpi = align_night_growth(kpi)
+        if aligned_kpi != kpi:
+            result.setdefault('planning_decision', {}).setdefault('measurement_alignment', []).append(
+                {'original': kpi, 'updated': aligned_kpi, 'reason': '야간 방문 비중과 전년 대비 증가율의 분모 구분'})
+            strategy['kpi'] = kpi = aligned_kpi
         if '⑥성공/중단 기준:' in kpi:
             strategy['kpi'] = kpi.split('⑥성공/중단 기준:', 1)[0].rstrip() + ' ⑥성과 판단: 위 계획 목표와 실제 집계 결과를 비교합니다.'
-    if not result.get('reference_estimate'):
+    previous_estimate = result.get('reference_estimate') or {}
+    estimate_is_manual = previous_estimate.get('user_adjusted') or '사용자 참고 총액' in previous_estimate.get('scale_basis', '')
+    if plan.get('estimate') and not estimate_is_manual:
+        result['reference_estimate'] = deepcopy(plan['estimate'])
+    elif not result.get('reference_estimate'):
         result['reference_estimate'] = build_reference_estimate(result)
         estimate = result['reference_estimate']
         brief = result.get('planning_brief') or {}
@@ -118,13 +129,15 @@ def bounded_chat_reply(report, question):
         visitor = re.search(r'방문(?:자)?(?:\s*목표(?:율)?)?\s*([0-9]+(?:\.[0-9]+)?)\s*%', question)
         spending = re.search(r'(?:관광)?소비(?:\s*목표(?:율)?)?\s*([0-9]+(?:\.[0-9]+)?)\s*%', question)
         if visitor or spending:
-            current = prepare_idea_report(report)['execution_scenario']
+            current = prepare_idea_report(report)['execution_scenario'] or {}
+            if (not visitor and 'visitor_target_pct' not in current) or (not spending and 'spending_target_pct' not in current):
+                return reply('현재 자동 목표가 없어 한 지표만 바꾸면 다른 목표를 임의로 정하게 됩니다. 방문·소비 목표를 함께 알려주시면 반영합니다.')
             v = float(visitor[1]) if visitor else current['visitor_target_pct']
             s = float(spending[1]) if spending else current['spending_target_pct']
             if not 0 <= v <= 20 or not 0 <= s <= 30:
                 return reply('방문 목표는 0~20%, 소비 목표는 0~30%로 조정할 수 있습니다.')
             return reply(f'방문 +{v:g}%, 소비 +{s:g}%로 계획 목표를 조정합니다. ML 예측값은 유지됩니다.',
-                         {'execution_scenario': {'visitor_target_pct': v, 'spending_target_pct': s}})
+                         {'execution_scenario': {'visitor_target_pct': v, 'spending_target_pct': s, 'target_origin': 'user'}})
         budget = re.search(r'(?:견적|예산)(?:\s*총액)?\s*([0-9,]+(?:\.[0-9]+)?)\s*(억|만)?\s*원', question)
         if budget:
             total = round(float(budget[1].replace(',', '')) * {'억': 100000000, '만': 10000, None: 1}[budget[2]])
@@ -140,12 +153,17 @@ def bounded_chat_reply(report, question):
 
 
 def scale_estimate(estimate, total):
+    estimate['user_adjusted'] = True
     original = estimate['total_krw']
-    amounts = [int(row['amount'] * total / original) for row in estimate['items']]
+    amounts = [int(row['amount'] * total / original) if original else int(total / len(estimate['items'])) for row in estimate['items']]
     amounts[-1] += total - sum(amounts)
     for row, amount in zip(estimate['items'], amounts):
         row.update(amount=amount, basis='요청 총액 내 항목별 배분 가정 · 운영량 별도 조정')
-    for key in ('quantity', 'unit_krw', 'redemption_count', 'qualifying_spend_krw'):
+    for key in ('quantity', 'unit_krw', 'redemption_count', 'qualifying_spend_krw',
+                'full_participation_budget_krw', 'participant_purchases_krw',
+                'additional_spending_krw', 'scenario_note', 'capacity_quantity',
+                'per_claim_cap_krw', 'refund_rate_pct', 'purchase_per_participant_krw'):
         estimate.pop(key, None)
+    estimate['assumptions'] = ['사용자가 지정한 총액의 항목별 배분 예시이며 운영 시나리오와 별도로 조정한 금액입니다.']
     estimate['scale_basis'] = f'사용자 참고 총액 {total:,}원을 기존 항목 비중으로 재배분. 수량·단가는 별도 조정하는 배분 예시입니다.'
     estimate.update(total_krw=total, reserve_krw=amounts[-1], subtotal_krw=sum(amounts[:-1]), within_hard_budget=True)

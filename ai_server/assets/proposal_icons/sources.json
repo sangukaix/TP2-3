@@ -1,0 +1,19 @@
+{
+  "project": "Lucide",
+  "version": "0.468.0",
+  "source": "https://raw.githubusercontent.com/lucide-icons/lucide/0.468.0/",
+  "license": "ISC; Feather-derived icons MIT (see LICENSE)",
+  "icons": [
+    "mouse-pointer-click",
+    "map-pinned",
+    "search-check",
+    "git-compare-arrows",
+    "notebook-pen",
+    "shield-check",
+    "files",
+    "database",
+    "target",
+    "users",
+    "coins"
+  ]
+}

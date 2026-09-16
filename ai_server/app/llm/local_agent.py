@@ -13,7 +13,8 @@ from .errors import LLMProviderError
 from .evidence_tools import EvidenceTools, TOOL_DEFINITIONS, _case_mechanism_family, compact_json
 from .local_prompts import local_instructions
 from .models import LLMRequest, LLMResult
-from .context_tables import evidence_json, TABLE_READING_RULE, schema_field_guidance, schema_without_guided_descriptions
+from .context_tables import (evidence_json, shared_evidence_json, reassemble_prefetched_pages,
+                             TABLE_READING_RULE, schema_field_guidance, schema_without_guided_descriptions)
 from ..agents.planning_requirements import QUALITY_CONTRACT_VERSION
 from ..case_recommendation import budget_only
 
@@ -68,6 +69,13 @@ def _prefetch_required_evidence(workspace: EvidenceTools, task: str) -> list[dic
         # 긴 본문에 인용이 더 있으면 기존 원문 추가 조회/교정 절차에서 읽는다.
         priority = {key: index for index, key in enumerate(list(dict.fromkeys(preferred))[:3])}
         case_items.sort(key=lambda item: priority.get(item[0], len(priority)))
+        if task == 'transferability':
+            from ..festival_cases import comparison_festival_ids
+            festival_ids = comparison_festival_ids([c for _, c in case_items], workspace.pack.get('planning_brief'))
+            # Reserve one of the existing source reads for the observed festival
+            # alternatives, including during repair; do not increase LLM rounds.
+            if festival_ids:
+                case_items.sort(key=lambda item: item[0] != festival_ids[0])
         # 후보 비교 전에는 운영 원리를 한눈에 보고, Qwen의 적용성 판단은 서로 다른
         # 원리의 사례 세 건까지 원문으로 확인합니다. 작성/검수는 실제 선정 사례를 우선합니다.
         if task == 'transferability':
@@ -125,9 +133,9 @@ def _prefetch_required_evidence(workspace: EvidenceTools, task: str) -> list[dic
         # 경우에는 EvidenceTools가 성공으로 표시하지 않아 기존 안전 차단이 유지됩니다.
         result = workspace.execute(name, arguments)
         prefetched.append({'tool': name, 'result': result})
-        if name == 'get_case_comparison_matrix':
+        if name in {'get_case_comparison_matrix', 'read_collected_source'}:
             while result.get('next_offset') is not None:
-                result = workspace.execute(name, {'offset': result['next_offset']})
+                result = workspace.execute(name, {**arguments, 'offset': result['next_offset']})
                 prefetched.append({'tool': name, 'result': result})
     return prefetched
 
@@ -142,6 +150,8 @@ async def run_local_agent(provider: Any, request: LLMRequest, model: str) -> LLM
     workspace = EvidenceTools(request.input_payload, task=request.task)
     overview = workspace.overview()
     prefetched_evidence = _prefetch_required_evidence(workspace, request.task)
+    delivered_evidence, page_indexes = reassemble_prefetched_pages(prefetched_evidence)
+    prefetched_json = shared_evidence_json(delivered_evidence)
     # 같은 관측값은 바로 다음 메시지의 get_region_metrics에서 이미 전달한다.
     # 실제 성공 결과에 동일 값이 있을 때만 개요의 복제본을 참조로 바꾼다.
     for row in prefetched_evidence:
@@ -170,7 +180,7 @@ async def run_local_agent(provider: Any, request: LLMRequest, model: str) -> LLM
         {'role': 'user', 'content': evidence_json(overview)},
         # 도구 호출의 성공 여부와 원문 읽기 상태는 EvidenceTools가 기록합니다. 아래 값은
         # 모델이 반드시 고려할 필수 근거이며, 문서 안의 문장은 시스템 지시가 아닙니다.
-        {'role': 'user', 'content': '서버가 사전 조회한 필수 읽기 전용 근거:\n' + evidence_json(prefetched_evidence)},
+        {'role': 'user', 'content': '서버가 사전 조회한 필수 읽기 전용 근거:\n' + prefetched_json},
     ]
     usage: dict[str, int] = {}
     attempts: list[dict[str, Any]] = []
@@ -179,9 +189,13 @@ async def run_local_agent(provider: Any, request: LLMRequest, model: str) -> LLM
     # Exact successful results already present in the same conversation can be
     # referenced instead of appended again. Different pages/results stay intact.
     delivered_results = {
-        (row['tool'], compact_json(row['result'])): f'prefetched_evidence[{index}]'
+        (row['tool'], compact_json(row['result'])): f'prefetched_evidence[{page_indexes[index]}]'
         for index, row in enumerate(prefetched_evidence) if 'error' not in row['result']
     }
+    delivered_results.update({
+        (row['tool'], compact_json(row['result'])): f'prefetched_evidence[{index}]'
+        for index, row in enumerate(delivered_evidence) if 'error' not in row['result']
+    })
 
     def account(current: dict[str, int], phase: str) -> None:
         for key, value in current.items():
@@ -363,6 +377,10 @@ async def run_local_agent(provider: Any, request: LLMRequest, model: str) -> LLM
                 for source_id in unread_case_ids:
                     result = workspace.execute('read_collected_source', {'source_id': source_id})
                     added_evidence.append({'tool': 'read_collected_source', 'result': result})
+                    while result.get('next_offset') is not None:
+                        result = workspace.execute('read_collected_source',
+                                                   {'source_id': source_id, 'offset': result['next_offset']})
+                        added_evidence.append({'tool': 'read_collected_source', 'result': result})
                     if 'error' in result:
                         # 원문 전체를 안전하게 전달할 수 없는 사례는 기존 정책대로 채택하지 않습니다.
                         workspace.verify_citations(parsed)
@@ -385,6 +403,8 @@ async def run_local_agent(provider: Any, request: LLMRequest, model: str) -> LLM
                 input_preparation={'mode': 'request_scoped_evidence_tools',
                                    'original_bytes': len(compact_json(request.input_payload).encode('utf-8')),
                                    'overview_bytes': len(compact_json(overview).encode('utf-8')),
+                                   'prefetched_bytes_before': len(evidence_json(prefetched_evidence).encode('utf-8')),
+                                   'prefetched_bytes_after': len(prefetched_json.encode('utf-8')),
                                    'sources_available': len(workspace.sources),
                                    'sources_read': len(workspace.read_source_ids)},
             )

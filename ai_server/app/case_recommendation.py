@@ -23,7 +23,7 @@ def allowed_operation(value, brief):
             and (direction == 'auto' or family == direction))
 
 
-def constrain_decision(decision, sources, brief):
+def constrain_decision(decision, sources, brief, *, defer_repair=False):
     if (brief or {}).get('input_profile') not in ('guided_v1', 'guided_v2'):
         return link_decision(decision, sources)
     result = deepcopy(decision)
@@ -31,13 +31,32 @@ def constrain_decision(decision, sources, brief):
     result['design_candidates'] = [c for c in result.get('design_candidates') or [] if allowed_operation(c, brief)]
     result = link_decision(result, sources)
     result['design_candidates'] = [c for c in result['design_candidates'] if c.get('case_source_ids')]
-    if not result['design_candidates']:
+    valid_ids = {c['candidate_id'] for c in result['design_candidates']}
+    if not valid_ids or result.get('selected_candidate_id') not in valid_ids:
+        # A model selection error must reach the existing one-shot local repair.
+        # Preserve the complete original decision; never select the first survivor
+        # while retaining the rejected plan's title, scope or budget.
+        message = '모델이 선택한 사업을 허용된 운영 방식과 공식 사례에 연결하지 못했습니다.'
+        if defer_repair:
+            pending = deepcopy(decision)
+            pending['selection_status'] = 'needs_evidence'
+            pending['constraint_repair'] = {
+                'problem': message,
+                'selected_candidate_id': decision.get('selected_candidate_id'),
+                'eligible_candidate_ids': sorted(valid_ids),
+                'allowed_case_ids': [s.get('source_id') for s in sources],
+                'required_fix': '제공된 공식 사례의 운영 방식과 사용자 조건에 맞게 후보를 다시 비교하고 selected_candidate_id, strategy_brief, 출처를 함께 수정하세요. 기존 제목·예산을 다른 후보에 붙이지 마세요.',
+            }
+            return pending
         from .openai_responses import OpenAIResponseError
-        raise OpenAIResponseError('PLANNING_CONDITIONS_UNSUPPORTED', '선택 조건에 맞는 공식 근거와 사업 후보를 확보하지 못했습니다. 사업 방향을 추천으로 바꾸거나 제외 조건을 조정해 주세요.', status_code=422)
-    if result.get('selected_candidate_id') not in {c['candidate_id'] for c in result['design_candidates']}:
-        # Do not combine an alternative's title with the rejected plan's scope and budget.
-        from .openai_responses import OpenAIResponseError
-        raise OpenAIResponseError('PLANNING_CONDITIONS_UNSUPPORTED', '선정한 사업이 입력 조건과 맞지 않습니다. 사업 방향이나 제외 조건을 조정해 다시 생성해 주세요.', status_code=422)
+        automatic = brief.get('business_direction', 'auto') == 'auto' and not brief.get('excluded_operations')
+        raise OpenAIResponseError(
+            'TRANSFERABILITY_SELECTION_UNSUPPORTED' if automatic else 'PLANNING_CONDITIONS_UNSUPPORTED',
+            message + (' 사용자 입력 오류가 아닙니다. 후보 보완 후에도 연결이 확인되지 않아 본문 작성을 시작하지 않았습니다.'
+                       if automatic else ' 지정한 사업 방향·제외 조건을 충족하는 후보 보완이 필요합니다.'),
+            status_code=422,
+        )
+    result.pop('constraint_repair', None)
     return result
 
 
@@ -91,7 +110,12 @@ def link_decision(decision, sources):
             'regional_similarity_verified': False,
             'basis': '같은 운영 방식의 유효한 인용을 유지. 인용 누락·오류일 때만 지역 검색 맥락·문서 등급으로 참고 사례 1건 연결. 지역 적합성 순위나 효과 확률이 아님.'}
         candidate['case_source_ids'] = ids
-        if set(prior) != set(ids):
+        # Historical citation repair is an audit, not a reason to overwrite a
+        # later explanation again during stabilization or export preparation.
+        for field in ('local_fit', 'differentiation'):
+            if 'original_' + field in previous_audit:
+                candidate['case_linkage']['original_' + field] = previous_audit['original_' + field]
+        if set(current_ids) != set(ids):
             audit = candidate['case_linkage']
             for field in ('local_fit', 'differentiation'):
                 audit['original_' + field] = previous_audit.get('original_' + field, candidate.get(field, ''))

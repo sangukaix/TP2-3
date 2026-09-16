@@ -9,6 +9,34 @@ from ai_server.test_proposal_presentation_v3_contract import _sample_report
 
 
 class GuidedPlanningTest(unittest.TestCase):
+    def test_auto_selection_failure_reaches_repair_without_replacing_the_plan(self):
+        from copy import deepcopy
+        from ai_server.app.agents.planning_requirements import candidate_delivery_issues
+        brief = {'input_profile': 'guided_v2', 'business_direction': 'auto'}
+        source = {'source_id': 'case:stay', 'source_url': 'https://example.go.kr/stay',
+                  'intervention': '숙박 체험', 'operating_model': '숙소 체험 운영'}
+        decision = {'selected_candidate_id': 'night', 'selection_status': 'ready',
+                    'strategy_brief': {'working_title': '야간 공연', 'budget_formula': '야간 예산 가정'},
+                    'design_candidates': [{'candidate_id': 'night', 'mechanism': '야간 공연'},
+                                          {'candidate_id': 'stay', 'mechanism': '숙박 체험'}]}
+        original = deepcopy(decision)
+        pending = constrain_decision(decision, [source], brief, defer_repair=True)
+        self.assertEqual(decision, original)
+        self.assertEqual(pending['selected_candidate_id'], 'night')
+        self.assertEqual(pending['strategy_brief'], original['strategy_brief'])
+        self.assertEqual(pending['constraint_repair']['eligible_candidate_ids'], ['stay'])
+        feedback = candidate_delivery_issues({'benchmark_cases': [source], 'planning_brief': brief}, pending)
+        self.assertTrue(any(r['field'].endswith('constraint_repair') and r['severity'] == 'critical' for r in feedback))
+        with self.assertRaises(OpenAIResponseError) as raised:
+            constrain_decision(pending, [source], brief)
+        self.assertEqual(raised.exception.code, 'TRANSFERABILITY_SELECTION_UNSUPPORTED')
+        self.assertIn('사용자 입력 오류가 아닙니다', raised.exception.message)
+        pending['selected_candidate_id'] = 'stay'
+        pending['strategy_brief'] = {'working_title': '숙박 체험'}
+        repaired = constrain_decision(pending, [source], brief)
+        self.assertNotIn('constraint_repair', repaired)
+        self.assertEqual(repaired['strategy_brief']['working_title'], '숙박 체험')
+
     def test_default_dates_are_three_calendar_months(self):
         brief=PlanningBrief(region_code='51110',input_profile='guided_v1')
         self.assertEqual(brief.start_date,date.today().replace(day=1))

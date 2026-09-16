@@ -7,6 +7,8 @@
 from __future__ import annotations
 
 from io import BytesIO
+from hashlib import sha256
+from pathlib import Path
 from typing import Any, Iterable
 from urllib.parse import urlparse
 
@@ -36,6 +38,7 @@ PALE_BLUE = RGBColor(232, 244, 252)
 PALE_CYAN = RGBColor(230, 249, 250)
 PALE_ORANGE = RGBColor(255, 242, 232)
 WHITE = RGBColor(255, 255, 255)
+IMAGE_CACHE = Path(__file__).resolve().parents[2] / 'storage' / 'region_cover_images'
 
 
 def set_run(run: Any, *, size: float, color: RGBColor = INK, bold: bool = False,
@@ -257,18 +260,36 @@ def select_image_sources(report: dict[str, Any], *, limit: int = 2) -> list[dict
 
 
 def download_images(sources: Iterable[dict[str, Any]]) -> list[tuple[dict[str, Any], BytesIO]]:
-    """사진 다운로드 실패가 기획서 생성 전체를 막지 않도록 개별적으로 건너뜁니다."""
+    """Reuse verified photo bytes across cover, body and Word exports."""
     downloaded: list[tuple[dict[str, Any], BytesIO]] = []
     with httpx.Client(timeout=7, follow_redirects=True) as client:
         for source in sources:
+            url = str(source.get('image_url') or '')
+            if not _valid_image_url(url):
+                continue
+            path = IMAGE_CACHE / (sha256(url.encode()).hexdigest() + '.img')
             try:
-                response = client.get(str(source['image_url']))
+                if path.is_file():
+                    stream = BytesIO(path.read_bytes())
+                    Image.open(stream).verify()
+                    stream.seek(0)
+                    downloaded.append((source, stream))
+                    continue
+            except (OSError, ValueError):
+                pass  # Corrupt cache entries are fetched again, never exported.
+            try:
+                response = client.get(url)
                 response.raise_for_status()
                 if not str(response.headers.get('content-type', '')).lower().startswith('image/'):
                     continue
                 stream = BytesIO(response.content)
                 Image.open(stream).verify()
                 stream.seek(0)
+                try:
+                    IMAGE_CACHE.mkdir(parents=True, exist_ok=True)
+                    path.write_bytes(response.content)
+                except OSError:
+                    pass
                 downloaded.append((source, stream))
             except (httpx.HTTPError, OSError, KeyError, ValueError):
                 continue

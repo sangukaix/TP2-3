@@ -97,7 +97,12 @@ class BriefContractTest(unittest.TestCase):
                 extract_brief_reference(filename, content)
 
     def test_api_validation_no_llm(self):
-        with TestClient(main.app) as client, patch('ai_server.app.main.generate_orchestrated_report', new_callable=AsyncMock) as generate:
+        with (
+            patch('ai_server.app.main.initialize_strategy_store'),
+            patch('ai_server.app.main.list_interrupted_strategy_jobs', return_value=[]),
+            patch('ai_server.app.main.generate_orchestrated_report', new_callable=AsyncMock) as generate,
+            TestClient(main.app) as client,
+        ):
             response = client.post('/ai/v1/demo/11680/strategy-report/jobs', json={'region_name': '서울특별시 강남구', 'planning_brief': {'region_code': '11680', 'budget_status': 'confirmed'}})
             self.assertEqual(response.status_code, 422)
             response = client.post('/ai/v1/demo/11680/strategy-report/jobs', json={'region_name': '서울특별시 강남구', 'planning_brief': {'region_code': '28245'}})

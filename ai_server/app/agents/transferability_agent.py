@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 from typing import Any
+from copy import deepcopy
 
 from ..openai_responses import create_structured_response
 from ..llm.models import LLMRequest
 from ..llm.router import LLMRouter
 from .prompts import TRANSFERABILITY_INSTRUCTIONS
 from .planning_requirements import CANDIDATE_TYPES
+from ..planning_rationale import bind_rationale, reasoning_guide, COMPARISON_CRITERIA
 
 
 # 기존 사례 평가와 새 사업 후보 비교는 다릅니다. 발상 후보도 구조화해 선정 근거를 보존합니다.
@@ -23,6 +25,19 @@ DESIGN_CANDIDATE_FIELDS.update({
     'evidence_source_ids': {'type': 'array', 'maxItems': 6, 'items': {'type': 'string'}},
     'case_source_ids': {'type': 'array', 'maxItems': 3, 'items': {'type': 'string'}},
 })
+
+_REASONING_FIELDS = {
+    'fact_ids': {'type': 'array', 'maxItems': 3, 'items': {'type': 'string'},
+                 'description': 'reasoning_guide.facts에서 이 후보에 실제 연결한 ID. 관측/ML을 구분한다. 서버가 원래 수치·기간을 결합한다.'},
+    'application_hypothesis': {'type': 'string', 'description': '지역 신호와 사례 운영을 연결하여 바꿔 볼 이용 행동을 한 문장 가설로 제안한다. 측정하지 않은 소비 전환율 저하를 사실로 쓰지 않는다.'},
+    **{key: {'type': 'string', 'description': label + '. 다른 후보와 동일한 기준으로 1문장. 확정된 사례 운영과 선택 지역에서 준비할 조건을 구분한다.'}
+       for key, label in COMPARISON_CRITERIA.items()},
+    'tradeoff': {'type': 'string', 'description': '다른 후보보다 불리하거나 아직 확보할 조건을 1문장. 효과·비용 우열을 자료 없이 단정하지 않는다.'},
+}
+REASONING_SCHEMA = {
+    'type': 'object', 'additionalProperties': False,
+    'properties': _REASONING_FIELDS, 'required': list(_REASONING_FIELDS),
+}
 
 # Ollama의 format은 JSON 모양만 강제한다. local_agent의 schema_field_guidance가
 # 아래 설명을 시스템 메시지에도 전달해 작성할 필드 바로 옆에 계약을 둔다.
@@ -51,7 +66,7 @@ TRANSFERABILITY_SCHEMA = {
                       'properties': DESIGN_CANDIDATE_FIELDS, 'required': list(DESIGN_CANDIDATE_FIELDS)},
         },
         'selected_candidate_id': {'type': 'string'},
-        'selection_reason': {'type': 'string'},
+        'selection_reason': {'type': 'string', 'description': '실제 비교한 후보 이름과 선택 지역의 관측/ML 근거를 연결해 선택안의 장점과 대안보다 불리한 점을 설명한다. 인용 연결 성공이나 다시 비교할 수 있다는 처리 안내는 선정 이유가 아니다.'},
         'selection_status': {'type': 'string', 'enum': ['ready', 'needs_evidence']},
         'candidate_assessments': {
             'type': 'array',
@@ -65,7 +80,8 @@ TRANSFERABILITY_SCHEMA = {
                     'evidence_score': {'type': 'integer', 'minimum': 0, 'maximum': 100},
                     'similarity_reason': {'type': 'string'},
                     'adaptation': {'type': 'string'},
-                    'rejection_risks': {'type': 'array', 'maxItems': 4, 'items': {'type': 'string'}},
+                    'rejection_risks': {'type': 'array', 'maxItems': 4, 'items': {'type': 'string'},
+                                        'description': '이 행의 case_source_id 원문 risks·운영 조건에서 도출한 적용 위험만 쓴다. 다른 사례의 지역·시설·규모를 복사하지 않는다. 선택 지역에서 추가로 확인할 위험은 확인할 조건으로 구분한다.'},
                     'validation_plan': {'type': 'string'},
                 },
                 'required': [
@@ -107,7 +123,8 @@ class TransferabilityAgent:
         self.model = model
         self.llm_router = llm_router
 
-    async def assess(self, *, evidence_pack: dict[str, Any], revision_feedback: list[dict] | None = None) -> dict[str, Any]:
+    async def assess(self, *, evidence_pack: dict[str, Any], revision_feedback: list[dict] | None = None,
+                     structured_reasoning: bool = False) -> dict[str, Any]:
         # 공식 사례가 하나도 없으면 모델에게 내용을 지어내게 하지 않고, 안전한 ‘추가 조사 필요’ 결과를 즉시 반환합니다.
         from ..case_recommendation import budget_only, allowed_operation, constrain_decision
         brief = evidence_pack.get('planning_brief') or {}
@@ -136,6 +153,27 @@ class TransferabilityAgent:
             }
         # 선택 지역 snapshot, 사용자 여건, 사례 카드만 전달합니다.
         # 실제 수치 계산은 ML·원자료 계층이 담당하고 이 Agent는 적용 판단만 담당합니다.
+        # Keep the unvalidated larger output contract opt-in for diagnostics.
+        # Production callers retain the proven shape and context reservation.
+        guide = reasoning_guide(evidence_pack) if structured_reasoning else None
+        schema = deepcopy(TRANSFERABILITY_SCHEMA)
+        from ..festival_cases import comparison_festival_ids
+        festival_ids = comparison_festival_ids(cases, brief)
+        if festival_ids:
+            schema['properties']['candidate_assessments']['description'] = (
+                '축제 실적 후보를 무시하지 말고 다음 ID 중 최소 하나의 적용/제외 이유를 평가한다: '
+                + ', '.join(festival_ids) + '. 선택 사업은 비교 후 결정하며 축제 채택은 강제하지 않는다.'
+            )
+        if structured_reasoning:
+            candidate_schema = schema['properties']['design_candidates']['items']
+            candidate_schema['properties']['reasoning'] = deepcopy(REASONING_SCHEMA)
+            candidate_schema['required'].append('reasoning')
+            fact_ids = candidate_schema['properties']['reasoning']['properties']['fact_ids']
+            if guide['facts']:
+                fact_ids['minItems'] = 1
+                fact_ids['items']['enum'] = list(guide['facts'])
+            else:
+                fact_ids['maxItems'] = 0
         request = LLMRequest(
             task='transferability', agent='transferability', model=None,
             instructions=TRANSFERABILITY_INSTRUCTIONS + '\n후보 비교 시 환급·야간 개장만 반복하지 말고, 제공된 공식 운영 근거 안에서 예약형 체험, 시간대 분산, 기존 공간 연계, 재방문 등 서로 다른 이용 흐름을 검토한다. 숙박 비율이 낮다는 이유만으로 환급을 선택하지 않는다. 숙박·체험·재방문 후보와 비교해 어떤 이용 행동을 바꿀지 설명한다. 지역 자료에서 확인된 자원과 사용자 조건에 맞춰 대상·시간·참여처·예약·혜택 조건을 구체화한다. 사례에 없는 협약이나 시설을 확정하지 않는다.' + (
@@ -161,11 +199,12 @@ class TransferabilityAgent:
                 'research_gaps': evidence_pack.get('research_gaps') or [],
                 'case_search_policy': evidence_pack.get('case_search_policy') or {},
                 'case_research_plan': evidence_pack.get('case_research_plan') or {},
+                **({'reasoning_guide': guide} if guide else {}),
                 'case_search_coverage': evidence_pack.get('case_search_coverage') or {},
                 'quality_contract_version': evidence_pack.get('quality_contract_version'),
                 'transfer_assessment': evidence_pack.get('transfer_assessment') if revision_feedback else None,
                 'quality_review_feedback': {'issues': revision_feedback} if revision_feedback else {},
-            }, schema_name='tourism_case_transferability', schema=TRANSFERABILITY_SCHEMA,
+            }, schema_name='tourism_case_transferability', schema=schema,
             # 후보 비교가 늘어난 만큼 OpenAI 추론+출력 예산을 늘립니다. Qwen 예산은 별도로 유지합니다.
             reasoning_effort='medium', max_output_tokens=16000,
             # 실제 원주 통합 생성에서 5,600 토큰을 두 번 모두 채우고 JSON이 잘렸습니다.
@@ -176,7 +215,8 @@ class TransferabilityAgent:
         )
         if self.llm_router:
             result = await self.llm_router.generate(request)
-            return constrain_decision(result, cases, brief)
+            return constrain_decision(bind_rationale(result, evidence_pack), cases, brief,
+                                      defer_repair=bool(getattr(self.llm_router, 'local_first', False)))
         result = await create_structured_response(
             api_key=self.api_key,
             model=self.model,
@@ -192,16 +232,17 @@ class TransferabilityAgent:
                 'research_gaps': evidence_pack.get('research_gaps') or [],
                 'case_search_policy': evidence_pack.get('case_search_policy') or {},
                 'case_research_plan': evidence_pack.get('case_research_plan') or {},
+                **({'reasoning_guide': guide} if guide else {}),
                 'case_search_coverage': evidence_pack.get('case_search_coverage') or {},
                 'quality_contract_version': evidence_pack.get('quality_contract_version'),
                 'transfer_assessment': evidence_pack.get('transfer_assessment') if revision_feedback else None,
                 'quality_review_feedback': {'issues': revision_feedback} if revision_feedback else {},
             },
             schema_name='tourism_case_transferability',
-            schema=TRANSFERABILITY_SCHEMA,
+            schema=schema,
             # 후보 사례를 새로 조사하는 단계가 아니라 이미 수집된 사례를 정해진 6개 기준으로
             # 비교하는 단계입니다. medium이면 구조화 판단 품질을 유지하면서 장시간 timeout을 줄입니다.
             reasoning_effort='medium',
             max_output_tokens=16000, retry_max_output_tokens=24000, timeout_seconds=600,
         )
-        return constrain_decision(result, cases, brief)
+        return constrain_decision(bind_rationale(result, evidence_pack), cases, brief)

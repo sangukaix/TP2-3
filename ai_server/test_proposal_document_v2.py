@@ -48,7 +48,8 @@ class WordParityTest(unittest.TestCase):
         all_text = '\n'.join(p.text for p in doc.paragraphs) + '\n' + '\n'.join(c.text for t in doc.tables for row in t.rows for c in row.cells)
         self.assertEqual(r, before)
         self.assertIn(long_title, all_text)
-        self.assertIn('https://example.go.kr/full-source', all_text)
+        self.assertIn('https://example.go.kr/full-source',
+                      [rel.target_ref for rel in doc.part.rels.values() if rel.is_external])
         self.assertIn('페이지 12, 19', all_text)
         self.assertIn('4단계 실행 가이드', all_text)
         self.assertNotIn('5단계 집행 방법', all_text)

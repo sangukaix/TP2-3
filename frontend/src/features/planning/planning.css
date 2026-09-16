@@ -125,6 +125,17 @@
 @media(max-width:520px){.strategy-job-flow{flex-wrap:wrap;row-gap:12px}.strategy-job-flow .strategy-job-stage{gap:4px}}
 @media(prefers-reduced-motion:reduce){.strategy-job-flow span.is-current{animation:none;background:#d6eaff;outline:2px solid #78b9f1}}
 
+.strategy-start--loading .strategy-job-waiting{display:flex;flex-direction:column;align-items:center;gap:10px;margin:0 0 12px;max-width:460px;padding:0 12px}
+.strategy-job-waiting-note{font-size:12px;font-weight:600;line-height:1.7;color:#b42336;text-wrap:pretty}
+@supports (background-clip:text){
+  .strategy-job-waiting-note{background:linear-gradient(110deg,#b42336 0%,#b42336 40%,#ee8a94 48%,#b42336 56%,#b42336 100%);background-size:250% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;animation:strategy-waiting-shimmer 3.2s linear infinite}
+}
+.strategy-job-elapsed{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid #e4d9dd;border-radius:999px;background:#ffffffb8;color:#80525a;font-size:11px;line-height:1.4}
+.strategy-job-elapsed strong{min-width:44px;color:#9e2638;font-size:15px;font-variant-numeric:tabular-nums;letter-spacing:.05em}
+.strategy-job-delay{font-size:11px;line-height:1.6;color:#80525a}
+@keyframes strategy-waiting-shimmer{from{background-position:150% 0}to{background-position:-100% 0}}
+@media(prefers-reduced-motion:reduce){.strategy-job-waiting-note{animation:none;background:none;color:#b42336}}
+
 .planning-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .planning-options .planning-check { margin: 0; padding: 10px; border: 1px solid #dbe4ee; border-radius: 8px; font-size: 13px; }
 .planning-options .planning-check:has(input:checked) { background: #edf5ff; border-color: #8dbaff; color: #155fc0; }

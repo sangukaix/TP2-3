@@ -39,6 +39,11 @@ class MlLearningAssistantTest(unittest.IsolatedAsyncioTestCase):
 
 
 class MlLearningAssistantApiTest(unittest.TestCase):
+    def setUp(self) -> None:
+        # TestClient startup must never resume the developer's live MySQL jobs.
+        self.enterContext(patch('ai_server.app.main.initialize_strategy_store'))
+        self.enterContext(patch('ai_server.app.main.list_interrupted_strategy_jobs', return_value=[]))
+
     def test_api_requires_server_side_openai_key(self) -> None:
         """브라우저가 키를 보내지 않으며 서버 키가 없으면 명확한 오류를 반환합니다."""
         with patch.dict(main.ENV_VALUES, {'OPENAI_API_KEY': ''}, clear=False), TestClient(main.app) as client:

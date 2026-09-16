@@ -3,9 +3,36 @@ from pptx import Presentation
 from pptx.enum.text import PP_ALIGN
 from ai_server.test_proposal_presentation_v3_contract import _sample_report, _slide_text
 from ai_server.app.proposal_presentation_v4 import create_strategy_proposal_presentation
-from ai_server.app.proposal_layout_v9 import execution_copy, case_selection_basis
+from ai_server.app.proposal_layout_v9 import execution_copy, case_selection_basis, execution_groups, period
 
 class ExecutionDetailTest(unittest.TestCase):
+    def test_five_steps_preserve_operation_and_evaluation_dates_in_both_outputs(self):
+        from copy import deepcopy
+        from docx import Document
+        from ai_server.app.proposal_document import create_strategy_proposal_document
+        r = _sample_report()
+        r['strategies'][0]['implementation_steps'] = [
+            {'step':1, 'schedule':'2026-10', 'task':'참여 시설 조사', 'deliverable':'시설 목록'},
+            {'step':2, 'schedule':'2026-10', 'task':'콘텐츠와 안전 계획 수립', 'deliverable':'운영 계획'},
+            {'step':3, 'schedule':'2026-10', 'task':'예약 시스템 점검', 'deliverable':'점검 결과'},
+            {'step':4, 'schedule':'2026-11 ~ 2026-12', 'task':'프로그램 시범 운영', 'deliverable':'운영 원장'},
+            {'step':5, 'schedule':'2026-12', 'task':'성과 분석', 'deliverable':'결과 보고서'},
+        ]
+        before = deepcopy(r)
+        groups = execution_groups(r)
+        self.assertEqual([v for g in groups for v in g], r['strategies'][0]['implementation_steps'])
+        self.assertEqual(period(groups[2]), '2026-11 ~ 2026-12')
+        self.assertEqual(period(groups[3]), '2026-12')
+        deck = Presentation(create_strategy_proposal_presentation(r))
+        periods = {s.name:s.text for s in deck.slides[6].shapes if s.name.startswith('execution-period-')}
+        self.assertIn('2026-11 ~ 2026-12', periods['execution-period-2'])
+        self.assertTrue(periods['execution-period-3'].startswith('2026-12'))
+        doc = Document(create_strategy_proposal_document(r))
+        paragraphs = [p.text for p in doc.paragraphs]
+        pilot = paragraphs.index('03  시범 운영')
+        self.assertIn('2026-11 ~ 2026-12', paragraphs[pilot+1])
+        self.assertEqual(r, before)
+
     def test_selection_uses_linked_case_without_environment_claim(self):
         r=_sample_report()
         r['strategies'][0]['title']='여행비 환급'

@@ -13,11 +13,11 @@ class IdeaProposalTest(unittest.TestCase):
     def test_defaults_preserve_facts_review_and_input(self):
         r = self.report(); before = deepcopy(r); result = prepare_idea_report(r)
         self.assertEqual(r, before)
-        self.assertEqual(result['execution_scenario'], {'visitor_target_pct': 20, 'spending_target_pct': 20})
+        self.assertIsNone(result['execution_scenario'])
         self.assertEqual(result['ml_analysis'], r['ml_analysis'])
         self.assertEqual(result['quality_review'], r['quality_review'])
-        self.assertEqual(result['target_proposal_basis']['observed_visitors'], 2480000)
-        self.assertIn('사업 단독 효과', result['target_proposal_basis']['explanation'])
+        self.assertIsNone(result['target_proposal_basis']['observed_visitors'])
+        self.assertEqual(result['target_proposal_basis']['capacity_plan']['status'], 'no_comparable_forecast')
         e=result['reference_estimate']; self.assertEqual(sum(row['amount'] for row in e['items']),e['total_krw'])
 
     def test_user_goals_win_and_unrelated_case_is_not_gangjin(self):

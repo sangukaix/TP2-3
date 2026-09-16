@@ -31,6 +31,7 @@ from .proposal_document import create_strategy_proposal_document
 from .proposal_presentation import PRESENTATION_RENDER_VERSION, create_strategy_proposal_presentation
 from .raw_data_repository import read_region_tables
 from .nationwide_context_store import NationwideContextUnavailable, load_nationwide_comparison
+from .provincial_context_store import load_provincial_context
 from .nationwide_bigdata_store import NationwideBigdataUnavailable, load_nationwide_bigdata_context
 from .regional_tourism_status_store import load_regional_tourism_status
 from .agents.report_orchestrator import orchestrate_strategy_report
@@ -72,7 +73,7 @@ LOGGER = logging.getLogger(__name__)
 
 # 저장 문서의 레이아웃·생성 규칙이 바뀌면 이 값만 올려 과거 캐시를 안전하게 다시 만듭니다.
 DOCUMENT_RENDER_VERSIONS = {
-    'docx': 'strategy-docx-v9-paginated-a4',
+    'docx': 'strategy-docx-v18-linked-cost',
     'pptx': PRESENTATION_RENDER_VERSION,
 }
 # Matplotlib의 전역 상태와 문서 렌더러를 동시에 사용하지 않습니다.
@@ -227,6 +228,7 @@ class ExecutionScenario(BaseModel):
 
     visitor_target_pct: float = Field(ge=0, le=20)
     spending_target_pct: float = Field(ge=0, le=30)
+    target_origin: Literal['user', 'operating_capacity'] | None = None
 
 
 class ReportResponse(BaseModel):
@@ -1141,10 +1143,13 @@ def build_region_snapshot(region_name: str) -> dict[str, Any]:
     # 정규화 context가 아직 없거나 지역 코드가 미등록이면 기존 기획안 흐름을 막지 않습니다.
     regional_tourism_status = load_regional_tourism_status(registered_region_code) if registered_region_code else None
 
+    provincial_context = load_provincial_context(
+        registered_region_code, history.to_dict(orient='records'), ENV_VALUES,
+    ) if registered else {'available': False}
     observation_month = f'{latest_month[:4]}-{latest_month[4:]}'
     social_month = _month_value(social)
     social_observation_month = f'{social_month[:4]}-{social_month[4:]}' if social_month else observation_month
-    return {'region_name': region_name, 'period': period, 'latest_month': observation_month, 'monthly_trend': monthly_trend, 'consumption_by_category': consumption_by_category, 'regional_comparison': regional_comparison, 'nationwide_comparison': nationwide_comparison, 'nationwide_bigdata_context': nationwide_bigdata_context, 'regional_tourism_status': regional_tourism_status, 'observations': [
+    return {'region_name': region_name, 'period': period, 'latest_month': observation_month, 'monthly_trend': monthly_trend, 'consumption_by_category': consumption_by_category, 'regional_comparison': regional_comparison, 'nationwide_comparison': nationwide_comparison, 'nationwide_bigdata_context': nationwide_bigdata_context, 'provincial_context': provincial_context, 'regional_tourism_status': regional_tourism_status, 'observations': [
         {'metric': '월간 순 방문자 수', 'value': f'{latest_unique_visitors:,.0f}명', 'period': observation_month, 'source': f'{source_prefix} 순 방문자 수 및 숙박 비율 (이동통신 기반 외지인)'},
         {'metric': '전년동월 외지인 방문자 증감률', 'value': f'{visitor_yoy_change:.1f}%', 'period': observation_month, 'source': f'{source_prefix} 월간 순 방문자 수 (이동통신 기반 외지인)'},
         {'metric': '월간 외지인 관광소비 총액', 'value': f'{spending_krw:,.0f}원', 'period': observation_month, 'source': f'{source_prefix} 관광소비 추이_외지인'},

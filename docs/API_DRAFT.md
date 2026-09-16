@@ -1,5 +1,7 @@
 # 프론트엔드 연동 API 초안
 
+2026-09-16 D-185: 공개 API 계약은 유지한다. 내부 `read_collected_source`는 긴 사례·출처 JSON을 `serialized_json_segment`, `segment_index`, `segment_count`, `next_offset`으로 분할 전달하고 전 페이지 조회 후에만 인용을 허용한다. 서버 사전 조회 및 기존 인용 교정도 전 페이지를 전달한다. 도구별 크기와 모델 전체 문맥 검사는 유지한다. PPT v45/Word v17은 실제 시범 운영 단계의 날짜로 4단계를 묶는다. 유료/로컬 호출 횟수·예산은 변경하지 않는다.
+
 2026-09-14 D-154: 공개 API 변경 없음. `measurement_missing`에서 월간 주기를 인정하고 실행 단계 담당은 `task`와 `deliverable`을 함께 검사한다. 측정 분모·담당 실재 여부를 자동 승인하지 않는다. 저장 사례의 실제 로컬 작성/보완/검수는 완료했으나 의미 품질 미승인이다.
 
 2026-09-13 D-153: 공개 API/보고서 JSON 계약은 유지한다. 내부 Planner 최초 작성에는 남은 `candidate_validation_findings`를 `quality_review_feedback.scope=candidate_handoff`와 함께 전달하며 로컬 최종 JSON 직전에 원문 전체를 한 번 제공한다. 보완 작성에는 기존 검수 지시와 후보 지적을 합쳐 보존한다. 쿠폰 비용의 점포 수/지급 건수 혼동, `00%` 목표 및 함수로 변경한 사례의 의미 재검토 항목은 기존 보완 경로로 전달한다. LLM 호출 수·유료 정책·승인 기준은 변경하지 않는다. 오프라인 151개 테스트 통과이며 실제 모델 재검증은 미실행이다.
@@ -465,3 +467,110 @@ Backend는 개발용 `http://localhost:5176`, `http://127.0.0.1:5176` Origin도 
 D-155: Ollama 네이티브 생성 요청에 truncate=false/shift=false를 명시합니다(0.34 실측). 개인 Gemma 문맥131,072, Qwen40,960이며 공개 API 스키마/유료 호출 정책은 유지합니다. 설정한 num_ctx와 실제 할당량이 다를 수 있으므로 /api/ps 실측을 기준으로 기록합니다.
 
 네이티브 문맥 검증 opt-in: OLLAMA_NATIVE_CONTEXT_VALIDATION=true는 Ollama0.34.0 이상 버전 확인 후 서버 실제 토큰 판정에 맡깁니다. 구형/미확인 버전은 OLLAMA_NATIVE_CONTEXT_UNSUPPORTED, 실제 입력 초과는 OLLAMA_CONTEXT_BUDGET_EXCEEDED로 구분합니다. 문맥 중간 소진이나 미완성 출력은 성공 처리하지 않습니다. 공개 API 변경 없음.
+
+D-156: 공개 API 변경 없이 요청 내 기본 measurement_plan/success_metrics를 동기화합니다. 서버가 작성한 기존 비교 문장에 한해 이용률과 전후 매출 비교를 분리하며 저장 보고서를 수정하지 않습니다.
+
+D-157: 공개 API 필드는 유지합니다. link_decision은 현재 case_source_ids가 바뀔 때만 지역 적합성/차별성 설명을 보정하며 과거 original_case_source_ids만 다르다는 이유로 설명을 다시 덮어쓰지 않습니다. 이전 인용·설명 감사 이력과 미검증 상태는 보존합니다. Transferability JSON 필드 안내에서 실제 대안 비교와 해당 source_id 원문의 위험 연결을 명시합니다.
+
+### D-160 후보 판단 근거 (2026-09-14)
+
+진단 opt-in `TransferabilityAgent.assess(structured_reasoning=True)`에서 `planning_decision.design_candidates[].reasoning`에 `fact_ids`, `application_hypothesis`, `visitor_action`, `operating_requirements`, `measurement`, `tradeoff`를 추가합니다. `fact_ids`는 이번 요청의 dataset 출처 또는 지표·기간·집계별 ML signal ID만 허용하는 JSON Schema enum입니다. ML 수치는 서버가 계산한 signal을 그대로 결합합니다.
+
+일반 생성의 기본 Schema와 호출 경로는 유지합니다. Qwen의 실제 종단 완료가 검증되기 전에는 확대 Schema를 강제하지 않습니다.
+
+`planning_decision.rationale_evidence`는 선택 ID에 대응하는 원문 기록과 종류(observed/forecast), 인용 당시 사례 ID 및 후보 내용 지문을 보존합니다. 승인·효과 점수는 생성하지 않습니다. 기존 report JSON에 이 필드가 없어도 생성·다운로드 계약은 유지됩니다. 인용/실행/측정 내용이 후속 수정된 기록은 현재 판단의 검증된 설명으로 다시 사용하지 않습니다. PPT 렌더 버전은 `pptx-source-bound-rationale-v20`이며 유효한 연결 기록이 있을 때만 추가 설명 페이지를 출력합니다.
+
+D-160 공통 검사 보완: “운영 인력이/운영 인력은”과 같이 실행 주체를 명시한 task는 역할 누락으로 판정하지 않습니다. “운영 인력 확보”처럼 주체가 없는 작업은 기존대로 검사합니다. 실제 인력 확보·협약·사업 효과를 승인하는 검사는 아닙니다.
+
+### D-161 후보 보완과 문서 표기 (2026-09-14)
+
+로컬 우선 `TransferabilityAgent.assess`는 모델 선정안의 운영·출처 연결 실패를 내부 `constraint_repair` 피드백으로 보존해 기존 후보 보완 1회에 전달합니다. 공개 요청 필드나 호출 상한을 늘리지 않습니다. 보완 후에도 연결되지 않은 선정안은 본문 작성 전에 차단합니다. 자동 방향이며 제외 조건이 없는 경우 `TRANSFERABILITY_SELECTION_UNSUPPORTED`로 구분하고 사용자 입력 오류라고 안내하지 않습니다. 지정 방향/제외 조건 불충족은 기존 `PLANNING_CONDITIONS_UNSUPPORTED`를 유지합니다. 완료·승인 결과를 합성하지 않습니다.
+
+문서 캐시 버전은 `strategy-docx-v10-fact-forecast-labels`, `pptx-source-bound-rationale-v21-goal-labels`입니다. 저장 보고서 수치·승인 상태는 그대로 두고 관측/전망 표 제목과 계획 목표 설명만 정정합니다.
+
+### D-162 실행 안내 일정 연결 (2026-09-15)
+
+현재 문서 캐시 버전은 `strategy-docx-v11-execution-periods`, `pptx-source-bound-rationale-v22-execution-periods`입니다. 4개보다 많은 실행 단계를 안내용 4단계로 묶을 때 앞쪽 준비 단계를 합쳐 마지막 운영 준비·운영·평가 일정이 유지되게 했습니다. 다운로드 계약과 저장 report JSON은 바뀌지 않으며 기존 문서는 새 버전으로 재렌더됩니다. 제주시 실제 생성·저장·다운로드 및 수치 대조가 완료됐고, 품질 81점/미승인 상태는 그대로 보존했습니다. 대표 기능 점검 종료 기록은 `output/final_validation_20260915/README.md`입니다.
+
+D-163: 최신 PPT 캐시 버전은 `pptx-v23-case-results-infographics`입니다. Word v11과 API 스키마는 유지합니다. 공통 PPT 출력은 사업 목표/선택 체크/사례 실적/산출 도식/압축 출처 배치를 사용합니다. `proposal_case_outcomes`가 선택 출처와 명시적인 사업 포함 관계를 확인한 자료만 출력 근거로 보강하고, 추가 출처·기간·사진·산식은 해당 슬라이드 메모와 출처 부록에 남깁니다. 이 보강은 저장 JSON이나 목표율을 변경하지 않고 생성 당시 LLM이 읽은 자료로 소급 표시하지 않습니다. 확정 전후 수치가 없는 사례에는 임의 수치 그래프를 만들지 않습니다.
+
+D-164: 최신 PPT 캐시 버전은 `pptx-v24-kpi-agent-pipeline`. 11장 ‘목표 KPI 산출근거’는 저장된 목표 채택 이유와 3개월 추가 방문·소비 목표를 표시합니다. 12장 ‘기획서 생성 파이프라인’은 5개 Agent 역할과 성공 trace의 공급자를 표시하고 미기록 모델은 특정 공급자로 추정하지 않습니다. 공개 API, Word 버전, 저장 목표율·예측값·견적은 유지합니다.
+
+
+D-165: 최신 PPT 캐시 버전은 `pptx-v25-editorial-polish`. 기본 순서는 사업 목표(4장) → 목표 KPI 산출근거(5장) → 지역별 참고 사례입니다. 공통 시각 정리는 `proposal_visual_finish.finish_design`에서 수행합니다. 다운로드 스키마·저장 JSON·수치·Word 버전은 유지합니다.
+
+
+D-166: PPT 출력 버전은 `pptx-v26-regional-growth`. `proposal_growth_comparison.comparison`이 모델·CSV 지문/동일 관측 종료월/동일 사업기간을 확인해 지역별 YoY 증가율의 평균·공동 순위를 제공합니다. 캐시는 `artifacts/ml/comparison/<입력지문>.json`입니다. 목표 순위는 타지역 전망 고정 가정입니다. 인구 보정·추가 학습·외부 API 호출은 없으며 공개 응답 스키마와 저장 기획안은 유지합니다. 지문 불일치나 비교 범위 부족 시 지역 전망 페이지를 표시합니다.
+
+D-167: PPT 공통 렌더 캐시 `pptx-v27-photo-growth-bars`. 기획 의도 페이지는 지역 사진과 동일 기간 전년 대비 증가율 막대 비교를 사용한다. 공개 API/보고서 스키마 변경 없음.
+
+D-168: 문서 출력 API/스키마와 수치 계산은 유지하며 PPT 공통 테마 캐시를 `pptx-v28-spicus-editorial`로 갱신합니다. 지역 사진, 동적 지역명, 기존 출처 링크·편집형 차트/표를 유지합니다.
+
+D-169: PPT 캐시 `pptx-v29-regional-landmark-cover`. 표지 사진은 보고서 공식 관광 API 메타데이터의 지역 주소/유형과 3장 중복을 확인하며, 성공 원본을 `storage/region_cover_images/`에 캐시합니다. API/보고서 JSON 변경 없음, 유료 호출 없음.
+
+D-170: PPT 캐시 `pptx-v31-province-ribbon-cover`. 표지 지역명 띠와 날짜/사업기간 배치, 마지막 장 별도 지역 사진 적용. 마지막 사진도 저장 관광 API 메타데이터를 사용하며 표지/3장 제목·이미지 해시를 제외합니다. 웹 검색 없음, API/보고서 JSON 변경 없음.
+
+D-171: PPT 캐시 `pptx-v32-balanced-semantic-colors`. 공통 출력의 목차와 KPI/적용/실행/파이프라인 색상만 조정. API 입력·응답·저장 데이터·수치 산식 변경 없음.
+
+D-172: PPT 캐시 `pptx-v33-compact-contents-reference-type`. 목차/글꼴/정렬/표시 문구만 조정. 표지 공식 사진 출처 메타데이터와 링크는 유지하고 화면에서는 장소명만 표시한다. 입력·응답·저장 수치 변경 없음.
+
+D-173: PPT 캐시 `pptx-v34-readable-case-cards-local-photos`. 사례 카드/실적/KPI 레이아웃 조정 및 지역 시설 참고 사진 추가. 저장 사진 메타데이터의 주소·시설 유형을 확인하며 없으면 텍스트 구성으로 출력. 보고서 입력/응답·수치 산식·승인 상태 변경 없음.
+
+D-174: PPT 캐시 `pptx-v35-gray-intros-goal-summary`. 목차 날짜 제거, 참고 사례 실적의 사진 캡션 및 26pt 회색 중간 제목, 사업기간 합계의 목표 증가율 문장 적용. 기존 보고서도 다음 PPT 다운로드에서 새 버전으로 출력하며 API 요청/응답 스키마와 목표 산식은 유지합니다.
+
+D-175: PPT `pptx-v36-operating-capacity`, Word `strategy-docx-v13-operating-capacity`. `execution_scenario.target_origin`에 `user`/`operating_capacity` 선택 필드를 추가한다. `target_proposal_basis.capacity_plan`은 운영 규모·가정/검토 출처·세 시나리오·예산을 보관한다. 기존 응답과 호환하며 자동 초기 목표와 명시적 편집을 구분한다. `/strategy-idea-preview`는 이 계산을 적용하되 LLM/DB 쓰기를 하지 않는다. 신규 생성·저장본 다운로드에도 같은 함수 사용. Case Scout에 `operating_statistics` 구조화 목록을 추가하고 자동 추출과 검토된 자료를 구분한다. 호출 수와 유료 정책 변경 없음.
+
+### PPT 목표 표시 v37 (2026-09-15)
+
+`pptx-v37-small-growth-amounts`: 사업 목표 회색 설명의 방문/소비 증가율이 각각 1% 미만이면 추가 인원/금액을 표시한다. 1% 이상은 백분율을 유지한다. API 스키마, 원래 전망/목표 값, Word는 변경하지 않는다. 공통 렌더 캐시 버전을 갱신한다.
+
+### PPT 목표 지역·기간 표시 v38 (2026-09-15)
+
+`pptx-v38-capacity-region-period`: 목표 KPI 산출근거에 report.region_name 및 capacity_plan의 사업기간/운영량을 표시한다. 스키마와 목표 계산값은 유지하고 PPT 캐시만 갱신한다.
+
+### PPT 운영 규모와 사례 실적 구분 v39 (2026-09-15)
+
+`pptx-v39-capacity-case-distinction`: 연결된 사례의 기존 실적과 지역의 제안 정원을 구분해 설명한다. 목표 계산/API 스키마는 변경하지 않는다. 검토 파일은 사용자 요청 시 전달한다.
+
+### PPT 참여 목표 표기 v40 (2026-09-15)
+
+`pptx-v40-participation-goal`: 참여 가정을 참여 목표로 표시한다. 운영 정원 전체 산식, 계산값, API 스키마는 유지한다.
+
+### PPT 표지 v41 (2026-09-15)
+
+`pptx-v41-soft-photo-cover`: 첫 장의 기존 지역 사진과 청록·남색 그라데이션을 연결한다. 본문/마지막 장/계산값/API 스키마는 변경하지 않는다.
+
+### 참여 목표 하한 및 근거 (2026-09-15)
+
+- 운영 계획 v2, PPT v42, Word v14. `capacity_plan.minimum_participation_pct=75`, `participation_basis`에 목표 채택 근거를 제공한다.
+- Case Scout `operating_statistics`에 nullable `capacity_count`, `participant_count`, `program_name`을 추가했다. 같은 사업·기간의 실제 참여와 정원이 확인된 검토 자료만 참여율 인용에 사용한다.
+- `rate_basis`는 원래 `observed_value`, 채택한 `target_value`, `floor_applied`, 지역/사업/기간/인원/URL을 구분한다. 확인 자료가 없으면 `kind=planning_policy`이며 75% 공통 최소 목표로 표시한다. 추가 방문 비중은 별도 기준이다.
+
+### 문화관광축제 근거 (2026-09-16)
+
+- 새 공개 endpoint 없이 기존 생성 요청에 공통 적용한다. `evidence_sources[]`에 `festival_statistics`, `retrieval_basis`, `source_files`, `dataset_hash`를 보존한다. 통계 카드는 `retrieval_method=datalab_festival_table`이며 공식 운영 문서와 정확히 결합된 경우 문서의 URL/ID를 유지한다.
+- `festival_statistics`는 개최연도별 전체/외지인/현지인/외국인 방문, 일수, 전년 비교와 CSV 출처이다. `retrieval_basis`는 ML 조사 방향·관측 peer·자원으로 정한 조사 순서이며 학습한 추천 점수가 아니다.
+- Case Scout trace의 `festival_dataset.dataset.status`는 `mysql`, `local_snapshot`, `not_imported`, `unavailable`을 구분한다. 로컬 사본은 MySQL과 동일한 데이터 해시를 확인해야 사용한다.
+- PPT v43 / Word v15에서 선택된 축제의 실제 실적을 공통 함수로 출력한다. 기존 저장안의 사업 선택·숫자를 새 후보로 자동 변경하지 않는다. [산식과 데이터 보관](FESTIVAL_CASE_DATA.md).
+
+### 대전 서구 실생성 점검 반영 (2026-09-16)
+
+생성 대기 UI에는 시작 시각 기준 `MM:SS` 경과 타이머와 30분 안내를 표시한다. `started_at`은 프런트가 작업 요청 때 기록하여 작업 링크·브라우저 저장소에 보존하는 UI 메타데이터이며 새 서버 요청 필드가 아니다. 탭 복귀 시 같은 작업의 상태를 재조회한다. 30분은 서버 취소/타임아웃 설정이 아니며 초과 시 지연 안내와 타이머를 유지한다.
+
+- `target_proposal_basis.capacity_plan`에 `active_months`(YYYYMM), `monthly_weights`, `schedule_basis`, `operating_period`, `schedule_note`가 추가된다. 명시된 개시월부터 운영량을 산정하고 자동 목표는 준비월에 추가분을 배분하지 않는다. 관측·ML 값과 사용자 목표는 유지한다.
+- `planning_decision.measurement_alignment`는 야간 방문 비중/증가율 혼용의 원문과 보정 문장을 기록한다. 저장 원본을 DB에서 일괄 변경하지 않는다.
+- PPT v44 / Word v16. 기존 조회 슬롯에서 축제 원문을 우선 읽고 후보 보완 1회 안에서 축제 적용/제외 이유 누락을 다룬다. 새 API 호출 상한은 추가하지 않는다. [실제 결과와 검증 범위](DAEJEON_REPORT_REVIEW_20260916.md).
+
+### 참여 시나리오와 예상 사업비 연결 (D-186)
+
+- `capacity_plan.version=operating-capacity-v4-linked-cost`. 모든 지역의 자동 목표/견적에 같은 함수를 사용한다. 지역별 전망·사업유형·실제 운영월·예산 제약에 따라 결과가 달라진다.
+- `scenarios[]`에 `participant_purchases_krw`(참여자 계획 결제 합계), `expected_support_krw`(참여 목표의 지원액), `expected_budget_krw`(예비비 포함 예상 사업비)가 추가된다. `additional_spending_krw`는 추가 방문+기존 방문자의 추가 구매 목표이며 총 결제액/사업 수익과 구분한다.
+- 환급형 기본 설정: 계획 결제액은 ML 소비합계/방문합계를 원 단위로 반올림한 참고값, 예상 지급은 min(계획 결제×10%, 50,000원). 기존 참여 추가 구매는 유형별 기준과 ML 비율의 50% 중 작은 값이다. 실측 객단가·사례 확정단가가 아니다. 공동 정산팀은 점포 묶음 최대 4개당 1팀으로 제안한다.
+- 선택된 지역 기획 후보의 `budget_formula`에 환급률과 건별 상한이 명확히 쓰였으면 해당 계획 조건을 우선한다. 타지역 사례 본문의 비율은 자동 복사하지 않는다. `purchase_per_participant_krw`는 건별 계획 결제액, `qualifying_spend_krw`는 참여자의 인정 결제 합계다.
+- `reference_estimate.quantity`는 정원 대신 참여 목표 건수, `unit_krw`는 예상 지원단가다. `capacity_quantity`, `per_claim_cap_krw`, `refund_rate_pct`, `full_participation_budget_krw`, `participant_purchases_krw`, `additional_spending_krw`, `scenario_note`로 근거를 보존한다. 100% 참여 참고예산도 같은 계획 결제액 기준이며 최대 지급 책임액은 아니다. 사용자 견적 재배분 시 연결되지 않는 자동 산식 필드를 제거한다.
+- PPT v46 / Word v18. 기존 문서 캐시를 구분한다. 수치 실적 없는 선정 사례는 운영 흐름, 축제 수치 있는 사례는 실제 전후 비교를 표시한다. 사진은 검증된 URL별 캐시를 표지·본문·Word에서 재사용한다. 타지역 사진은 실제 장소와 참고 용도를 명시한다.
+
+
+### 소속 시도 관측 맥락 (D-187)
+
+새 생성의 내부 snapshot에 `provincial_context`를 추가한다. `available`, `province_code/name`, `observation_month`, `comparisons`, `source_records`, `read_rule`을 갖는다. 같은 관측월의 방문/소비 전년 대비 증감률과 숙박 비율/일수만 비교하며, 시도 생성 endpoint나 ML 예측 응답은 추가하지 않는다. 기존 `get_region_metrics` 도구와 Evidence/Case Scout 입력에 전달하고 공개 보고서의 `evidence_sources`에 비교 요약·출처를 보존한다. 자료/월이 없으면 비교만 생략한다. [상세](PROVINCIAL_TOURISM_CONTEXT.md).

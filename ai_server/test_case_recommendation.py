@@ -34,6 +34,20 @@ class RecommendationTest(unittest.TestCase):
         source=sources()[1];source['source_url']=''
         self.assertEqual(match_cases(decision()['design_candidates'][0],[source]),[])
 
+    def test_repeated_linking_preserves_repaired_explanation_and_audit(self):
+        original = decision()
+        original['design_candidates'][0].update(local_fit='잘못된 예산 사례 비교', differentiation='이전 설명')
+        linked = link_decision(original, sources())
+        self.assertEqual(link_decision(linked, sources()), linked)
+        linked['design_candidates'][0].update(local_fit='지역 소비 관측에 근거한 새 비교', differentiation='운영 규모 차이')
+        linked['selection_reason'] = '숙박안과 소비안을 비교한 장단점'
+        before = copy.deepcopy(linked)
+        again = link_decision(linked, sources())
+        self.assertEqual(again, before)
+        self.assertEqual(again['design_candidates'][0]['case_linkage']['original_local_fit'], '잘못된 예산 사례 비교')
+        self.assertEqual(again['case_linkage']['original_case_source_ids'], ['case:budget'])
+        self.assertEqual(linked, before)
+
     def test_valid_citation_and_selection_explanation_survive_linkage(self):
         original=decision()
         original['selection_reason']='숙박 결제 유도를 검토하되 참여업체 협의 부담을 대안과 비교했다.'
@@ -68,6 +82,20 @@ class RecommendationTest(unittest.TestCase):
 
 
 class AgentIntegrationTest(unittest.IsolatedAsyncioTestCase):
+    async def test_local_model_selection_failure_is_returned_for_existing_repair(self):
+        router = AsyncMock()
+        router.local_first = True
+        raw = decision()
+        raw['design_candidates'][0]['mechanism'] = '야간 공연'
+        raw['design_candidates'].append({'candidate_id': 'b', 'mechanism': '숙박 체험'})
+        router.generate.return_value = raw
+        result = await TransferabilityAgent(api_key='', model='', llm_router=router).assess(
+            evidence_pack={'benchmark_cases': sources(), 'planning_brief': {'input_profile': 'guided_v2', 'business_direction': 'auto'}})
+        self.assertEqual(router.generate.await_count, 1)
+        self.assertEqual(result['selected_candidate_id'], 'a')
+        self.assertEqual(result['constraint_repair']['eligible_candidate_ids'], ['b'])
+        self.assertEqual(result['selection_status'], 'needs_evidence')
+
     async def test_budget_filtered_before_model_and_result_linked_after_model(self):
         router=AsyncMock();router.generate.return_value=decision()
         agent=TransferabilityAgent(api_key='',model='',llm_router=router)

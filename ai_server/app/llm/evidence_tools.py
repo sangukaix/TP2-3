@@ -47,7 +47,7 @@ TOOL_DEFINITIONS = [
           {'query': {'type': 'string', 'maxLength': 120},
            'offset': {'type': 'integer', 'minimum': 0},
            'limit': {'type': 'integer', 'minimum': 1, 'maximum': 8}}),
-    _tool('read_collected_source', 'source_id의 출처와 사례 원문을 읽는다. PDF 청크는 next_offset이 없을 때까지 순서대로 읽는다. 사례 인용 전에 반드시 호출한다.',
+    _tool('read_collected_source', 'source_id의 출처와 사례 원문을 읽는다. PDF 청크나 긴 JSON 원문은 next_offset이 없을 때까지 순서대로 읽는다. serialized_json_segment는 순서대로 합치면 전체 원문이다. 사례 인용 전에 반드시 호출한다.',
           {'source_id': {'type': 'string', 'minLength': 1, 'maxLength': 200},
            'offset': {'type': 'integer', 'minimum': 0},
            'limit': {'type': 'integer', 'minimum': 1, 'maximum': 4}}, ['source_id']),
@@ -90,6 +90,7 @@ class EvidenceTools:
                         item[kind] = row
         self.read_source_ids: set[str] = set()
         self.source_chunk_reads: dict[str, set[int]] = {}
+        self.source_segment_reads: dict[str, set[int]] = {}
         self.read_paths: set[str] = set()
         self.segment_reads: dict[str, set[int]] = {}
         self.case_matrix_reads: set[int] = set()
@@ -109,6 +110,8 @@ class EvidenceTools:
             'case_search_coverage': self.pack.get('case_search_coverage', {}),
             'quality_contract_version': self.pack.get('quality_contract_version'),
             'observations': self.snapshot.get('observations', []),
+            **({'reasoning_guide': self.pack['reasoning_guide']}
+               if self.task == 'transferability' and self.pack.get('reasoning_guide') else {}),
             'ml_status': ml.get('status'),
             'ml_windows': [{key: window.get(key) for key in ('start_month', 'end_month', 'reliability')}
                            for window in policy.get('decision_windows', [])],
@@ -385,6 +388,8 @@ class EvidenceTools:
                 # 일반론만 반복하지 않도록, 작고 검증 가능한 표를 처음부터 전달한다.
                 # 원본 snapshot은 유지하고, 없을 때도 빈 목록으로 사실을 만들지 않는다.
                 result = {'period': self.pack.get('period'), 'observations': self.snapshot.get('observations', [])}
+                if (self.snapshot.get('provincial_context') or {}).get('available'):
+                    result['provincial_context'] = deepcopy(self.snapshot['provincial_context'])
                 result['dataset_sources'] = deepcopy([
                     row for row in self.pack.get('sources') or []
                     if row.get('source_type') == 'dataset'
@@ -433,7 +438,21 @@ class EvidenceTools:
                 result = {'source_id': arguments['source_id'],
                           **{key: value for key, value in item.items() if key != 'chunks'}}
                 chunks = item.get('chunks', [])
-                if chunks:
+                # A source card and its case may both contain the full festival
+                # statistics. Split the complete JSON instead of making these
+                # valid, available sources unreadable at the per-tool size limit.
+                full = {**result, **({'chunks': chunks} if chunks else {})}
+                raw = compact_json(full)
+                if len(raw.encode('utf-8')) > 12000:
+                    segments = [raw[i:i + 1500] for i in range(0, len(raw), 1500)]
+                    offset = arguments.get('offset', 0)
+                    if offset >= len(segments):
+                        raise ValueError('Source segment offset is out of range.')
+                    result = {'source_id': arguments['source_id'], 'segment_index': offset,
+                              'segment_count': len(segments),
+                              'serialized_json_segment': segments[offset],
+                              'next_offset': offset + 1 if offset + 1 < len(segments) else None}
+                elif chunks:
                     offset, limit = arguments.get('offset', 0), arguments.get('limit', 1)
                     if offset >= len(chunks):
                         raise ValueError('Source chunk offset is out of range.')
@@ -454,7 +473,12 @@ class EvidenceTools:
             self.case_matrix_reads.add(result.get('segment_index', 0))
         if name == 'read_collected_source' and success:
             source_id = arguments['source_id']
-            if result.get('chunk_count'):
+            if 'segment_index' in result:
+                reads = self.source_segment_reads.setdefault(source_id, set())
+                reads.add(result['segment_index'])
+                if len(reads) == result['segment_count']:
+                    self.read_source_ids.add(source_id)
+            elif result.get('chunk_count'):
                 reads = self.source_chunk_reads.setdefault(source_id, set())
                 reads.update(range(result['offset'], result['offset'] + len(result['chunks'])))
                 if len(reads) == result['chunk_count']:
@@ -471,7 +495,8 @@ class EvidenceTools:
             else:
                 self.read_paths.add(path)
         # 인자·본문은 기록하지 않아 첨부 정보가 영구 로그로 유출되지 않게 합니다.
-        self.events.append({'tool': name, 'status': 'completed' if success else 'unavailable'})
+        self.events.append({'tool': name, 'status': 'completed' if success else 'unavailable',
+                            **({'error_code': result['error']} if not success else {})})
         return result
 
     def missing_required_reads(self) -> list[str]:

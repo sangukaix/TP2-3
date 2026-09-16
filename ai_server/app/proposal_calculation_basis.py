@@ -40,13 +40,17 @@ def calculation_basis(report):
 def methodology_sections(report):
     b = calculation_basis(report)
     totals = b['totals']
+    plan = (report.get('target_proposal_basis') or {}).get('capacity_plan') or {}
+    goal_formula = ('준비월 추가 목표는 0명·0원. 운영월 추가 목표 = 월별 전망 × 최종월 목표율 × 경과 운영월/전체 운영월. '
+                    if plan.get('monthly_weights') and (report.get('target_proposal_basis') or {}).get('target_mode') != 'user' else
+                    '월별 목표 = 월별 기준 전망 × (1 + 최종월 목표율 × 경과월/전체월). ')
     numerical = '\n'.join(f"{r['label']}: 기준 {r['baseline']:,.0f}{r['unit']} → 목표 {r['target']:,.0f}{r['unit']}"
                           f" (추가 {r['additional']:,.0f}{r['unit']}, +{r['pct']:.2f}%)" for r in totals if r['pct'] is not None)
     return [
         ('월별 기준 전망', f"{b['source_period']} 월별 데이터에서 1·3·12개월 전 값과 계절 정보를 구성합니다. "
          f"방문은 {b['models'].get('visitors', '저장 모델')}, 소비는 {b['models'].get('spending_krw', '저장 모델')}로 산출합니다. "
          '전년 동월 기준모델이 선택된 지표는 해당 월의 전년 값을 사용합니다. 최신 관측월 이후를 순차 계산한 뒤 사업기간의 3개월을 표시합니다.'),
-        ('3개월 목표 계산', numerical+'\n월별 목표 = 월별 기준 전망 × (1 + 최종월 목표율 × 경과월/전체월). '
+        ('3개월 목표 계산', numerical+'\n'+goal_formula+
          '합계 증가율 = (월별 목표 합계 ÷ 월별 기준 합계 − 1) × 100. 방문 합계는 월간 순 방문 수의 합계로, 3개월 고유 인원과 다릅니다.'),
         ('공식 사례에서 사업 후보까지', f"저장 보고서의 공식 사례 {b['case_count']}건 → 설계 후보 {b['candidate_count']}개 → "
          f"선정 사업의 운영 근거와 추가 참고 사례 {b['displayed_count']}건 표시. "

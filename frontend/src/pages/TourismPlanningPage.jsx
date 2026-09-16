@@ -86,7 +86,8 @@ function PlanningForm({ region, dataState, onDirtyChange, onSaveReady }) {
     try {
       if (activeJob) { window.location.assign(strategyJobUrl(activeJob, region.name)); return }
       // 입력한 조건의 복사본이 서버 작업에 전달됩니다. 작성 중 초안은 별도입니다.
-      const job = await startAiStrategyReportJob(region.code, { region_name: region.name, planning_brief: { ...brief, ...nextThreeMonthSchedule() } })
+      const started_at = new Date().toISOString()
+      const job = { ...await startAiStrategyReportJob(region.code, { region_name: region.name, planning_brief: { ...brief, ...nextThreeMonthSchedule() } }), started_at }
       // 작업 ID만 브라우저에 남기고, 첨부 문서 본문은 서버 작업 중에만 사용합니다.
       saveActiveStrategyJob(job)
       window.location.assign(strategyJobUrl(job, region.name))

@@ -113,7 +113,9 @@ def placeholder_rate_issues(text: str, field: str) -> list[dict[str, str]]:
 
 def uses_region_wide_refund_budget(text: str) -> bool:
     """지역 전체 관측 규모를 시범 지원 예산으로 곱한 산식을 찾습니다."""
-    return bool(_REGION_WIDE_REFUND_BUDGET_PATTERN.search(str(text or '')))
+    text = str(text or '')
+    return bool(_REGION_WIDE_REFUND_BUDGET_PATTERN.search(text) or re.search(
+        r'(?:지역환급\s*(?:비율|률).{0,35}[×*].{0,15}관광소비액|관광소비액.{0,35}[×*].{0,15}지역환급\s*(?:비율|률))', text))
 
 
 def overclaims_local_fit(text: str) -> bool:
@@ -210,10 +212,18 @@ _SAFE_ESTIMATE_FORMULA = (
     '참여업체 수×업체 준비비 견적 + 측정 원장 1식×구축 견적. 사업 담당자가 착수 전 수량을 정하고 '
     '회계 담당자가 같은 조건의 비교견적 2건 이상으로 단가·부가세·총액을 확정한다.'
 )
+_PARTICIPATION_COMPARISON = (
+    '이용률의 기준기간은 해당 승인·발급 집단의 이용 유효기간이다. '
+    '이용률 비교는 참여 자격·혜택·관찰기간이 같은 운영 집단끼리 각각 자기 집단의 분모로 계산한다. '
+    '미운영 집단에는 승인·발급 분모가 없으므로 이용률을 0으로 두거나 직접 비교하지 않는다. '
+    '매출 비교는 별도 지표로, 같은 참여 상점·업종·요일·집계범위의 취소 제외 결제액을 '
+    '운영 전 4주와 운영기간의 동일 길이 구간에서 비교한다. '
+    '비교할 집단을 확보하지 못하면 해당 집단의 이용률과 결제액 추이만 기술하며 사업의 인과효과로 단정하지 않는다. '
+)
 _SAFE_MEASUREMENT_PLAN = (
     '유효 참여완료율은 분자=취소·중복을 제외한 완료 ID 수, 분모=승인 참여 ID 수로 계산한다. '
-    '운영 전 4주를 기준기간으로 두고 운영 중 매주 예약·참여·취소·결제 원장을 사업 담당자가 집계한다. '
-    '같은 콘텐츠의 순차 도입 운영일과 미운영일을 동일 분모로 비교하며, 전후 차이를 사업 인과효과로 확정하지 않는다. '
+    '운영 중 매주 예약·참여·취소·결제 원장을 사업 담당자가 집계한다. '
+    + _PARTICIPATION_COMPARISON +
     '성공·중단 기준은 기준선과 집계 가능성을 확인한 뒤 착수 전에 확정한다.'
 )
 
@@ -258,8 +268,9 @@ def _safe_measurement_plan(candidate: dict[str, Any]) -> str:
                                            '발급·사용을 같은 지급 코호트와 유효기간으로 연결하며 참여 점포 수를 분모로 쓰지 않는다.')
     return (
         definitions.get(candidate_type, _SAFE_MEASUREMENT_PLAN.split(' 운영 전', 1)[0]) + ' '
-        '운영 전 4주를 기준기간으로 두고 운영 중 매주 원자료=신청·승인·취소·이용·결제 원장을 사업 담당자가 집계한다. '
-        '같은 콘텐츠·기간의 순차 도입 미운영 집단과 동일 분모로 비교한다. 발전 가능 범위는 시범 대상 수×관측 완료율×건별 측정값의 '
+        '운영 중 매주 원자료=신청·승인·취소·이용·결제 원장을 사업 담당자가 집계한다. '
+        + _PARTICIPATION_COMPARISON +
+        '발전 가능 범위는 시범 대상 수×관측 완료율×건별 측정값의 '
         '가정 시나리오로 제시하고 지역 전체 자연증감과 분리한다. 성공·중단 기준은 기준선·표본수 확인 뒤 착수 전에 확정한다.'
     )
 
@@ -360,6 +371,15 @@ def stabilize_candidate_decision(pack: dict[str, Any], transfer: dict[str, Any])
                 or uses_region_wide_refund_budget(budget) or uses_merchant_count_for_visitor_payout(budget)):
             candidate['budget_formula'] = _safe_estimate_formula(candidate)
             corrected(prefix + '.budget_formula', '지역 전체 규모를 예산으로 쓰지 않고 시범 수량·비교견적 기반의 미확정 산식으로 교체했습니다.')
+        measurement = str(candidate.get('measurement_plan') or '')
+        legacy_comparison = '같은 콘텐츠·기간의 순차 도입 미운영 집단과 동일 분모로 비교한다. '
+        # Repair our exact old generated guidance in the in-memory request only.
+        # Do not rewrite arbitrary user measurement plans or stored reports.
+        if legacy_comparison in measurement:
+            candidate['measurement_plan'] = measurement.replace(legacy_comparison, _PARTICIPATION_COMPARISON)
+            candidate['measurement_plan'] = candidate['measurement_plan'].replace(
+                '운영 전 4주를 기준기간으로 두고 운영 중 매주 원자료=', '운영 중 매주 원자료=')
+            corrected(prefix + '.measurement_plan', '서버 기본 문장의 미운영 집단 이용률 비교를 운영 집단별 이용률과 별도 매출 비교로 분리했습니다.')
         if measurement_missing(str(candidate.get('measurement_plan') or '')):
             candidate['measurement_plan'] = _safe_measurement_plan(candidate)
             corrected(prefix + '.measurement_plan', '분자·분모·수집 원장·비교 기준을 서버 측정 계약으로 보완했습니다.')
@@ -380,9 +400,18 @@ def stabilize_candidate_decision(pack: dict[str, Any], transfer: dict[str, Any])
         if (re.search(r'\d+(?:\.\d+)?\s*%', rule) and re.search(r'성공|중단|확대', rule)
                 and not re.search(r'가정|잠정|목표안|착수\s*전|산출\s*근거|출처', rule)):
             candidate['stop_or_scale_rule'] = (
-                f'기획 가정 목표안: {rule} 기준선·표본수·집계 가능성을 확인한 뒤 사업 담당자가 착수 전에 확정한다.'
+                '사업 담당자가 실제 이용·취소·결제 결과를 같은 대상·기간의 기준선과 비교한다. '
+                '확대·중단 수치와 판단 방향은 기준선·표본수·집계 가능성을 확인한 뒤 착수 전에 확정한다.'
             )
-            corrected(prefix + '.stop_or_scale_rule', '근거 없는 수치 문턱을 착수 전 확정할 가정 목표안으로 바꿨습니다.')
+            corrected(prefix + '.stop_or_scale_rule', '근거 없는 수치 문턱과 판단 방향을 임의로 승인하지 않고 착수 전 확정 조건으로 교체했습니다.')
+            corrections[-1]['original_value'] = rule
+            # The same model sentence can also be copied into the case assessment.
+            # Replace only that exact duplicate for this candidate's linked cases.
+            for assessment in result.get('candidate_assessments') or []:
+                if (assessment.get('case_source_id') in valid_case_ids
+                        and assessment.get('validation_plan') == rule):
+                    assessment.setdefault('original_validation_plan', rule)
+                    assessment['validation_plan'] = candidate['stop_or_scale_rule']
 
     candidate_ids = [str(row.get('candidate_id') or '') for row in candidates if row.get('candidate_id')]
     if candidates and str(result.get('selected_candidate_id') or '') not in candidate_ids:
@@ -401,6 +430,12 @@ def stabilize_candidate_decision(pack: dict[str, Any], transfer: dict[str, Any])
                 if selected.get(candidate_key) and brief.get(brief_key) != selected.get(candidate_key):
                     brief[brief_key] = selected[candidate_key]
                     corrected(f'planning_decision.strategy_brief.{brief_key}', '보정된 선택 후보와 요약을 동기화했습니다.')
+            selected_index = next((index for index, row in enumerate(candidates, 1)
+                                   if row.get('candidate_id') == result.get('selected_candidate_id')), None)
+            if any(row['field'] == f'planning_decision.design_candidates[{selected_index}].measurement_plan'
+                   for row in corrections):
+                brief['success_metrics'] = selected['measurement_plan']
+                corrected('planning_decision.strategy_brief.success_metrics', '보정된 선택 후보의 측정 설계를 요약에도 동일하게 전달했습니다.')
     if corrections:
         result['selection_status'] = 'needs_evidence'
         result['automatic_corrections'] = corrections
@@ -413,9 +448,13 @@ def candidate_delivery_issues(pack: dict[str, Any], transfer: dict[str, Any]) ->
         return []  # 이전 저장 계약과 호환
     candidates = transfer.get('design_candidates') or []
     local_ids = {str(row.get('source_id')) for row in pack.get('sources') or []
-                 if row.get('source_type') in {'dataset', 'nationwide_dataset', 'regional_tourism_status'}
+                 if row.get('source_type') in {'dataset', 'nationwide_dataset', 'regional_tourism_status', 'provincial_tourism_context'}
                  or str(row.get('source_id', '')).startswith(('dataset:', 'nationwide:', 'regional-status:'))}
     problems = []
+    constraint = transfer.get('constraint_repair')
+    if constraint:
+        problems.append(issue('planning_decision.constraint_repair', constraint['problem'],
+                              constraint['required_fix'], 'critical'))
     known_cases = {row.get('source_id') for row in pack.get('benchmark_cases') or []}
     brief = transfer.get('strategy_brief') or {}
     if has_unlabeled_fixed_budget_total(str(brief.get('budget_formula') or '')):
@@ -472,6 +511,15 @@ def candidate_delivery_issues(pack: dict[str, Any], transfer: dict[str, Any]) ->
     if len(candidates) < required_kinds:
         problems.append(issue('planning_decision.design_candidates', '서로 다른 사업 후보가 두 개 미만입니다.',
                               '보유 공식 사례에서 운영 원리가 다른 후보를 비교하세요. 없으면 필요한 사례의 운영 방식과 자료를 명시하세요.'))
+    from ..festival_cases import comparison_festival_ids
+    festival_ids = comparison_festival_ids(pack.get('benchmark_cases') or [], pack.get('planning_brief'))
+    assessed = {row.get('case_source_id') for row in transfer.get('candidate_assessments') or []
+                if row.get('similarity_reason') and row.get('adaptation') and row.get('rejection_risks')}
+    if festival_ids and not assessed.intersection(festival_ids):
+        problems.append(issue('planning_decision.candidate_assessments.festival_comparison',
+                              '제공된 타지역 축제 실적 후보의 적용·제외 이유가 비교 결과에서 빠졌습니다.',
+                              '다음 중 최소 한 축제 원문을 읽고 candidate_assessments에 지역 조건과의 연결, 가져올 운영과 제외 위험을 작성하세요: '
+                              + ', '.join(festival_ids) + '. 축제를 반드시 선택할 필요는 없으며 통계에 없는 세부 운영은 기획 제안으로 구분하세요.'))
     fits = [str(row.get('local_fit') or '').strip() for row in candidates]
     if len(fits) > 1 and len(set(fits)) == 1 and fits[0]:
         problems.append(issue('planning_decision.design_candidates.comparison',
@@ -548,6 +596,11 @@ def spending_as_success(text: str) -> bool:
 
 def execution_delivery_issues(strategy: dict[str, Any], prefix: str) -> list[dict[str, str]]:
     problems = []
+    from ..measurement_alignment import align_night_growth
+    kpi = str(strategy.get('kpi') or '')
+    if align_night_growth(kpi) != kpi:
+        problems.append(issue(prefix + '.kpi.denominator', '야간 방문 비중과 전년 대비 증가율의 분모가 섞였습니다.',
+                              '증가율은 야간 방문 인원 차이÷전년 같은 기간 야간 방문 인원이다. 동일 시간대 자료 확보 계획을 쓰고 월별 합계로 야간 실측을 대신하지 마세요.'))
     if is_budget_only_title(str(strategy.get('title') or '')):
         problems.append(issue(prefix + '.title', '기획안 제목이 예산 편성만 설명하고 실제 관광사업을 설명하지 않습니다.',
                               '예산은 실행을 위한 수단으로만 두고, 대상·참여 조건·이용 또는 결제 흐름이 드러나는 사업 제목으로 고치세요.'))
@@ -581,7 +634,7 @@ def execution_delivery_issues(strategy: dict[str, Any], prefix: str) -> list[dic
     steps = strategy.get('implementation_steps') or []
     for index, step in enumerate(steps, 1):
         role_text = str(step.get('task') or '') + ' ' + str(step.get('deliverable') or '')
-        if not re.search(r'담당|운영자|운영팀|사업팀|업체|시청|군청|구청|사업자|평가자|협력사', role_text):
+        if not re.search(r'담당|운영자|운영팀|운영\s*인력(?:이|은)|안전\s*관리자(?:가|는)|기획팀(?:이|은)|사업팀|업체|시청|군청|구청|사업자|평가자|협력사', role_text):
             problems.append(issue(prefix + f'.implementation_steps[{index}].task', '실행 단계의 담당 역할이 없습니다.',
                                   '누가 어떤 입력·확인 조건으로 실제 작업을 하는지 task에 적고 deliverable을 구체적으로 유지하세요.'))
     return problems

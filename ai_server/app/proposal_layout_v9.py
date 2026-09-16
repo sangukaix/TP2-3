@@ -9,7 +9,19 @@ ROLES=('사업 총괄','운영·정산 담당','현장 운영 담당','사업·�
 
 def execution_groups(report):
     steps=[v for v in base._first_strategy(report).get('implementation_steps') or [] if isinstance(v,dict)]
-    groups=[[v] for v in steps[:3]]+[steps[3:]]
+    from .operating_schedule import is_launch_step
+    launch = next((i for i, step in enumerate(steps) if is_launch_step(step)), None)
+    if len(steps) > 4 and launch is not None and 2 <= launch < len(steps) - 1:
+        # Preserve the actual launch even when there are two evaluation steps.
+        # Position-only grouping used to relabel November's launch as preparation
+        # and December's analysis as operation, disagreeing with KPI capacity.
+        return [steps[:launch-1], steps[launch-1:launch], [steps[launch]], steps[launch+1:]]
+    # The execution contract ends with operational preparation, operation, evaluation.
+    # Merge extra preparation steps at the front, not operation into evaluation.
+    if len(steps)>4:
+        groups=[steps[:-3]]+[[v] for v in steps[-3:]]
+    else:
+        groups=[[v] for v in steps]
     while len(groups)<4:groups.append([])
     return groups
 
@@ -128,8 +140,10 @@ def target_evidence_page(prs, report):
         table(s, 'case-result-table', rows, 106, 279, 1388, 246, [455, 390, 543], 24)
     else:
         text(s, 'basis-description', '선정 사례의 운영 방식을 지역의 시범사업에 적용합니다. 비교 가능한 전후 실적이 없는 경우 목표는 계획 가정으로 제시합니다.', 106, 285, 1388, 170, 27, SLATE)
-    scenario = report['execution_scenario']
-    text(s, 'proposed-target', f"최종월 계획 목표  방문 +{scenario['visitor_target_pct']:g}% · 소비 +{scenario['spending_target_pct']:g}%", 106, 557, 1388, 63, 33, ORANGE, True)
+    scenario = report.get('execution_scenario') or {}
+    target_text=(f"최종월 계획 목표  방문 +{scenario['visitor_target_pct']:.2f}% · 소비 +{scenario['spending_target_pct']:.2f}%"
+                 if scenario.get('visitor_target_pct') is not None else '운영 조건을 바탕으로 목표 규모를 제안합니다')
+    text(s, 'proposed-target', target_text, 106, 557, 1388, 63, 33, ORANGE, True)
     text(s, 'basis-method', basis['explanation'], 106, 637, 1388, 165, 21, SLATE)
     source_shape = text(s, 'basis-source', '출처: 강진군의회 제307회 본회의 시정연설, 2024.11.20' if basis['source_url'] else '목표율: 조정 가능한 기획 가정', 106, 825, 1388, 42, 19, SLATE)
     if basis['source_url']:

@@ -16,13 +16,16 @@ export function applyReportPatch(report, patch) {
   if (targets && Number.isFinite(targets.visitor_target_pct) && targets.visitor_target_pct >= 0 && targets.visitor_target_pct <= 20
       && Number.isFinite(targets.spending_target_pct) && targets.spending_target_pct >= 0 && targets.spending_target_pct <= 30) {
     numericUpdates.target_proposal_basis = undefined
-    numericUpdates.execution_scenario = { visitor_target_pct: targets.visitor_target_pct, spending_target_pct: targets.spending_target_pct }
+    numericUpdates.execution_scenario = { visitor_target_pct: targets.visitor_target_pct, spending_target_pct: targets.spending_target_pct, target_origin: 'user' }
   }
   const estimate = patch.reference_estimate
   if (estimate?.status === 'planning_assumption_not_quote' && Array.isArray(estimate.items)
       && estimate.items.length > 0 && estimate.items.every((row) => Number.isSafeInteger(row.amount) && row.amount >= 0)
       && estimate.items.reduce((sum, row) => sum + row.amount, 0) === estimate.total_krw) {
     numericUpdates.reference_estimate = estimate
+  }
+  if (!numericUpdates.execution_scenario && (patch.solution || patch.strategy_title || numericUpdates.reference_estimate)) {
+    numericUpdates.target_proposal_basis = { ...report.target_proposal_basis, capacity_plan: undefined }
   }
   return { ...report, ...numericUpdates,
     summary: typeof patch.summary === 'string' && patch.summary.trim() ? patch.summary.trim() : report.summary,

@@ -66,7 +66,7 @@ class EvidenceSourcesTest(unittest.TestCase):
         self.assertIn('error', result)
         tools.sources['pdf:seminar']['chunks'][0]['summary'] = 'x' * 13000
         result = tools.execute('read_collected_source', {'source_id': 'pdf:seminar'})
-        self.assertEqual(result['error'], 'EVIDENCE_RESULT_TOO_LARGE')
+        self.assertIn('serialized_json_segment', result)
         self.assertNotIn('pdf:seminar', tools.read_source_ids)
 
 

@@ -63,7 +63,7 @@ def detail(prs,report):
     from .proposal_presentation_v4 import _selected_candidate,_scenario_for_display
     s=prs.slides[3];strategy=base._first_strategy(report);candidate=_selected_candidate(report)
     scenario,demo=_scenario_for_display(report)
-    header(s,'사업 설계와 3개월 목표')
+    header(s,'사업 목표')
     target='목표 방문자 수·관광소비액은 목표율 확정 후 표시합니다.'
     if scenario and scenario['has_target']:
         target=f"3개월 월별 합계\n방문자 {compact(sum(scenario['target_visitors'][:3]),'visitors')}\n관광소비액 {compact(sum(scenario['target_spending'][:3]),'spending')}"
@@ -83,8 +83,8 @@ def detail(prs,report):
         if scenario:comparison_chart(s,f'comparison-chart-{i}',x+12,510,650,277,scenario,key,divisor)
         else:centered(text(s,f'chart-missing-{i}','사업 기간의 예측치 미제공',x,585,674,90,25,SLATE))
     period=str((report.get('ml_analysis') or {}).get('source_period') or '저장 학습기간')
-    note=f'ML 기준: {period} 월별 지표의 1·3·12개월 전 값과 계절 정보를 저장 모델에 입력. 목표: 기준 전망 × (1 + 최종월 목표율 × 경과월/전체월).\n목표율은 사례 실적을 참고한 계획 가정이며, 구체적인 채택 비율과 출처는 목표 설정 근거에 제시합니다.'
-    text(s,'comparison-note',note,106,811,1388,63,20,SLATE)
+    note='파란선: 한국관광 데이터랩의 과거 월별 방문·소비 기록과 계절 흐름을 바탕으로 계산한 전망입니다.\n주황선: 공식 사례를 참고해 정한 사업 목표입니다. 목표율은 조정할 수 있으며, 산출 근거 페이지에서 설명합니다.'
+    text(s,'comparison-note',note,106,811,1388,69,21,SLATE)
 
 
 def diverse_cases(report):
@@ -190,6 +190,9 @@ def kpi(prs,report):
     elif scenario and scenario.get('has_target'):
         note=('월별 목표 = 해당 월 ML 전망 × (1 + 최종월 목표율 × 경과 월 수 ÷ 전체 월 수). 방문·소비 목표율은 각각 적용합니다.\n'
               '합계 증가율 = (목표 합계 ÷ ML 합계 − 1) × 100. 방문 합계는 월 간 중복을 포함하며, 보장된 사업 효과가 아닙니다.')
+        if scenario.get('operating_months'):
+            note=('준비월의 추가 목표는 0명·0원입니다. 운영월에는 ML 전망 × 최종월 목표율 × (경과 운영월 ÷ 전체 운영월)을 더합니다.\n'
+                  '합계 증가율 = (목표 합계 ÷ ML 합계 − 1) × 100. 방문 합계는 월 간 중복을 포함하며, 보장된 사업 효과가 아닙니다.')
     if demo or report.get('layout_target_sample'):note+=' 이번 파일의 목표율은 디자인 확인용 예시입니다.'
     text(s,'kpi-calculation',note,106,780,1388,112,18,SLATE)
 

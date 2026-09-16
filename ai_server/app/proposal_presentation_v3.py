@@ -344,9 +344,18 @@ def _scenario_rows(report: dict[str, Any]) -> dict[str, Any] | None:
     baseline_spending = [_as_float(item.get('spending_krw')) for item in forecasts]
     target_visitors = target_series(baseline_visitors, visitor_target_pct)
     target_spending = target_series(baseline_spending, spending_target_pct)
+    basis = report.get('target_proposal_basis') or {}
+    schedule_weights = (basis.get('capacity_plan') or {}).get('monthly_weights')
+    automatic_schedule = (has_target and basis.get('kind') == 'operating_capacity'
+                          and basis.get('target_mode') != 'user'
+                          and (report.get('execution_scenario') or {}).get('target_origin') != 'user'
+                          and schedule_weights is not None and len(schedule_weights) == horizon)
+    if automatic_schedule:
+        target_visitors = [v * (1 + visitor_target_pct / 100 * w) for v, w in zip(baseline_visitors, schedule_weights)]
+        target_spending = [v * (1 + spending_target_pct / 100 * w) for v, w in zip(baseline_spending, schedule_weights)]
     linked = visitor_linked_spending(baseline_visitors, baseline_spending, target_visitors)
     # 별도로 입력한 소비 목표는 보존합니다. 같은 목표율은 방문 증가분으로 산출합니다.
-    linked_mode = has_target and visitor_target_pct == spending_target_pct and all(
+    linked_mode = has_target and (report.get('target_proposal_basis') or {}).get('kind') != 'operating_capacity' and visitor_target_pct == spending_target_pct and all(
         value is not None for value in linked['targets'])
     if linked_mode:
         target_spending = linked['targets']
@@ -367,6 +376,7 @@ def _scenario_rows(report: dict[str, Any]) -> dict[str, Any] | None:
         'source_period': str(ml.get('source_period') or ''),
         'period': selection['period'],
         'notes': selection['notes'],
+        'operating_months': (basis.get('capacity_plan') or {}).get('active_months', []) if automatic_schedule else [],
     }
 
 

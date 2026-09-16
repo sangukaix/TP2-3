@@ -438,3 +438,8 @@ LLM은 DB를 직접 저장·삭제하지 못한다. 보고서 저장은 사용�
 시군구 연간/반기 집계는 지역 월별 사실이나 ML target/feature가 아니며, 전국 월별 추이도
 선택 지역의 실적·예측·전국 평균이 아니다. 두 자료는 RAG에 넣지 않고, 기간·단위·출처 상태를
 보존한 보조 진단에만 사용한다. 모델은 DB·원본 ZIP에 직접 접근하지 못한다.
+
+
+### 상위 시도 관광 흐름 (D-187, 2026-09-16)
+
+로컬 시도 ZIP snapshot → 재현 가능한 CSV → MySQL `provincial_tourism_monthly_context` → 시군구 snapshot의 `provincial_context` → Evidence/Case Scout 및 Qwen/Gemma의 기존 읽기 전용 근거 도구 → 저장 출처/공통 출력. 비교는 동일 관측월의 전년 대비 증감률·숙박 특성에 한정하며 기존 시군구 ML·목표·생성 지원 카탈로그를 변경하지 않는다. 자료 미확보 시 비교만 생략한다. [데이터와 검증](PROVINCIAL_TOURISM_CONTEXT.md).

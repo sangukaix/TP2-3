@@ -3,6 +3,8 @@ from typing import Any
 
 
 def case_mechanism_family(case: dict[str, Any]) -> str:
+    if case.get('evidence_kind') == 'festival_statistics':
+        return 'experience_product'
     # Do not classify by incidental risks, prerequisites, URLs or raw JSON keys.
     for field in ('intervention', 'operating_model', 'title', 'summary'):
         text = str(case.get(field) or '').lower()
@@ -14,7 +16,7 @@ def case_mechanism_family(case: dict[str, Any]) -> str:
             (('교통', 'ktx', '항공', '시티투어', '이동'), 'access_and_mobility'),
             (('예약', '재고', '시간대', '입장'), 'reservation_conversion'),
             (('할인', '쿠폰', '상품권', '결제'), 'spend_conversion'),
-            (('체험', '공예', '해설', '탐방'), 'experience_product'),
+            (('체험', '공예', '해설', '탐방', '축제', '페스티벌', '문화제'), 'experience_product'),
         ):
             if any(word in text for word in tokens):
                 return family

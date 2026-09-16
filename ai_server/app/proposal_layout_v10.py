@@ -13,6 +13,13 @@ def case_narrative(value):
     return re.sub(r'\s*\(?\[[^\]]+\]\(https?://[^\s]+\)\)?', '', str(value or '')).strip()
 
 
+def case_card_summary(source):
+    """Display observed festival figures, retaining the event/period scope."""
+    if source.get('festival_statistics'):
+        return str(source.get('observed_result') or '') + ' 축제 개최기간의 방문 실적을 참고합니다.'
+    return case_narrative(source.get('operating_model'))
+
+
 def safe_text(slide,name,value,x,y,w,h,size=22,color=SLATE,bold=False):
     shape=text(slide,name,value,x,y,w-40,h,size,color,bold)
     shape.width=w*EMU
@@ -27,6 +34,7 @@ def link(shape, url):
 
 def case_cards(slide, report):
     from .case_images import case_image
+    from .proposal_case_outcomes import source_outcome
     from PIL import Image
     header(slide, '지역별 참고 사례')
     rows, primary = report_cases(report)
@@ -36,11 +44,19 @@ def case_cards(slide, report):
         x=106+i*472
         rect(slide,f'case-panel-{i}',x,258,444,542,PALE if source in primary else WHITE)
         text(slide,f'case-number-{i}',f'{i+1:02d}',x+24,277,64,44,29,CYAN,True)
-        text(slide,f'case-badge-{i}',case_reference_role(report, source),x+99,285,320,33,19,BLUE,True)
+        chosen=source in primary
+        text(slide,f'case-badge-{i}','적용 사례' if chosen else '후보 사례',x+99,278,248,44,29,BLUE,True)
+        if chosen:
+            tick=slide.shapes.add_shape(MSO_SHAPE.OVAL,(x+365)*EMU,282*EMU,43*EMU,43*EMU)
+            tick.name=f'case-selected-tick-{i}';tick.fill.solid();tick.fill.fore_color.rgb=RGBColor.from_string(BLUE);tick.line.fill.background()
+            mark=text(slide,f'case-selected-mark-{i}','✓',x+365,281,43,43,26,WHITE,True)
+            from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
+            mark.text_frame.paragraphs[0].alignment=PP_ALIGN.CENTER;mark.text_frame.vertical_anchor=MSO_ANCHOR.MIDDLE
         name=(source.get('case_region') or '')+' · '+(source.get('intervention') or source.get('title') or '')
         safe_text(slide,f'case-title-{i}',name,x+24,339,396,98,25,INK,True)
-        safe_text(slide,f'case-body-{i}',case_narrative(source.get('operating_model')),x+24,452,396,158,21,SLATE)
-        image_info=case_image(source)
+        safe_text(slide,f'case-body-{i}',case_card_summary(source),x+24,452,396,158,21,SLATE)
+        outcome=source_outcome(source)
+        image_info=(outcome or {}).get('photo') or case_image(source)
         if image_info:
             asset=image_info['path']
             with Image.open(asset) as raw:
@@ -102,7 +118,7 @@ def merged_execution(slide,report):
 def estimate(slide,report):
     header(slide,'견적 예시안')
     e=report['reference_estimate']
-    text(slide,'estimate-label','운영 규모를 가정한 시범 예산',106,203,890,50,29,SLATE,True)
+    text(slide,'estimate-label','참여 목표에 따른 예상 사업비',106,203,890,50,29,SLATE,True)
     text(slide,'estimate-total',f"총 {e['total_krw']/10000:,.0f}만 원",1010,197,484,62,39,BLUE,True)
 
     rows=[['항목','금액','산출근거']]
@@ -113,9 +129,12 @@ def estimate(slide,report):
     note=e.get('scale_basis', '참여량은 운영 기간과 예산에 따른 계획 가정입니다.')+'\n직접비 = 혜택 + 운영·정산 + 시스템 + 홍보 + 평가; 예비비 = 직접비 × 10%. 단가와 처리량은 기획 가정입니다.'
     if 'quantity' not in e:
         note='현재 금액은 사용자가 지정한 총액을 기존 항목 비중으로 재배분한 가정입니다. 각 항목 수량·단가는 별도 조정합니다.'
+    elif e.get('scenario_note'):
+        note=(e['scenario_note'] + '\n'
+              f"100% 참여 시 참고예산 {e['full_participation_budget_krw']:,}원 · 같은 계획 결제·단가 기준, 지급 상한 총액은 아님. 예비비는 직접비의 10%.")
     text(slide,'estimate-method',note,106,720,1388,106,19,SLATE)
     text(slide,'estimate-note','예상 견적이며 실제 액수와 다를 수 있습니다. 세금 포함 여부·업무 범위·수량·단가는 계약 전에 조정합니다.',106,848,1388,38,18,BLUE)
-    slide.notes_slide.notes_text_frame.text='proposal_evidence.build_reference_estimate; idea_proposal.scale_estimate.\n'+json.dumps(e,ensure_ascii=False,indent=2)
+    slide.notes_slide.notes_text_frame.text='operating_target.build_operating_target; 사용자 재배분: idea_proposal.scale_estimate; 전망 없는 기존 견적: proposal_evidence.build_reference_estimate.\n'+json.dumps(e,ensure_ascii=False,indent=2)
 
 
 def polish(prs,report):
@@ -127,27 +146,35 @@ def polish(prs,report):
     sid=prs.slides._sldIdLst[7];prs.part.drop_rel(sid.rId);prs.slides._sldIdLst.remove(sid)
     estimate(prs.slides[9],report)
     basis=prs.slides[8]
-    method=next((s for s in basis.shapes if s.name=='basis-method'),None)
-    if method:
-        method.height=175*EMU
-        data=report['target_proposal_basis'];actual=report['execution_scenario']
-        explanation=('① 참고 실적: 강진 2024년 10월 누적 248만 명, 전년 대비 25% 증가. 반값여행·축제가 함께 운영된 지역 전체 실적.\n'
-                     '② 목표 채택: 25% × 80% = 20%. 80%는 단계 운영을 고려한 계획 가정이며 인구·통계 보정값은 아님.\n'
-                     if data.get('observed_visitors') else
-                     '① 목표 채택: 공식 사례의 운영 방식을 참고해 초기 계획 목표 5% 제안.\n')
-        explanation+=f"③ 적용 목표: 최종월 방문 +{actual['visitor_target_pct']:g}% · 소비 +{actual['spending_target_pct']:g}%. 월별 기준 전망에 단계 적용.\n"
-        explanation+=('소비 목표는 해당 월 ML 소비/방문 비율을 추가 방문 목표에 적용한 계획값. 사례의 소비 증가율·사업 단독 효과가 아님.' if actual['visitor_target_pct']==actual['spending_target_pct'] else '소비 목표는 별도로 지정한 목표율을 해당 월 ML 소비액에 적용한 계획값. 사례의 소비 증가율·사업 단독 효과가 아님.')
-        method.width=1348*EMU
-        fit_text(method,explanation,23,SLATE)
+    from .proposal_result_slide import case_performance
+    case_performance(basis,report)
     calculation_pages(prs, report, after=9)
-    labels=['프로젝트 개요','사업 설계와 3개월 목표','지역별 참고 사례','사례 선정과 지역 적용','4단계 실행 가이드 예시안','ML 전망과 목표 KPI','사례 실적과 목표 설정','견적 예시안','산출 근거와 사례 선정 과정','근거·데이터·출처 및 맺음말']
+    sid=next(sid for sid in prs.slides._sldIdLst if sid.id==basis.slide_id)
+    prs.slides._sldIdLst.remove(sid);prs.slides._sldIdLst.insert(5,sid)
+    # User-edited order: purpose, cases, result, goal, goal basis, application.
+    requested=['지역별 참고 사례','사례 실적','사업 목표','목표 KPI 산출근거',
+               '이 사업을 참고한 이유와 지역 적용 방법','4단계 실행 가이드 예시안',
+               '머신러닝 예측값과 목표 KPI','견적 예시안','기획서 생성 파이프라인']
+    for index,title in enumerate(requested,3):
+        page=next(s for s in prs.slides if any(sh.name=='title' and sh.text==title for sh in s.shapes if sh.has_text_frame))
+        sid=next(sid for sid in prs.slides._sldIdLst if sid.id==page.slide_id)
+        prs.slides._sldIdLst.remove(sid);prs.slides._sldIdLst.insert(index,sid)
+    from .proposal_growth_slide import growth_page, section_labels
+    growth_page(prs.slides[2],report)
+    labels=[('0','개요'),('1','지역별 사례와 실적'),('2','사업 목표와 KPI 산출근거'),
+            ('3','지역 적용과 실행'),('4','견적 예시안'),('5','기획서 생성 과정'),('6','근거·데이터·출처')]
     toc=prs.slides[1]
     for shape in list(toc.shapes):
         if shape.name.startswith('toc-'):shape._element.getparent().remove(shape._element)
-    for i,label in enumerate(labels):
-        col,row=divmod(i,5);x=562+540*col;y=296+94*row
-        text(toc,f'toc-{i}-number',f'{i+1:02d}',x,y,61,44,25,CYAN,True)
+    for i,(number,label) in enumerate(labels):
+        col,row=divmod(i,4);x=562+540*col;y=296+108*row
+        text(toc,f'toc-{i}-number',number,x,y,61,44,25,CYAN,True)
         text(toc,f'toc-{i}-label',label,x+65,y+5,415,58,25,INK,True)
+    from .proposal_visual_finish import finish_design
+    finish_design(prs,report)
+    section_labels(prs)
+    from .proposal_theme_spicus import apply_theme
+    apply_theme(prs, report)
 
 
 def project_targets(slide, report):
@@ -156,15 +183,15 @@ def project_targets(slide, report):
     for shape in list(slide.shapes):
         if shape.name in ('s3-operation', 's3-operation-rule'):
             shape._element.getparent().remove(shape._element)
-    text(slide,'s3-goal-label','사업의 목표 · 3개월 월별 합계 기준',561,675,895,40,24,BLUE,True)
+    text(slide,'s3-goal-label','사업의 목표 · 3개월 월별 합계 기준',561,645,895,40,23,BLUE,True)
     for i,r in enumerate(b['totals']):
         x=561+i*459
-        rect(slide,f's3-goal-panel-{i}',x,728,438,132,PALE)
-        text(slide,f's3-goal-name-{i}',r['label'],x+15,739,400,30,22,BLUE,True)
+        rect(slide,f's3-goal-panel-{i}',x,698,438,132,PALE)
+        text(slide,f's3-goal-name-{i}',r['label'],x+15,709,400,30,21,BLUE,True)
         delta=(f"{r['additional']:,.0f}명" if r['key']=='visitors' else f"{r['additional']/1e8:,.2f}억 원")
-        text(slide,f's3-goal-value-{i}',f'↑ {delta}',x+15,776,404,41,31,ORANGE,True)
+        text(slide,f's3-goal-value-{i}',f'↑ {delta}',x+15,746,404,41,30,ORANGE,True)
         pct=f"+{r['pct']:.2f}%" if r['pct'] is not None else '비율 산정 제외'
-        text(slide,f's3-goal-pct-{i}',f'기준 전망 대비 {pct} · 계획 목표',x+15,822,404,30,18,SLATE)
+        text(slide,f's3-goal-pct-{i}',f'기준 전망 대비 {pct} · 계획 목표',x+15,792,404,30,18,SLATE)
     if not b['totals']:
         text(slide,'s3-goal-missing','저장된 사업기간 전망과 목표율을 연결하면 방문·소비 목표를 표시합니다.',561,734,895,100,23,SLATE)
 
@@ -177,25 +204,41 @@ def calculation_pages(prs, report, after):
     for index, slide in enumerate(prs.slides, 1):
         slide.part._partname=PackURI(f'/ppt/slides/slide{index}.xml')
     b=calculation_basis(report);sections=methodology_sections(report)
-    from .proposal_infographics import calculations, ml_to_plan
+    from .proposal_infographics import calculations, ml_to_plan, planning_rationale_page
+    from .planning_rationale import report_rationale, rationale_sections
     first=prs.slides.add_slide(prs.slides[-1].slide_layout)
     calculations(first,report)
     second=prs.slides.add_slide(prs.slides[-1].slide_layout)
     ml_to_plan(second,report)
     for slide in (first,second):
         script=(
-            '발표 설명\n방문·소비의 기준 전망은 저장 모델에서 나온 수치입니다. 여기에 공식 사례를 참고한 계획 목표율을 단계적으로 적용합니다. '
-            '강진을 참고한 경우 25%는 발표된 지역 증가율이고, 80%는 우리가 채택한 계획 가정입니다. 두 값을 곱한 20%는 신규 사업 효과의 ML 예측이 아닙니다. '
-            '추가 방문 목표의 일부를 직접 운영할 참여량으로 배분하고 가정 단가를 곱합니다. 상세 항목의 합계에 예비비를 더한 값이 견적입니다.\n\n'
+            '발표 설명\n방문·소비의 기준 전망은 저장 모델에서 나온 수치입니다. 운영 규모와 참여 가정에서 추가 방문·소비를 계산합니다. '
+            '지역 전체 사례 증가율이나 인구 비율을 신규 사업의 효과로 복사하지 않습니다. 운영량과 단가를 곱해 예상 견적을 산정합니다. '
+            '자동 제안과 사용자 수정 목표는 구분하며 계획 시나리오는 통계적 신뢰구간이 아닙니다.\n\n'
             if slide==first else
             '발표 설명\n우리 ML은 7개 관광지표의 전망을 계산합니다. 방문자와 소비액은 그래프·목표 규모를 계산하는 기준선입니다. '
             '체류·숙박·검색 관련 5개 전망은 지역의 관광 흐름을 검토할 입력입니다. 서버가 이 수치와 모델 평가를 공식 사례와 함께 Qwen에 제공합니다. '
             'Qwen은 지역 조건과 사례의 운영 방식을 비교하고 Gemma는 선택안을 본문으로 구성합니다. 따라서 ML은 수치 전망을 담당하고 사업 선택은 근거 문서와 LLM 판단을 결합합니다. '
             '지표별로 전년 동월 기준모델이 선택될 수 있으며, 이를 고도화 모델의 성능 개선이라고 설명하지 않습니다.\n\n')
         slide.notes_slide.notes_text_frame.text=script+json.dumps({'sections':sections,'basis':b,
+            'icons':{'library':'Lucide 0.468.0','source':'https://github.com/lucide-icons/lucide/tree/0.468.0',
+                     'license':'ISC / Feather MIT; ai_server/assets/proposal_icons/LICENSE'},
+            'pipeline':{'agents':['Evidence','Case Scout','Transferability','Planner','Reviewer'],
+                        'implementation':'app/agents/report_orchestrator.py; Evidence + Case Scout gathered together',
+                        'provider_labels':'Completed provider records in this report, otherwise saved evidence / configured model'},
             'functions':['planning_evidence.build_planning_ml_evidence','case_recommendation.link_decision',
                          'report_projection.execution_target','proposal_evidence.build_reference_estimate']},ensure_ascii=False,indent=2)
-    # Insert the two new pages directly after the estimate, ahead of bibliography.
-    for offset,slide in enumerate((first,second),1):
+    pages = [first, second]
+    if report_rationale(report):
+        third = prs.slides.add_slide(prs.slides[-1].slide_layout)
+        planning_rationale_page(third, report)
+        third.notes_slide.notes_text_frame.text = (
+            '발표 설명\n관측값과 ML 전망을 먼저 확인하고, 사례의 운영 방식에서 가져온 지역 적용 가설을 구분했습니다. '
+            '후보마다 이용 행동·운영 준비·성과 확인이라는 같은 기준을 사용합니다. 이 선택 이유는 조건부 기획 판단이며 성과 보장이 아닙니다.\n\n' +
+            '\n\n'.join(title+'\n'+body for title,body in rationale_sections(report)) + '\n\n' +
+            json.dumps({'decision': report.get('planning_decision'), 'sources': report.get('evidence_sources')}, ensure_ascii=False, indent=2))
+        pages.append(third)
+    # New traced decisions include their rationale; older reports keep the approved pages.
+    for offset,slide in enumerate(pages,1):
         sid=next(sid for sid in prs.slides._sldIdLst if sid.id==slide.slide_id)
         prs.slides._sldIdLst.remove(sid);prs.slides._sldIdLst.insert(after+offset,sid)

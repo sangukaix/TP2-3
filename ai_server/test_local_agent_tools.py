@@ -213,7 +213,7 @@ class EvidenceToolTests(unittest.TestCase):
         text = '공식 원문' * 4000
         self.tools.sources['case:1']['case']['long_text'] = text
         result = self.tools.execute('read_collected_source', {'source_id': 'case:1'})
-        self.assertEqual(result['error'], 'EVIDENCE_RESULT_TOO_LARGE')
+        self.assertIn('serialized_json_segment', result)
         self.assertEqual(self.tools.sources['case:1']['case']['long_text'], text)
         self.assertNotIn('case:1', self.tools.read_source_ids)
 
@@ -432,12 +432,11 @@ class LocalAgentRunnerTests(unittest.TestCase):
 
     def test_required_evidence_output_limit_is_never_bypassed(self):
         original = request()
-        original.input_payload['evidence_pack']['benchmark_cases'][0]['large_text'] = '원문' * 5000
         provider = self.provider([
             LLMProviderError('OLLAMA_INCOMPLETE_RESPONSE', '선택 단계 장문',
                              usage={'input_tokens': 100, 'output_tokens': 512, 'total_tokens': 612}),
         ])
-        with self.assertRaises(LLMProviderError) as error:
+        with patch.object(EvidenceTools, 'missing_required_reads', return_value=['read_collected_source(case:1)']), self.assertRaises(LLMProviderError) as error:
             asyncio.run(provider.generate(original))
         self.assertEqual(error.exception.code, 'OLLAMA_INCOMPLETE_RESPONSE')
         self.assertEqual(error.exception.attempts[-1]['status'], 'failed')
@@ -460,9 +459,8 @@ class LocalAgentRunnerTests(unittest.TestCase):
 
     def test_empty_selection_cannot_skip_missing_required_source(self):
         original = request()
-        original.input_payload['evidence_pack']['benchmark_cases'][0]['large_text'] = '원문' * 5000
         provider = self.provider([LLMProviderError('OLLAMA_OUTPUT_MISSING', '빈 선택')])
-        with self.assertRaises(LLMProviderError) as error:
+        with patch.object(EvidenceTools, 'missing_required_reads', return_value=['read_collected_source(case:1)']), self.assertRaises(LLMProviderError) as error:
             asyncio.run(provider.generate(original))
         self.assertEqual(error.exception.code, 'OLLAMA_OUTPUT_MISSING')
         self.assertEqual(len(provider.seen), 1)
@@ -511,7 +509,7 @@ class LocalAgentRunnerTests(unittest.TestCase):
         })
         original.input_payload['evidence_pack']['benchmark_cases'].append({
             'source_id': 'case:2', 'title': '추가 공식 사례', 'operating_model': '다른 운영 방식',
-            'observed_result': '인과효과 미확인',
+            'observed_result': '인과효과 미확인', 'full_text': '공식 원문 전체를 보존합니다. ' * 1000,
         })
         result = asyncio.run(provider.generate(original))
         self.assertEqual(result.payload['answer'], 'case:2 원문 확인')

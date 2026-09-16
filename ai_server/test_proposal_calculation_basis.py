@@ -23,15 +23,18 @@ class CalculationPagesTest(unittest.TestCase):
         self.assertGreater(label.height,one)
         self.assertEqual(label.top+label.height//2,background.top+background.height//2)
 
-    def test_new_pages_are_after_estimate_and_have_unique_package_parts(self):
+    def test_goal_basis_follows_business_goal_and_package_parts_are_unique(self):
         output = create_strategy_proposal_presentation(_sample_report())
         with ZipFile(output) as archive:
             self.assertEqual(len(archive.namelist()), len(set(archive.namelist())))
         output.seek(0)
         deck = Presentation(output)
         title = lambda i: '\n'.join(s.text for s in deck.slides[i].shapes if s.has_text_frame)
-        self.assertIn('견적 예시안', title(9))
-        self.assertIn('산출 근거 ①', title(10))
-        self.assertIn('산출 근거 ②', title(11))
+        self.assertIn('1.1 지역별 참고 사례', title(3))
+        self.assertIn('1.2 사례 실적', title(4))
+        self.assertIn('2.1 사업 목표', title(5))
+        self.assertIn('2.2 목표 KPI 산출근거', title(6))
+        self.assertIn('견적 예시안', title(10))
+        self.assertIn('기획서 생성 파이프라인', title(11))
         self.assertNotIn('s3-operation', [s.name for s in deck.slides[2].shapes])
-        self.assertIn('사업의 목표', title(2))
+        self.assertIn('기획 의도', title(2))

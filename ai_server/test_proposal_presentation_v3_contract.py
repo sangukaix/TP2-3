@@ -177,7 +177,7 @@ class ProposalPresentationV4ContractTest(unittest.TestCase):
             proposal_presentation.create_strategy_proposal_presentation,
             proposal_presentation_v4.create_strategy_proposal_presentation,
         )
-        self.assertEqual(proposal_presentation_v4.PRESENTATION_RENDER_VERSION, 'pptx-calculation-infographic-v19')
+        self.assertEqual(proposal_presentation_v4.PRESENTATION_RENDER_VERSION, 'pptx-source-bound-rationale-v20')
         template_path = Path(proposal_presentation_v4.PRESENTATION_TEMPLATE_PATH)
         self.assertEqual(template_path.name, 'tourism_strategy_12_slide_template_v6.pptx')
         self.assertTrue(template_path.is_file(), f'승인된 PPT 레이아웃 원본을 찾을 수 없습니다: {template_path}')

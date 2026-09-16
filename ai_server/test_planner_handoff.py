@@ -21,12 +21,44 @@ required_calls = local_fixtures.required_calls
 
 
 class OperationFallbackTest(unittest.TestCase):
+    def test_real_bupyeong_roles_are_recognized_without_inventing_an_actor(self):
+        for task, missing in (
+            ('안전 관리자가 야간 보행 동선을 점검함', False),
+            ('기획팀이 원장을 분석하여 종료 보고함', False),
+            ('안전 관리자 확보 및 기획팀 구성 검토', True),
+        ):
+            strategy = {'implementation_steps': [{'task': task, 'deliverable': '보고서'}]}
+            with self.subTest(task=task):
+                self.assertEqual(any('.task' in r['field'] for r in execution_delivery_issues(strategy, 's')), missing)
+
+    def test_unsupported_stop_rule_is_replaced_not_relabelled_as_an_assumption(self):
+        original = transfer(False)
+        candidate = original['design_candidates'][0]
+        rule = '야간 체류 시간이 10% 증가하거나 5% 감소할 경우 중단함'
+        candidate['stop_or_scale_rule'] = rule
+        case_id = candidate['case_source_ids'][0]
+        original['candidate_assessments'] = [{'case_source_id': case_id, 'validation_plan': rule}]
+        before = deepcopy(original)
+        result, corrections = stabilize_candidate_decision(pack(), original)
+        self.assertEqual(original, before)
+        self.assertNotIn('10%', result['design_candidates'][0]['stop_or_scale_rule'])
+        self.assertEqual(result['candidate_assessments'][0]['validation_plan'], result['design_candidates'][0]['stop_or_scale_rule'])
+        self.assertEqual(result['candidate_assessments'][0]['original_validation_plan'], rule)
+        self.assertTrue(any(r.get('original_value') == rule for r in corrections))
+        candidate['stop_or_scale_rule'] = '가정 목표안: 완료율 10% 이상이면 확대 검토'
+        result, _ = stabilize_candidate_decision(pack(), original)
+        self.assertEqual(result['design_candidates'][0]['stop_or_scale_rule'], candidate['stop_or_scale_rule'])
+
     def test_monthly_period_and_role_in_deliverable_are_not_missing(self):
         self.assertNotIn('확인 주기', measurement_missing('측정주기: 월간'))
         self.assertIn('확인 주기', measurement_missing('측정주기: 정기적으로'))
         strategy = {'implementation_steps': [{'task': '성과 분석 및 정산', 'deliverable': '결과 보고서 | 담당: 운영 사무국'}]}
         self.assertFalse(any('.task' in r['field'] for r in execution_delivery_issues(strategy, 'strategies[1]')))
         strategy['implementation_steps'][0]['deliverable'] = '결과 보고서'
+        self.assertTrue(any('.task' in r['field'] for r in execution_delivery_issues(strategy, 'strategies[1]')))
+        strategy['implementation_steps'][0]['task'] = '운영 인력이 인증 기록을 관리하고 자격 요건을 충족한 참여자에게 혜택을 지급함'
+        self.assertFalse(any('.task' in r['field'] for r in execution_delivery_issues(strategy, 'strategies[1]')))
+        strategy['implementation_steps'][0]['task'] = '운영 인력 확보 및 참여자 모집'
         self.assertTrue(any('.task' in r['field'] for r in execution_delivery_issues(strategy, 'strategies[1]')))
 
     def test_relinked_citations_need_semantic_recomparison_not_automatic_quality_pass(self):
@@ -68,6 +100,27 @@ class OperationFallbackTest(unittest.TestCase):
         selected = self.repaired('여행비 일부를 상품권으로 환급')['design_candidates'][0]
         self.assertIn('min(', selected['budget_formula'])
         self.assertIn('분모=지급한 환급액 합계', selected['measurement_plan'])
+
+    def test_measurement_comparison_separates_operating_cohorts_and_sales(self):
+        result = self.repaired('GPS 스탬프 투어 완주자에게 소비쿠폰 지급')
+        plan = result['design_candidates'][0]['measurement_plan']
+        self.assertIn('각각 자기 집단의 분모', plan)
+        self.assertIn('미운영 집단에는 승인·발급 분모가 없으므로', plan)
+        self.assertIn('매출 비교는 별도 지표', plan)
+        self.assertIn('취소 제외 결제액', plan)
+        self.assertNotIn('미운영 집단과 동일 분모로 비교한다', plan)
+        self.assertEqual(result['strategy_brief']['success_metrics'], plan)
+
+    def test_exact_legacy_server_guidance_is_repaired_without_mutating_source(self):
+        original = transfer()
+        original['design_candidates'][0]['measurement_plan'] += (
+            ' 같은 콘텐츠·기간의 순차 도입 미운영 집단과 동일 분모로 비교한다. ')
+        before = deepcopy(original)
+        result, corrections = stabilize_candidate_decision(pack(), original)
+        self.assertEqual(original, before)
+        self.assertTrue(any(r['field'].endswith('.measurement_plan') for r in corrections))
+        self.assertNotIn('미운영 집단과 동일 분모로 비교한다',
+                         result['design_candidates'][0]['measurement_plan'])
 
     def test_night_program_is_not_overnight_conversion_despite_model_enum(self):
         selected = self.repaired('야간 공연을 운영한다', 'stay_conversion')['design_candidates'][0]

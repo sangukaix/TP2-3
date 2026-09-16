@@ -20,6 +20,7 @@ from .planning_requirements import (
 )
 from ..openai_responses import OpenAIResponseError
 from ..evidence_sources import merge_evidence_sources
+from ..festival_cases import dataset_fingerprint
 from ..llm.errors import LLMProviderError
 from ..llm.router import LLMRouter
 from .planner_agent import PlannerAgent
@@ -92,6 +93,7 @@ def _evidence_cache_key(
         # 테스트 대역과 실제 Agent가 같은 캐시를 공유하지 않게 합니다.
         'agent_type': f'{type(agent).__module__}.{type(agent).__qualname__}',
         'case_registry_hash': _rag_registry_hash(agent, 'official_case_studies.jsonl'),
+        'festival_dataset_hash': dataset_fingerprint(agent.project_root) if getattr(agent, 'project_root', None) else 'not_imported',
         # 정책·지표 해석 PDF를 새로 등록하면 이전 1시간 근거 캐시를 재사용하지 않습니다.
         'reference_registry_hash': _rag_registry_hash(agent, 'official_reference_documents.jsonl'),
         # 원문 페이지 청크도 실제 RAG 입력이므로 재생성·보완하면 근거 캐시를 즉시 비웁니다.
@@ -313,7 +315,8 @@ async def orchestrate_strategy_report(
     trace.extend(llm_router.consume_trace())
     # 저장된 사례가 실제 지역 문제에 부족하다고 Qwen이 판단한 경우에만 공식 웹 보강 1회를 허용합니다.
     if (llm_router.local_first and not llm_router.student_budget
-            and transfer_assessment.get('selection_status') == 'needs_evidence' and not case_pack.get('web_research_attempted')):
+            and transfer_assessment.get('selection_status') == 'needs_evidence'
+            and not transfer_assessment.get('constraint_repair') and not case_pack.get('web_research_attempted')):
         augmented = await _run_openai_stage('case_scout_supplement', '부족한 공식 사례 보강', case_study_agent.collect(
             region_code=region_code, snapshot=snapshot, planning_brief=planning_brief, force_web=True,
         ))
@@ -360,6 +363,13 @@ async def orchestrate_strategy_report(
     trace.extend(llm_router.consume_trace())
 
     remaining = candidate_delivery_issues(evidence_pack, transfer_assessment)
+    if transfer_assessment.get('constraint_repair'):
+        # Do not let generic stabilization replace a rejected selected ID with
+        # the first alternative. The one existing repair must resolve it first.
+        from ..case_recommendation import constrain_decision
+        transfer_assessment = constrain_decision(
+            transfer_assessment, evidence_pack.get('benchmark_cases') or [], planning_brief,
+        )
     if 'selection_status' in transfer_assessment:
         # 출처 ID, 타지역 범위, 확정처럼 보이는 예산과 측정 분모처럼 규칙으로 안전하게
         # 고칠 수 있는 값은 서버 계약으로 한 번 보정한다. 원래 LLM 판단은 correction
