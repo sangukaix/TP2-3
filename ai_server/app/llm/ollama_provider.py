@@ -86,7 +86,13 @@ class OllamaProvider:
             if ('exceed_context_size_error' in detail
                     or 'exceeds the available context size' in detail):
                 raise LLMProviderError('OLLAMA_CONTEXT_BUDGET_EXCEEDED',
-                    '실제 입력 토큰이 로컬 모델의 문맥 한도를 넘습니다. 근거를 자르지 않고 중단했습니다.')
+                    f'로컬 모델이 실제 입력을 문맥 초과로 거절했습니다(요청 문맥 {self.context_length:,}토큰). '
+                    '근거를 자르지 않고 중단했습니다.',
+                    attempts=[{'phase': 'native_context_validation', 'status': 'failed',
+                               'requested_context_tokens': self.context_length,
+                               'requested_output_tokens': max_output_tokens,
+                               'input_estimate_tokens': self._estimated_context_tokens({'messages': messages, 'schema': schema, 'tools': tools}),
+                               'usage_reported': False}])
             suffix = f' {detail[:180]}' if detail else ''
             raise LLMProviderError('OLLAMA_REQUEST_ERROR', f'Ollama 요청이 실패했습니다. ({response.status_code}){suffix}')
         try:

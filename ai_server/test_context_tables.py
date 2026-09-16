@@ -6,9 +6,38 @@ import unittest
 from ai_server.app.llm.context_tables import TABLE, MAPPING, encode_tables, decode_tables, evidence_json, schema_field_guidance, schema_without_guided_descriptions
 from ai_server.app.llm.ollama_provider import OllamaProvider
 from ai_server.app.scripts.check_local_agent_smoke import semantic_errors
+from ai_server.app.llm.context_tables import (SHARED, REF, shared_evidence_json, reassemble_prefetched_pages)
 
 
 class ContextTableTests(unittest.TestCase):
+    def test_shared_evidence_restores_nested_duplicates_exactly(self):
+        text = '공식 원문: 운영일 8일, 방문 12,345명, 소비 0원, 미확인 null. ' * 40
+        value = {'source': {'text': text, 'statistics': [0, None, False, '0']},
+                 'case': {'text': text, 'statistics': [0, None, False, '0']},
+                 'different': text + '정정', 'reserved': {SHARED: {REF: 0}}}
+        before = deepcopy(value)
+        wire = shared_evidence_json(value)
+        self.assertEqual(decode_tables(json.loads(wire)), value)
+        self.assertEqual(value, before)
+        self.assertLess(len(wire), len(evidence_json(value)))
+
+    def test_reassembly_requires_all_pages_same_source_in_order(self):
+        original = {'source_id': 'case:one', 'body': '한글 원문과 \\n \\\" 따옴표' * 300}
+        serialized = json.dumps(original, ensure_ascii=False)
+        chunks = [serialized[i:i+250] for i in range(0, len(serialized), 250)]
+        pages = [{'tool': 'read_collected_source', 'result': {
+            'source_id': 'case:one', 'segment_index': i, 'segment_count': len(chunks),
+            'serialized_json_segment': text, 'next_offset': i+1 if i+1<len(chunks) else None}}
+            for i, text in enumerate(chunks)]
+        restored, indexes = reassemble_prefetched_pages(pages)
+        self.assertEqual(restored, [{'tool': 'read_collected_source', 'result': original}])
+        self.assertEqual(indexes, [0]*len(pages))
+        self.assertEqual(decode_tables(json.loads(shared_evidence_json(restored))), restored)
+        for damaged in (pages[:-1], list(reversed(pages)), deepcopy(pages)):
+            if len(damaged)==len(pages) and damaged[0]['result']['segment_index']==0:
+                damaged[1]['result']['source_id']='case:another'
+            self.assertEqual(reassemble_prefetched_pages(damaged)[0], damaged)
+
     def test_guided_descriptions_are_deduplicated_without_changing_validity(self):
         from jsonschema import Draft202012Validator
         schema = {'type': 'object', 'description': '필드 지침', 'required': ['description'],
