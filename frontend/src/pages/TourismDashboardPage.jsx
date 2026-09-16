@@ -26,7 +26,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { downloadAiStrategyPresentation, downloadAiStrategyProposal, getAiRegionDashboard, getAiRegionOpenApiInfo, getSidoBoundaries, getSigunguBoundaries } from '../api/dashboardApi'
+import { downloadAiStrategyPresentation, downloadAiStrategyProposal, getAiRegionCatalog, getAiRegionDashboard, getAiRegionOpenApiInfo, getSidoBoundaries, getSigunguBoundaries } from '../api/dashboardApi'
 import TourismAssistant from '../components/TourismAssistant'
 import WorkspaceShell from '../components/WorkspaceShell'
 import predictionLoadingVideo from '../assets/prediction-animation-alpha-v7.webm'
@@ -802,6 +802,7 @@ function DashboardApp() {
   // 첫 화면은 특정 시군구가 아닌 서울특별시 전체를 기본 선택합니다.
   const [selectedCode, setSelectedCode] = useState('11680')
   const [selectedSidoCode, setSelectedSidoCode] = useState('11')
+  const [draftSigunguCode, setDraftSigunguCode] = useState('11680')
   const [isReportVisible, setIsReportVisible] = useState(false)
   const [strategyReport, setStrategyReport] = useState(null)
   // AI 전략기획은 전용 페이지에서 생성합니다. 이 대시보드에서는 생성 상태를 만들지 않습니다.
@@ -820,11 +821,21 @@ function DashboardApp() {
   const [boundaryError, setBoundaryError] = useState(false)
   const [regionDashboard, setRegionDashboard] = useState(null)
   const [regionDashboardState, setRegionDashboardState] = useState('idle')
+  const [regionDashboardError, setRegionDashboardError] = useState('')
+  const [regionFetchVersion, setRegionFetchVersion] = useState(0)
+  const [regionCatalog, setRegionCatalog] = useState([])
   // 한 달이 바뀌어도 열린 화면이 이전 예측월에 머물지 않도록, 한 시간마다 최신 대시보드 데이터를 다시 요청합니다.
   // 이 값은 화면에 표시하지 않고 API 요청 효과를 다시 실행하는 용도로만 사용합니다.
   const [dashboardRefreshTick, setDashboardRefreshTick] = useState(0)
   const [regionSearch, setRegionSearch] = useState('')
+  const [pendingRegion, setPendingRegion] = useState(null)
   const [regionSearchMessage, setRegionSearchMessage] = useState('')
+  const [isRegionSuggestionsOpen, setIsRegionSuggestionsOpen] = useState(false)
+  const [regionPickerTab, setRegionPickerTab] = useState('admin')
+  const [regionSelectionConfirmed, setRegionSelectionConfirmed] = useState(false)
+  const [regionToastMessage, setRegionToastMessage] = useState('')
+  const regionToastTimerRef = useRef(null)
+  const regionSearchInputRef = useRef(null)
   const [isRegionInfoVisible, setIsRegionInfoVisible] = useState(false)
   const [regionInfo, setRegionInfo] = useState(null)
   const [regionInfoState, setRegionInfoState] = useState('idle')
@@ -838,6 +849,19 @@ function DashboardApp() {
     window.addEventListener('scroll', updateScrollTopVisibility, { passive: true })
     return () => window.removeEventListener('scroll', updateScrollTopVisibility)
   }, [])
+
+  useEffect(() => () => {
+    if (regionToastTimerRef.current) window.clearTimeout(regionToastTimerRef.current)
+  }, [])
+
+  useEffect(() => {
+    if (regionPickerTab !== 'search') return
+    setRegionSearch('')
+    setPendingRegion(null)
+    setRegionSearchMessage('')
+    setIsRegionSuggestionsOpen(false)
+    window.requestAnimationFrame(() => regionSearchInputRef.current?.focus())
+  }, [regionPickerTab])
 
   // 서버가 "다음 달"을 날짜 기준으로 계산하므로, 브라우저를 새로고침하지 않아도 자정·월 변경 후 최신 기준을 받습니다.
   // 시간 단위 재검증은 OpenAI 호출이 아닌 공식 지표/저장 모델 조회라 비용을 발생시키지 않습니다.
@@ -859,17 +883,24 @@ function DashboardApp() {
     [selectedSidoCode, sidoBoundaries],
   )
 
+  const selectedCatalogRegion = useMemo(
+    () => regionCatalog.find((region) => region.region_code === selectedCode) ?? null,
+    [regionCatalog, selectedCode],
+  )
+
   // 경계 이름만 화면 메타데이터로 사용합니다. 실제 지표는 AI Server 응답이 성공한 경우에만 채웁니다.
   // 이렇게 하면 미지원 지역에서 개발용 예시 숫자가 실제 값처럼 노출되지 않습니다.
   const selectedRegion = useMemo(
-    () => (selectedBoundary
+    () => (selectedCatalogRegion
+      ? createPendingRegion(selectedCatalogRegion.region_code, selectedCatalogRegion.region_name)
+      : selectedBoundary
       ? createPendingRegion(selectedCode, selectedBoundary.properties.region_name)
       : selectedCode === '11680'
         ? createPendingRegion('11680', '서울특별시 강남구')
       : selectedSido
         ? createPendingRegion(selectedSidoCode, selectedSido.properties.region_name)
         : createPendingRegion(selectedSidoCode, selectedSidoCode === '11' ? '서울특별시' : '선택 지역')),
-    [selectedBoundary, selectedCode, selectedSido, selectedSidoCode],
+    [selectedBoundary, selectedCatalogRegion, selectedCode, selectedSido, selectedSidoCode],
   )
 
   // 다른 업무 페이지에서도 같은 시군구를 이어서 검토할 수 있도록, 실제 시군구 선택만 저장합니다.
@@ -905,6 +936,14 @@ function DashboardApp() {
     [selectedSidoCode, sigunguBoundaries],
   )
 
+  const regionSuggestions = useMemo(() => {
+    const query = regionSearch.replace(/\s+/g, '').toLowerCase()
+    if (!query) return []
+    return regionCatalog
+      .filter((region) => region.region_name.replace(/\s+/g, '').toLowerCase().includes(query))
+      .slice(0, 8)
+  }, [regionCatalog, regionSearch])
+
   const selectedMarkerPosition = useMemo(
     () => getFeatureCenter(selectedBoundary)
       ?? SIDO_LABEL_POSITIONS[selectedSidoCode]
@@ -937,6 +976,18 @@ function DashboardApp() {
     return () => { isActive = false }
   }, [])
 
+  useEffect(() => {
+    let isActive = true
+    getAiRegionCatalog()
+      .then((catalog) => {
+        if (isActive) setRegionCatalog(catalog.regions ?? [])
+      })
+      .catch(() => {
+        // 카탈로그 오류가 지도 선택 자체를 막지 않도록, 기존 경계 선택은 계속 사용할 수 있게 둡니다.
+      })
+    return () => { isActive = false }
+  }, [])
+
   // 브라우저에는 현재 시도의 시군구만 전달해 전국 상세 경계 수십 MB를 한꺼번에 파싱하지 않습니다.
   useEffect(() => {
     let isActive = true
@@ -958,9 +1009,15 @@ function DashboardApp() {
     let isActive = true
 
     if (!selectedCode) {
+      setRegionDashboard(null)
+      setRegionDashboardState('idle')
+      setRegionDashboardError('')
       return () => { isActive = false }
     }
 
+    setRegionDashboard(null)
+    setRegionDashboardState('loading')
+    setRegionDashboardError('')
     getAiRegionDashboard(selectedCode, selectedRegion.name)
       .then((data) => {
         if (isActive) {
@@ -968,15 +1025,16 @@ function DashboardApp() {
           setRegionDashboardState('ready')
         }
       })
-      .catch(() => {
+      .catch((error) => {
         if (isActive) {
           setRegionDashboard(null)
-          setRegionDashboardState('unavailable')
+          setRegionDashboardState('error')
+          setRegionDashboardError(error.message || '데이터를 불러오지 못했습니다. 다시 시도해 주세요.')
         }
       })
 
     return () => { isActive = false }
-  }, [selectedCode, selectedRegion.name])
+  }, [dashboardRefreshTick, regionFetchVersion, selectedCode, selectedRegion.name])
 
   // 지역 선택 이벤트에서만 이전 지역(현재는 강남구)의 AI 문서를 초기화합니다.
   // useEffect가 아니라 선택 처리 함수에서 실행해 불필요한 추가 렌더링을 막습니다.
@@ -996,51 +1054,92 @@ function DashboardApp() {
     clearStrategyReport()
     setRegionDashboard(null)
     setRegionDashboardState('idle')
+    setRegionDashboardError('')
     setSigunguBoundaries(null)
     setSelectedSidoCode(sidoCode)
+    setDraftSigunguCode('')
     // 시도가 바뀌면 기존 시군구 선택은 해제해 "해당 시도 전체" 상태로 돌아갑니다.
     setSelectedCode('')
   }
 
-  const selectSigungu = (sigunguCode) => {
+  const confirmRegionSelection = (regionName) => {
+    if (!regionName) return
+    setRegionSelectionConfirmed(true)
+    setRegionToastMessage(`${regionName}가 저장되었습니다.`)
+    if (regionToastTimerRef.current) window.clearTimeout(regionToastTimerRef.current)
+    regionToastTimerRef.current = window.setTimeout(() => setRegionToastMessage(''), 2600)
+  }
+
+  const handleMapSidoSelection = (sidoCode) => {
+    selectSido(sidoCode)
+  }
+
+  const commitRegion = (region) => {
+    const regionCode = region?.region_code
+    const regionName = region?.region_name
+    if (!regionCode || !regionName) return
+
     clearStrategyReport()
     setRegionDashboard(null)
-    setRegionDashboardState(sigunguCode ? 'loading' : 'idle')
-    setSelectedCode(sigunguCode)
+    setRegionDashboardState('loading')
+    setRegionDashboardError('')
+    setSelectedSidoCode(regionCode.slice(0, 2))
+    setDraftSigunguCode(regionCode)
+    setSelectedCode(regionCode)
+    setRegionFetchVersion((version) => version + 1)
+    setRegionSearch(regionName)
+    setRegionSearchMessage('')
+    setIsRegionSuggestionsOpen(false)
+    confirmRegionSelection(regionName)
+  }
+
+  const applyAdministrativeSelection = () => {
+    if (!draftSigunguCode) {
+      setRegionSearchMessage('시군구를 선택한 뒤 적용해 주세요.')
+      return
+    }
+    const region = regionCatalog.find((item) => item.region_code === draftSigunguCode)
+    if (!region) {
+      setRegionSearchMessage('선택한 지역의 분석 데이터를 준비하지 못했습니다.')
+      return
+    }
+    commitRegion(region)
+  }
+
+  const selectSigungu = (sigunguCode) => {
+    setDraftSigunguCode(sigunguCode)
+    setRegionSearchMessage('')
   }
 
   const searchRegion = (event) => {
     event.preventDefault()
     const query = regionSearch.replace(/\s+/g, '').toLowerCase()
-    if (!query) return
-
-    const sidoFeatures = sidoBoundaries?.features ?? []
-    const sigunguFeatures = sigunguBoundaries?.features ?? []
-    const matchedSido = sidoFeatures.find((feature) => feature.properties.region_name.replace(/\s+/g, '').toLowerCase().includes(query))
-    const matchedSigungu = sigunguFeatures.find((feature) => {
-      const sidoName = sidoFeatures.find((sido) => feature.properties.region_code.startsWith(sido.properties.region_code))?.properties.region_name ?? ''
-      const regionName = feature.properties.region_name.replace(/\s+/g, '').toLowerCase()
-      const fullName = `${sidoName}${feature.properties.region_name}`.replace(/\s+/g, '').toLowerCase()
-      return regionName.includes(query) || fullName.includes(query)
-    })
-
-    if (matchedSido) {
-      selectSido(matchedSido.properties.region_code)
-      setRegionSearch(matchedSido.properties.region_name)
-      setRegionSearchMessage('')
+    if (!query) {
+      setRegionSearchMessage('검색 결과에서 지역을 선택해주세요.')
       return
     }
-    if (matchedSigungu) {
-      clearStrategyReport()
-      setRegionDashboard(null)
-      setRegionDashboardState('loading')
-      setSelectedSidoCode(matchedSigungu.properties.region_code.slice(0, 2))
-      setSelectedCode(matchedSigungu.properties.region_code)
-      setRegionSearch(matchedSigungu.properties.region_name)
-      setRegionSearchMessage('')
+
+    const matchedRegion = pendingRegion?.region_code
+      ? pendingRegion
+      : regionCatalog.find((region) => region.region_name.replace(/\s+/g, '').toLowerCase() === query)
+
+    if (matchedRegion) {
+      commitRegion(matchedRegion)
       return
     }
-    setRegionSearchMessage('일치하는 도·시·군·구를 찾지 못했습니다.')
+    setIsRegionSuggestionsOpen(false)
+    setRegionSearchMessage(regionCatalog.length ? '검색 결과에서 지역을 선택해주세요.' : '분석 가능한 지역 목록을 불러오는 중입니다.')
+  }
+
+  const selectRegionSuggestion = (region) => {
+    setRegionSearch(region.region_name)
+    setPendingRegion(region)
+    setIsRegionSuggestionsOpen(false)
+    setRegionSearchMessage('')
+  }
+
+  const toggleRegionPickerTab = () => {
+    setRegionPickerTab((current) => current === 'admin' ? 'search' : 'admin')
   }
 
   const openRegionInfo = async () => {
@@ -1140,6 +1239,16 @@ function DashboardApp() {
             </button>
           </div>
 
+          {regionSelectionConfirmed && (
+            <div className="region-selection-notice" role="status">
+              <div className="region-selection-notice-copy">
+                <strong>{selectedRegion.name}가 저장되었습니다.</strong>
+                <span>기획안 생성 단계로 이동하여 기획안을 생성해보세요!</span>
+              </div>
+              <button type="button" onClick={() => { window.history.pushState({}, '', '/planning'); window.dispatchEvent(new PopStateEvent('popstate')); window.scrollTo({ top: 0 }) }}>다음단계로 이동!</button>
+            </div>
+          )}
+
           <div className="dashboard-top-grid dashboard-top-grid--map-first">
             <div className="dashboard-left">
               <div className="metric-grid" aria-label={`${selectedRegion.name} 핵심 지표`}>
@@ -1154,8 +1263,8 @@ function DashboardApp() {
                 <TourismTrendChart
                   trend={regionDashboard?.monthly_trend}
                   emptyMessage={
-                    regionDashboardState === 'unavailable'
-                      ? '이 지역의 검증된 월간 원자료가 아직 연결되지 않았습니다.'
+                    regionDashboardState === 'error'
+                      ? regionDashboardError || '데이터를 불러오지 못했습니다. 다시 시도해 주세요.'
                       : regionDashboardState === 'idle'
                         ? '시군구를 선택하면 최근 12개월 원자료를 표시합니다.'
                         : '선택한 지역의 월간 원자료를 불러오는 중입니다.'
@@ -1167,47 +1276,25 @@ function DashboardApp() {
 
             <article className="panel map-panel">
               <div className="map-selection-controls">
-                <form className="map-region-search" onSubmit={searchRegion}>
-                  <Search size={14} aria-hidden="true" />
-                  <input
-                    list="region-search-options"
-                    value={regionSearch}
-                    onChange={(event) => { setRegionSearch(event.target.value); setRegionSearchMessage('') }}
-                    placeholder="지역을 검색하세요"
-                    aria-label="지역 검색"
-                  />
-                  <button type="submit">검색</button>
-                </form>
-                <label className="region-select-label">
-                  <span>시도</span>
-                  <select value={selectedSidoCode} onChange={(event) => selectSido(event.target.value)}>
-                    <option value="">시도 선택</option>
-                    {sidoBoundaries?.features?.map((feature) => (
-                      <option key={feature.properties.region_code} value={feature.properties.region_code}>{feature.properties.region_name}</option>
-                    ))}
-                  </select>
-                  <ChevronDown size={16} aria-hidden="true" />
-                </label>
-                <label className="region-select-label">
-                  <span>시군구</span>
-                  <select
-                    disabled={!selectedSidoCode}
-                    value={sigunguInSelectedSido.some((feature) => feature.properties.region_code === selectedCode) ? selectedCode : ''}
-                    onChange={(event) => selectSigungu(event.target.value)}
-                  >
-                    <option value="">시군구 전체</option>
-                    {sigunguInSelectedSido.map((feature) => (
-                      <option key={feature.properties.region_code} value={feature.properties.region_code}>
-                        {feature.properties.display_name ?? feature.properties.region_name}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown size={16} aria-hidden="true" />
-                </label>
-                <datalist id="region-search-options">
-                  {(sidoBoundaries?.features ?? []).map((feature) => <option key={feature.properties.region_code} value={feature.properties.region_name} />)}
-                  {(sigunguBoundaries?.features ?? []).map((feature) => <option key={feature.properties.region_code} value={feature.properties.region_name} />)}
-                </datalist>
+                <div className="region-picker-row">
+                  <button type="button" className="region-picker-toggle" aria-pressed={regionPickerTab === 'search'} aria-label={`현재 지역 선택 방식: ${regionPickerTab === 'admin' ? '행정구역 선택' : '검색으로 찾기'}. ${regionPickerTab === 'admin' ? '검색으로 찾기' : '행정구역 선택'}로 전환`} onClick={toggleRegionPickerTab}>{regionPickerTab === 'admin' ? '검색으로 찾기' : '행정구역 선택'}</button>
+                  {regionPickerTab === 'search' ? <div className="region-picker-panel" role="tabpanel">
+                    <form className="map-region-search" onSubmit={searchRegion}>
+                      <Search size={14} aria-hidden="true" />
+                      <input ref={regionSearchInputRef} value={regionSearch} onChange={(event) => { setRegionSearch(event.target.value); setPendingRegion(null); setRegionSearchMessage(''); setIsRegionSuggestionsOpen(true) }} placeholder="지역명을 입력하세요" aria-label="지역 검색" />
+                      <button type="submit" className="region-action-button">검색</button>
+                    </form>
+                    {isRegionSuggestionsOpen && regionSuggestions.length > 0 && (
+                      <div className="region-search-suggestions" role="listbox" aria-label="지역 검색 결과">
+                        {regionSuggestions.map((region) => <button type="button" role="option" key={region.region_code} onClick={() => selectRegionSuggestion(region)}>{region.region_name}</button>)}
+                      </div>
+                    )}
+                  </div> : <div className="region-picker-panel region-picker-panel--admin" role="tabpanel">
+                    <label className="region-select-label"><span>시도</span><select value={selectedSidoCode} onChange={(event) => selectSido(event.target.value)}><option value="">시도 선택</option>{sidoBoundaries?.features?.map((feature) => <option key={feature.properties.region_code} value={feature.properties.region_code}>{feature.properties.region_name}</option>)}</select><ChevronDown size={16} aria-hidden="true" /></label>
+                    <label className="region-select-label"><span>시군구</span><select disabled={!selectedSidoCode} value={sigunguInSelectedSido.some((feature) => feature.properties.region_code === draftSigunguCode) ? draftSigunguCode : ''} onChange={(event) => selectSigungu(event.target.value)}><option value="">시군구 선택</option>{sigunguInSelectedSido.map((feature) => <option key={feature.properties.region_code} value={feature.properties.region_code}>{feature.properties.display_name ?? feature.properties.region_name}</option>)}</select><ChevronDown size={16} aria-hidden="true" /></label>
+                    <button type="button" className="region-picker-apply region-action-button" onClick={applyAdministrativeSelection}>적용</button>
+                  </div>}
+                </div>
                 {regionSearchMessage && <p className="map-region-search-message" role="status">{regionSearchMessage}</p>}
               </div>
               <div className="map-frame">
@@ -1217,7 +1304,7 @@ function DashboardApp() {
                   selectedSigungu={selectedBoundary}
                   markerPosition={selectedMarkerPosition}
                   markerLabel={selectedRegion.name}
-                  onSelectSido={selectSido}
+                  onSelectSido={handleMapSidoSelection}
                   onZoomChange={handleMapZoomChange}
                   isLoading={isBoundaryLoading}
                   error={boundaryError}
@@ -1250,6 +1337,7 @@ function DashboardApp() {
       />
       <StrategyReport key={`${selectedRegion.code}-${strategyReport?.summary ?? 'loading'}`} region={selectedRegion} visible={isReportVisible} report={strategyReport} isLoading={isStrategyReportLoading} error={strategyReportError} onClose={() => setIsReportVisible(false)} onDownload={downloadStrategyProposal} onDownloadPptx={downloadStrategyPresentation} isDownloading={isProposalDownloading} isPresentationDownloading={isPresentationDownloading} downloadError={proposalDownloadError} executionScenario={executionScenario} onExecutionScenarioChange={setExecutionScenario} />
       <TourismAssistant open={isAssistantOpen} onClose={() => setIsAssistantOpen(false)} region={selectedRegion} report={strategyReport} onApplyPatch={applyAssistantReportPatch} />
+      {regionToastMessage && <div className="region-selection-toast" role="status"><span aria-hidden="true">✓</span>{regionToastMessage}</div>}
 
       <button
         type="button"

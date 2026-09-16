@@ -140,7 +140,10 @@ export async function getAiRegionDashboard(regionCode, regionName) {
   const params = new URLSearchParams({ region_name: regionName })
   const response = await fetch(`/ai/v1/demo/${regionCode}/dashboard?${params}`)
 
-  if (!response.ok) throw new Error('선택 지역의 월간 대시보드 데이터를 불러오지 못했습니다.')
+  if (!response.ok) {
+    const error = await response.json().catch(() => null)
+    throw new Error(error?.detail?.message || '선택 지역의 월간 대시보드 데이터를 불러오지 못했습니다.')
+  }
   return response.json()
 }
 
